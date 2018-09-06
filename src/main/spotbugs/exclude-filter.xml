@@ -24,4 +24,9 @@
     <Class name="org.apache.accumulo.proxy.Proxy" />
     <Bug code="DM" pattern="DM_EXIT" />
   </Match>
+  <Match>
+    <!-- Calling new File on input can be dangerous, but OK here -->
+    <Class name="org.apache.accumulo.proxy.Proxy$PropertiesConverter"/>
+    <Bug code="PATH" pattern="PATH_TRAVERSAL_IN"/>
+  </Match>
 </FindBugsFilter>
