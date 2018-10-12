@@ -2230,6 +2230,8 @@ public class ProxyServer implements AccumuloProxy.Iface {
       }
 
       return resultMap;
+    } catch (RuntimeException e) {
+      throw e;
     } catch (Exception e) {
       handleException(e);
       return null;
