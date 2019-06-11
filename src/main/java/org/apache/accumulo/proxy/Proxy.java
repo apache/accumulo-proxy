@@ -24,18 +24,18 @@ import java.nio.file.Files;
 import java.util.Properties;
 
 import org.apache.accumulo.core.cli.Help;
-import org.apache.accumulo.core.client.impl.ClientConfConverter;
 import org.apache.accumulo.core.client.security.tokens.AuthenticationToken;
 import org.apache.accumulo.core.client.security.tokens.KerberosToken;
+import org.apache.accumulo.core.clientImpl.ClientConfConverter;
 import org.apache.accumulo.core.conf.ClientProperty;
 import org.apache.accumulo.core.conf.ConfigurationTypeHelper;
 import org.apache.accumulo.core.conf.Property;
 import org.apache.accumulo.core.rpc.SslConnectionParams;
-import org.apache.accumulo.core.trace.wrappers.TraceWrap;
+import org.apache.accumulo.core.trace.TraceUtil;
 import org.apache.accumulo.core.util.HostAndPort;
 import org.apache.accumulo.minicluster.MiniAccumuloCluster;
 import org.apache.accumulo.proxy.thrift.AccumuloProxy;
-import org.apache.accumulo.server.metrics.MetricsFactory;
+import org.apache.accumulo.server.metrics.Metrics;
 import org.apache.accumulo.server.rpc.SaslServerConnectionParams;
 import org.apache.accumulo.server.rpc.ServerAddress;
 import org.apache.accumulo.server.rpc.TServerUtils;
@@ -136,12 +136,6 @@ public class Proxy implements KeywordExecutable {
     boolean useMini = Boolean
         .parseBoolean(proxyProps.getProperty(USE_MINI_ACCUMULO_KEY, USE_MINI_ACCUMULO_DEFAULT));
 
-    if (!useMini && clientProps == null) {
-      System.err.println("The '-c' option must be set with an accumulo-client.properties file or"
-          + " proxy.properties must contain either useMiniAccumulo=true");
-      System.exit(1);
-    }
-
     if (!proxyProps.containsKey("port")) {
       System.err.println("No port property");
       System.exit(1);
@@ -152,23 +146,22 @@ public class Proxy implements KeywordExecutable {
       final File folder = Files.createTempDirectory(System.currentTimeMillis() + "").toFile();
       final MiniAccumuloCluster accumulo = new MiniAccumuloCluster(folder, "secret");
       accumulo.start();
-      clientProps.setProperty(ClientProperty.INSTANCE_NAME.getKey(),
-          accumulo.getConfig().getInstanceName());
-      clientProps.setProperty(ClientProperty.INSTANCE_ZOOKEEPERS.getKey(),
-          accumulo.getZooKeepers());
-      Runtime.getRuntime().addShutdownHook(new Thread() {
-        @Override
-        public void start() {
-          try {
-            accumulo.stop();
-          } catch (Exception e) {
-            throw new RuntimeException();
-          } finally {
-            if (!folder.delete())
-              log.warn("Unexpected error removing {}", folder);
+      clientProps = accumulo.getClientProperties();
+      Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+        try {
+          accumulo.stop();
+        } catch (InterruptedException | IOException e) {
+          throw new RuntimeException(e);
+        } finally {
+          if (!folder.delete()) {
+            log.warn("Unexpected error removing {}", folder);
           }
         }
-      });
+      }));
+    } else if (clientProps == null) {
+      System.err.println("The '-c' option must be set with an accumulo-client.properties file or"
+          + " proxy.properties must contain either useMiniAccumulo=true");
+      System.exit(1);
     }
 
     Class<? extends TProtocolFactory> protoFactoryClass = Class
@@ -209,14 +202,13 @@ public class Proxy implements KeywordExecutable {
     // No timeout
     final long serverSocketTimeout = 0L;
     // Use the new hadoop metrics2 support
-    final MetricsFactory metricsFactory = new MetricsFactory(false);
     final String serverName = "Proxy", threadName = "Accumulo Thrift Proxy";
 
     // create the implementation of the proxy interface
     ProxyServer impl = new ProxyServer(props);
 
     // Wrap the implementation -- translate some exceptions
-    AccumuloProxy.Iface wrappedImpl = TraceWrap.service(impl);
+    AccumuloProxy.Iface wrappedImpl = TraceUtil.wrapService(impl);
 
     // Create the processor from the implementation
     TProcessor processor = new AccumuloProxy.Processor<>(wrappedImpl);
@@ -279,8 +271,8 @@ public class Proxy implements KeywordExecutable {
     }
 
     // Hook up support for tracing for thrift calls
-    TimedProcessor timedProcessor = new TimedProcessor(metricsFactory, processor, serverName,
-        threadName);
+    TimedProcessor timedProcessor = new TimedProcessor(
+        Metrics.initSystem(Proxy.class.getSimpleName()), processor, serverName, threadName);
 
     // Create the thrift server with our processor and properties
 
