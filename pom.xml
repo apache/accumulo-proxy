@@ -94,7 +94,7 @@
     <maven.compiler.release>8</maven.compiler.release>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
-    <slf4j.version>1.7.26</slf4j.version>
+    <slf4j.version>1.7.28</slf4j.version>
     <sourceReleaseAssemblyDescriptor>source-release-tar</sourceReleaseAssemblyDescriptor>
     <spotbugs.excludeFilterFile>src/main/spotbugs/exclude-filter.xml</spotbugs.excludeFilterFile>
     <spotbugs.version>3.1.12</spotbugs.version>
@@ -104,7 +104,7 @@
     <dependency>
       <groupId>com.beust</groupId>
       <artifactId>jcommander</artifactId>
-      <version>1.72</version>
+      <version>1.78</version>
     </dependency>
     <!-- spotbugs-annotations provides SuppressFBWarnings annotation -->
     <dependency>
@@ -116,13 +116,13 @@
     <dependency>
       <groupId>com.google.auto.service</groupId>
       <artifactId>auto-service</artifactId>
-      <version>1.0-rc5</version>
+      <version>1.0-rc6</version>
       <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
-      <version>27.1-jre</version>
+      <version>28.1-jre</version>
     </dependency>
     <dependency>
       <groupId>commons-lang</groupId>
@@ -198,7 +198,7 @@
     <dependency>
       <groupId>org.easymock</groupId>
       <artifactId>easymock</artifactId>
-      <version>3.6</version>
+      <version>4.0.2</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -439,10 +439,10 @@
               <failOnWarning>true</failOnWarning>
               <ignoredUnusedDeclaredDependencies>
                 <!-- auto-service isn't detected as use since the annotation has retention of source -->
-                <unusedDeclaredDependency>com.google.auto.service:auto-service:jar:1.0-rc5</unusedDeclaredDependency>
+                <unusedDeclaredDependency>com.google.auto.service:auto-service:jar:*</unusedDeclaredDependency>
                 <!-- unused/declared implementation jars or parent jars that bring in children -->
-                <unusedDeclaredDependency>org.apache.hadoop:hadoop-client-runtime:jar:${hadoop.version}</unusedDeclaredDependency>
-                <unusedDeclaredDependency>org.slf4j:slf4j-log4j12:jar:${slf4j.version}</unusedDeclaredDependency>
+                <unusedDeclaredDependency>org.apache.hadoop:hadoop-client-runtime:jar:*</unusedDeclaredDependency>
+                <unusedDeclaredDependency>org.slf4j:slf4j-log4j12:jar:*</unusedDeclaredDependency>
               </ignoredUnusedDeclaredDependencies>
             </configuration>
           </execution>
@@ -538,10 +538,6 @@
                   <property name="message" value="Use static imports for Assert.* methods for consistency" />
                 </module>
                 <module name="OuterTypeFilename" />
-                <module name="LineLength">
-                  <property name="max" value="100" />
-                  <property name="ignorePattern" value="^[ ]*[*].*@(link|see) |Map.* = new .*Map|org[.]apache[.]accumulo[.]|a href=|http://|https://|ftp://" />
-                </module>
                 <module name="AvoidStarImport" />
                 <module name="UnusedImports">
                   <property name="processJavadoc" value="true" />
@@ -549,8 +545,7 @@
                 <module name="NoLineWrap" />
                 <module name="LeftCurly" />
                 <module name="RightCurly">
-                  <property name="option" value="alone" />
-                  <property name="tokens" value="CLASS_DEF, METHOD_DEF, CTOR_DEF, LITERAL_FOR, LITERAL_WHILE, STATIC_INIT, INSTANCE_INIT" />
+                  <property name="tokens" value="LITERAL_TRY, LITERAL_CATCH, LITERAL_FINALLY, LITERAL_IF, LITERAL_ELSE, CLASS_DEF, METHOD_DEF, CTOR_DEF, LITERAL_FOR, LITERAL_WHILE, LITERAL_DO, STATIC_INIT, INSTANCE_INIT" />
                 </module>
                 <module name="SeparatorWrap">
                   <property name="tokens" value="DOT" />
@@ -602,7 +597,7 @@
           <dependency>
             <groupId>com.puppycrawl.tools</groupId>
             <artifactId>checkstyle</artifactId>
-            <version>8.12</version>
+            <version>8.24</version>
           </dependency>
         </dependencies>
         <executions>
