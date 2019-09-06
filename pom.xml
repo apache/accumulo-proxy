@@ -93,11 +93,11 @@
     <it.failIfNoSpecifiedTests>false</it.failIfNoSpecifiedTests>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
-    <slf4j.version>1.7.25</slf4j.version>
+    <slf4j.version>1.7.26</slf4j.version>
     <sourceReleaseAssemblyDescriptor>source-release-tar</sourceReleaseAssemblyDescriptor>
     <spotbugs.excludeFilterFile>src/main/spotbugs/exclude-filter.xml</spotbugs.excludeFilterFile>
-    <spotbugs.version>3.1.6</spotbugs.version>
-    <thrift.version>0.11.0</thrift.version>
+    <spotbugs.version>3.1.7</spotbugs.version>
+    <thrift.version>0.12.0</thrift.version>
   </properties>
   <dependencies>
     <dependency>
@@ -115,13 +115,13 @@
     <dependency>
       <groupId>com.google.auto.service</groupId>
       <artifactId>auto-service</artifactId>
-      <version>1.0-rc4</version>
+      <version>1.0-rc5</version>
       <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
-      <version>26.0-jre</version>
+      <version>27.1-jre</version>
     </dependency>
     <dependency>
       <groupId>commons-lang</groupId>
@@ -131,22 +131,22 @@
     <dependency>
       <groupId>org.apache.accumulo</groupId>
       <artifactId>accumulo-core</artifactId>
-      <version>2.0.0-SNAPSHOT</version>
+      <version>${accumulo.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.accumulo</groupId>
       <artifactId>accumulo-minicluster</artifactId>
-      <version>2.0.0-SNAPSHOT</version>
+      <version>${accumulo.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.accumulo</groupId>
       <artifactId>accumulo-server-base</artifactId>
-      <version>2.0.0-SNAPSHOT</version>
+      <version>${accumulo.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.accumulo</groupId>
       <artifactId>accumulo-start</artifactId>
-      <version>2.0.0-SNAPSHOT</version>
+      <version>${accumulo.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.hadoop</groupId>
@@ -157,6 +157,13 @@
       <groupId>org.apache.thrift</groupId>
       <artifactId>libthrift</artifactId>
       <version>${thrift.version}</version>
+      <!-- exclude vulnerable lib see https://issues.apache.org/jira/browse/HTTPCLIENT-1803 -->
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.httpcomponents</groupId>
+          <artifactId>httpclient</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -170,9 +177,21 @@
       <scope>runtime</scope>
     </dependency>
     <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>2.6</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.12</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.accumulo</groupId>
+      <artifactId>accumulo-test</artifactId>
+      <version>${accumulo.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -220,11 +239,6 @@
                 <groupId>com.overstock.findbugs</groupId>
                 <artifactId>library-detectors</artifactId>
                 <version>1.2.0</version>
-              </plugin>
-              <plugin>
-                <groupId>com.h3xstream.findsecbugs</groupId>
-                <artifactId>findsecbugs-plugin</artifactId>
-                <version>1.8.0</version>
               </plugin>
             </plugins>
           </configuration>
@@ -453,7 +467,7 @@
               <failOnWarning>true</failOnWarning>
               <ignoredUnusedDeclaredDependencies>
                 <!-- auto-service isn't detected as use since the annotation has retention of source -->
-                <unusedDeclaredDependency>com.google.auto.service:auto-service:jar:1.0-rc4</unusedDeclaredDependency>
+                <unusedDeclaredDependency>com.google.auto.service:auto-service:jar:1.0-rc5</unusedDeclaredDependency>
                 <!-- unused/declared implementation jars or parent jars that bring in children -->
                 <unusedDeclaredDependency>org.apache.hadoop:hadoop-client-runtime:jar:${hadoop.version}</unusedDeclaredDependency>
                 <unusedDeclaredDependency>org.slf4j:slf4j-log4j12:jar:${slf4j.version}</unusedDeclaredDependency>
@@ -693,9 +707,10 @@
       <build>
         <plugins>
           <plugin>
+            <!-- version 1.6.0 is broken; see https://github.com/mojohaus/exec-maven-plugin/issues/75 -->
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>exec-maven-plugin</artifactId>
-            <version>1.6.0</version>
+            <version>1.5.0</version>
             <executions>
               <execution>
                 <id>generate-thrift</id>

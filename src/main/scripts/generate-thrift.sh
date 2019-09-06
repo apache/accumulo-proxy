@@ -16,7 +16,7 @@
 # limitations under the License.
 
 # This script will regenerate the thrift code for accumulo-proxy.
-REQUIRED_THRIFT_VERSION='0.11.0'
+REQUIRED_THRIFT_VERSION='0.12.0'
 INCLUDED_MODULES=(-)
 BASE_OUTPUT_PACKAGE='org.apache.accumulo'
 PACKAGES_TO_GENERATE=(proxy)
@@ -56,7 +56,7 @@ THRIFT_ARGS="${THRIFT_ARGS} -o $BUILD_DIR"
 mkdir -p $BUILD_DIR
 rm -rf $BUILD_DIR/gen-java
 for f in src/main/thrift/*.thrift; do
-  thrift ${THRIFT_ARGS} --gen java:generated_annotations=undated,handle_runtime_exceptions "$f" || fail unable to generate java thrift classes
+  thrift ${THRIFT_ARGS} --gen java:generated_annotations=suppress "$f" || fail unable to generate java thrift classes
   thrift ${THRIFT_ARGS} --gen py "$f" || fail unable to generate python thrift classes
   thrift ${THRIFT_ARGS} --gen rb "$f" || fail unable to generate ruby thrift classes
   thrift ${THRIFT_ARGS} --gen cpp "$f" || fail unable to generate cpp thrift classes
