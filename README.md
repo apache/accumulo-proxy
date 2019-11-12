@@ -30,7 +30,7 @@ Thrift language binding).
 
     ```
     cd /path/to/accumulo-proxy
-    mvn clean package
+    mvn clean package -Ptarball
     tar xzvf ./target/accumulo-proxy-2.0.0-SNAPSHOT-bin.tar.gz -C /path/to/install
     ```
 
