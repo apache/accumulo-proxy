@@ -1,3 +1,5 @@
+#! /usr/bin/env bash
+
 # Licensed to the Apache Software Foundation (ASF) under one or more
 # contributor license agreements.  See the NOTICE file distributed with
 # this work for additional information regarding copyright ownership.
@@ -13,10 +15,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Port to run proxy on
-port=42424
-# Set to true if you wish to use an Mini Accumulo Cluster
-useMiniAccumulo=false
-protocolFactory=org.apache.thrift.protocol.TCompactProtocol$Factory
-tokenClass=org.apache.accumulo.core.client.security.tokens.PasswordToken
-maxFrameSize=16M
+CONF_DIR=$(readlink -f ./conf)
+LIB_DIR=./lib
+
+CLASSPATH="$CONF_DIR:$LIB_DIR/*:$(accumulo classpath)"
+export CLASSPATH

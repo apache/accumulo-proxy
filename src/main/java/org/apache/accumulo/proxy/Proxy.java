@@ -101,12 +101,9 @@ public class Proxy implements KeywordExecutable {
   }
 
   public static class Opts extends Help {
-    @Parameter(names = "-p", description = "proxy.properties path",
+    @Parameter(names = "-p", description = "proxy.properties path", required = true,
         converter = PropertiesConverter.class)
     Properties proxyProps;
-    @Parameter(names = "-c", description = "accumulo-client.properties path",
-        converter = PropertiesConverter.class)
-    Properties clientProps;
   }
 
   @Override
@@ -131,7 +128,6 @@ public class Proxy implements KeywordExecutable {
     opts.parseArgs(Proxy.class.getName(), args);
 
     Properties proxyProps = opts.proxyProps;
-    Properties clientProps = opts.clientProps;
 
     boolean useMini = Boolean
         .parseBoolean(proxyProps.getProperty(USE_MINI_ACCUMULO_KEY, USE_MINI_ACCUMULO_DEFAULT));
@@ -146,7 +142,7 @@ public class Proxy implements KeywordExecutable {
       final File folder = Files.createTempDirectory(System.currentTimeMillis() + "").toFile();
       final MiniAccumuloCluster accumulo = new MiniAccumuloCluster(folder, "secret");
       accumulo.start();
-      clientProps = accumulo.getClientProperties();
+      proxyProps.putAll(accumulo.getClientProperties());
       Runtime.getRuntime().addShutdownHook(new Thread(() -> {
         try {
           accumulo.stop();
@@ -158,10 +154,6 @@ public class Proxy implements KeywordExecutable {
           }
         }
       }));
-    } else if (clientProps == null) {
-      System.err.println("The '-c' option must be set with an accumulo-client.properties file or"
-          + " proxy.properties must contain either useMiniAccumulo=true");
-      System.exit(1);
     }
 
     Class<? extends TProtocolFactory> protoFactoryClass = Class
@@ -173,7 +165,6 @@ public class Proxy implements KeywordExecutable {
     String hostname = proxyProps.getProperty(THRIFT_SERVER_HOSTNAME,
         THRIFT_SERVER_HOSTNAME_DEFAULT);
     HostAndPort address = HostAndPort.fromParts(hostname, port);
-    proxyProps.putAll(clientProps);
     ServerAddress server = createProxyServer(address, protoFactory, proxyProps);
     // Wait for the server to come up
     while (!server.server.isServing()) {

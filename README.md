@@ -24,6 +24,23 @@ an Apache [Thrift] service so that users can use their preferred programming
 language to communicate with Accumulo (provided that language has a supported
 Thrift language binding).
 
+# Running the Accumulo proxy
+
+1. Build the proxy tarball and install it.
+
+    ```
+    cd /path/to/accumulo-proxy
+    mvn clean package -Ptarball
+    tar xzvf ./target/accumulo-proxy-2.0.0-SNAPSHOT-bin.tar.gz -C /path/to/install
+    ```
+
+2. Edit `proxy.properties` and `accumulo-client.properties` and run the proxy.
+
+    ```
+    cd /path/to/install/accumulo-proxy-2.0.0-SNAPSHOT
+    ./bin/accumulo-proxy -p conf/proxy.properties -c $ACCUMULO_HOME/conf/accumulo-client.properties
+    ```
+
 [accumulo]: https://accumulo.apache.org
 [Thrift]: https://thrift.apache.org
 [li]: https://img.shields.io/badge/license-ASL-blue.svg
