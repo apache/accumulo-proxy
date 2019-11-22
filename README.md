@@ -41,8 +41,34 @@ Thrift language binding).
     ./bin/accumulo-proxy -p conf/proxy.properties -c $ACCUMULO_HOME/conf/accumulo-client.properties
     ```
 
+# Build language specific bindings
+
+Bindings have been built in `src/main/` for Java, python, and ruby.
+
+Bindings for other languages can be built using the Thrift compiler. Follow the [Thrift tutorial]
+to install a Thrift compiler and use the following command to generate language bindings.
+
+```
+thrift -r --gen <language> <Thrift filename>
+```
+
+# Create an Accumulo client using Python
+
+Run the commands below to install the Python bindings and create an example client:
+
+```
+mkdir accumulo-client/
+cd accumulo-client/
+pipenv --python 2.7
+pipenv install -e /path/to/accumulo-proxy/src/main/python
+cp /path/to/accumulo-proxy/path/to/src/main/python/example.py .
+vim example.py
+pipenv run python2 example.py
+```
+
 [accumulo]: https://accumulo.apache.org
 [Thrift]: https://thrift.apache.org
+[Thrift tutorial]: https://thrift.apache.org/tutorial/
 [li]: https://img.shields.io/badge/license-ASL-blue.svg
 [ll]: https://www.apache.org/licenses/LICENSE-2.0
 [mi]: https://maven-badges.herokuapp.com/maven-central/org.apache.accumulo/accumulo-proxy/badge.svg
@@ -51,4 +77,3 @@ Thrift language binding).
 [jl]: https://www.javadoc.io/doc/org.apache.accumulo/accumulo-proxy
 [ti]: https://travis-ci.org/apache/accumulo-proxy.svg?branch=master
 [tl]: https://travis-ci.org/apache/accumulo-proxy
-
