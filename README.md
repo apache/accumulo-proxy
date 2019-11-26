@@ -56,12 +56,12 @@ thrift -r --gen <language> <Thrift filename>
 
 Run the commands below to install the Python bindings and create an example client:
 
-```
+```bash
 mkdir accumulo-client/
 cd accumulo-client/
 pipenv --python 2.7
 pipenv install -e /path/to/accumulo-proxy/src/main/python
-cp /path/to/accumulo-proxy/path/to/src/main/python/example.py .
+cp /path/to/accumulo-proxy/src/main/python/example.py .
 vim example.py
 pipenv run python2 example.py
 ```
