@@ -62,6 +62,7 @@ cd accumulo-client/
 pipenv --python 2.7
 pipenv install -e /path/to/accumulo-proxy/src/main/python
 cp /path/to/accumulo-proxy/src/main/python/example.py .
+# Edit credentials if needed
 vim example.py
 pipenv run python2 example.py
 ```
