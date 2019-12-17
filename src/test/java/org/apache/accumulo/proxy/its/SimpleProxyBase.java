@@ -133,6 +133,7 @@ import org.apache.thrift.server.TServer;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -2726,6 +2727,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
   }
 
   @Test
+  @Ignore
   public void testCompactionStrategy() throws Exception {
     File jarDir = new File(System.getProperty("user.dir"), "target");
     assertTrue(jarDir.mkdirs() || jarDir.isDirectory());
