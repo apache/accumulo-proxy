@@ -1,0 +1,3 @@
+source "https://rubygems.org"
+gem 'thrift', '0.11.0.0'
+gem 'accumulo', :path => "/path/to/accumulo-proxy/src/main/ruby/accumulo"
