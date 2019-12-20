@@ -43,7 +43,7 @@ Thrift language binding).
 
 # Build language specific bindings
 
-Bindings have been built in `src/main/` for Java, python, and ruby.
+Bindings have been built in `src/main/` for Java, Python, and Ruby.
 
 Bindings for other languages can be built using the Thrift compiler. Follow the [Thrift tutorial]
 to install a Thrift compiler and use the following command to generate language bindings.
@@ -62,10 +62,10 @@ cd accumulo-client/
 pipenv --python 2.7
 pipenv install thrift
 pipenv install -e /path/to/accumulo-proxy/src/main/python
-cp /path/to/accumulo-proxy/src/main/python/example.py .
+cp /path/to/accumulo-proxy/src/main/python/basic_client.py .
 # Edit credentials if needed
-vim example.py
-pipenv run python2 example.py
+vim basic_client.py
+pipenv run python2 basic_client.py
 ```
 
 # Create an Accumulo client using Ruby
@@ -83,6 +83,12 @@ bundle install
 bundle exec client.rb
 ```
 
+# Java clients to Proxy
+
+[Java clients] to the Proxy can be written to limit access to the cluster. The proxy can be placed
+on a server in the cluster and clients can communicate with proxy from outside of the cluster.
+
+[Java clients]: docs/java_client.md
 [accumulo]: https://accumulo.apache.org
 [Thrift]: https://thrift.apache.org
 [Thrift tutorial]: https://thrift.apache.org/tutorial/
