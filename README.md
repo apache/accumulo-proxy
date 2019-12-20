@@ -54,7 +54,7 @@ thrift -r --gen <language> <Thrift filename>
 
 # Create an Accumulo client using Python
 
-Run the commands below to install the Python bindings and create an example client:
+Run the commands below to install the Python bindings and create an example Python client:
 
 ```bash
 mkdir accumulo-client/
@@ -66,6 +66,21 @@ cp /path/to/accumulo-proxy/src/main/python/example.py .
 # Edit credentials if needed
 vim example.py
 pipenv run python2 example.py
+```
+
+# Create an Accumulo client using Ruby
+
+Run the command below to create an example Ruby client:
+
+```bash
+mkdir accumulo-client/
+cd accumulo-client/
+cp /path/to/accumulo-proxy/src/main/ruby/Gemfile .
+vim Gemfile # Set correct path
+cp /path/to/accumulo-proxy/src/main/ruby/client.rb .
+gem install bundler
+bundle install
+bundle exec client.rb
 ```
 
 [accumulo]: https://accumulo.apache.org
