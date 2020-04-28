@@ -59,29 +59,20 @@ RUN set -eux; \
    download_bin "accumulo.tar.gz" "${ACCUMULO_HASH}" "accumulo/${ACCUMULO_VERSION}/accumulo-${ACCUMULO_VERSION}-bin.tar.gz";
 
 # Install the dependencies into /opt/
-RUN mkdir /opt/hadoop && tar xzf /tmp/hadoop.tar.gz -C /opt/hadoop --strip 1
-RUN mkdir /opt/apache-zookeeper && tar xzf /tmp/apache-zookeeper.tar.gz -C /opt/apache-zookeeper --strip 1
-RUN mkdir /opt/accumulo && tar xzf /tmp/accumulo.tar.gz -C /opt/accumulo --strip 1
+RUN tar xzf /tmp/hadoop.tar.gz -C /opt/ && ln -s /opt/hadoop-${HADOOP_VERSION} /opt/hadoop
+RUN tar xzf /tmp/apache-zookeeper.tar.gz -C /opt/ && ln -s /opt/apache-zookeeper-${ZOOKEEPER_VERSION}-bin /opt/apache-zookeeper
+RUN tar xzf /tmp/accumulo.tar.gz -C /opt/ && ln -s /opt/accumulo-${ACCUMULO_VERSION} /opt/accumulo && sed -i 's/\${ZOOKEEPER_HOME}\/\*/\${ZOOKEEPER_HOME}\/\*\:\${ZOOKEEPER_HOME}\/lib\/\*/g' /opt/accumulo/conf/accumulo-env.sh
 
 ENV HADOOP_HOME /opt/hadoop
 ENV ZOOKEEPER_HOME /opt/apache-zookeeper
 ENV ACCUMULO_HOME /opt/accumulo
-
-# Add some useful readme files
-COPY README.md DOCKER.md /tmp/
 
 # Add the proxy binary
 COPY target/accumulo-proxy-${ACCUMULO_PROXY_VERSION}-bin.tar.gz /tmp/
 RUN tar xzf /tmp/accumulo-proxy-${ACCUMULO_PROXY_VERSION}-bin.tar.gz -C /opt/accumulo-proxy --strip 1
 ENV ACCUMULO_PROXY_HOME /opt/accumulo-proxy
 
-# Sort out PATH and CLASSPATH configuration
+# Ensure Accumulo is on the path.
 ENV PATH "${PATH}:${ACCUMULO_HOME}/bin"
-ENV CLASSPATH=/opt/apache-zookeeper/lib/*
-
-# TEMPORARY FOR SPEED DURING DEVELOPMENT
-#RUN apt-get update && apt-get install vim telnet -y && rm -rf /var/lib/apt/lists/*
-#RUN sed -i 's/localhost:2181/host.docker.internal:2181/g' /opt/accumulo-proxy/conf/proxy.properties
-#RUN sed -i 's/myinstance/uno/' /opt/accumulo-proxy/conf/proxy.properties
 
 CMD ["/opt/accumulo-proxy/bin/accumulo-proxy", "-p", "/opt/accumulo-proxy/conf/proxy.properties"]
