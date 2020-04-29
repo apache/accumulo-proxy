@@ -16,8 +16,16 @@ limitations under the License.
 -->
 
 # accumulo-proxy-docker
+This documentation covers how to stand up [accumulo-proxy](https://github.com/apache/accumulo-proxy/) within a Docker container.
+ 
+The guide covers:
+* Building the image
+* Configuring the `proxy.properties` file
+* Selecting an appropriate networking choice
+* Starting and stopping the container
+* Basic troubleshooting tips 
 
-A temporary guide on how to run this up in Docker.
+It is not recommended using this guide for a production instance of accumulo-proxy at this time.
 
 ## Build the image using
 Invoke the docker build command to create a container image.
@@ -28,7 +36,7 @@ docker build -t accumulo-proxy:latest .
 ## Default Configuration and Quickstart
 By default, the container image expects the following to be true:
 1. Your Accumulo instance name is "myinstance"
-2. Your zookeeper is available (and reachable from the container) at localhost:2181
+2. Your ZooKeeper is available (and reachable from the container) at localhost:2181
 
 You can start the proxy using:
 ```commandline
@@ -44,11 +52,11 @@ docker run --rm -d -p 42424:42424 -v /path/to/proxy.properties:/opt/accumulo-pro
 ## Networking configuration
 Container networking can be a very specialised subject therefore we document two common practices that should cover the majority of use cases for development. 
 
-The proxy container must be able to access both Accumulo and Zookeeper.
+The proxy container must be able to access both Accumulo and ZooKeeper.
 
-The Zookeeper location can be configured in the `conf/proxy.properties` file, so you can override this to an acceptable value (see "Custom proxy.properties" section) 
+The ZooKeeper location can be configured in the `conf/proxy.properties` file, so you can override this to an acceptable value (see "Custom proxy.properties" section) 
 
-In order to communicate with Accumulo the container will need to be able to resolve the FQDN that the servers have registered in Zookeeper. If using [fluo-uno](https://github.com/apache/fluo-uno) this is very likely the hostname of your development environment. We'll call this my.host.com and IP 192.168.0.1 for the rest of this document.
+In order to communicate with Accumulo the container will need to be able to resolve the FQDN that the servers have registered in ZooKeeper. If using [fluo-uno](https://github.com/apache/fluo-uno) this is very likely the hostname of your development environment. We'll call this my.host.com and IP 192.168.0.1 for the rest of this document.
 
 ### Host networking
 
@@ -104,7 +112,7 @@ docker run -it --rm -p 42424:42424 --network="host" --name accumulo-proxy accumu
 
 The container is very slim so if need be you can add additional tools using `apt`. 
 
-If you wish to manually execute the accumulo-proxy in you can:
+If you wish to manually execute the accumulo-proxy in the container you can:
 ```commandline
 /opt/accumulo-proxy/bin/accumulo-proxy -p /opt/accumulo-proxy/conf/proxy.properties
 ```
