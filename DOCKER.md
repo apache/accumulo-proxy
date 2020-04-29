@@ -108,3 +108,7 @@ If you wish to manually execute the accumulo-proxy in you can:
 ```commandline
 /opt/accumulo-proxy/bin/accumulo-proxy -p /opt/accumulo-proxy/conf/proxy.properties
 ```
+
+Some resources for additional help:
+* [Main Accumulo Website](https://accumulo.apache.org/)
+* [Contact Us page](https://accumulo.apache.org/contact-us/)
