@@ -27,8 +27,13 @@ The guide covers:
 
 It is not recommended using this guide for a production instance of accumulo-proxy at this time.
 
-## Build the image using
-Invoke the docker build command to create a container image.
+## Build the image
+Firstly you will need the tarball of accumulo-proxy, this is documented in the [README.md](README.md) but for simplicity run:
+```commandline
+mvn clean package -Ptarball
+```
+
+Once you have the tarball (should be in ./target/ folder) then invoke the Docker build command to create a container image.
 ```commandline
 docker build -t accumulo-proxy:latest .
 ```
@@ -60,19 +65,27 @@ In order to communicate with Accumulo the container will need to be able to reso
 
 ### Host networking
 
-Host networking is the simplest mechanism but generally only works for linux hosts where docker has been installed on 'bare metal' e.g. through an RPM. 
+Host networking is the simplest mechanism but generally only works for linux hosts where Docker has been installed on 'bare metal' e.g. through an RPM. 
 
-You can test if this will work for you by executing the following:
+You can test if this will work for you by executing the following steps
+
+Start the accumulo-proxy container and enter it
 ```commandline
-# Start the accumulo-proxy container and enter it
 docker run -it --rm -p 42424:42424 --network="host" --name accumulo-proxy accumulo-proxy:latest bash;
-
-# Install telnet and verify if you can connect to my.host.com:9995 
-apt-get update && apt-get install telnet;
-telnet my.host.com 9995
 ```
 
-If telnet can connect, then your container can resolve `my.host.com` correctly with host networking and therefore you can append `--network="host"` to your docker commands.
+Once inside the container, execute the curl command to attempt to connect to the monitor webserver:
+```commandline
+curl my.host.com:9995
+```
+
+If the terminal returns an error such as: 
+```
+curl: (7) Failed to connect to my.host.com 9995: Connection refused
+``` 
+then your container cannot see the host, and you will need to look at the next section (Non-Host networking).
+
+If you receive the HTML for the monitor web page then host networking will work for you and you can add `--network="host"` to each Docker command going forward.
 
 An example of using host networking:
 ```commandline
@@ -81,15 +94,14 @@ docker run --rm -d -p 42424:42424 --network="host" --name accumulo-proxy accumul
 
 Note: You do not need to map your ports (-p) if using host networking, but we include it for clarity.
 
-For more details see the official docker documentation: [Use host Networking](https://docs.docker.com/network/host)
+For more details see the official Docker documentation: [Use host Networking](https://docs.docker.com/network/host)
 
 ### Non-Host networking
-
-If you run outside of a single node linux installation, e.g. Docker for Mac, Docker for Windows or use a VM to isolate your docker engine then you will likely need to take this path.
+If you run outside of a single node linux installation, e.g. Docker for Mac, Docker for Windows or use a VM to isolate your Docker engine then you will likely need to take this path.
 
 Docker allows you to supply additional addresses to be resolved by the container, and these are automatically added by Docker to the /etc/hosts 
 
-For each host add a `--add-host FQDN:IP` entry to your docker run command, you can add multiple entries if need to, see the official docs covering [network settings](https://docs.docker.com/engine/reference/run/#network-settings).
+For each host add a `--add-host FQDN:IP` entry to your Docker run command, you can add multiple entries if need to, see the official docs covering [network settings](https://docs.docker.com/engine/reference/run/#network-settings).
 
 An example of using this approach:
 
