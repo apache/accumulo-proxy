@@ -41,6 +41,10 @@ Thrift language binding).
     ./bin/accumulo-proxy -p conf/proxy.properties
     ```
 
+# Docker Environment
+
+The Accumulo Proxy can also now be packaged and started in a Docker container, see the [DOCKER.md](DOCKER.md) for full details.
+
 # Build language specific bindings
 
 Bindings have been built in `src/main/` for Java, Python, and Ruby.
