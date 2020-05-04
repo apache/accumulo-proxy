@@ -71,7 +71,7 @@ You can test if this will work for you by executing the following steps
 
 Start the accumulo-proxy container and enter it
 ```commandline
-docker run -it --rm -p 42424:42424 --network="host" --name accumulo-proxy accumulo-proxy:latest bash;
+docker run -it --rm -p 42424:42424 --network="host" --name accumulo-proxy accumulo-proxy:latest sh;
 ```
 
 Once inside the container, execute the curl command to attempt to connect to the monitor webserver:
@@ -119,10 +119,10 @@ docker rm accumulo-proxy;
 ## Troubleshooting
 It can often be difficult to know where to start with troubleshooting inside containers, if you need to enter the container without starting the proxy we support this:
 ```commandline
-docker run -it --rm -p 42424:42424 --network="host" --name accumulo-proxy accumulo-proxy:latest bash
+docker run -it --rm -p 42424:42424 --network="host" --name accumulo-proxy accumulo-proxy:latest sh
 ``` 
 
-The container is very slim so if need be you can add additional tools using `apt`. 
+The container is very slim so if need be you can add additional tools using `apk`. 
 
 If you wish to manually execute the accumulo-proxy in the container you can:
 ```commandline
