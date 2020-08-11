@@ -102,5 +102,5 @@ on a server in the cluster and clients can communicate with proxy from outside o
 [ml]: https://maven-badges.herokuapp.com/maven-central/org.apache.accumulo/accumulo-proxy/
 [ji]: https://www.javadoc.io/badge/org.apache.accumulo/accumulo-proxy.svg
 [jl]: https://www.javadoc.io/doc/org.apache.accumulo/accumulo-proxy
-[ti]: https://travis-ci.org/apache/accumulo-proxy.svg?branch=master
-[tl]: https://travis-ci.org/apache/accumulo-proxy
+[ti]: https://github.com/apache/accumulo-proxy/workflows/QA/badge.svg
+[tl]: https://github.com/apache/accumulo-proxy/actions
