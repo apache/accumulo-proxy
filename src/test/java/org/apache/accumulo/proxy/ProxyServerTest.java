@@ -17,7 +17,7 @@
 package org.apache.accumulo.proxy;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.nio.ByteBuffer;
 import java.util.HashMap;
@@ -30,7 +30,7 @@ import org.apache.accumulo.proxy.ProxyServer.BatchWriterPlusProblem;
 import org.apache.accumulo.proxy.thrift.ColumnUpdate;
 import org.apache.accumulo.proxy.thrift.WriterOptions;
 import org.easymock.EasyMock;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  *

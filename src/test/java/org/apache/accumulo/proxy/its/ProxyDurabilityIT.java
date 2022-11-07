@@ -17,8 +17,8 @@
 package org.apache.accumulo.proxy.its;
 
 import static org.apache.accumulo.fate.util.UtilWaitThread.sleepUninterruptibly;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.nio.ByteBuffer;
@@ -57,7 +57,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.RawLocalFileSystem;
 import org.apache.thrift.protocol.TJSONProtocol;
 import org.apache.thrift.server.TServer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.google.common.collect.Iterators;
 

@@ -183,12 +183,6 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.13.1</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>org.apache.accumulo</groupId>
       <artifactId>accumulo-test</artifactId>
       <version>${accumulo.version}</version>
@@ -198,6 +192,19 @@
       <groupId>org.easymock</groupId>
       <artifactId>easymock</artifactId>
       <version>4.2</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit</groupId>
+      <artifactId>junit-bom</artifactId>
+      <version>5.9.1</version>
+      <type>pom</type>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>RELEASE</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -547,8 +554,12 @@
                   <property name="message" value="Use JUnit4+ @Test annotation instead of TestCase" />
                 </module>
                 <module name="RegexpSinglelineJava">
-                  <property name="format" value="import org[.]junit[.]Assert;" />
-                  <property name="message" value="Use static imports for Assert.* methods for consistency" />
+                  <property name="format" value="org[.]junit[.]jupiter[.]api[.]Assertions;" />
+                  <property name="message" value="Use static imports for Assertions.* methods for consistency" />
+                </module>
+                <module name="RegexpSinglelineJava">
+                  <property name="format" value="org[.]junit[.]jupiter[.]api[.]Assumptions;" />
+                  <property name="message" value="Use static imports for Assumptions.* methods for consistency" />
                 </module>
                 <module name="OuterTypeFilename" />
                 <module name="AvoidStarImport" />
