@@ -17,7 +17,7 @@
 package org.apache.accumulo.proxy.its;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.apache.accumulo.fate.util.UtilWaitThread.sleepUninterruptibly;
+import static org.apache.accumulo.core.util.UtilWaitThread.sleepUninterruptibly;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -33,6 +33,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.nio.ByteBuffer;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -57,7 +58,6 @@ import org.apache.accumulo.core.clientImpl.ClientInfo;
 import org.apache.accumulo.core.clientImpl.Namespace;
 import org.apache.accumulo.core.conf.DefaultConfiguration;
 import org.apache.accumulo.core.conf.Property;
-import org.apache.accumulo.core.crypto.CryptoServiceFactory;
 import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.file.FileOperations;
 import org.apache.accumulo.core.file.FileSKVWriter;
@@ -68,6 +68,7 @@ import org.apache.accumulo.core.iterators.user.SummingCombiner;
 import org.apache.accumulo.core.iterators.user.VersioningIterator;
 import org.apache.accumulo.core.metadata.MetadataTable;
 import org.apache.accumulo.core.security.Authorizations;
+import org.apache.accumulo.core.spi.crypto.NoCryptoServiceFactory;
 import org.apache.accumulo.core.util.ByteBufferUtil;
 import org.apache.accumulo.core.util.HostAndPort;
 import org.apache.accumulo.harness.MiniClusterConfigurationCallback;
@@ -152,8 +153,8 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
   private static final Logger log = LoggerFactory.getLogger(SimpleProxyBase.class);
 
   @Override
-  protected int defaultTimeoutSeconds() {
-    return 60;
+  protected Duration defaultTimeout() {
+    return Duration.ofMinutes(1);
   }
 
   private static final long ZOOKEEPER_PROPAGATION_TIME = 10 * 1000;
@@ -2165,7 +2166,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     // Write an RFile
     String filename = dir + "/bulk/import/rfile.rf";
     FileSKVWriter writer = FileOperations.getInstance().newWriterBuilder()
-        .forFile(filename, fs, fs.getConf(), CryptoServiceFactory.newDefaultInstance())
+        .forFile(filename, fs, fs.getConf(), NoCryptoServiceFactory.NONE)
         .withTableConfiguration(DefaultConfiguration.getInstance()).build();
     writer.startDefaultLocalityGroup();
     writer.append(
