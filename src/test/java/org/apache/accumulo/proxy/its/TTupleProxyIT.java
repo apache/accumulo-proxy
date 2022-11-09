@@ -18,11 +18,11 @@ package org.apache.accumulo.proxy.its;
 
 import org.apache.accumulo.harness.SharedMiniClusterBase;
 import org.apache.thrift.protocol.TTupleProtocol;
-import org.junit.BeforeClass;
+import org.junit.jupiter.api.BeforeAll;
 
 public class TTupleProxyIT extends SimpleProxyBase {
 
-  @BeforeClass
+  @BeforeAll
   public static void setProtocol() throws Exception {
     SharedMiniClusterBase.startMiniClusterWithConfig(new TestConfig());
     SimpleProxyBase.factory = new TTupleProtocol.Factory();

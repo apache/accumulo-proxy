@@ -18,13 +18,14 @@ package org.apache.accumulo.proxy.its;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.accumulo.fate.util.UtilWaitThread.sleepUninterruptibly;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -130,10 +131,12 @@ import org.apache.thrift.TApplicationException;
 import org.apache.thrift.TException;
 import org.apache.thrift.protocol.TProtocolFactory;
 import org.apache.thrift.server.TServer;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
+import org.junit.jupiter.api.Timeout;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -192,7 +195,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
    * Does the actual test setup, invoked by the concrete test class
    */
   public static void setUpProxy() throws Exception {
-    assertNotNull("Implementations must initialize the TProtocolFactory", factory);
+    assertNotNull(factory, "Implementations must initialize the TProtocolFactory");
 
     try (AccumuloClient c = Accumulo.newClient().from(getClientProps()).build()) {
       waitForAccumulo(c);
@@ -253,7 +256,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     }
   }
 
-  @AfterClass
+  @AfterAll
   public static void tearDownProxy() throws Exception {
     if (proxyServer != null) {
       proxyServer.stop();
@@ -268,8 +271,17 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
   String namespaceName;
   ByteBuffer badLogin;
 
-  @Before
-  public void setup() throws Exception {
+  private String testName;
+
+  private String[] getUniqueNameArray(int num) {
+    String[] names = new String[num];
+    for (int i = 0; i < num; i++)
+      names[i] = this.getClass().getSimpleName() + "_" + testName + i;
+    return names;
+  }
+
+  @BeforeEach
+  public void setup(TestInfo info) throws Exception {
     // Create a new client for each test
     if (isKerberosEnabled()) {
       UserGroupInformation.loginUserFromKeytab(clientPrincipal, clientKeytab.getAbsolutePath());
@@ -314,8 +326,10 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
       client.dropLocalUser(creds, "user");
     }
 
+    testName = info.getTestMethod().get().getName();
+
     // Create some unique names for tables, namespaces, etc.
-    String[] uniqueNames = getUniqueNames(2);
+    String[] uniqueNames = getUniqueNameArray(2);
 
     // Create a general table to be used
     tableName = uniqueNames[0];
@@ -326,7 +340,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     client.createNamespace(creds, namespaceName);
   }
 
-  @After
+  @AfterEach
   public void teardown() throws Exception {
     if (tableName != null) {
       if (isKerberosEnabled()) {
@@ -361,317 +375,418 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
    * Set a lower timeout for tests that should fail fast
    */
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void addConstraintLoginFailure() throws Exception {
-    client.addConstraint(badLogin, tableName, NumericValueConstraint.class.getName());
+  @Test
+  @Timeout(5)
+  public void addConstraintLoginFailure() {
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.addConstraint(badLogin, tableName, NumericValueConstraint.class.getName()));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void addSplitsLoginFailure() throws Exception {
-    client.addSplits(badLogin, tableName, Collections.singleton(s2bb("1")));
+  @Test
+  @Timeout(5)
+  public void addSplitsLoginFailure() {
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.addSplits(badLogin, tableName, Collections.singleton(s2bb("1"))));
   }
 
-  @Test(expected = TApplicationException.class, timeout = 5000)
-  public void clearLocatorCacheLoginFailure() throws Exception {
-    client.clearLocatorCache(badLogin, tableName);
+  @Test
+  @Timeout(5)
+  public void clearLocatorCacheLoginFailure() {
+    assertThrows(TApplicationException.class, () -> client.clearLocatorCache(badLogin, tableName));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
+  @Test
+  @Timeout(5)
   public void compactTableLoginFailure() throws Exception {
-    client.compactTable(badLogin, tableName, null, null, null, true, false, null);
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.compactTable(badLogin, tableName, null, null, null, true, false, null));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void cancelCompactionLoginFailure() throws Exception {
-    client.cancelCompaction(badLogin, tableName);
+  @Test
+  @Timeout(5)
+  public void cancelCompactionLoginFailure() {
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.cancelCompaction(badLogin, tableName));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void createTableLoginFailure() throws Exception {
-    client.createTable(badLogin, tableName, false, TimeType.MILLIS);
+  @Test
+  @Timeout(5)
+  public void createTableLoginFailure() {
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.createTable(badLogin, tableName, false, TimeType.MILLIS));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void deleteTableLoginFailure() throws Exception {
-    client.deleteTable(badLogin, tableName);
+  @Test
+  @Timeout(5)
+  public void deleteTableLoginFailure() {
+    assertThrows(AccumuloSecurityException.class, () -> client.deleteTable(badLogin, tableName));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
+  @Test
+  @Timeout(5)
   public void deleteRowsLoginFailure() throws Exception {
-    client.deleteRows(badLogin, tableName, null, null);
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.deleteRows(badLogin, tableName, null, null));
   }
 
-  @Test(expected = TApplicationException.class, timeout = 5000)
-  public void tableExistsLoginFailure() throws Exception {
-    client.tableExists(badLogin, tableName);
+  @Test
+  @Timeout(5)
+  public void tableExistsLoginFailure() {
+    assertThrows(TApplicationException.class, () -> client.tableExists(badLogin, tableName));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void flustTableLoginFailure() throws Exception {
-    client.flushTable(badLogin, tableName, null, null, false);
+  @Test
+  @Timeout(5)
+  public void flustTableLoginFailure() {
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.flushTable(badLogin, tableName, null, null, false));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void getLocalityGroupsLoginFailure() throws Exception {
-    client.getLocalityGroups(badLogin, tableName);
+  @Test
+  @Timeout(5)
+  public void getLocalityGroupsLoginFailure() {
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.getLocalityGroups(badLogin, tableName));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
+  @Test
+  @Timeout(5)
   public void getMaxRowLoginFailure() throws Exception {
-    client.getMaxRow(badLogin, tableName, Collections.<ByteBuffer> emptySet(), null, false, null,
-        false);
+    assertThrows(AccumuloSecurityException.class, () -> client.getMaxRow(badLogin, tableName,
+        Collections.<ByteBuffer> emptySet(), null, false, null, false));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void getTablePropertiesLoginFailure() throws Exception {
-    client.getTableProperties(badLogin, tableName);
+  @Test
+  @Timeout(5)
+  public void getTablePropertiesLoginFailure() {
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.getTableProperties(badLogin, tableName));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
+  @Test
+  @Timeout(5)
   public void listSplitsLoginFailure() throws Exception {
-    client.listSplits(badLogin, tableName, 10000);
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.listSplits(badLogin, tableName, 10000));
   }
 
-  @Test(expected = TApplicationException.class, timeout = 5000)
-  public void listTablesLoginFailure() throws Exception {
-    client.listTables(badLogin);
+  @Test
+  @Timeout(5)
+  public void listTablesLoginFailure() {
+    assertThrows(TApplicationException.class, () -> client.listTables(badLogin));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
+  @Test
+  @Timeout(5)
   public void listConstraintsLoginFailure() throws Exception {
-    client.listConstraints(badLogin, tableName);
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.listConstraints(badLogin, tableName));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void mergeTabletsLoginFailure() throws Exception {
-    client.mergeTablets(badLogin, tableName, null, null);
+  @Test
+  @Timeout(5)
+  public void mergeTabletsLoginFailure() {
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.mergeTablets(badLogin, tableName, null, null));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void offlineTableLoginFailure() throws Exception {
-    client.offlineTable(badLogin, tableName, false);
+  @Test
+  @Timeout(5)
+  public void offlineTableLoginFailure() {
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.offlineTable(badLogin, tableName, false));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void onlineTableLoginFailure() throws Exception {
-    client.onlineTable(badLogin, tableName, false);
+  @Test
+  @Timeout(5)
+  public void onlineTableLoginFailure() {
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.onlineTable(badLogin, tableName, false));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void removeConstraintLoginFailure() throws Exception {
-    client.removeConstraint(badLogin, tableName, 0);
+  @Test
+  @Timeout(5)
+  public void removeConstraintLoginFailure() {
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.removeConstraint(badLogin, tableName, 0));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void removeTablePropertyLoginFailure() throws Exception {
-    client.removeTableProperty(badLogin, tableName, Property.TABLE_FILE_MAX.getKey());
+  @Test
+  @Timeout(5)
+  public void removeTablePropertyLoginFailure() {
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.removeTableProperty(badLogin, tableName, Property.TABLE_FILE_MAX.getKey()));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void renameTableLoginFailure() throws Exception {
-    client.renameTable(badLogin, tableName, "someTableName");
+  @Test
+  @Timeout(5)
+  public void renameTableLoginFailure() {
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.renameTable(badLogin, tableName, "someTableName"));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void setLocalityGroupsLoginFailure() throws Exception {
+  @Test
+  @Timeout(5)
+  public void setLocalityGroupsLoginFailure() {
     Map<String,Set<String>> groups = new HashMap<>();
     groups.put("group1", Collections.singleton("cf1"));
     groups.put("group2", Collections.singleton("cf2"));
-    client.setLocalityGroups(badLogin, tableName, groups);
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.setLocalityGroups(badLogin, tableName, groups));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void setTablePropertyLoginFailure() throws Exception {
-    client.setTableProperty(badLogin, tableName, Property.TABLE_FILE_MAX.getKey(), "0");
+  @Test
+  @Timeout(5)
+  public void setTablePropertyLoginFailure() {
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.setTableProperty(badLogin, tableName, Property.TABLE_FILE_MAX.getKey(), "0"));
   }
 
-  @Test(expected = TException.class, timeout = 5000)
-  public void tableIdMapLoginFailure() throws Exception {
-    client.tableIdMap(badLogin);
+  @Test
+  @Timeout(5)
+  public void tableIdMapLoginFailure() {
+    assertThrows(TException.class, () -> client.tableIdMap(badLogin));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
+  @Test
+  @Timeout(5)
   public void getSiteConfigurationLoginFailure() throws Exception {
-    client.getSiteConfiguration(badLogin);
+    assertThrows(AccumuloSecurityException.class, () -> client.getSiteConfiguration(badLogin));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
+  @Test
+  @Timeout(5)
   public void getSystemConfigurationLoginFailure() throws Exception {
-    client.getSystemConfiguration(badLogin);
+    assertThrows(AccumuloSecurityException.class, () -> client.getSystemConfiguration(badLogin));
   }
 
-  @Test(expected = TException.class, timeout = 5000)
-  public void getTabletServersLoginFailure() throws Exception {
-    client.getTabletServers(badLogin);
+  @Test
+  @Timeout(5)
+  public void getTabletServersLoginFailure() {
+    assertThrows(TException.class, () -> client.getTabletServers(badLogin));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void getActiveScansLoginFailure() throws Exception {
-    client.getActiveScans(badLogin, "fake");
+  @Test
+  @Timeout(5)
+  public void getActiveScansLoginFailure() {
+    assertThrows(AccumuloSecurityException.class, () -> client.getActiveScans(badLogin, "fake"));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void getActiveCompactionsLoginFailure() throws Exception {
-    client.getActiveCompactions(badLogin, "fakse");
+  @Test
+  @Timeout(5)
+  public void getActiveCompactionsLoginFailure() {
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.getActiveCompactions(badLogin, "fake"));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void removePropertyLoginFailure() throws Exception {
-    client.removeProperty(badLogin, "table.split.threshold");
+  @Test
+  @Timeout(5)
+  public void removePropertyLoginFailure() {
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.removeProperty(badLogin, "table.split.threshold"));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void setPropertyLoginFailure() throws Exception {
-    client.setProperty(badLogin, "table.split.threshold", "500M");
+  @Test
+  @Timeout(5)
+  public void setPropertyLoginFailure() {
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.setProperty(badLogin, "table.split.threshold", "500M"));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void testClassLoadLoginFailure() throws Exception {
-    client.testClassLoad(badLogin, DevNull.class.getName(), SortedKeyValueIterator.class.getName());
+  @Test
+  @Timeout(5)
+  public void testClassLoadLoginFailure() {
+    assertThrows(AccumuloSecurityException.class, () -> client.testClassLoad(badLogin,
+        DevNull.class.getName(), SortedKeyValueIterator.class.getName()));
   }
 
-  @Test(timeout = 5000)
-  public void authenticateUserLoginFailure() throws Exception {
+  @Test
+  @Timeout(5)
+  public void authenticateUserLoginFailure() {
     if (!isKerberosEnabled()) {
-      try {
-        // Not really a relevant test for kerberos
-        client.authenticateUser(badLogin, "root", s2pp(SharedMiniClusterBase.getRootPassword()));
-        fail("Expected AccumuloSecurityException");
-      } catch (AccumuloSecurityException e) {
-        // Expected
-        return;
-      }
+      // Not really a relevant test for kerberos
+      Map<String,String> pw = s2pp(SharedMiniClusterBase.getRootPassword());
+      assertThrows(AccumuloSecurityException.class,
+          () -> client.authenticateUser(badLogin, "root", pw));
     }
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void changeUserAuthorizationsLoginFailure() throws Exception {
+  @Test
+  @Timeout(5)
+  public void changeUserAuthorizationsLoginFailure() {
     HashSet<ByteBuffer> auths = new HashSet<>(Arrays.asList(s2bb("A"), s2bb("B")));
-    client.changeUserAuthorizations(badLogin, "stooge", auths);
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.changeUserAuthorizations(badLogin, "stooge", auths));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void changePasswordLoginFailure() throws Exception {
-    client.changeLocalUserPassword(badLogin, "stooge", s2bb(""));
+  @Test
+  @Timeout(5)
+  public void changePasswordLoginFailure() {
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.changeLocalUserPassword(badLogin, "stooge", s2bb("")));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void createUserLoginFailure() throws Exception {
-    client.createLocalUser(badLogin, "stooge", s2bb("password"));
+  @Test
+  @Timeout(5)
+  public void createUserLoginFailure() {
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.createLocalUser(badLogin, "stooge", s2bb("password")));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void dropUserLoginFailure() throws Exception {
-    client.dropLocalUser(badLogin, "stooge");
+  @Test
+  @Timeout(5)
+  public void dropUserLoginFailure() {
+    assertThrows(AccumuloSecurityException.class, () -> client.dropLocalUser(badLogin, "stooge"));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void getUserAuthorizationsLoginFailure() throws Exception {
-    client.getUserAuthorizations(badLogin, "stooge");
+  @Test
+  @Timeout(5)
+  public void getUserAuthorizationsLoginFailure() {
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.getUserAuthorizations(badLogin, "stooge"));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void grantSystemPermissionLoginFailure() throws Exception {
-    client.grantSystemPermission(badLogin, "stooge", SystemPermission.CREATE_TABLE);
+  @Test
+  @Timeout(5)
+  public void grantSystemPermissionLoginFailure() {
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.grantSystemPermission(badLogin, "stooge", SystemPermission.CREATE_TABLE));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void grantTablePermissionLoginFailure() throws Exception {
-    client.grantTablePermission(badLogin, "root", tableName, TablePermission.WRITE);
+  @Test
+  @Timeout(5)
+  public void grantTablePermissionLoginFailure() {
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.grantTablePermission(badLogin, "root", tableName, TablePermission.WRITE));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void hasSystemPermissionLoginFailure() throws Exception {
-    client.hasSystemPermission(badLogin, "stooge", SystemPermission.CREATE_TABLE);
+  @Test
+  @Timeout(5)
+  public void hasSystemPermissionLoginFailure() {
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.hasSystemPermission(badLogin, "stooge", SystemPermission.CREATE_TABLE));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void hasTablePermission() throws Exception {
-    client.hasTablePermission(badLogin, "root", tableName, TablePermission.WRITE);
+  @Test
+  @Timeout(5)
+  public void hasTablePermission() {
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.hasTablePermission(badLogin, "root", tableName, TablePermission.WRITE));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void listLocalUsersLoginFailure() throws Exception {
-    client.listLocalUsers(badLogin);
+  @Test
+  @Timeout(5)
+  public void listLocalUsersLoginFailure() {
+    assertThrows(AccumuloSecurityException.class, () -> client.listLocalUsers(badLogin));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void revokeSystemPermissionLoginFailure() throws Exception {
-    client.revokeSystemPermission(badLogin, "stooge", SystemPermission.CREATE_TABLE);
+  @Test
+  @Timeout(5)
+  public void revokeSystemPermissionLoginFailure() {
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.revokeSystemPermission(badLogin, "stooge", SystemPermission.CREATE_TABLE));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void revokeTablePermissionLoginFailure() throws Exception {
-    client.revokeTablePermission(badLogin, "root", tableName, TablePermission.ALTER_TABLE);
+  @Test
+  @Timeout(5)
+  public void revokeTablePermissionLoginFailure() {
+    assertThrows(AccumuloSecurityException.class, () -> client.revokeTablePermission(badLogin,
+        "root", tableName, TablePermission.ALTER_TABLE));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void createScannerLoginFailure() throws Exception {
-    client.createScanner(badLogin, tableName, new ScanOptions());
+  @Test
+  @Timeout(5)
+  public void createScannerLoginFailure() {
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.createScanner(badLogin, tableName, new ScanOptions()));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void createBatchScannerLoginFailure() throws Exception {
-    client.createBatchScanner(badLogin, tableName, new BatchScanOptions());
+  @Test
+  @Timeout(5)
+  public void createBatchScannerLoginFailure() {
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.createBatchScanner(badLogin, tableName, new BatchScanOptions()));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void updateAndFlushLoginFailure() throws Exception {
-    client.updateAndFlush(badLogin, tableName, new HashMap<ByteBuffer,List<ColumnUpdate>>());
+  @Test
+  @Timeout(5)
+  public void updateAndFlushLoginFailure() {
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.updateAndFlush(badLogin, tableName, new HashMap<>()));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void createWriterLoginFailure() throws Exception {
-    client.createWriter(badLogin, tableName, new WriterOptions());
+  @Test
+  @Timeout(5)
+  public void createWriterLoginFailure() {
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.createWriter(badLogin, tableName, new WriterOptions()));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void attachIteratorLoginFailure() throws Exception {
-    client.attachIterator(badLogin, "slow", setting, EnumSet.allOf(IteratorScope.class));
+  @Test
+  @Timeout(5)
+  public void attachIteratorLoginFailure() {
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.attachIterator(badLogin, "slow", setting, EnumSet.allOf(IteratorScope.class)));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void checkIteratorLoginFailure() throws Exception {
-    client.checkIteratorConflicts(badLogin, tableName, setting, EnumSet.allOf(IteratorScope.class));
+  @Test
+  @Timeout(5)
+  public void checkIteratorLoginFailure() {
+    assertThrows(AccumuloSecurityException.class, () -> client.checkIteratorConflicts(badLogin,
+        tableName, setting, EnumSet.allOf(IteratorScope.class)));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void cloneTableLoginFailure() throws Exception {
-    client.cloneTable(badLogin, tableName, tableName + "_clone", false, null, null);
+  @Test
+  @Timeout(5)
+  public void cloneTableLoginFailure() {
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.cloneTable(badLogin, tableName, tableName + "_clone", false, null, null));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void exportTableLoginFailure() throws Exception {
-    client.exportTable(badLogin, tableName, "/tmp");
+  @Test
+  @Timeout(5)
+  public void exportTableLoginFailure() {
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.exportTable(badLogin, tableName, "/tmp"));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void importTableLoginFailure() throws Exception {
-    client.importTable(badLogin, "testify", "/tmp");
+  @Test
+  @Timeout(5)
+  public void importTableLoginFailure() {
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.importTable(badLogin, "testify", "/tmp"));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void getIteratorSettingLoginFailure() throws Exception {
-    client.getIteratorSetting(badLogin, tableName, "foo", IteratorScope.SCAN);
+  @Test
+  @Timeout(5)
+  public void getIteratorSettingLoginFailure() {
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.getIteratorSetting(badLogin, tableName, "foo", IteratorScope.SCAN));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void listIteratorsLoginFailure() throws Exception {
-    client.listIterators(badLogin, tableName);
+  @Test
+  @Timeout(5)
+  public void listIteratorsLoginFailure() {
+    assertThrows(AccumuloSecurityException.class, () -> client.listIterators(badLogin, tableName));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void removeIteratorLoginFailure() throws Exception {
-    client.removeIterator(badLogin, tableName, "name", EnumSet.allOf(IteratorScope.class));
+  @Test
+  @Timeout(5)
+  public void removeIteratorLoginFailure() {
+    assertThrows(AccumuloSecurityException.class, () -> client.removeIterator(badLogin, tableName,
+        "name", EnumSet.allOf(IteratorScope.class)));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
+  @Test
+  @Timeout(5)
   public void splitRangeByTabletsLoginFailure() throws Exception {
-    client.splitRangeByTablets(badLogin, tableName,
-        client.getRowRange(ByteBuffer.wrap("row".getBytes(UTF_8))), 10);
+    Range range = client.getRowRange(ByteBuffer.wrap("row".getBytes(UTF_8)));
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.splitRangeByTablets(badLogin, tableName, range, 10));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
+  @Test
+  @Timeout(5)
   public void importDirectoryLoginFailure() throws Exception {
     MiniAccumuloClusterImpl cluster = SharedMiniClusterBase.getCluster();
     Path base = cluster.getTemporaryPath();
@@ -679,145 +794,183 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     Path failuresDir = new Path(base, "failuresDir");
     assertTrue(cluster.getFileSystem().mkdirs(importDir));
     assertTrue(cluster.getFileSystem().mkdirs(failuresDir));
-    client.importDirectory(badLogin, tableName, importDir.toString(), failuresDir.toString(), true);
+    assertThrows(AccumuloSecurityException.class, () -> client.importDirectory(badLogin, tableName,
+        importDir.toString(), failuresDir.toString(), true));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void pingTabletServerLoginFailure() throws Exception {
-    client.pingTabletServer(badLogin, "fake");
+  @Test
+  @Timeout(5)
+  public void pingTabletServerLoginFailure() {
+    assertThrows(AccumuloSecurityException.class, () -> client.pingTabletServer(badLogin, "fake"));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void loginFailure() throws Exception {
-    client.login("badUser", properties);
+  @Test
+  @Timeout(5)
+  public void loginFailure() {
+    assertThrows(AccumuloSecurityException.class, () -> client.login("badUser", properties));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void testTableClassLoadLoginFailure() throws Exception {
-    client.testTableClassLoad(badLogin, tableName, VersioningIterator.class.getName(),
-        SortedKeyValueIterator.class.getName());
+  @Test
+  @Timeout(5)
+  public void testTableClassLoadLoginFailure() {
+    assertThrows(AccumuloSecurityException.class, () -> client.testTableClassLoad(badLogin,
+        tableName, VersioningIterator.class.getName(), SortedKeyValueIterator.class.getName()));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void createConditionalWriterLoginFailure() throws Exception {
-    client.createConditionalWriter(badLogin, tableName, new ConditionalWriterOptions());
+  @Test
+  @Timeout(5)
+  public void createConditionalWriterLoginFailure() {
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.createConditionalWriter(badLogin, tableName, new ConditionalWriterOptions()));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void grantNamespacePermissionLoginFailure() throws Exception {
-    client.grantNamespacePermission(badLogin, "stooge", namespaceName,
-        NamespacePermission.ALTER_NAMESPACE);
+  @Test
+  @Timeout(5)
+  public void grantNamespacePermissionLoginFailure() {
+    assertThrows(AccumuloSecurityException.class, () -> client.grantNamespacePermission(badLogin,
+        "stooge", namespaceName, NamespacePermission.ALTER_NAMESPACE));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void hasNamespacePermissionLoginFailure() throws Exception {
-    client.hasNamespacePermission(badLogin, "stooge", namespaceName,
-        NamespacePermission.ALTER_NAMESPACE);
+  @Test
+  @Timeout(5)
+  public void hasNamespacePermissionLoginFailure() {
+    assertThrows(AccumuloSecurityException.class, () -> client.hasNamespacePermission(badLogin,
+        "stooge", namespaceName, NamespacePermission.ALTER_NAMESPACE));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void revokeNamespacePermissionLoginFailure() throws Exception {
-    client.revokeNamespacePermission(badLogin, "stooge", namespaceName,
-        NamespacePermission.ALTER_NAMESPACE);
+  @Test
+  @Timeout(5)
+  public void revokeNamespacePermissionLoginFailure() {
+    assertThrows(AccumuloSecurityException.class, () -> client.revokeNamespacePermission(badLogin,
+        "stooge", namespaceName, NamespacePermission.ALTER_NAMESPACE));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void listNamespacesLoginFailure() throws Exception {
-    client.listNamespaces(badLogin);
+  @Test
+  @Timeout(5)
+  public void listNamespacesLoginFailure() {
+    assertThrows(AccumuloSecurityException.class, () -> client.listNamespaces(badLogin));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void namespaceExistsLoginFailure() throws Exception {
-    client.namespaceExists(badLogin, namespaceName);
+  @Test
+  @Timeout(5)
+  public void namespaceExistsLoginFailure() {
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.namespaceExists(badLogin, namespaceName));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void createNamespaceLoginFailure() throws Exception {
-    client.createNamespace(badLogin, "abcdef");
+  @Test
+  @Timeout(5)
+  public void createNamespaceLoginFailure() {
+    assertThrows(AccumuloSecurityException.class, () -> client.createNamespace(badLogin, "abcdef"));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void deleteNamespaceLoginFailure() throws Exception {
-    client.deleteNamespace(badLogin, namespaceName);
+  @Test
+  @Timeout(5)
+  public void deleteNamespaceLoginFailure() {
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.deleteNamespace(badLogin, namespaceName));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void renameNamespaceLoginFailure() throws Exception {
-    client.renameNamespace(badLogin, namespaceName, "abcdef");
+  @Test
+  @Timeout(5)
+  public void renameNamespaceLoginFailure() {
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.renameNamespace(badLogin, namespaceName, "abcdef"));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void setNamespacePropertyLoginFailure() throws Exception {
-    client.setNamespaceProperty(badLogin, namespaceName, "table.compaction.major.ratio", "4");
+  @Test
+  @Timeout(5)
+  public void setNamespacePropertyLoginFailure() {
+    assertThrows(AccumuloSecurityException.class, () -> client.setNamespaceProperty(badLogin,
+        namespaceName, "table.compaction.major.ratio", "4"));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void removeNamespacePropertyLoginFailure() throws Exception {
-    client.removeNamespaceProperty(badLogin, namespaceName, "table.compaction.major.ratio");
+  @Test
+  @Timeout(5)
+  public void removeNamespacePropertyLoginFailure() {
+    assertThrows(AccumuloSecurityException.class, () -> client.removeNamespaceProperty(badLogin,
+        namespaceName, "table.compaction.major.ratio"));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void getNamespacePropertiesLoginFailure() throws Exception {
-    client.getNamespaceProperties(badLogin, namespaceName);
+  @Test
+  @Timeout(5)
+  public void getNamespacePropertiesLoginFailure() {
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.getNamespaceProperties(badLogin, namespaceName));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void namespaceIdMapLoginFailure() throws Exception {
-    client.namespaceIdMap(badLogin);
+  @Test
+  @Timeout(5)
+  public void namespaceIdMapLoginFailure() {
+    assertThrows(AccumuloSecurityException.class, () -> client.namespaceIdMap(badLogin));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void attachNamespaceIteratorLoginFailure() throws Exception {
+  @Test
+  @Timeout(5)
+  public void attachNamespaceIteratorLoginFailure() {
     IteratorSetting setting = new IteratorSetting(100, "DebugTheThings",
         DebugIterator.class.getName(), Collections.emptyMap());
-    client.attachNamespaceIterator(badLogin, namespaceName, setting,
-        EnumSet.allOf(IteratorScope.class));
+    assertThrows(AccumuloSecurityException.class, () -> client.attachNamespaceIterator(badLogin,
+        namespaceName, setting, EnumSet.allOf(IteratorScope.class)));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void removeNamespaceIteratorLoginFailure() throws Exception {
-    client.removeNamespaceIterator(badLogin, namespaceName, "DebugTheThings",
-        EnumSet.allOf(IteratorScope.class));
+  @Test
+  @Timeout(5)
+  public void removeNamespaceIteratorLoginFailure() {
+    assertThrows(AccumuloSecurityException.class, () -> client.removeNamespaceIterator(badLogin,
+        namespaceName, "DebugTheThings", EnumSet.allOf(IteratorScope.class)));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void getNamespaceIteratorSettingLoginFailure() throws Exception {
-    client.getNamespaceIteratorSetting(badLogin, namespaceName, "DebugTheThings",
-        IteratorScope.SCAN);
+  @Test
+  @Timeout(5)
+  public void getNamespaceIteratorSettingLoginFailure() {
+    assertThrows(AccumuloSecurityException.class, () -> client.getNamespaceIteratorSetting(badLogin,
+        namespaceName, "DebugTheThings", IteratorScope.SCAN));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void listNamespaceIteratorsLoginFailure() throws Exception {
-    client.listNamespaceIterators(badLogin, namespaceName);
+  @Test
+  @Timeout(5)
+  public void listNamespaceIteratorsLoginFailure() {
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.listNamespaceIterators(badLogin, namespaceName));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void checkNamespaceIteratorConflictsLoginFailure() throws Exception {
+  @Test
+  @Timeout(5)
+  public void checkNamespaceIteratorConflictsLoginFailure() {
     IteratorSetting setting = new IteratorSetting(100, "DebugTheThings",
         DebugIterator.class.getName(), Collections.emptyMap());
-    client.checkNamespaceIteratorConflicts(badLogin, namespaceName, setting,
-        EnumSet.allOf(IteratorScope.class));
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.checkNamespaceIteratorConflicts(badLogin, namespaceName, setting,
+            EnumSet.allOf(IteratorScope.class)));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void addNamespaceConstraintLoginFailure() throws Exception {
-    client.addNamespaceConstraint(badLogin, namespaceName, MaxMutationSize.class.getName());
+  @Test
+  @Timeout(5)
+  public void addNamespaceConstraintLoginFailure() {
+    assertThrows(AccumuloSecurityException.class, () -> client.addNamespaceConstraint(badLogin,
+        namespaceName, MaxMutationSize.class.getName()));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void removeNamespaceConstraintLoginFailure() throws Exception {
-    client.removeNamespaceConstraint(badLogin, namespaceName, 1);
+  @Test
+  @Timeout(5)
+  public void removeNamespaceConstraintLoginFailure() {
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.removeNamespaceConstraint(badLogin, namespaceName, 1));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void listNamespaceConstraintsLoginFailure() throws Exception {
-    client.listNamespaceConstraints(badLogin, namespaceName);
+  @Test
+  @Timeout(5)
+  public void listNamespaceConstraintsLoginFailure() {
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.listNamespaceConstraints(badLogin, namespaceName));
   }
 
-  @Test(expected = AccumuloSecurityException.class, timeout = 5000)
-  public void testNamespaceClassLoadLoginFailure() throws Exception {
-    client.testNamespaceClassLoad(badLogin, namespaceName, DebugIterator.class.getName(),
-        SortedKeyValueIterator.class.getName());
+  @Test
+  @Timeout(5)
+  public void testNamespaceClassLoadLoginFailure() {
+    assertThrows(AccumuloSecurityException.class, () -> client.testNamespaceClassLoad(badLogin,
+        namespaceName, DebugIterator.class.getName(), SortedKeyValueIterator.class.getName()));
   }
 
   @Test
@@ -851,7 +1004,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
       fail("exception not thrown");
     } catch (TableNotFoundException ex) {}
     try {
-      final String TABLE_TEST = getUniqueNames(1)[0];
+      final String TABLE_TEST = getUniqueNameArray(1)[0];
       client.cloneTable(creds, doesNotExist, TABLE_TEST, false, null, null);
       fail("exception not thrown");
     } catch (TableNotFoundException ex) {}
@@ -1092,10 +1245,11 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     } catch (NamespaceExistsException ex) {}
   }
 
-  @Test(expected = NamespaceNotEmptyException.class)
+  @Test
   public void testNamespaceNotEmpty() throws Exception {
     client.createTable(creds, namespaceName + ".abcdefg", true, TimeType.MILLIS);
-    client.deleteNamespace(creds, namespaceName);
+    assertThrows(NamespaceNotEmptyException.class,
+        () -> client.deleteNamespace(creds, namespaceName));
   }
 
   @Test
@@ -1176,7 +1330,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     ScanResult entries = client.nextK(scanner, 10);
     client.closeScanner(scanner);
     assertFalse(entries.more);
-    assertEquals("Results: " + entries.results, 1, entries.results.size());
+    assertEquals(1, entries.results.size(), "Results: " + entries.results);
 
     upd = new ColumnUpdate(s2bb("cf"), s2bb("cq"));
     upd.setDeleteCell(true);
@@ -1316,7 +1470,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     }
     t.join();
 
-    assertFalse("Expected to find scans, but found none", scans.isEmpty());
+    assertFalse(scans.isEmpty(), "Expected to find scans, but found none");
     boolean found = false;
     Map<String,String> map = null;
     for (int i = 0; i < scans.size() && !found; i++) {
@@ -1335,7 +1489,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
       }
     }
 
-    assertTrue("Could not find a scan against the 'slow' table", found);
+    assertTrue(found, "Could not find a scan against the 'slow' table");
   }
 
   @Test
@@ -1455,7 +1609,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
       otherClient = getKdc().getClientPrincipal(1);
       user = otherClient.getPrincipal();
     } else {
-      user = getUniqueNames(1)[0];
+      user = getUniqueNameArray(1)[0];
     }
 
     // create a user
@@ -1463,8 +1617,8 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     // change auths
     Set<String> users = client.listLocalUsers(creds);
     Set<String> expectedUsers = new HashSet<>(Arrays.asList(clientPrincipal, user));
-    assertTrue("Did not find all expected users: " + expectedUsers,
-        users.containsAll(expectedUsers));
+    assertTrue(users.containsAll(expectedUsers),
+        "Did not find all expected users: " + expectedUsers);
     HashSet<ByteBuffer> auths = new HashSet<>(Arrays.asList(s2bb("A"), s2bb("B")));
     client.changeUserAuthorizations(creds, user, auths);
     List<ByteBuffer> update = client.getUserAuthorizations(creds, user);
@@ -1500,7 +1654,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
   @Test
   public void userPermissions() throws Exception {
-    String userName = getUniqueNames(1)[0];
+    String userName = getUniqueNameArray(1)[0];
     ClusterUser otherClient = null;
     ByteBuffer password = s2bb("password");
     ByteBuffer user;
@@ -1527,7 +1681,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
       user = client.login(userName, Collections.<String,String> emptyMap());
     } else {
-      userName = getUniqueNames(1)[0];
+      userName = getUniqueNameArray(1)[0];
       // create a user
       client.createLocalUser(creds, userName, password);
       user = client.login(userName, s2pp(ByteBufferUtil.toString(password)));
@@ -1647,7 +1801,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     // delete user
     client.dropLocalUser(creds, userName);
     Set<String> users = client.listLocalUsers(creds);
-    assertFalse("Should not see user after they are deleted", users.contains(userName));
+    assertFalse(users.contains(userName), "Should not see user after they are deleted");
 
     if (isKerberosEnabled()) {
       userProxyClient.close();
@@ -1685,7 +1839,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
       user = client.login(userName, Collections.<String,String> emptyMap());
     } else {
-      userName = getUniqueNames(1)[0];
+      userName = getUniqueNameArray(1)[0];
       // create a user
       client.createLocalUser(creds, userName, password);
       user = client.login(userName, s2pp(ByteBufferUtil.toString(password)));
@@ -1751,7 +1905,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     // delete user
     client.dropLocalUser(creds, userName);
     Set<String> users = client.listLocalUsers(creds);
-    assertFalse("Should not see user after they are deleted", users.contains(userName));
+    assertFalse(users.contains(userName), "Should not see user after they are deleted");
 
     if (isKerberosEnabled()) {
       userProxyClient.close();
@@ -1995,7 +2149,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
   @Test
   public void cloneTable() throws Exception {
-    String TABLE_TEST2 = getUniqueNames(2)[1];
+    String TABLE_TEST2 = getUniqueNameArray(2)[1];
 
     String[][] expected = new String[10][];
     for (int i = 0; i < 10; i++) {
@@ -2035,7 +2189,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
   @Test
   public void diskUsage() throws Exception {
-    String TABLE_TEST2 = getUniqueNames(2)[1];
+    String TABLE_TEST2 = getUniqueNameArray(2)[1];
 
     // Write some data
     String[][] expected = new String[10][];
@@ -2239,7 +2393,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     String scid = client.createScanner(creds, table, new ScanOptions());
     ScanResult keyValues = client.nextK(scid, expected.length + 1);
 
-    assertEquals("Saw " + keyValues.results, expected.length, keyValues.results.size());
+    assertEquals(expected.length, keyValues.results.size(), "Saw " + keyValues.results);
     assertFalse(keyValues.more);
 
     for (int i = 0; i < keyValues.results.size(); i++) {
@@ -2765,42 +2919,42 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
   @Test
   public void namespaceOperations() throws Exception {
     // default namespace and accumulo namespace
-    assertEquals("System namespace is wrong", client.systemNamespace(), Namespace.ACCUMULO.name());
-    assertEquals("Default namespace is wrong", client.defaultNamespace(), Namespace.DEFAULT.name());
+    assertEquals(client.systemNamespace(), Namespace.ACCUMULO.name(), "System namespace is wrong");
+    assertEquals(client.defaultNamespace(), Namespace.DEFAULT.name(), "Default namespace is wrong");
 
     // namespace existence and namespace listing
-    assertTrue("Namespace created during setup should exist",
-        client.namespaceExists(creds, namespaceName));
-    assertTrue("Namespace listing should contain namespace created during setup",
-        client.listNamespaces(creds).contains(namespaceName));
+    assertTrue(client.namespaceExists(creds, namespaceName),
+        "Namespace created during setup should exist");
+    assertTrue(client.listNamespaces(creds).contains(namespaceName),
+        "Namespace listing should contain namespace created during setup");
 
     // create new namespace
     String newNamespace = "foobar";
     client.createNamespace(creds, newNamespace);
 
-    assertTrue("Namespace just created should exist", client.namespaceExists(creds, newNamespace));
-    assertTrue("Namespace listing should contain just created",
-        client.listNamespaces(creds).contains(newNamespace));
+    assertTrue(client.namespaceExists(creds, newNamespace), "Namespace just created should exist");
+    assertTrue(client.listNamespaces(creds).contains(newNamespace),
+        "Namespace listing should contain just created");
 
     // rename the namespace
     String renamedNamespace = "foobar_renamed";
     client.renameNamespace(creds, newNamespace, renamedNamespace);
 
-    assertTrue("Renamed namespace should exist", client.namespaceExists(creds, renamedNamespace));
-    assertTrue("Namespace listing should contain renamed namespace",
-        client.listNamespaces(creds).contains(renamedNamespace));
+    assertTrue(client.namespaceExists(creds, renamedNamespace), "Renamed namespace should exist");
+    assertTrue(client.listNamespaces(creds).contains(renamedNamespace),
+        "Namespace listing should contain renamed namespace");
 
-    assertFalse("Original namespace should no longer exist",
-        client.namespaceExists(creds, newNamespace));
-    assertFalse("Namespace listing should no longer contain original namespace",
-        client.listNamespaces(creds).contains(newNamespace));
+    assertFalse(client.namespaceExists(creds, newNamespace),
+        "Original namespace should no longer exist");
+    assertFalse(client.listNamespaces(creds).contains(newNamespace),
+        "Namespace listing should no longer contain original namespace");
 
     // delete the namespace
     client.deleteNamespace(creds, renamedNamespace);
-    assertFalse("Renamed namespace should no longer exist",
-        client.namespaceExists(creds, renamedNamespace));
-    assertFalse("Namespace listing should no longer contain renamed namespace",
-        client.listNamespaces(creds).contains(renamedNamespace));
+    assertFalse(client.namespaceExists(creds, renamedNamespace),
+        "Renamed namespace should no longer exist");
+    assertFalse(client.listNamespaces(creds).contains(renamedNamespace),
+        "Namespace listing should no longer contain renamed namespace");
 
     // namespace properties
     Map<String,String> cfg = client.getNamespaceProperties(creds, namespaceName);
@@ -2815,11 +2969,13 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
       }
       sleepUninterruptibly(200, TimeUnit.MILLISECONDS);
     }
-    assertTrue("Namespace should contain table.compaction.major.ratio property", client
-        .getNamespaceProperties(creds, namespaceName).containsKey("table.compaction.major.ratio"));
-    assertEquals("Namespace property table.compaction.major.ratio property should equal 10",
+    assertTrue(
+        client.getNamespaceProperties(creds, namespaceName)
+            .containsKey("table.compaction.major.ratio"),
+        "Namespace should contain table.compaction.major.ratio property");
+    assertEquals(
         client.getNamespaceProperties(creds, namespaceName).get("table.compaction.major.ratio"),
-        "10");
+        "10", "Namespace property table.compaction.major.ratio property should equal 10");
     client.removeNamespaceProperty(creds, namespaceName, "table.compaction.major.ratio");
     for (int i = 0; i < 5; i++) {
       cfg = client.getNamespaceProperties(creds, namespaceName);
@@ -2828,49 +2984,53 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
       }
       sleepUninterruptibly(200, TimeUnit.MILLISECONDS);
     }
-    assertEquals("Namespace should have default value for table.compaction.major.ratio",
-        defaultProp, cfg.get("table.compaction.major.ratio"));
+    assertEquals(defaultProp, cfg.get("table.compaction.major.ratio"),
+        "Namespace should have default value for table.compaction.major.ratio");
 
     // namespace ID map
-    assertTrue("Namespace ID map should contain accumulo",
-        client.namespaceIdMap(creds).containsKey("accumulo"));
-    assertTrue("Namespace ID map should contain namespace created during setup",
-        client.namespaceIdMap(creds).containsKey(namespaceName));
+    assertTrue(client.namespaceIdMap(creds).containsKey("accumulo"),
+        "Namespace ID map should contain accumulo");
+    assertTrue(client.namespaceIdMap(creds).containsKey(namespaceName),
+        "Namespace ID map should contain namespace created during setup");
 
     // namespace iterators
     IteratorSetting setting = new IteratorSetting(100, "DebugTheThings",
         DebugIterator.class.getName(), Collections.emptyMap());
     client.attachNamespaceIterator(creds, namespaceName, setting, EnumSet.of(IteratorScope.SCAN));
-    assertEquals("Wrong iterator setting returned", setting, client
-        .getNamespaceIteratorSetting(creds, namespaceName, "DebugTheThings", IteratorScope.SCAN));
-    assertTrue("Namespace iterator settings should contain iterator just added",
-        client.listNamespaceIterators(creds, namespaceName).containsKey("DebugTheThings"));
-    assertEquals("Namespace iterator listing should contain iterator scope just added",
-        EnumSet.of(IteratorScope.SCAN),
-        client.listNamespaceIterators(creds, namespaceName).get("DebugTheThings"));
+    assertEquals(setting, client.getNamespaceIteratorSetting(creds, namespaceName, "DebugTheThings",
+        IteratorScope.SCAN), "Wrong iterator setting returned");
+    assertTrue(client.listNamespaceIterators(creds, namespaceName).containsKey("DebugTheThings"),
+        "Namespace iterator settings should contain iterator just added");
+    assertEquals(EnumSet.of(IteratorScope.SCAN),
+        client.listNamespaceIterators(creds, namespaceName).get("DebugTheThings"),
+        "Namespace iterator listing should contain iterator scope just added");
     client.checkNamespaceIteratorConflicts(creds, namespaceName, setting,
         EnumSet.of(IteratorScope.MAJC));
     client.removeNamespaceIterator(creds, namespaceName, "DebugTheThings",
         EnumSet.of(IteratorScope.SCAN));
-    assertFalse("Namespace iterator settings should contain iterator just added",
-        client.listNamespaceIterators(creds, namespaceName).containsKey("DebugTheThings"));
+    assertFalse(client.listNamespaceIterators(creds, namespaceName).containsKey("DebugTheThings"),
+        "Namespace iterator settings should contain iterator just added");
 
     // namespace constraints
     int id = client.addNamespaceConstraint(creds, namespaceName, MaxMutationSize.class.getName());
-    assertTrue("Namespace should contain max mutation size constraint",
+    assertTrue(
         client.listNamespaceConstraints(creds, namespaceName)
-            .containsKey(MaxMutationSize.class.getName()));
-    assertEquals("Namespace max mutation size constraint id is wrong", id, (int) client
-        .listNamespaceConstraints(creds, namespaceName).get(MaxMutationSize.class.getName()));
+            .containsKey(MaxMutationSize.class.getName()),
+        "Namespace should contain max mutation size constraint");
+    assertEquals(id,
+        (int) client.listNamespaceConstraints(creds, namespaceName)
+            .get(MaxMutationSize.class.getName()),
+        "Namespace max mutation size constraint id is wrong");
     client.removeNamespaceConstraint(creds, namespaceName, id);
-    assertFalse("Namespace should no longer contain max mutation size constraint",
+    assertFalse(
         client.listNamespaceConstraints(creds, namespaceName)
-            .containsKey(MaxMutationSize.class.getName()));
+            .containsKey(MaxMutationSize.class.getName()),
+        "Namespace should no longer contain max mutation size constraint");
 
     // namespace class load
-    assertTrue("Namespace class load should work", client.testNamespaceClassLoad(creds,
-        namespaceName, DebugIterator.class.getName(), SortedKeyValueIterator.class.getName()));
-    assertFalse("Namespace class load should not work", client.testNamespaceClassLoad(creds,
-        namespaceName, "foo.bar", SortedKeyValueIterator.class.getName()));
+    assertTrue(client.testNamespaceClassLoad(creds, namespaceName, DebugIterator.class.getName(),
+        SortedKeyValueIterator.class.getName()), "Namespace class load should work");
+    assertFalse(client.testNamespaceClassLoad(creds, namespaceName, "foo.bar",
+        SortedKeyValueIterator.class.getName()), "Namespace class load should not work");
   }
 }
