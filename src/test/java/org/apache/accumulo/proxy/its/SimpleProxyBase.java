@@ -29,6 +29,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.nio.ByteBuffer;
@@ -397,7 +398,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
   @Test
   @Timeout(5)
-  public void compactTableLoginFailure() throws Exception {
+  public void compactTableLoginFailure() {
     assertThrows(AccumuloSecurityException.class,
         () -> client.compactTable(badLogin, tableName, null, null, null, true, false, null));
   }
@@ -424,7 +425,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
   @Test
   @Timeout(5)
-  public void deleteRowsLoginFailure() throws Exception {
+  public void deleteRowsLoginFailure() {
     assertThrows(AccumuloSecurityException.class,
         () -> client.deleteRows(badLogin, tableName, null, null));
   }
@@ -451,7 +452,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
   @Test
   @Timeout(5)
-  public void getMaxRowLoginFailure() throws Exception {
+  public void getMaxRowLoginFailure() {
     assertThrows(AccumuloSecurityException.class, () -> client.getMaxRow(badLogin, tableName,
         Collections.<ByteBuffer> emptySet(), null, false, null, false));
   }
@@ -465,7 +466,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
   @Test
   @Timeout(5)
-  public void listSplitsLoginFailure() throws Exception {
+  public void listSplitsLoginFailure() {
     assertThrows(AccumuloSecurityException.class,
         () -> client.listSplits(badLogin, tableName, 10000));
   }
@@ -478,7 +479,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
   @Test
   @Timeout(5)
-  public void listConstraintsLoginFailure() throws Exception {
+  public void listConstraintsLoginFailure() {
     assertThrows(AccumuloSecurityException.class,
         () -> client.listConstraints(badLogin, tableName));
   }
@@ -550,13 +551,13 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
   @Test
   @Timeout(5)
-  public void getSiteConfigurationLoginFailure() throws Exception {
+  public void getSiteConfigurationLoginFailure() {
     assertThrows(AccumuloSecurityException.class, () -> client.getSiteConfiguration(badLogin));
   }
 
   @Test
   @Timeout(5)
-  public void getSystemConfigurationLoginFailure() throws Exception {
+  public void getSystemConfigurationLoginFailure() {
     assertThrows(AccumuloSecurityException.class, () -> client.getSystemConfiguration(badLogin));
   }
 
@@ -974,320 +975,232 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
   }
 
   @Test
-  public void tableNotFound() throws Exception {
+  public void tableNotFound() throws IOException {
     final String doesNotExist = "doesNotExists";
-    try {
-      client.addConstraint(creds, doesNotExist, NumericValueConstraint.class.getName());
-      fail("exception not thrown");
-    } catch (TableNotFoundException ex) {}
-    try {
-      client.addSplits(creds, doesNotExist, Collections.<ByteBuffer> emptySet());
-      fail("exception not thrown");
-    } catch (TableNotFoundException ex) {}
+
+    assertThrows(TableNotFoundException.class,
+        () -> client.addConstraint(creds, doesNotExist, NumericValueConstraint.class.getName()));
+
+    assertThrows(TableNotFoundException.class,
+        () -> client.addSplits(creds, doesNotExist, Collections.emptySet()));
+
     final IteratorSetting setting = new IteratorSetting(100, "slow", SlowIterator.class.getName(),
         Collections.singletonMap("sleepTime", "200"));
-    try {
-      client.attachIterator(creds, doesNotExist, setting, EnumSet.allOf(IteratorScope.class));
-      fail("exception not thrown");
-    } catch (TableNotFoundException ex) {}
-    try {
-      client.cancelCompaction(creds, doesNotExist);
-      fail("exception not thrown");
-    } catch (TableNotFoundException ex) {}
-    try {
-      client.checkIteratorConflicts(creds, doesNotExist, setting,
-          EnumSet.allOf(IteratorScope.class));
-      fail("exception not thrown");
-    } catch (TableNotFoundException ex) {}
-    try {
-      client.clearLocatorCache(creds, doesNotExist);
-      fail("exception not thrown");
-    } catch (TableNotFoundException ex) {}
-    try {
-      final String TABLE_TEST = getUniqueNameArray(1)[0];
-      client.cloneTable(creds, doesNotExist, TABLE_TEST, false, null, null);
-      fail("exception not thrown");
-    } catch (TableNotFoundException ex) {}
-    try {
-      client.compactTable(creds, doesNotExist, null, null, null, true, false, null);
-      fail("exception not thrown");
-    } catch (TableNotFoundException ex) {}
-    try {
-      client.createBatchScanner(creds, doesNotExist, new BatchScanOptions());
-      fail("exception not thrown");
-    } catch (TableNotFoundException ex) {}
-    try {
-      client.createScanner(creds, doesNotExist, new ScanOptions());
-      fail("exception not thrown");
-    } catch (TableNotFoundException ex) {}
-    try {
-      client.createWriter(creds, doesNotExist, new WriterOptions());
-      fail("exception not thrown");
-    } catch (TableNotFoundException ex) {}
-    try {
-      client.deleteRows(creds, doesNotExist, null, null);
-      fail("exception not thrown");
-    } catch (TableNotFoundException ex) {}
-    try {
-      client.deleteTable(creds, doesNotExist);
-      fail("exception not thrown");
-    } catch (TableNotFoundException ex) {}
-    try {
-      client.exportTable(creds, doesNotExist, "/tmp");
-      fail("exception not thrown");
-    } catch (TableNotFoundException ex) {}
-    try {
-      client.flushTable(creds, doesNotExist, null, null, false);
-      fail("exception not thrown");
-    } catch (TableNotFoundException ex) {}
-    try {
-      client.getIteratorSetting(creds, doesNotExist, "foo", IteratorScope.SCAN);
-      fail("exception not thrown");
-    } catch (TableNotFoundException ex) {}
-    try {
-      client.getLocalityGroups(creds, doesNotExist);
-      fail("exception not thrown");
-    } catch (TableNotFoundException ex) {}
-    try {
-      client.getMaxRow(creds, doesNotExist, Collections.<ByteBuffer> emptySet(), null, false, null,
-          false);
-      fail("exception not thrown");
-    } catch (TableNotFoundException ex) {}
-    try {
-      client.getTableProperties(creds, doesNotExist);
-      fail("exception not thrown");
-    } catch (TableNotFoundException ex) {}
-    try {
-      client.grantTablePermission(creds, "root", doesNotExist, TablePermission.WRITE);
-      fail("exception not thrown");
-    } catch (TableNotFoundException ex) {}
-    try {
-      client.hasTablePermission(creds, "root", doesNotExist, TablePermission.WRITE);
-      fail("exception not thrown");
-    } catch (TableNotFoundException ex) {}
-    try {
-      MiniAccumuloClusterImpl cluster = SharedMiniClusterBase.getCluster();
-      Path base = cluster.getTemporaryPath();
-      Path importDir = new Path(base, "importDir");
-      Path failuresDir = new Path(base, "failuresDir");
-      assertTrue(cluster.getFileSystem().mkdirs(importDir));
-      assertTrue(cluster.getFileSystem().mkdirs(failuresDir));
-      client.importDirectory(creds, doesNotExist, importDir.toString(), failuresDir.toString(),
-          true);
-      fail("exception not thrown");
-    } catch (TableNotFoundException ex) {}
-    try {
-      client.listConstraints(creds, doesNotExist);
-      fail("exception not thrown");
-    } catch (TableNotFoundException ex) {}
-    try {
-      client.listSplits(creds, doesNotExist, 10000);
-      fail("exception not thrown");
-    } catch (TableNotFoundException ex) {}
-    try {
-      client.mergeTablets(creds, doesNotExist, null, null);
-      fail("exception not thrown");
-    } catch (TableNotFoundException ex) {}
-    try {
-      client.offlineTable(creds, doesNotExist, false);
-      fail("exception not thrown");
-    } catch (TableNotFoundException ex) {}
-    try {
-      client.onlineTable(creds, doesNotExist, false);
-      fail("exception not thrown");
-    } catch (TableNotFoundException ex) {}
-    try {
-      client.removeConstraint(creds, doesNotExist, 0);
-      fail("exception not thrown");
-    } catch (TableNotFoundException ex) {}
-    try {
-      client.removeIterator(creds, doesNotExist, "name", EnumSet.allOf(IteratorScope.class));
-      fail("exception not thrown");
-    } catch (TableNotFoundException ex) {}
-    try {
-      client.removeTableProperty(creds, doesNotExist, Property.TABLE_FILE_MAX.getKey());
-      fail("exception not thrown");
-    } catch (TableNotFoundException ex) {}
-    try {
-      client.renameTable(creds, doesNotExist, "someTableName");
-      fail("exception not thrown");
-    } catch (TableNotFoundException ex) {}
-    try {
-      client.revokeTablePermission(creds, "root", doesNotExist, TablePermission.ALTER_TABLE);
-      fail("exception not thrown");
-    } catch (TableNotFoundException ex) {}
-    try {
-      client.setTableProperty(creds, doesNotExist, Property.TABLE_FILE_MAX.getKey(), "0");
-      fail("exception not thrown");
-    } catch (TableNotFoundException ex) {}
-    try {
-      client.splitRangeByTablets(creds, doesNotExist,
-          client.getRowRange(ByteBuffer.wrap("row".getBytes(UTF_8))), 10);
-      fail("exception not thrown");
-    } catch (TableNotFoundException ex) {}
-    try {
-      client.updateAndFlush(creds, doesNotExist, new HashMap<ByteBuffer,List<ColumnUpdate>>());
-      fail("exception not thrown");
-    } catch (TableNotFoundException ex) {}
-    try {
-      client.getDiskUsage(creds, Collections.singleton(doesNotExist));
-      fail("exception not thrown");
-    } catch (TableNotFoundException ex) {}
-    try {
-      client.testTableClassLoad(creds, doesNotExist, VersioningIterator.class.getName(),
-          SortedKeyValueIterator.class.getName());
-      fail("exception not thrown");
-    } catch (TableNotFoundException ex) {}
-    try {
-      client.createConditionalWriter(creds, doesNotExist, new ConditionalWriterOptions());
-      fail("exception not thrown");
-    } catch (TableNotFoundException ex) {}
+
+    assertThrows(TableNotFoundException.class, () -> client.attachIterator(creds, doesNotExist,
+        setting, EnumSet.allOf(IteratorScope.class)));
+
+    assertThrows(TableNotFoundException.class, () -> client.cancelCompaction(creds, doesNotExist));
+
+    assertThrows(TableNotFoundException.class, () -> client.checkIteratorConflicts(creds,
+        doesNotExist, setting, EnumSet.allOf(IteratorScope.class)));
+
+    assertThrows(TableNotFoundException.class, () -> client.clearLocatorCache(creds, doesNotExist));
+
+    final String TABLE_TEST = getUniqueNameArray(1)[0];
+
+    assertThrows(TableNotFoundException.class,
+        () -> client.cloneTable(creds, doesNotExist, TABLE_TEST, false, null, null));
+
+    assertThrows(TableNotFoundException.class,
+        () -> client.compactTable(creds, doesNotExist, null, null, null, true, false, null));
+
+    assertThrows(TableNotFoundException.class,
+        () -> client.createBatchScanner(creds, doesNotExist, new BatchScanOptions()));
+
+    assertThrows(TableNotFoundException.class,
+        () -> client.createScanner(creds, doesNotExist, new ScanOptions()));
+
+    assertThrows(TableNotFoundException.class,
+        () -> client.createWriter(creds, doesNotExist, new WriterOptions()));
+
+    assertThrows(TableNotFoundException.class,
+        () -> client.deleteRows(creds, doesNotExist, null, null));
+
+    assertThrows(TableNotFoundException.class, () -> client.deleteTable(creds, doesNotExist));
+
+    assertThrows(TableNotFoundException.class,
+        () -> client.exportTable(creds, doesNotExist, "/tmp"));
+
+    assertThrows(TableNotFoundException.class,
+        () -> client.flushTable(creds, doesNotExist, null, null, false));
+
+    assertThrows(TableNotFoundException.class,
+        () -> client.getIteratorSetting(creds, doesNotExist, "foo", IteratorScope.SCAN));
+
+    assertThrows(TableNotFoundException.class, () -> client.getLocalityGroups(creds, doesNotExist));
+
+    assertThrows(TableNotFoundException.class, () -> client.getMaxRow(creds, doesNotExist,
+        Collections.emptySet(), null, false, null, false));
+
+    assertThrows(TableNotFoundException.class,
+        () -> client.getTableProperties(creds, doesNotExist));
+
+    assertThrows(TableNotFoundException.class,
+        () -> client.grantTablePermission(creds, "root", doesNotExist, TablePermission.WRITE));
+
+    assertThrows(TableNotFoundException.class,
+        () -> client.hasTablePermission(creds, "root", doesNotExist, TablePermission.WRITE));
+
+    MiniAccumuloClusterImpl cluster = SharedMiniClusterBase.getCluster();
+    Path base = cluster.getTemporaryPath();
+    Path importDir = new Path(base, "importDir");
+    Path failuresDir = new Path(base, "failuresDir");
+    assertTrue(cluster.getFileSystem().mkdirs(importDir));
+    assertTrue(cluster.getFileSystem().mkdirs(failuresDir));
+
+    assertThrows(TableNotFoundException.class, () -> client.importDirectory(creds, doesNotExist,
+        importDir.toString(), failuresDir.toString(), true));
+
+    assertThrows(TableNotFoundException.class, () -> client.listConstraints(creds, doesNotExist));
+
+    assertThrows(TableNotFoundException.class, () -> client.listSplits(creds, doesNotExist, 10000));
+
+    assertThrows(TableNotFoundException.class,
+        () -> client.mergeTablets(creds, doesNotExist, null, null));
+
+    assertThrows(TableNotFoundException.class,
+        () -> client.offlineTable(creds, doesNotExist, false));
+
+    assertThrows(TableNotFoundException.class,
+        () -> client.onlineTable(creds, doesNotExist, false));
+
+    assertThrows(TableNotFoundException.class,
+        () -> client.removeConstraint(creds, doesNotExist, 0));
+
+    assertThrows(TableNotFoundException.class, () -> client.removeIterator(creds, doesNotExist,
+        "name", EnumSet.allOf(IteratorScope.class)));
+
+    assertThrows(TableNotFoundException.class,
+        () -> client.removeTableProperty(creds, doesNotExist, Property.TABLE_FILE_MAX.getKey()));
+
+    assertThrows(TableNotFoundException.class,
+        () -> client.renameTable(creds, doesNotExist, "someTableName"));
+
+    assertThrows(TableNotFoundException.class, () -> client.revokeTablePermission(creds, "root",
+        doesNotExist, TablePermission.ALTER_TABLE));
+
+    assertThrows(TableNotFoundException.class,
+        () -> client.setTableProperty(creds, doesNotExist, Property.TABLE_FILE_MAX.getKey(), "0"));
+
+    assertThrows(TableNotFoundException.class, () -> client.splitRangeByTablets(creds, doesNotExist,
+        client.getRowRange(ByteBuffer.wrap("row".getBytes(UTF_8))), 10));
+
+    assertThrows(TableNotFoundException.class,
+        () -> client.updateAndFlush(creds, doesNotExist, new HashMap<>()));
+
+    assertThrows(TableNotFoundException.class,
+        () -> client.getDiskUsage(creds, Collections.singleton(doesNotExist)));
+
+    assertThrows(TableNotFoundException.class, () -> client.testTableClassLoad(creds, doesNotExist,
+        VersioningIterator.class.getName(), SortedKeyValueIterator.class.getName()));
+
+    assertThrows(TableNotFoundException.class,
+        () -> client.createConditionalWriter(creds, doesNotExist, new ConditionalWriterOptions()));
   }
 
   @Test
-  public void namespaceNotFound() throws Exception {
+  public void namespaceNotFound() {
     final String doesNotExist = "doesNotExists";
-    try {
-      client.deleteNamespace(creds, doesNotExist);
-      fail("exception not thrown");
-    } catch (NamespaceNotFoundException ex) {}
-    try {
-      client.renameNamespace(creds, doesNotExist, "abcdefg");
-      fail("exception not thrown");
-    } catch (NamespaceNotFoundException ex) {}
-    try {
-      client.setNamespaceProperty(creds, doesNotExist, "table.compaction.major.ratio", "4");
-      fail("exception not thrown");
-    } catch (NamespaceNotFoundException ex) {}
-    try {
-      client.removeNamespaceProperty(creds, doesNotExist, "table.compaction.major.ratio");
-      fail("exception not thrown");
-    } catch (NamespaceNotFoundException ex) {}
-    try {
-      client.getNamespaceProperties(creds, doesNotExist);
-      fail("exception not thrown");
-    } catch (NamespaceNotFoundException ex) {}
-    try {
-      IteratorSetting setting = new IteratorSetting(100, "DebugTheThings",
-          DebugIterator.class.getName(), Collections.emptyMap());
-      client.attachNamespaceIterator(creds, doesNotExist, setting,
-          EnumSet.allOf(IteratorScope.class));
-      fail("exception not thrown");
-    } catch (NamespaceNotFoundException ex) {}
-    try {
-      client.removeNamespaceIterator(creds, doesNotExist, "DebugTheThings",
-          EnumSet.allOf(IteratorScope.class));
-      fail("exception not thrown");
-    } catch (NamespaceNotFoundException ex) {}
-    try {
-      client.getNamespaceIteratorSetting(creds, doesNotExist, "DebugTheThings", IteratorScope.SCAN);
-      fail("exception not thrown");
-    } catch (NamespaceNotFoundException ex) {}
-    try {
-      client.listNamespaceIterators(creds, doesNotExist);
-      fail("exception not thrown");
-    } catch (NamespaceNotFoundException ex) {}
-    try {
-      IteratorSetting setting = new IteratorSetting(100, "DebugTheThings",
-          DebugIterator.class.getName(), Collections.emptyMap());
-      client.checkNamespaceIteratorConflicts(creds, doesNotExist, setting,
-          EnumSet.allOf(IteratorScope.class));
-      fail("exception not thrown");
-    } catch (NamespaceNotFoundException ex) {}
-    try {
-      client.addNamespaceConstraint(creds, doesNotExist, MaxMutationSize.class.getName());
-      fail("exception not thrown");
-    } catch (NamespaceNotFoundException ex) {}
-    try {
-      client.removeNamespaceConstraint(creds, doesNotExist, 1);
-      fail("exception not thrown");
-    } catch (NamespaceNotFoundException ex) {}
-    try {
-      client.listNamespaceConstraints(creds, doesNotExist);
-      fail("exception not thrown");
-    } catch (NamespaceNotFoundException ex) {}
-    try {
-      client.testNamespaceClassLoad(creds, doesNotExist, DebugIterator.class.getName(),
-          SortedKeyValueIterator.class.getName());
-      fail("exception not thrown");
-    } catch (NamespaceNotFoundException ex) {}
+    IteratorSetting iteratorSetting = new IteratorSetting(100, "DebugTheThings",
+        DebugIterator.class.getName(), Collections.emptyMap());
+
+    assertThrows(NamespaceNotFoundException.class,
+        () -> client.deleteNamespace(creds, doesNotExist));
+
+    assertThrows(NamespaceNotFoundException.class,
+        () -> client.renameNamespace(creds, doesNotExist, "abcdefg"));
+
+    assertThrows(NamespaceNotFoundException.class, () -> client.setNamespaceProperty(creds,
+        doesNotExist, "table.compaction.major.ratio", "4"));
+
+    assertThrows(NamespaceNotFoundException.class,
+        () -> client.removeNamespaceProperty(creds, doesNotExist, "table.compaction.major.ratio"));
+
+    assertThrows(NamespaceNotFoundException.class,
+        () -> client.getNamespaceProperties(creds, doesNotExist));
+
+    assertThrows(NamespaceNotFoundException.class, () -> client.attachNamespaceIterator(creds,
+        doesNotExist, setting, EnumSet.allOf(IteratorScope.class)));
+
+    assertThrows(NamespaceNotFoundException.class, () -> client.removeNamespaceIterator(creds,
+        doesNotExist, "DebugTheThings", EnumSet.allOf(IteratorScope.class)));
+
+    assertThrows(NamespaceNotFoundException.class, () -> client.getNamespaceIteratorSetting(creds,
+        doesNotExist, "DebugTheThings", IteratorScope.SCAN));
+
+    assertThrows(NamespaceNotFoundException.class,
+        () -> client.listNamespaceIterators(creds, doesNotExist));
+
+    assertThrows(NamespaceNotFoundException.class,
+        () -> client.checkNamespaceIteratorConflicts(creds, doesNotExist, iteratorSetting,
+            EnumSet.allOf(IteratorScope.class)));
+
+    assertThrows(NamespaceNotFoundException.class,
+        () -> client.addNamespaceConstraint(creds, doesNotExist, MaxMutationSize.class.getName()));
+
+    assertThrows(NamespaceNotFoundException.class,
+        () -> client.removeNamespaceConstraint(creds, doesNotExist, 1));
+
+    assertThrows(NamespaceNotFoundException.class,
+        () -> client.listNamespaceConstraints(creds, doesNotExist));
+
+    assertThrows(NamespaceNotFoundException.class, () -> client.testNamespaceClassLoad(creds,
+        doesNotExist, DebugIterator.class.getName(), SortedKeyValueIterator.class.getName()));
   }
 
   @Test
-  public void testExists() throws Exception {
-    client.createTable(creds, "ett1", false, TimeType.MILLIS);
-    client.createTable(creds, "ett2", false, TimeType.MILLIS);
-    try {
-      client.createTable(creds, "ett1", false, TimeType.MILLIS);
-      fail("exception not thrown");
-    } catch (TableExistsException tee) {}
-    try {
-      client.renameTable(creds, "ett1", "ett2");
-      fail("exception not thrown");
-    } catch (TableExistsException tee) {}
-    try {
-      client.cloneTable(creds, "ett1", "ett2", false, new HashMap<String,String>(),
-          new HashSet<String>());
-      fail("exception not thrown");
-    } catch (TableExistsException tee) {}
+  public void testExists() throws TException {
+    final String table1 = "ett1";
+    final String table2 = "ett2";
+
+    client.createTable(creds, table1, false, TimeType.MILLIS);
+    client.createTable(creds, table2, false, TimeType.MILLIS);
+
+    assertThrows(TableExistsException.class,
+        () -> client.createTable(creds, table1, false, TimeType.MILLIS));
+
+    assertThrows(TableExistsException.class, () -> client.renameTable(creds, table1, table2));
+
+    assertThrows(TableExistsException.class,
+        () -> client.cloneTable(creds, table1, table2, false, new HashMap<>(), new HashSet<>()));
   }
 
   @Test
-  public void testNamespaceExists() throws Exception {
+  public void testNamespaceExists() throws TException {
     client.createNamespace(creds, "foobar");
-    try {
-      client.createNamespace(creds, namespaceName);
-      fail("exception not thrown");
-    } catch (NamespaceExistsException ex) {}
-    try {
-      client.renameNamespace(creds, "foobar", namespaceName);
-      fail("exception not thrown");
-    } catch (NamespaceExistsException ex) {}
+
+    assertThrows(NamespaceExistsException.class,
+        () -> client.createNamespace(creds, namespaceName));
+
+    assertThrows(NamespaceExistsException.class,
+        () -> client.renameNamespace(creds, "foobar", namespaceName));
   }
 
   @Test
   public void testNamespaceNotEmpty() throws Exception {
     client.createTable(creds, namespaceName + ".abcdefg", true, TimeType.MILLIS);
+
     assertThrows(NamespaceNotEmptyException.class,
         () -> client.deleteNamespace(creds, namespaceName));
   }
 
   @Test
-  public void testUnknownScanner() throws Exception {
+  public void testUnknownScanner() throws TException {
     String scanner = client.createScanner(creds, tableName, null);
     assertFalse(client.hasNext(scanner));
     client.closeScanner(scanner);
 
-    try {
-      client.hasNext(scanner);
-      fail("exception not thrown");
-    } catch (UnknownScanner us) {}
-
-    try {
-      client.closeScanner(scanner);
-      fail("exception not thrown");
-    } catch (UnknownScanner us) {}
-
-    try {
-      client.nextEntry("99999999");
-      fail("exception not thrown");
-    } catch (UnknownScanner us) {}
-    try {
-      client.nextK("99999999", 6);
-      fail("exception not thrown");
-    } catch (UnknownScanner us) {}
-    try {
-      client.hasNext("99999999");
-      fail("exception not thrown");
-    } catch (UnknownScanner us) {}
-    try {
-      client.hasNext(UUID.randomUUID().toString());
-      fail("exception not thrown");
-    } catch (UnknownScanner us) {}
+    assertThrows(UnknownScanner.class, () -> client.hasNext(scanner));
+    assertThrows(UnknownScanner.class, () -> client.closeScanner(scanner));
+    assertThrows(UnknownScanner.class, () -> client.nextEntry("99999999"));
+    assertThrows(UnknownScanner.class, () -> client.nextK("99999999", 6));
+    assertThrows(UnknownScanner.class, () -> client.hasNext("99999999"));
+    assertThrows(UnknownScanner.class, () -> client.hasNext(UUID.randomUUID().toString()));
   }
 
   @Test
-  public void testUnknownWriter() throws Exception {
+  public void testUnknownWriter() throws TException {
     String writer = client.createWriter(creds, tableName, null);
     client.update(writer, mutation("row0", "cf", "cq", "value"));
     client.flush(writer);
@@ -1297,22 +1210,10 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     // this is a oneway call, so it does not throw exceptions
     client.update(writer, mutation("row2", "cf", "cq", "value2"));
 
-    try {
-      client.flush(writer);
-      fail("exception not thrown");
-    } catch (UnknownWriter uw) {}
-    try {
-      client.flush("99999");
-      fail("exception not thrown");
-    } catch (UnknownWriter uw) {}
-    try {
-      client.flush(UUID.randomUUID().toString());
-      fail("exception not thrown");
-    } catch (UnknownWriter uw) {}
-    try {
-      client.closeWriter("99999");
-      fail("exception not thrown");
-    } catch (UnknownWriter uw) {}
+    assertThrows(UnknownWriter.class, () -> client.flush(writer));
+    assertThrows(UnknownWriter.class, () -> client.flush("99999"));
+    assertThrows(UnknownWriter.class, () -> client.flush(UUID.randomUUID().toString()));
+    assertThrows(UnknownWriter.class, () -> client.closeWriter("99999"));
   }
 
   @Test
@@ -1738,17 +1639,15 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
       assertFalse(client.listTables(creds).contains("fail"));
     }
     // denied!
-    try {
-      if (isKerberosEnabled()) {
-        // Switch back to the extra user
-        UserGroupInformation.loginUserFromKeytab(otherClient.getPrincipal(),
-            otherClient.getKeytab().getAbsolutePath());
-        client = userClient;
-      }
-      String scanner = client.createScanner(user, tableName, null);
-      client.nextK(scanner, 100);
-      fail("stooge should not read table test");
-    } catch (AccumuloSecurityException ex) {}
+    if (isKerberosEnabled()) {
+      // Switch back to the extra user
+      UserGroupInformation.loginUserFromKeytab(otherClient.getPrincipal(),
+          otherClient.getKeytab().getAbsolutePath());
+      client = userClient;
+    }
+    String scanner = client.createScanner(user, tableName, null);
+    assertThrows(AccumuloSecurityException.class, () -> client.nextK(scanner, 100),
+        "stooge should not read table test");
 
     if (isKerberosEnabled()) {
       // Switch back to original client
@@ -1767,9 +1666,9 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
           otherClient.getKeytab().getAbsolutePath());
       client = userClient;
     }
-    String scanner = client.createScanner(user, tableName, null);
-    client.nextK(scanner, 10);
-    client.closeScanner(scanner);
+    final String scanner1 = client.createScanner(user, tableName, null);
+    client.nextK(scanner1, 10);
+    client.closeScanner(scanner1);
 
     if (isKerberosEnabled()) {
       // Switch back to original client
@@ -1780,17 +1679,15 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     // revoke
     client.revokeTablePermission(creds, userName, tableName, TablePermission.READ);
     assertFalse(client.hasTablePermission(creds, userName, tableName, TablePermission.READ));
-    try {
-      if (isKerberosEnabled()) {
-        // Switch back to the extra user
-        UserGroupInformation.loginUserFromKeytab(otherClient.getPrincipal(),
-            otherClient.getKeytab().getAbsolutePath());
-        client = userClient;
-      }
-      scanner = client.createScanner(user, tableName, null);
-      client.nextK(scanner, 100);
-      fail("stooge should not read table test");
-    } catch (AccumuloSecurityException ex) {}
+    if (isKerberosEnabled()) {
+      // Switch back to the extra user
+      UserGroupInformation.loginUserFromKeytab(otherClient.getPrincipal(),
+          otherClient.getKeytab().getAbsolutePath());
+      client = userClient;
+    }
+    final String scanner2 = client.createScanner(user, tableName, null);
+    assertThrows(AccumuloSecurityException.class, () -> client.nextK(scanner2, 100),
+        "stooge should not read table test");
 
     if (isKerberosEnabled()) {
       // Switch back to original client
@@ -2274,12 +2171,8 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     assertScan(expected, "testify");
     client.deleteTable(creds, "testify");
 
-    try {
-      // ACCUMULO-1558 a second import from the same dir should fail, the first import moved the
-      // files
-      client.importTable(creds, "testify2", destDir.toString());
-      fail();
-    } catch (Exception e) {}
+    // ACCUMULO-1558 a second import from the same dir should fail, the first import moved the files
+    assertThrows(Exception.class, () -> client.importTable(creds, "testify2", destDir.toString()));
 
     assertFalse(client.listTables(creds).contains("testify2"));
   }
@@ -2648,10 +2541,8 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
         {"00347", "data", "count", "3"}, {"00347", "data", "img", "0987654321"}}, tableName);
 
     client.closeConditionalWriter(cwid);
-    try {
-      client.updateRowsConditionally(cwid, updates);
-      fail("conditional writer not closed");
-    } catch (UnknownWriter uk) {}
+    assertThrows(UnknownWriter.class, () -> client.updateRowsConditionally(cwid, updates),
+        "conditional writer not closed");
 
     String principal;
     ClusterUser cwuser = null;
@@ -2690,7 +2581,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     try {
       ByteBuffer cwCreds = client.login(principal, cwProperties);
 
-      cwid = client.createConditionalWriter(cwCreds, tableName,
+      final String cwid2 = client.createConditionalWriter(cwCreds, tableName,
           new ConditionalWriterOptions().setAuthorizations(Collections.singleton(s2bb("A"))));
 
       updates.clear();
@@ -2704,7 +2595,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
               Arrays.asList(new Condition(new Column(s2bb("data"), s2bb("c"), s2bb("B")))),
               Arrays.asList(newColUpdate("data", "seq", "1"))));
 
-      results = client.updateRowsConditionally(cwid, updates);
+      results = client.updateRowsConditionally(cwid2, updates);
 
       assertEquals(2, results.size());
       assertEquals(ConditionalStatus.ACCEPTED, results.get(s2bb("00348")));
@@ -2736,7 +2627,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
           Arrays.asList(newColUpdate("data", "seq", "2"),
               newColUpdate("data", "c", "2").setColVisibility(s2bb("A")))));
 
-      results = client.updateRowsConditionally(cwid, updates);
+      results = client.updateRowsConditionally(cwid2, updates);
 
       assertEquals(1, results.size());
       assertEquals(ConditionalStatus.REJECTED, results.get(s2bb("00348")));
@@ -2766,7 +2657,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
           Arrays.asList(newColUpdate("data", "seq", "2"),
               newColUpdate("data", "c", "2").setColVisibility(s2bb("A")))));
 
-      results = client.updateRowsConditionally(cwid, updates);
+      results = client.updateRowsConditionally(cwid2, updates);
 
       assertEquals(1, results.size());
       assertEquals(ConditionalStatus.ACCEPTED, results.get(s2bb("00348")));
@@ -2788,11 +2679,9 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
         client = cwuserProxyClient.proxy();
       }
 
-      client.closeConditionalWriter(cwid);
-      try {
-        client.updateRowsConditionally(cwid, updates);
-        fail("conditional writer not closed");
-      } catch (UnknownWriter uk) {}
+      client.closeConditionalWriter(cwid2);
+      assertThrows(UnknownWriter.class, () -> client.updateRowsConditionally(cwid2, updates),
+          "conditional writer not closed");
     } finally {
       if (isKerberosEnabled()) {
         // Close the other client
