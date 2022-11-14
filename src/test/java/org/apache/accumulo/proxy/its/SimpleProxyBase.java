@@ -2171,8 +2171,8 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     assertScan(expected, "testify");
     client.deleteTable(creds, "testify");
 
-    // ACCUMULO-1558 a second import from the same dir should fail, the first import moved the files
-    assertThrows(Exception.class, () -> client.importTable(creds, "testify2", destDir.toString()));
+    assertThrows(org.apache.accumulo.proxy.thrift.AccumuloException.class,
+        () -> client.importTable(creds, "testify2", destDir.toString()));
 
     assertFalse(client.listTables(creds).contains("testify2"));
   }
