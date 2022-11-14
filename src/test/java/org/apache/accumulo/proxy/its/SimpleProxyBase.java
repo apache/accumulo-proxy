@@ -46,6 +46,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
 
 import org.apache.accumulo.cluster.ClusterUser;
 import org.apache.accumulo.core.client.Accumulo;
@@ -138,6 +139,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.Timeout;
+import org.junit.jupiter.api.function.Executable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -159,13 +161,13 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
   private static int proxyPort;
 
   private TestProxyClient proxyClient;
-  private org.apache.accumulo.proxy.thrift.AccumuloProxy.Client client;
+  private static org.apache.accumulo.proxy.thrift.AccumuloProxy.Client client;
 
   private static Map<String,String> properties = new HashMap<>();
   private static String hostname, proxyPrincipal, proxyPrimary, clientPrincipal;
   private static File proxyKeytab, clientKeytab;
 
-  private ByteBuffer creds = null;
+  private static ByteBuffer creds = null;
 
   // Implementations can set this
   static TProtocolFactory factory = null;
@@ -976,127 +978,64 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
   @Test
   public void tableNotFound() throws IOException {
-    final String doesNotExist = "doesNotExists";
-
-    assertThrows(TableNotFoundException.class,
-        () -> client.addConstraint(creds, doesNotExist, NumericValueConstraint.class.getName()));
-
-    assertThrows(TableNotFoundException.class,
-        () -> client.addSplits(creds, doesNotExist, Collections.emptySet()));
+    final String nonExistentTableName = "doesNotExist";
 
     final IteratorSetting setting = new IteratorSetting(100, "slow", SlowIterator.class.getName(),
         Collections.singletonMap("sleepTime", "200"));
 
-    assertThrows(TableNotFoundException.class, () -> client.attachIterator(creds, doesNotExist,
-        setting, EnumSet.allOf(IteratorScope.class)));
+    final String newTableName = getUniqueNameArray(1)[0];
 
-    assertThrows(TableNotFoundException.class, () -> client.cancelCompaction(creds, doesNotExist));
-
-    assertThrows(TableNotFoundException.class, () -> client.checkIteratorConflicts(creds,
-        doesNotExist, setting, EnumSet.allOf(IteratorScope.class)));
-
-    assertThrows(TableNotFoundException.class, () -> client.clearLocatorCache(creds, doesNotExist));
-
-    final String TABLE_TEST = getUniqueNameArray(1)[0];
-
-    assertThrows(TableNotFoundException.class,
-        () -> client.cloneTable(creds, doesNotExist, TABLE_TEST, false, null, null));
-
-    assertThrows(TableNotFoundException.class,
-        () -> client.compactTable(creds, doesNotExist, null, null, null, true, false, null));
-
-    assertThrows(TableNotFoundException.class,
-        () -> client.createBatchScanner(creds, doesNotExist, new BatchScanOptions()));
-
-    assertThrows(TableNotFoundException.class,
-        () -> client.createScanner(creds, doesNotExist, new ScanOptions()));
-
-    assertThrows(TableNotFoundException.class,
-        () -> client.createWriter(creds, doesNotExist, new WriterOptions()));
-
-    assertThrows(TableNotFoundException.class,
-        () -> client.deleteRows(creds, doesNotExist, null, null));
-
-    assertThrows(TableNotFoundException.class, () -> client.deleteTable(creds, doesNotExist));
-
-    assertThrows(TableNotFoundException.class,
-        () -> client.exportTable(creds, doesNotExist, "/tmp"));
-
-    assertThrows(TableNotFoundException.class,
-        () -> client.flushTable(creds, doesNotExist, null, null, false));
-
-    assertThrows(TableNotFoundException.class,
-        () -> client.getIteratorSetting(creds, doesNotExist, "foo", IteratorScope.SCAN));
-
-    assertThrows(TableNotFoundException.class, () -> client.getLocalityGroups(creds, doesNotExist));
-
-    assertThrows(TableNotFoundException.class, () -> client.getMaxRow(creds, doesNotExist,
-        Collections.emptySet(), null, false, null, false));
-
-    assertThrows(TableNotFoundException.class,
-        () -> client.getTableProperties(creds, doesNotExist));
-
-    assertThrows(TableNotFoundException.class,
-        () -> client.grantTablePermission(creds, "root", doesNotExist, TablePermission.WRITE));
-
-    assertThrows(TableNotFoundException.class,
-        () -> client.hasTablePermission(creds, "root", doesNotExist, TablePermission.WRITE));
-
-    MiniAccumuloClusterImpl cluster = SharedMiniClusterBase.getCluster();
-    Path base = cluster.getTemporaryPath();
-    Path importDir = new Path(base, "importDir");
-    Path failuresDir = new Path(base, "failuresDir");
+    final MiniAccumuloClusterImpl cluster = SharedMiniClusterBase.getCluster();
+    final Path base = cluster.getTemporaryPath();
+    final Path importDir = new Path(base, "importDir");
+    final Path failuresDir = new Path(base, "failuresDir");
     assertTrue(cluster.getFileSystem().mkdirs(importDir));
     assertTrue(cluster.getFileSystem().mkdirs(failuresDir));
 
-    assertThrows(TableNotFoundException.class, () -> client.importDirectory(creds, doesNotExist,
-        importDir.toString(), failuresDir.toString(), true));
+    // @formatter:off
+    Stream<Executable> cases = Stream.of(
+      () -> client.addConstraint(creds, nonExistentTableName, NumericValueConstraint.class.getName()),
+      () -> client.addSplits(creds, nonExistentTableName, Collections.emptySet()),
+      () -> client.attachIterator(creds, nonExistentTableName, setting, EnumSet.allOf(IteratorScope.class)),
+      () -> client.cancelCompaction(creds, nonExistentTableName),
+      () -> client.checkIteratorConflicts(creds, nonExistentTableName, setting, EnumSet.allOf(IteratorScope.class)),
+      () -> client.clearLocatorCache(creds, nonExistentTableName),
+      () -> client.cloneTable(creds, nonExistentTableName, newTableName, false, null, null),
+      () -> client.compactTable(creds, nonExistentTableName, null, null, null, true, false, null),
+      () -> client.createBatchScanner(creds, nonExistentTableName, new BatchScanOptions()),
+      () -> client.createScanner(creds, nonExistentTableName, new ScanOptions()),
+      () -> client.createWriter(creds, nonExistentTableName, new WriterOptions()),
+      () -> client.deleteRows(creds, nonExistentTableName, null, null),
+      () -> client.deleteTable(creds, nonExistentTableName),
+      () -> client.exportTable(creds, nonExistentTableName, "/tmp"),
+      () -> client.flushTable(creds, nonExistentTableName, null, null, false),
+      () -> client.getIteratorSetting(creds, nonExistentTableName, "foo", IteratorScope.SCAN),
+      () -> client.getLocalityGroups(creds, nonExistentTableName),
+      () -> client.getMaxRow(creds, nonExistentTableName, Collections.emptySet(), null, false, null, false),
+      () -> client.getTableProperties(creds, nonExistentTableName),
+      () -> client.grantTablePermission(creds, "root", nonExistentTableName, TablePermission.WRITE),
+      () -> client.hasTablePermission(creds, "root", nonExistentTableName, TablePermission.WRITE),
+      () -> client.importDirectory(creds, nonExistentTableName, importDir.toString(), failuresDir.toString(), true),
+      () -> client.listConstraints(creds, nonExistentTableName),
+      () -> client.listSplits(creds, nonExistentTableName, 10000),
+      () -> client.mergeTablets(creds, nonExistentTableName, null, null),
+      () -> client.offlineTable(creds, nonExistentTableName, false),
+      () -> client.onlineTable(creds, nonExistentTableName, false),
+      () -> client.removeConstraint(creds, nonExistentTableName, 0),
+      () -> client.removeIterator(creds, nonExistentTableName, "name", EnumSet.allOf(IteratorScope.class)),
+      () -> client.removeTableProperty(creds, nonExistentTableName, Property.TABLE_FILE_MAX.getKey()),
+      () -> client.renameTable(creds, nonExistentTableName, "someTableName"),
+      () -> client.revokeTablePermission(creds, "root", nonExistentTableName, TablePermission.ALTER_TABLE),
+      () -> client.setTableProperty(creds, nonExistentTableName, Property.TABLE_FILE_MAX.getKey(), "0"),
+      () -> client.splitRangeByTablets(creds, nonExistentTableName, client.getRowRange(ByteBuffer.wrap("row".getBytes(UTF_8))), 10),
+      () -> client.updateAndFlush(creds, nonExistentTableName, new HashMap<>()),
+      () -> client.getDiskUsage(creds, Collections.singleton(nonExistentTableName)),
+      () -> client.testTableClassLoad(creds, nonExistentTableName, VersioningIterator.class.getName(), SortedKeyValueIterator.class.getName()),
+      () -> client.createConditionalWriter(creds, nonExistentTableName, new ConditionalWriterOptions())
+    );
+    // @formatter:on
 
-    assertThrows(TableNotFoundException.class, () -> client.listConstraints(creds, doesNotExist));
-
-    assertThrows(TableNotFoundException.class, () -> client.listSplits(creds, doesNotExist, 10000));
-
-    assertThrows(TableNotFoundException.class,
-        () -> client.mergeTablets(creds, doesNotExist, null, null));
-
-    assertThrows(TableNotFoundException.class,
-        () -> client.offlineTable(creds, doesNotExist, false));
-
-    assertThrows(TableNotFoundException.class,
-        () -> client.onlineTable(creds, doesNotExist, false));
-
-    assertThrows(TableNotFoundException.class,
-        () -> client.removeConstraint(creds, doesNotExist, 0));
-
-    assertThrows(TableNotFoundException.class, () -> client.removeIterator(creds, doesNotExist,
-        "name", EnumSet.allOf(IteratorScope.class)));
-
-    assertThrows(TableNotFoundException.class,
-        () -> client.removeTableProperty(creds, doesNotExist, Property.TABLE_FILE_MAX.getKey()));
-
-    assertThrows(TableNotFoundException.class,
-        () -> client.renameTable(creds, doesNotExist, "someTableName"));
-
-    assertThrows(TableNotFoundException.class, () -> client.revokeTablePermission(creds, "root",
-        doesNotExist, TablePermission.ALTER_TABLE));
-
-    assertThrows(TableNotFoundException.class,
-        () -> client.setTableProperty(creds, doesNotExist, Property.TABLE_FILE_MAX.getKey(), "0"));
-
-    assertThrows(TableNotFoundException.class, () -> client.splitRangeByTablets(creds, doesNotExist,
-        client.getRowRange(ByteBuffer.wrap("row".getBytes(UTF_8))), 10));
-
-    assertThrows(TableNotFoundException.class,
-        () -> client.updateAndFlush(creds, doesNotExist, new HashMap<>()));
-
-    assertThrows(TableNotFoundException.class,
-        () -> client.getDiskUsage(creds, Collections.singleton(doesNotExist)));
-
-    assertThrows(TableNotFoundException.class, () -> client.testTableClassLoad(creds, doesNotExist,
-        VersioningIterator.class.getName(), SortedKeyValueIterator.class.getName()));
-
-    assertThrows(TableNotFoundException.class,
-        () -> client.createConditionalWriter(creds, doesNotExist, new ConditionalWriterOptions()));
+    cases.forEach(e -> assertThrows(TableNotFoundException.class, e));
   }
 
   @Test
