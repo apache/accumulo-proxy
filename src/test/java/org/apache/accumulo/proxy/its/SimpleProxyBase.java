@@ -1523,17 +1523,16 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     }
 
     // check permission failure
-    try {
-      client.createTable(user, "fail", true, TimeType.MILLIS);
-      fail("should not create the table");
-    } catch (AccumuloSecurityException ex) {
-      if (isKerberosEnabled()) {
-        // Switch back to original client
-        UserGroupInformation.loginUserFromKeytab(clientPrincipal, clientKeytab.getAbsolutePath());
-        client = origClient;
-      }
-      assertFalse(client.listTables(creds).contains("fail"));
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.createTable(user, "fail", true, TimeType.MILLIS),
+        "should not be able to create the table");
+    if (isKerberosEnabled()) {
+      // Switch back to original client
+      UserGroupInformation.loginUserFromKeytab(clientPrincipal, clientKeytab.getAbsolutePath());
+      client = origClient;
     }
+    assertFalse(client.listTables(creds).contains("fail"));
+
     // grant permissions and test
     assertFalse(client.hasSystemPermission(creds, userName, SystemPermission.CREATE_TABLE));
     client.grantSystemPermission(creds, userName, SystemPermission.CREATE_TABLE);
@@ -1555,23 +1554,22 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     // revoke permissions
     client.revokeSystemPermission(creds, userName, SystemPermission.CREATE_TABLE);
     assertFalse(client.hasSystemPermission(creds, userName, SystemPermission.CREATE_TABLE));
-    try {
-      if (isKerberosEnabled()) {
-        // Switch back to the extra user
-        UserGroupInformation.loginUserFromKeytab(otherClient.getPrincipal(),
-            otherClient.getKeytab().getAbsolutePath());
-        client = userClient;
-      }
-      client.createTable(user, "fail", true, TimeType.MILLIS);
-      fail("should not create the table");
-    } catch (AccumuloSecurityException ex) {
-      if (isKerberosEnabled()) {
-        // Switch back to original client
-        UserGroupInformation.loginUserFromKeytab(clientPrincipal, clientKeytab.getAbsolutePath());
-        client = origClient;
-      }
-      assertFalse(client.listTables(creds).contains("fail"));
+    if (isKerberosEnabled()) {
+      // Switch back to the extra user
+      UserGroupInformation.loginUserFromKeytab(otherClient.getPrincipal(),
+          otherClient.getKeytab().getAbsolutePath());
+      client = userClient;
     }
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.createTable(user, "fail", true, TimeType.MILLIS),
+        "should not be able to create the table");
+    if (isKerberosEnabled()) {
+      // Switch back to original client
+      UserGroupInformation.loginUserFromKeytab(clientPrincipal, clientKeytab.getAbsolutePath());
+      client = origClient;
+    }
+    assertFalse(client.listTables(creds).contains("fail"));
+
     // denied!
     if (isKerberosEnabled()) {
       // Switch back to the extra user
@@ -1686,17 +1684,15 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     }
 
     // check permission failure
-    try {
-      client.createTable(user, namespaceName + ".fail", true, TimeType.MILLIS);
-      fail("should not create the table");
-    } catch (AccumuloSecurityException ex) {
-      if (isKerberosEnabled()) {
-        // Switch back to original client
-        UserGroupInformation.loginUserFromKeytab(clientPrincipal, clientKeytab.getAbsolutePath());
-        client = origClient;
-      }
-      assertFalse(client.listTables(creds).contains(namespaceName + ".fail"));
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.createTable(user, namespaceName + ".fail", true, TimeType.MILLIS),
+        "should not be able to create the table");
+    if (isKerberosEnabled()) {
+      // Switch back to original client
+      UserGroupInformation.loginUserFromKeytab(clientPrincipal, clientKeytab.getAbsolutePath());
+      client = origClient;
     }
+    assertFalse(client.listTables(creds).contains(namespaceName + ".fail"));
 
     // grant permissions and test
     assertFalse(client.hasNamespacePermission(creds, userName, namespaceName,
@@ -1724,23 +1720,21 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
         NamespacePermission.CREATE_TABLE);
     assertFalse(client.hasNamespacePermission(creds, userName, namespaceName,
         NamespacePermission.CREATE_TABLE));
-    try {
-      if (isKerberosEnabled()) {
-        // Switch back to the extra user
-        UserGroupInformation.loginUserFromKeytab(otherClient.getPrincipal(),
-            otherClient.getKeytab().getAbsolutePath());
-        client = userClient;
-      }
-      client.createTable(user, namespaceName + ".fail", true, TimeType.MILLIS);
-      fail("should not create the table");
-    } catch (AccumuloSecurityException ex) {
-      if (isKerberosEnabled()) {
-        // Switch back to original client
-        UserGroupInformation.loginUserFromKeytab(clientPrincipal, clientKeytab.getAbsolutePath());
-        client = origClient;
-      }
-      assertFalse(client.listTables(creds).contains(namespaceName + ".fail"));
+    if (isKerberosEnabled()) {
+      // Switch back to the extra user
+      UserGroupInformation.loginUserFromKeytab(otherClient.getPrincipal(),
+          otherClient.getKeytab().getAbsolutePath());
+      client = userClient;
     }
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.createTable(user, namespaceName + ".fail", true, TimeType.MILLIS),
+        "should not be able to create the table");
+    if (isKerberosEnabled()) {
+      // Switch back to original client
+      UserGroupInformation.loginUserFromKeytab(clientPrincipal, clientKeytab.getAbsolutePath());
+      client = origClient;
+    }
+    assertFalse(client.listTables(creds).contains(namespaceName + ".fail"));
 
     // delete user
     client.dropLocalUser(creds, userName);
@@ -1970,12 +1964,9 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     // 10 updates of "1" in the value w/ SummingCombiner should return value of "10"
     assertScan(new String[][] {{"row1", "cf", "cq", "10"}}, tableName);
 
-    try {
-      client.checkIteratorConflicts(creds, tableName, setting, EnumSet.allOf(IteratorScope.class));
-      fail("checkIteratorConflicts did not throw an exception");
-    } catch (Exception ex) {
-      // Expected
-    }
+    assertThrows(Exception.class, () -> client.checkIteratorConflicts(creds, tableName, setting,
+        EnumSet.allOf(IteratorScope.class)));
+
     client.deleteRows(creds, tableName, null, null);
     client.removeIterator(creds, tableName, "test", EnumSet.allOf(IteratorScope.class));
     String[][] expected = new String[10][];
