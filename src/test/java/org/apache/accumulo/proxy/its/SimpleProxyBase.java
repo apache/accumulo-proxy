@@ -1579,9 +1579,12 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
           otherClient.getKeytab().getAbsolutePath());
       client = userClient;
     }
-    String scanner = client.createScanner(user, tableName, null);
-    assertThrows(AccumuloSecurityException.class, () -> client.nextK(scanner, 100),
-        "stooge should not read table test");
+
+    {
+      final String scanner = client.createScanner(user, tableName, null);
+      assertThrows(AccumuloSecurityException.class, () -> client.nextK(scanner, 100),
+          "stooge should not read table test");
+    }
 
     if (isKerberosEnabled()) {
       // Switch back to original client
@@ -1600,9 +1603,12 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
           otherClient.getKeytab().getAbsolutePath());
       client = userClient;
     }
-    final String scanner1 = client.createScanner(user, tableName, null);
-    client.nextK(scanner1, 10);
-    client.closeScanner(scanner1);
+
+    {
+      final String scanner = client.createScanner(user, tableName, null);
+      client.nextK(scanner, 10);
+      client.closeScanner(scanner);
+    }
 
     if (isKerberosEnabled()) {
       // Switch back to original client
@@ -1619,9 +1625,12 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
           otherClient.getKeytab().getAbsolutePath());
       client = userClient;
     }
-    final String scanner2 = client.createScanner(user, tableName, null);
-    assertThrows(AccumuloSecurityException.class, () -> client.nextK(scanner2, 100),
-        "stooge should not read table test");
+
+    {
+      final String scanner = client.createScanner(user, tableName, null);
+      assertThrows(AccumuloSecurityException.class, () -> client.nextK(scanner, 100),
+          "stooge should not read table test");
+    }
 
     if (isKerberosEnabled()) {
       // Switch back to original client
