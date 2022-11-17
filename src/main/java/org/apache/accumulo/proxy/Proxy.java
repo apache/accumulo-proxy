@@ -261,10 +261,12 @@ public class Proxy implements KeywordExecutable {
         break;
     }
 
-    TimedProcessor tp = new TimedProcessor(processor, serverName, threadName);
+    TimedProcessor timedProcessor = new TimedProcessor(processor, serverName, threadName);
 
-    return TServerUtils.startTServer(serverType, tp, protocolFactory, serverName, threadName,
-        numThreads, ThreadPools.DEFAULT_TIMEOUT_MILLISECS,
+    // Create the thrift server with our processor and properties
+
+    return TServerUtils.startTServer(serverType, timedProcessor, protocolFactory, serverName,
+        threadName, numThreads, ThreadPools.DEFAULT_TIMEOUT_MILLISECS,
         ClientConfConverter.toAccumuloConf(props), 1000L, maxFrameSize, sslParams, saslParams,
         serverSocketTimeout, address);
   }
