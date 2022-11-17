@@ -33,9 +33,9 @@ import org.apache.accumulo.core.conf.Property;
 import org.apache.accumulo.core.rpc.SslConnectionParams;
 import org.apache.accumulo.core.trace.TraceUtil;
 import org.apache.accumulo.core.util.HostAndPort;
+import org.apache.accumulo.core.util.threads.ThreadPools;
 import org.apache.accumulo.minicluster.MiniAccumuloCluster;
 import org.apache.accumulo.proxy.thrift.AccumuloProxy;
-import org.apache.accumulo.server.metrics.Metrics;
 import org.apache.accumulo.server.rpc.SaslServerConnectionParams;
 import org.apache.accumulo.server.rpc.ServerAddress;
 import org.apache.accumulo.server.rpc.TServerUtils;
@@ -261,14 +261,13 @@ public class Proxy implements KeywordExecutable {
         break;
     }
 
-    // Hook up support for tracing for thrift calls
-    TimedProcessor timedProcessor = new TimedProcessor(
-        Metrics.initSystem(Proxy.class.getSimpleName()), processor, serverName, threadName);
+    TimedProcessor timedProcessor = new TimedProcessor(processor, serverName, threadName);
 
     // Create the thrift server with our processor and properties
 
     return TServerUtils.startTServer(serverType, timedProcessor, protocolFactory, serverName,
-        threadName, numThreads, simpleTimerThreadpoolSize, threadpoolResizeInterval, maxFrameSize,
-        sslParams, saslParams, serverSocketTimeout, address);
+        threadName, numThreads, ThreadPools.DEFAULT_TIMEOUT_MILLISECS,
+        ClientConfConverter.toAccumuloConf(props), 1000L, maxFrameSize, sslParams, saslParams,
+        serverSocketTimeout, address);
   }
 }

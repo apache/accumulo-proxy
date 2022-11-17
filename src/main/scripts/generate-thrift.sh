@@ -16,7 +16,7 @@
 # limitations under the License.
 
 # This script will regenerate the thrift code for accumulo-proxy.
-REQUIRED_THRIFT_VERSION='0.12.0'
+REQUIRED_THRIFT_VERSION='0.17.0'
 INCLUDED_MODULES=(-)
 BASE_OUTPUT_PACKAGE='org.apache.accumulo'
 PACKAGES_TO_GENERATE=(proxy)
