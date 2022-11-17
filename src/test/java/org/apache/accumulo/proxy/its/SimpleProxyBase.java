@@ -138,7 +138,6 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.function.Executable;
 import org.slf4j.Logger;
@@ -275,17 +274,8 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
   String namespaceName;
   ByteBuffer badLogin;
 
-  private String testName;
-
-  private String[] getUniqueNameArray(int num) {
-    String[] names = new String[num];
-    for (int i = 0; i < num; i++)
-      names[i] = this.getClass().getSimpleName() + "_" + testName + i;
-    return names;
-  }
-
   @BeforeEach
-  public void setup(TestInfo info) throws Exception {
+  public void setup() throws Exception {
     // Create a new client for each test
     if (isKerberosEnabled()) {
       UserGroupInformation.loginUserFromKeytab(clientPrincipal, clientKeytab.getAbsolutePath());
@@ -330,10 +320,8 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
       client.dropLocalUser(creds, "user");
     }
 
-    testName = info.getTestMethod().get().getName();
-
     // Create some unique names for tables, namespaces, etc.
-    String[] uniqueNames = getUniqueNameArray(2);
+    String[] uniqueNames = getUniqueNames(2);
 
     // Create a general table to be used
     tableName = uniqueNames[0];
@@ -984,7 +972,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     final IteratorSetting setting = new IteratorSetting(100, "slow", SlowIterator.class.getName(),
         Collections.singletonMap("sleepTime", "200"));
 
-    final String newTableName = getUniqueNameArray(1)[0];
+    final String newTableName = getUniqueNames(1)[0];
 
     final MiniAccumuloClusterImpl cluster = SharedMiniClusterBase.getCluster();
     final Path base = cluster.getTemporaryPath();
@@ -1445,7 +1433,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
       otherClient = getKdc().getClientPrincipal(1);
       user = otherClient.getPrincipal();
     } else {
-      user = getUniqueNameArray(1)[0];
+      user = getUniqueNames(1)[0];
     }
 
     // create a user
@@ -1490,7 +1478,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
   @Test
   public void userPermissions() throws Exception {
-    String userName = getUniqueNameArray(1)[0];
+    final String userName;
     ClusterUser otherClient = null;
     ByteBuffer password = s2bb("password");
     ByteBuffer user;
@@ -1517,7 +1505,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
       user = client.login(userName, Collections.<String,String> emptyMap());
     } else {
-      userName = getUniqueNameArray(1)[0];
+      userName = getUniqueNames(1)[0];
       // create a user
       client.createLocalUser(creds, userName, password);
       user = client.login(userName, s2pp(ByteBufferUtil.toString(password)));
@@ -1678,7 +1666,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
       user = client.login(userName, Collections.<String,String> emptyMap());
     } else {
-      userName = getUniqueNameArray(1)[0];
+      userName = getUniqueNames(1)[0];
       // create a user
       client.createLocalUser(creds, userName, password);
       user = client.login(userName, s2pp(ByteBufferUtil.toString(password)));
@@ -1981,7 +1969,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
   @Test
   public void cloneTable() throws Exception {
-    String TABLE_TEST2 = getUniqueNameArray(2)[1];
+    String TABLE_TEST2 = getUniqueNames(2)[1];
 
     String[][] expected = new String[10][];
     for (int i = 0; i < 10; i++) {
@@ -2021,7 +2009,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
   @Test
   public void diskUsage() throws Exception {
-    String TABLE_TEST2 = getUniqueNameArray(2)[1];
+    String TABLE_TEST2 = getUniqueNames(2)[1];
 
     // Write some data
     String[][] expected = new String[10][];
