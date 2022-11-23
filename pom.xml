@@ -445,12 +445,16 @@
             </goals>
             <configuration>
               <failOnWarning>true</failOnWarning>
+              <ignoredUsedUndeclaredDependencies>
+                <usedUndeclaredDependency>com.google.auto.service:auto-service-annotations:jar:*</usedUndeclaredDependency>
+              </ignoredUsedUndeclaredDependencies>
               <ignoredUnusedDeclaredDependencies>
                 <!-- auto-service isn't detected as use since the annotation has retention of source -->
                 <unusedDeclaredDependency>com.google.auto.service:auto-service:jar:*</unusedDeclaredDependency>
                 <!-- unused/declared implementation jars or parent jars that bring in children -->
                 <unusedDeclaredDependency>org.apache.hadoop:hadoop-client-runtime:jar:*</unusedDeclaredDependency>
                 <unusedDeclaredDependency>org.slf4j:slf4j-log4j12:jar:*</unusedDeclaredDependency>
+                <unusedDeclaredDependency>org.slf4j:slf4j-reload4j:jar:*</unusedDeclaredDependency>
               </ignoredUnusedDeclaredDependencies>
             </configuration>
           </execution>
