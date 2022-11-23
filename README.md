@@ -84,7 +84,7 @@ vim Gemfile # Set correct path
 cp /path/to/accumulo-proxy/src/main/ruby/client.rb .
 gem install bundler
 bundle install
-bundle exec client.rb
+bundle exec ruby client.rb
 ```
 
 # Java clients to Proxy
