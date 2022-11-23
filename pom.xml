@@ -416,6 +416,7 @@
           <configuration>
             <excludes>
               <exclude>src/main/resources/META-INF/services/*</exclude>
+              <exclude>src/main/python/AccumuloProxy.egg-info/*</exclude>
             </excludes>
           </configuration>
         </plugin>
