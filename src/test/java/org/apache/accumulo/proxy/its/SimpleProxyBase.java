@@ -162,13 +162,13 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
   private static int proxyPort;
 
   private TestProxyClient proxyClient;
-  private static org.apache.accumulo.proxy.thrift.AccumuloProxy.Client client;
+  private org.apache.accumulo.proxy.thrift.AccumuloProxy.Client client;
 
   private static Map<String,String> properties = new HashMap<>();
   private static String hostname, proxyPrincipal, proxyPrimary, clientPrincipal;
   private static File proxyKeytab, clientKeytab;
 
-  private static ByteBuffer creds = null;
+  private ByteBuffer creds = null;
 
   // Implementations can set this
   static TProtocolFactory factory = null;

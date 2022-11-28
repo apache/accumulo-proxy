@@ -51,7 +51,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public class TestProxyClient {
 
-  protected AccumuloProxy.Client proxy;
+  protected TProtocolFactory factory;
   protected TTransport transport;
 
   public TestProxyClient(String host, int port) throws TTransportException {
@@ -63,8 +63,7 @@ public class TestProxyClient {
     final TSocket socket = new TSocket(host, port);
     socket.setTimeout(600000);
     transport = new TFramedTransport(socket);
-    final TProtocol protocol = protoFactory.getProtocol(transport);
-    proxy = new AccumuloProxy.Client(protocol);
+    factory = protoFactory;
     transport.open();
   }
 
@@ -79,9 +78,7 @@ public class TestProxyClient {
     // UGI transport will perform the doAs for us
     transport.open();
 
-    AccumuloProxy.Client.Factory factory = new AccumuloProxy.Client.Factory();
-    final TProtocol protocol = protoFactory.getProtocol(transport);
-    proxy = factory.getClient(protocol);
+    factory = protoFactory;
   }
 
   public synchronized void close() {
@@ -92,7 +89,9 @@ public class TestProxyClient {
   }
 
   public AccumuloProxy.Client proxy() {
-    return proxy;
+    AccumuloProxy.Client.Factory factory1 = new AccumuloProxy.Client.Factory();
+    final TProtocol protocol = factory.getProtocol(transport);
+    return factory1.getClient(protocol);
   }
 
   @SuppressFBWarnings(value = "HARD_CODE_PASSWORD", justification = "test password is okay")
@@ -104,7 +103,7 @@ public class TestProxyClient {
     props.put("password", "secret");
 
     System.out.println("Logging in");
-    ByteBuffer login = tpc.proxy.login(principal, props);
+    ByteBuffer login = tpc.proxy().login(principal, props);
 
     System.out.println("Creating user: ");
     if (!tpc.proxy().listLocalUsers(login).contains("testuser")) {
