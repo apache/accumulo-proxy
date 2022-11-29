@@ -29,7 +29,6 @@ import org.apache.accumulo.core.client.security.tokens.KerberosToken;
 import org.apache.accumulo.core.clientImpl.ClientConfConverter;
 import org.apache.accumulo.core.conf.ClientProperty;
 import org.apache.accumulo.core.conf.ConfigurationTypeHelper;
-import org.apache.accumulo.core.conf.Property;
 import org.apache.accumulo.core.rpc.SslConnectionParams;
 import org.apache.accumulo.core.trace.TraceUtil;
 import org.apache.accumulo.core.util.HostAndPort;
@@ -186,10 +185,6 @@ public class Proxy implements KeywordExecutable {
         .parseInt(props.getProperty(THRIFT_THREAD_POOL_SIZE_KEY, THRIFT_THREAD_POOL_SIZE_DEFAULT));
     final long maxFrameSize = ConfigurationTypeHelper.getFixedMemoryAsBytes(
         props.getProperty(THRIFT_MAX_FRAME_SIZE_KEY, THRIFT_MAX_FRAME_SIZE_DEFAULT));
-    final int simpleTimerThreadpoolSize = Integer
-        .parseInt(Property.GENERAL_SIMPLETIMER_THREADPOOL_SIZE.getDefaultValue());
-    // How frequently to try to resize the thread pool
-    final long threadpoolResizeInterval = 1000L * 5;
     // No timeout
     final long serverSocketTimeout = 0L;
     // Use the new hadoop metrics2 support
