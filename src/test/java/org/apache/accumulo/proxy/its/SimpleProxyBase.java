@@ -130,7 +130,6 @@ import org.apache.hadoop.fs.FileUtil;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.security.UserGroupInformation;
-import org.apache.thrift.TApplicationException;
 import org.apache.thrift.TException;
 import org.apache.thrift.protocol.TProtocolFactory;
 import org.apache.thrift.server.TServer;
@@ -139,7 +138,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
-import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.function.Executable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -167,8 +165,6 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
   private static Map<String,String> properties = new HashMap<>();
   private static String hostname, proxyPrincipal, proxyPrimary, clientPrincipal;
   private static File proxyKeytab, clientKeytab;
-
-  private ByteBuffer creds = null;
 
   // Implementations can set this
   static TProtocolFactory factory = null;
@@ -292,12 +288,11 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
       proxyClient = new TestProxyClient(hostname, proxyPort, factory, proxyPrimary,
           UserGroupInformation.getCurrentUser());
       client = proxyClient.proxy();
-      creds = client.login(clientPrincipal, properties);
 
       TestingKdc kdc = getKdc();
       final ClusterUser user = kdc.getClientPrincipal(0);
       // Create another user
-      client.createLocalUser(creds, user.getPrincipal(), s2bb("unused"));
+      client.createLocalUser(user.getPrincipal(), s2bb("unused"));
       // Login in as that user we just created
       UserGroupInformation.loginUserFromKeytab(user.getPrincipal(),
           user.getKeytab().getAbsolutePath());
@@ -307,7 +302,6 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
           badUgi);
       try {
         Client badProxy = badClient.proxy();
-        badLogin = badProxy.login(user.getPrincipal(), properties);
       } finally {
         badClient.close();
       }
@@ -316,18 +310,15 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
       UserGroupInformation.loginUserFromKeytab(clientPrincipal, clientKeytab.getAbsolutePath());
       // Drop test user, invalidating the credentials (not to mention not having the krb credentials
       // anymore)
-      client.dropLocalUser(creds, user.getPrincipal());
+      client.dropLocalUser(user.getPrincipal());
     } else {
       proxyClient = new TestProxyClient(hostname, proxyPort, factory);
       client = proxyClient.proxy();
-      creds = client.login("root", properties);
 
       // Create 'user'
-      client.createLocalUser(creds, "user", s2bb(SharedMiniClusterBase.getRootPassword()));
-      // Log in as 'user'
-      badLogin = client.login("user", properties);
+      client.createLocalUser("user", s2bb(SharedMiniClusterBase.getRootPassword()));
       // Drop 'user', invalidating the credentials
-      client.dropLocalUser(creds, "user");
+      client.dropLocalUser("user");
     }
 
     testName = info.getTestMethod().get().getName();
@@ -337,11 +328,11 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
     // Create a general table to be used
     tableName = uniqueNames[0];
-    client.createTable(creds, tableName, true, TimeType.MILLIS);
+    client.createTable(tableName, true, TimeType.MILLIS);
 
     // Create a general namespace to be used
     namespaceName = uniqueNames[1];
-    client.createNamespace(creds, namespaceName);
+    client.createNamespace(namespaceName);
   }
 
   @AfterEach
@@ -351,8 +342,8 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
         UserGroupInformation.loginUserFromKeytab(clientPrincipal, clientKeytab.getAbsolutePath());
       }
       try {
-        if (client.tableExists(creds, tableName)) {
-          client.deleteTable(creds, tableName);
+        if (client.tableExists(tableName)) {
+          client.deleteTable(tableName);
         }
       } catch (Exception e) {
         log.warn("Failed to delete test table", e);
@@ -361,8 +352,8 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
     if (namespaceName != null) {
       try {
-        if (client.namespaceExists(creds, namespaceName)) {
-          client.deleteNamespace(creds, namespaceName);
+        if (client.namespaceExists(namespaceName)) {
+          client.deleteNamespace(namespaceName);
         }
       } catch (Exception e) {
         log.warn("Failed to delete test namespace", e);
@@ -373,608 +364,6 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     if (proxyClient != null) {
       proxyClient.close();
     }
-  }
-
-  /*
-   * Set a lower timeout for tests that should fail fast
-   */
-
-  @Test
-  @Timeout(5)
-  public void addConstraintLoginFailure() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.addConstraint(badLogin, tableName, NumericValueConstraint.class.getName()));
-  }
-
-  @Test
-  @Timeout(5)
-  public void addSplitsLoginFailure() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.addSplits(badLogin, tableName, Collections.singleton(s2bb("1"))));
-  }
-
-  @Test
-  @Timeout(5)
-  public void clearLocatorCacheLoginFailure() {
-    assertThrows(TApplicationException.class, () -> client.clearLocatorCache(badLogin, tableName));
-  }
-
-  @Test
-  @Timeout(5)
-  public void compactTableLoginFailure() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.compactTable(badLogin, tableName, null, null, null, true, false, null));
-  }
-
-  @Test
-  @Timeout(5)
-  public void cancelCompactionLoginFailure() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.cancelCompaction(badLogin, tableName));
-  }
-
-  @Test
-  @Timeout(5)
-  public void createTableLoginFailure() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.createTable(badLogin, tableName, false, TimeType.MILLIS));
-  }
-
-  @Test
-  @Timeout(5)
-  public void deleteTableLoginFailure() {
-    assertThrows(AccumuloSecurityException.class, () -> client.deleteTable(badLogin, tableName));
-  }
-
-  @Test
-  @Timeout(5)
-  public void deleteRowsLoginFailure() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.deleteRows(badLogin, tableName, null, null));
-  }
-
-  @Test
-  @Timeout(5)
-  public void tableExistsLoginFailure() {
-    assertThrows(TApplicationException.class, () -> client.tableExists(badLogin, tableName));
-  }
-
-  @Test
-  @Timeout(5)
-  public void flustTableLoginFailure() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.flushTable(badLogin, tableName, null, null, false));
-  }
-
-  @Test
-  @Timeout(5)
-  public void getLocalityGroupsLoginFailure() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.getLocalityGroups(badLogin, tableName));
-  }
-
-  @Test
-  @Timeout(5)
-  public void getMaxRowLoginFailure() {
-    assertThrows(AccumuloSecurityException.class, () -> client.getMaxRow(badLogin, tableName,
-        Collections.<ByteBuffer> emptySet(), null, false, null, false));
-  }
-
-  @Test
-  @Timeout(5)
-  public void getTablePropertiesLoginFailure() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.getTableProperties(badLogin, tableName));
-  }
-
-  @Test
-  @Timeout(5)
-  public void listSplitsLoginFailure() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.listSplits(badLogin, tableName, 10000));
-  }
-
-  @Test
-  @Timeout(5)
-  public void listTablesLoginFailure() {
-    assertThrows(TApplicationException.class, () -> client.listTables(badLogin));
-  }
-
-  @Test
-  @Timeout(5)
-  public void listConstraintsLoginFailure() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.listConstraints(badLogin, tableName));
-  }
-
-  @Test
-  @Timeout(5)
-  public void mergeTabletsLoginFailure() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.mergeTablets(badLogin, tableName, null, null));
-  }
-
-  @Test
-  @Timeout(5)
-  public void offlineTableLoginFailure() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.offlineTable(badLogin, tableName, false));
-  }
-
-  @Test
-  @Timeout(5)
-  public void onlineTableLoginFailure() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.onlineTable(badLogin, tableName, false));
-  }
-
-  @Test
-  @Timeout(5)
-  public void removeConstraintLoginFailure() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.removeConstraint(badLogin, tableName, 0));
-  }
-
-  @Test
-  @Timeout(5)
-  public void removeTablePropertyLoginFailure() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.removeTableProperty(badLogin, tableName, Property.TABLE_FILE_MAX.getKey()));
-  }
-
-  @Test
-  @Timeout(5)
-  public void renameTableLoginFailure() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.renameTable(badLogin, tableName, "someTableName"));
-  }
-
-  @Test
-  @Timeout(5)
-  public void setLocalityGroupsLoginFailure() {
-    Map<String,Set<String>> groups = new HashMap<>();
-    groups.put("group1", Collections.singleton("cf1"));
-    groups.put("group2", Collections.singleton("cf2"));
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.setLocalityGroups(badLogin, tableName, groups));
-  }
-
-  @Test
-  @Timeout(5)
-  public void setTablePropertyLoginFailure() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.setTableProperty(badLogin, tableName, Property.TABLE_FILE_MAX.getKey(), "0"));
-  }
-
-  @Test
-  @Timeout(5)
-  public void tableIdMapLoginFailure() {
-    assertThrows(TException.class, () -> client.tableIdMap(badLogin));
-  }
-
-  @Test
-  @Timeout(5)
-  public void getSiteConfigurationLoginFailure() {
-    assertThrows(AccumuloSecurityException.class, () -> client.getSiteConfiguration(badLogin));
-  }
-
-  @Test
-  @Timeout(5)
-  public void getSystemConfigurationLoginFailure() {
-    assertThrows(AccumuloSecurityException.class, () -> client.getSystemConfiguration(badLogin));
-  }
-
-  @Test
-  @Timeout(5)
-  public void getTabletServersLoginFailure() {
-    assertThrows(TException.class, () -> client.getTabletServers(badLogin));
-  }
-
-  @Test
-  @Timeout(5)
-  public void getActiveScansLoginFailure() {
-    assertThrows(AccumuloSecurityException.class, () -> client.getActiveScans(badLogin, "fake"));
-  }
-
-  @Test
-  @Timeout(5)
-  public void getActiveCompactionsLoginFailure() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.getActiveCompactions(badLogin, "fake"));
-  }
-
-  @Test
-  @Timeout(5)
-  public void removePropertyLoginFailure() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.removeProperty(badLogin, "table.split.threshold"));
-  }
-
-  @Test
-  @Timeout(5)
-  public void setPropertyLoginFailure() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.setProperty(badLogin, "table.split.threshold", "500M"));
-  }
-
-  @Test
-  @Timeout(5)
-  public void testClassLoadLoginFailure() {
-    assertThrows(AccumuloSecurityException.class, () -> client.testClassLoad(badLogin,
-        DevNull.class.getName(), SortedKeyValueIterator.class.getName()));
-  }
-
-  @Test
-  @Timeout(5)
-  public void authenticateUserLoginFailure() {
-    if (!isKerberosEnabled()) {
-      // Not really a relevant test for kerberos
-      Map<String,String> pw = s2pp(SharedMiniClusterBase.getRootPassword());
-      assertThrows(AccumuloSecurityException.class,
-          () -> client.authenticateUser(badLogin, "root", pw));
-    }
-  }
-
-  @Test
-  @Timeout(5)
-  public void changeUserAuthorizationsLoginFailure() {
-    HashSet<ByteBuffer> auths = new HashSet<>(Arrays.asList(s2bb("A"), s2bb("B")));
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.changeUserAuthorizations(badLogin, "stooge", auths));
-  }
-
-  @Test
-  @Timeout(5)
-  public void changePasswordLoginFailure() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.changeLocalUserPassword(badLogin, "stooge", s2bb("")));
-  }
-
-  @Test
-  @Timeout(5)
-  public void createUserLoginFailure() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.createLocalUser(badLogin, "stooge", s2bb("password")));
-  }
-
-  @Test
-  @Timeout(5)
-  public void dropUserLoginFailure() {
-    assertThrows(AccumuloSecurityException.class, () -> client.dropLocalUser(badLogin, "stooge"));
-  }
-
-  @Test
-  @Timeout(5)
-  public void getUserAuthorizationsLoginFailure() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.getUserAuthorizations(badLogin, "stooge"));
-  }
-
-  @Test
-  @Timeout(5)
-  public void grantSystemPermissionLoginFailure() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.grantSystemPermission(badLogin, "stooge", SystemPermission.CREATE_TABLE));
-  }
-
-  @Test
-  @Timeout(5)
-  public void grantTablePermissionLoginFailure() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.grantTablePermission(badLogin, "root", tableName, TablePermission.WRITE));
-  }
-
-  @Test
-  @Timeout(5)
-  public void hasSystemPermissionLoginFailure() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.hasSystemPermission(badLogin, "stooge", SystemPermission.CREATE_TABLE));
-  }
-
-  @Test
-  @Timeout(5)
-  public void hasTablePermission() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.hasTablePermission(badLogin, "root", tableName, TablePermission.WRITE));
-  }
-
-  @Test
-  @Timeout(5)
-  public void listLocalUsersLoginFailure() {
-    assertThrows(AccumuloSecurityException.class, () -> client.listLocalUsers(badLogin));
-  }
-
-  @Test
-  @Timeout(5)
-  public void revokeSystemPermissionLoginFailure() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.revokeSystemPermission(badLogin, "stooge", SystemPermission.CREATE_TABLE));
-  }
-
-  @Test
-  @Timeout(5)
-  public void revokeTablePermissionLoginFailure() {
-    assertThrows(AccumuloSecurityException.class, () -> client.revokeTablePermission(badLogin,
-        "root", tableName, TablePermission.ALTER_TABLE));
-  }
-
-  @Test
-  @Timeout(5)
-  public void createScannerLoginFailure() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.createScanner(badLogin, tableName, new ScanOptions()));
-  }
-
-  @Test
-  @Timeout(5)
-  public void createBatchScannerLoginFailure() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.createBatchScanner(badLogin, tableName, new BatchScanOptions()));
-  }
-
-  @Test
-  @Timeout(5)
-  public void updateAndFlushLoginFailure() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.updateAndFlush(badLogin, tableName, new HashMap<>()));
-  }
-
-  @Test
-  @Timeout(5)
-  public void createWriterLoginFailure() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.createWriter(badLogin, tableName, new WriterOptions()));
-  }
-
-  @Test
-  @Timeout(5)
-  public void attachIteratorLoginFailure() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.attachIterator(badLogin, "slow", setting, EnumSet.allOf(IteratorScope.class)));
-  }
-
-  @Test
-  @Timeout(5)
-  public void checkIteratorLoginFailure() {
-    assertThrows(AccumuloSecurityException.class, () -> client.checkIteratorConflicts(badLogin,
-        tableName, setting, EnumSet.allOf(IteratorScope.class)));
-  }
-
-  @Test
-  @Timeout(5)
-  public void cloneTableLoginFailure() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.cloneTable(badLogin, tableName, tableName + "_clone", false, null, null));
-  }
-
-  @Test
-  @Timeout(5)
-  public void exportTableLoginFailure() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.exportTable(badLogin, tableName, "/tmp"));
-  }
-
-  @Test
-  @Timeout(5)
-  public void importTableLoginFailure() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.importTable(badLogin, "testify", "/tmp"));
-  }
-
-  @Test
-  @Timeout(5)
-  public void getIteratorSettingLoginFailure() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.getIteratorSetting(badLogin, tableName, "foo", IteratorScope.SCAN));
-  }
-
-  @Test
-  @Timeout(5)
-  public void listIteratorsLoginFailure() {
-    assertThrows(AccumuloSecurityException.class, () -> client.listIterators(badLogin, tableName));
-  }
-
-  @Test
-  @Timeout(5)
-  public void removeIteratorLoginFailure() {
-    assertThrows(AccumuloSecurityException.class, () -> client.removeIterator(badLogin, tableName,
-        "name", EnumSet.allOf(IteratorScope.class)));
-  }
-
-  @Test
-  @Timeout(5)
-  public void splitRangeByTabletsLoginFailure() throws Exception {
-    Range range = client.getRowRange(ByteBuffer.wrap("row".getBytes(UTF_8)));
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.splitRangeByTablets(badLogin, tableName, range, 10));
-  }
-
-  @Test
-  @Timeout(5)
-  public void importDirectoryLoginFailure() throws Exception {
-    MiniAccumuloClusterImpl cluster = SharedMiniClusterBase.getCluster();
-    Path base = cluster.getTemporaryPath();
-    Path importDir = new Path(base, "importDir");
-    Path failuresDir = new Path(base, "failuresDir");
-    assertTrue(cluster.getFileSystem().mkdirs(importDir));
-    assertTrue(cluster.getFileSystem().mkdirs(failuresDir));
-    assertThrows(AccumuloSecurityException.class, () -> client.importDirectory(badLogin, tableName,
-        importDir.toString(), failuresDir.toString(), true));
-  }
-
-  @Test
-  @Timeout(5)
-  public void pingTabletServerLoginFailure() {
-    assertThrows(AccumuloSecurityException.class, () -> client.pingTabletServer(badLogin, "fake"));
-  }
-
-  @Test
-  @Timeout(5)
-  public void loginFailure() {
-    assertThrows(AccumuloSecurityException.class, () -> client.login("badUser", properties));
-  }
-
-  @Test
-  @Timeout(5)
-  public void testTableClassLoadLoginFailure() {
-    assertThrows(AccumuloSecurityException.class, () -> client.testTableClassLoad(badLogin,
-        tableName, VersioningIterator.class.getName(), SortedKeyValueIterator.class.getName()));
-  }
-
-  @Test
-  @Timeout(5)
-  public void createConditionalWriterLoginFailure() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.createConditionalWriter(badLogin, tableName, new ConditionalWriterOptions()));
-  }
-
-  @Test
-  @Timeout(5)
-  public void grantNamespacePermissionLoginFailure() {
-    assertThrows(AccumuloSecurityException.class, () -> client.grantNamespacePermission(badLogin,
-        "stooge", namespaceName, NamespacePermission.ALTER_NAMESPACE));
-  }
-
-  @Test
-  @Timeout(5)
-  public void hasNamespacePermissionLoginFailure() {
-    assertThrows(AccumuloSecurityException.class, () -> client.hasNamespacePermission(badLogin,
-        "stooge", namespaceName, NamespacePermission.ALTER_NAMESPACE));
-  }
-
-  @Test
-  @Timeout(5)
-  public void revokeNamespacePermissionLoginFailure() {
-    assertThrows(AccumuloSecurityException.class, () -> client.revokeNamespacePermission(badLogin,
-        "stooge", namespaceName, NamespacePermission.ALTER_NAMESPACE));
-  }
-
-  @Test
-  @Timeout(5)
-  public void listNamespacesLoginFailure() {
-    assertThrows(AccumuloSecurityException.class, () -> client.listNamespaces(badLogin));
-  }
-
-  @Test
-  @Timeout(5)
-  public void namespaceExistsLoginFailure() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.namespaceExists(badLogin, namespaceName));
-  }
-
-  @Test
-  @Timeout(5)
-  public void createNamespaceLoginFailure() {
-    assertThrows(AccumuloSecurityException.class, () -> client.createNamespace(badLogin, "abcdef"));
-  }
-
-  @Test
-  @Timeout(5)
-  public void deleteNamespaceLoginFailure() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.deleteNamespace(badLogin, namespaceName));
-  }
-
-  @Test
-  @Timeout(5)
-  public void renameNamespaceLoginFailure() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.renameNamespace(badLogin, namespaceName, "abcdef"));
-  }
-
-  @Test
-  @Timeout(5)
-  public void setNamespacePropertyLoginFailure() {
-    assertThrows(AccumuloSecurityException.class, () -> client.setNamespaceProperty(badLogin,
-        namespaceName, "table.compaction.major.ratio", "4"));
-  }
-
-  @Test
-  @Timeout(5)
-  public void removeNamespacePropertyLoginFailure() {
-    assertThrows(AccumuloSecurityException.class, () -> client.removeNamespaceProperty(badLogin,
-        namespaceName, "table.compaction.major.ratio"));
-  }
-
-  @Test
-  @Timeout(5)
-  public void getNamespacePropertiesLoginFailure() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.getNamespaceProperties(badLogin, namespaceName));
-  }
-
-  @Test
-  @Timeout(5)
-  public void namespaceIdMapLoginFailure() {
-    assertThrows(AccumuloSecurityException.class, () -> client.namespaceIdMap(badLogin));
-  }
-
-  @Test
-  @Timeout(5)
-  public void attachNamespaceIteratorLoginFailure() {
-    IteratorSetting setting = new IteratorSetting(100, "DebugTheThings",
-        DebugIterator.class.getName(), Collections.emptyMap());
-    assertThrows(AccumuloSecurityException.class, () -> client.attachNamespaceIterator(badLogin,
-        namespaceName, setting, EnumSet.allOf(IteratorScope.class)));
-  }
-
-  @Test
-  @Timeout(5)
-  public void removeNamespaceIteratorLoginFailure() {
-    assertThrows(AccumuloSecurityException.class, () -> client.removeNamespaceIterator(badLogin,
-        namespaceName, "DebugTheThings", EnumSet.allOf(IteratorScope.class)));
-  }
-
-  @Test
-  @Timeout(5)
-  public void getNamespaceIteratorSettingLoginFailure() {
-    assertThrows(AccumuloSecurityException.class, () -> client.getNamespaceIteratorSetting(badLogin,
-        namespaceName, "DebugTheThings", IteratorScope.SCAN));
-  }
-
-  @Test
-  @Timeout(5)
-  public void listNamespaceIteratorsLoginFailure() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.listNamespaceIterators(badLogin, namespaceName));
-  }
-
-  @Test
-  @Timeout(5)
-  public void checkNamespaceIteratorConflictsLoginFailure() {
-    IteratorSetting setting = new IteratorSetting(100, "DebugTheThings",
-        DebugIterator.class.getName(), Collections.emptyMap());
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.checkNamespaceIteratorConflicts(badLogin, namespaceName, setting,
-            EnumSet.allOf(IteratorScope.class)));
-  }
-
-  @Test
-  @Timeout(5)
-  public void addNamespaceConstraintLoginFailure() {
-    assertThrows(AccumuloSecurityException.class, () -> client.addNamespaceConstraint(badLogin,
-        namespaceName, MaxMutationSize.class.getName()));
-  }
-
-  @Test
-  @Timeout(5)
-  public void removeNamespaceConstraintLoginFailure() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.removeNamespaceConstraint(badLogin, namespaceName, 1));
-  }
-
-  @Test
-  @Timeout(5)
-  public void listNamespaceConstraintsLoginFailure() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.listNamespaceConstraints(badLogin, namespaceName));
-  }
-
-  @Test
-  @Timeout(5)
-  public void testNamespaceClassLoadLoginFailure() {
-    assertThrows(AccumuloSecurityException.class, () -> client.testNamespaceClassLoad(badLogin,
-        namespaceName, DebugIterator.class.getName(), SortedKeyValueIterator.class.getName()));
   }
 
   @Test
@@ -995,44 +384,44 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
     // @formatter:off
     Stream<Executable> cases = Stream.of(
-        () -> client.addConstraint(creds, doesNotExist, NumericValueConstraint.class.getName()),
-        () -> client.addSplits(creds, doesNotExist, Collections.emptySet()),
-        () -> client.attachIterator(creds, doesNotExist, setting, EnumSet.allOf(IteratorScope.class)),
-        () -> client.cancelCompaction(creds, doesNotExist),
-        () -> client.checkIteratorConflicts(creds, doesNotExist, setting, EnumSet.allOf(IteratorScope.class)),
-        () -> client.clearLocatorCache(creds, doesNotExist),
-        () -> client.cloneTable(creds, doesNotExist, newTableName, false, null, null),
-        () -> client.compactTable(creds, doesNotExist, null, null, null, true, false, null),
-        () -> client.createBatchScanner(creds, doesNotExist, new BatchScanOptions()),
-        () -> client.createScanner(creds, doesNotExist, new ScanOptions()),
-        () -> client.createWriter(creds, doesNotExist, new WriterOptions()),
-        () -> client.deleteRows(creds, doesNotExist, null, null),
-        () -> client.deleteTable(creds, doesNotExist),
-        () -> client.exportTable(creds, doesNotExist, "/tmp"),
-        () -> client.flushTable(creds, doesNotExist, null, null, false),
-        () -> client.getIteratorSetting(creds, doesNotExist, "foo", IteratorScope.SCAN),
-        () -> client.getLocalityGroups(creds, doesNotExist),
-        () -> client.getMaxRow(creds, doesNotExist, Collections.emptySet(), null, false, null, false),
-        () -> client.getTableProperties(creds, doesNotExist),
-        () -> client.grantTablePermission(creds, "root", doesNotExist, TablePermission.WRITE),
-        () -> client.hasTablePermission(creds, "root", doesNotExist, TablePermission.WRITE),
-        () -> client.importDirectory(creds, doesNotExist, importDir.toString(), failuresDir.toString(), true),
-        () -> client.listConstraints(creds, doesNotExist),
-        () -> client.listSplits(creds, doesNotExist, 10000),
-        () -> client.mergeTablets(creds, doesNotExist, null, null),
-        () -> client.offlineTable(creds, doesNotExist, false),
-        () -> client.onlineTable(creds, doesNotExist, false),
-        () -> client.removeConstraint(creds, doesNotExist, 0),
-        () -> client.removeIterator(creds, doesNotExist, "name", EnumSet.allOf(IteratorScope.class)),
-        () -> client.removeTableProperty(creds, doesNotExist, Property.TABLE_FILE_MAX.getKey()),
-        () -> client.renameTable(creds, doesNotExist, "someTableName"),
-        () -> client.revokeTablePermission(creds, "root", doesNotExist, TablePermission.ALTER_TABLE),
-        () -> client.setTableProperty(creds, doesNotExist, Property.TABLE_FILE_MAX.getKey(), "0"),
-        () -> client.splitRangeByTablets(creds, doesNotExist, client.getRowRange(ByteBuffer.wrap("row".getBytes(UTF_8))), 10),
-        () -> client.updateAndFlush(creds, doesNotExist, new HashMap<>()),
-        () -> client.getDiskUsage(creds, Collections.singleton(doesNotExist)),
-        () -> client.testTableClassLoad(creds, doesNotExist, VersioningIterator.class.getName(), SortedKeyValueIterator.class.getName()),
-        () -> client.createConditionalWriter(creds, doesNotExist, new ConditionalWriterOptions())
+        () -> client.addConstraint( doesNotExist, NumericValueConstraint.class.getName()),
+        () -> client.addSplits( doesNotExist, Collections.emptySet()),
+        () -> client.attachIterator( doesNotExist, setting, EnumSet.allOf(IteratorScope.class)),
+        () -> client.cancelCompaction( doesNotExist),
+        () -> client.checkIteratorConflicts( doesNotExist, setting, EnumSet.allOf(IteratorScope.class)),
+        () -> client.clearLocatorCache( doesNotExist),
+        () -> client.cloneTable( doesNotExist, newTableName, false, null, null),
+        () -> client.compactTable( doesNotExist, null, null, null, true, false, null),
+        () -> client.createBatchScanner( doesNotExist, new BatchScanOptions()),
+        () -> client.createScanner( doesNotExist, new ScanOptions()),
+        () -> client.createWriter( doesNotExist, new WriterOptions()),
+        () -> client.deleteRows( doesNotExist, null, null),
+        () -> client.deleteTable( doesNotExist),
+        () -> client.exportTable( doesNotExist, "/tmp"),
+        () -> client.flushTable( doesNotExist, null, null, false),
+        () -> client.getIteratorSetting( doesNotExist, "foo", IteratorScope.SCAN),
+        () -> client.getLocalityGroups( doesNotExist),
+        () -> client.getMaxRow( doesNotExist, Collections.emptySet(), null, false, null, false),
+        () -> client.getTableProperties( doesNotExist),
+        () -> client.grantTablePermission( "root", doesNotExist, TablePermission.WRITE),
+        () -> client.hasTablePermission( "root", doesNotExist, TablePermission.WRITE),
+        () -> client.importDirectory( doesNotExist, importDir.toString(), failuresDir.toString(), true),
+        () -> client.listConstraints( doesNotExist),
+        () -> client.listSplits( doesNotExist, 10000),
+        () -> client.mergeTablets( doesNotExist, null, null),
+        () -> client.offlineTable( doesNotExist, false),
+        () -> client.onlineTable( doesNotExist, false),
+        () -> client.removeConstraint( doesNotExist, 0),
+        () -> client.removeIterator( doesNotExist, "name", EnumSet.allOf(IteratorScope.class)),
+        () -> client.removeTableProperty( doesNotExist, Property.TABLE_FILE_MAX.getKey()),
+        () -> client.renameTable( doesNotExist, "someTableName"),
+        () -> client.revokeTablePermission( "root", doesNotExist, TablePermission.ALTER_TABLE),
+        () -> client.setTableProperty( doesNotExist, Property.TABLE_FILE_MAX.getKey(), "0"),
+        () -> client.splitRangeByTablets( doesNotExist, client.getRowRange(ByteBuffer.wrap("row".getBytes(UTF_8))), 10),
+        () -> client.updateAndFlush( doesNotExist, new HashMap<>()),
+        () -> client.getDiskUsage( Collections.singleton(doesNotExist)),
+        () -> client.testTableClassLoad( doesNotExist, VersioningIterator.class.getName(), SortedKeyValueIterator.class.getName()),
+        () -> client.createConditionalWriter( doesNotExist, new ConditionalWriterOptions())
     );
     // @formatter:on
 
@@ -1047,20 +436,20 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
     // @formatter:off
     Stream<Executable> cases = Stream.of(
-        () -> client.deleteNamespace(creds, doesNotExist),
-        () -> client.renameNamespace(creds, doesNotExist, "abcdefg"),
-        () -> client.setNamespaceProperty(creds, doesNotExist, "table.compaction.major.ratio", "4"),
-        () -> client.removeNamespaceProperty(creds, doesNotExist, "table.compaction.major.ratio"),
-        () -> client.getNamespaceProperties(creds, doesNotExist),
-        () -> client.attachNamespaceIterator(creds, doesNotExist, setting, EnumSet.allOf(IteratorScope.class)),
-        () -> client.removeNamespaceIterator(creds, doesNotExist, "DebugTheThings", EnumSet.allOf(IteratorScope.class)),
-        () -> client.getNamespaceIteratorSetting(creds, doesNotExist, "DebugTheThings", IteratorScope.SCAN),
-        () -> client.listNamespaceIterators(creds, doesNotExist),
-        () -> client.checkNamespaceIteratorConflicts(creds, doesNotExist, iteratorSetting, EnumSet.allOf(IteratorScope.class)),
-        () -> client.addNamespaceConstraint(creds, doesNotExist, MaxMutationSize.class.getName()),
-        () -> client.removeNamespaceConstraint(creds, doesNotExist, 1),
-        () -> client.listNamespaceConstraints(creds, doesNotExist),
-        () -> client.testNamespaceClassLoad(creds, doesNotExist, DebugIterator.class.getName(), SortedKeyValueIterator.class.getName())
+        () -> client.deleteNamespace( doesNotExist),
+        () -> client.renameNamespace( doesNotExist, "abcdefg"),
+        () -> client.setNamespaceProperty( doesNotExist, "table.compaction.major.ratio", "4"),
+        () -> client.removeNamespaceProperty( doesNotExist, "table.compaction.major.ratio"),
+        () -> client.getNamespaceProperties( doesNotExist),
+        () -> client.attachNamespaceIterator( doesNotExist, setting, EnumSet.allOf(IteratorScope.class)),
+        () -> client.removeNamespaceIterator( doesNotExist, "DebugTheThings", EnumSet.allOf(IteratorScope.class)),
+        () -> client.getNamespaceIteratorSetting( doesNotExist, "DebugTheThings", IteratorScope.SCAN),
+        () -> client.listNamespaceIterators( doesNotExist),
+        () -> client.checkNamespaceIteratorConflicts( doesNotExist, iteratorSetting, EnumSet.allOf(IteratorScope.class)),
+        () -> client.addNamespaceConstraint( doesNotExist, MaxMutationSize.class.getName()),
+        () -> client.removeNamespaceConstraint( doesNotExist, 1),
+        () -> client.listNamespaceConstraints( doesNotExist),
+        () -> client.testNamespaceClassLoad( doesNotExist, DebugIterator.class.getName(), SortedKeyValueIterator.class.getName())
     );
     // @formatter:on
 
@@ -1072,14 +461,14 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     final String table1 = "ett1";
     final String table2 = "ett2";
 
-    client.createTable(creds, table1, false, TimeType.MILLIS);
-    client.createTable(creds, table2, false, TimeType.MILLIS);
+    client.createTable(table1, false, TimeType.MILLIS);
+    client.createTable(table2, false, TimeType.MILLIS);
 
     // @formatter:off
     Stream<Executable> cases = Stream.of(
-        () -> client.createTable(creds, table1, false, TimeType.MILLIS),
-        () -> client.renameTable(creds, table1, table2),
-        () -> client.cloneTable(creds, table1, table2, false, new HashMap<>(), new HashSet<>())
+        () -> client.createTable( table1, false, TimeType.MILLIS),
+        () -> client.renameTable( table1, table2),
+        () -> client.cloneTable( table1, table2, false, new HashMap<>(), new HashSet<>())
     );
     // @formatter:on
 
@@ -1088,12 +477,12 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
   @Test
   public void testNamespaceExists() throws TException {
-    client.createNamespace(creds, "foobar");
+    client.createNamespace("foobar");
 
     // @formatter:off
     Stream<Executable> cases = Stream.of(
-        () -> client.createNamespace(creds, namespaceName),
-        () -> client.renameNamespace(creds, "foobar", namespaceName)
+        () -> client.createNamespace( namespaceName),
+        () -> client.renameNamespace( "foobar", namespaceName)
     );
     // @formatter:on
 
@@ -1102,15 +491,14 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
   @Test
   public void testNamespaceNotEmpty() throws Exception {
-    client.createTable(creds, namespaceName + ".abcdefg", true, TimeType.MILLIS);
+    client.createTable(namespaceName + ".abcdefg", true, TimeType.MILLIS);
 
-    assertThrows(NamespaceNotEmptyException.class,
-        () -> client.deleteNamespace(creds, namespaceName));
+    assertThrows(NamespaceNotEmptyException.class, () -> client.deleteNamespace(namespaceName));
   }
 
   @Test
   public void testUnknownScanner() throws TException {
-    String scanner = client.createScanner(creds, tableName, null);
+    String scanner = client.createScanner(tableName, null);
     assertFalse(client.hasNext(scanner));
     client.closeScanner(scanner);
 
@@ -1130,7 +518,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
   @Test
   public void testUnknownWriter() throws TException {
-    String writer = client.createWriter(creds, tableName, null);
+    String writer = client.createWriter(tableName, null);
     client.update(writer, mutation("row0", "cf", "cq", "value"));
     client.flush(writer);
     client.update(writer, mutation("row2", "cf", "cq", "value2"));
@@ -1153,7 +541,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
   @Test
   public void testDelete() throws Exception {
-    client.updateAndFlush(creds, tableName, mutation("row0", "cf", "cq", "value"));
+    client.updateAndFlush(tableName, mutation("row0", "cf", "cq", "value"));
 
     assertScan(new String[][] {{"row0", "cf", "cq", "value"}}, tableName);
 
@@ -1161,8 +549,8 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     upd.setDeleteCell(false);
     Map<ByteBuffer,List<ColumnUpdate>> notDelete = Collections.singletonMap(s2bb("row0"),
         Collections.singletonList(upd));
-    client.updateAndFlush(creds, tableName, notDelete);
-    String scanner = client.createScanner(creds, tableName, null);
+    client.updateAndFlush(tableName, notDelete);
+    String scanner = client.createScanner(tableName, null);
     ScanResult entries = client.nextK(scanner, 10);
     client.closeScanner(scanner);
     assertFalse(entries.more);
@@ -1173,29 +561,28 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     Map<ByteBuffer,List<ColumnUpdate>> delete = Collections.singletonMap(s2bb("row0"),
         Collections.singletonList(upd));
 
-    client.updateAndFlush(creds, tableName, delete);
+    client.updateAndFlush(tableName, delete);
 
     assertScan(new String[][] {}, tableName);
   }
 
   @Test
   public void testSystemProperties() throws Exception {
-    Map<String,String> cfg = client.getSiteConfiguration(creds);
+    Map<String,String> cfg = client.getSiteConfiguration();
 
     // set generic property
-    client.setProperty(creds, "general.custom.test.systemprop", "whistletips");
-    assertEquals(
-        proxyClient.proxy().getSystemConfiguration(creds).get("general.custom.test.systemprop"),
+    client.setProperty("general.custom.test.systemprop", "whistletips");
+    assertEquals(proxyClient.proxy().getSystemConfiguration().get("general.custom.test.systemprop"),
         "whistletips");
-    client.removeProperty(creds, "general.custom.test.systemprop");
-    assertNull(client.getSystemConfiguration(creds).get("general.custom.test.systemprop"));
+    client.removeProperty("general.custom.test.systemprop");
+    assertNull(client.getSystemConfiguration().get("general.custom.test.systemprop"));
 
     // set a property in zookeeper
-    client.setProperty(creds, "table.split.threshold", "500M");
+    client.setProperty("table.split.threshold", "500M");
 
     // check that we can read it
     for (int i = 0; i < 5; i++) {
-      cfg = client.getSystemConfiguration(creds);
+      cfg = client.getSystemConfiguration();
       if ("500M".equals(cfg.get("table.split.threshold")))
         break;
       sleepUninterruptibly(200, TimeUnit.MILLISECONDS);
@@ -1203,9 +590,9 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     assertEquals("500M", cfg.get("table.split.threshold"));
 
     // unset the setting, check that it's not what it was
-    client.removeProperty(creds, "table.split.threshold");
+    client.removeProperty("table.split.threshold");
     for (int i = 0; i < 5; i++) {
-      cfg = client.getSystemConfiguration(creds);
+      cfg = client.getSystemConfiguration();
       if (!"500M".equals(cfg.get("table.split.threshold")))
         break;
       sleepUninterruptibly(200, TimeUnit.MILLISECONDS);
@@ -1216,8 +603,8 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
   @Test
   public void pingTabletServers() throws Exception {
     int tservers = 0;
-    for (String tserver : client.getTabletServers(creds)) {
-      client.pingTabletServer(creds, tserver);
+    for (String tserver : client.getTabletServers()) {
+      client.pingTabletServer(tserver);
       tservers++;
     }
     assertTrue(tservers > 0);
@@ -1227,7 +614,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
   public void testSiteConfiguration() throws Exception {
     // get something we know is in the site config
     MiniAccumuloClusterImpl cluster = SharedMiniClusterBase.getCluster();
-    Map<String,String> cfg = client.getSiteConfiguration(creds);
+    Map<String,String> cfg = client.getSiteConfiguration();
     assertTrue(cfg.get("instance.dfs.dir")
         .startsWith(cluster.getConfig().getAccumuloDir().getAbsolutePath()));
   }
@@ -1235,26 +622,26 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
   @Test
   public void testClassLoad() throws Exception {
     // try to load some classes via the proxy
-    assertTrue(client.testClassLoad(creds, DevNull.class.getName(),
-        SortedKeyValueIterator.class.getName()));
-    assertFalse(client.testClassLoad(creds, "foo.bar", SortedKeyValueIterator.class.getName()));
+    assertTrue(
+        client.testClassLoad(DevNull.class.getName(), SortedKeyValueIterator.class.getName()));
+    assertFalse(client.testClassLoad("foo.bar", SortedKeyValueIterator.class.getName()));
   }
 
   @Test
   public void attachIteratorsWithScans() throws Exception {
-    if (client.tableExists(creds, "slow")) {
-      client.deleteTable(creds, "slow");
+    if (client.tableExists("slow")) {
+      client.deleteTable("slow");
     }
 
     // create a table that's very slow, so we can look for scans
-    client.createTable(creds, "slow", true, TimeType.MILLIS);
+    client.createTable("slow", true, TimeType.MILLIS);
     IteratorSetting setting = new IteratorSetting(100, "slow", SlowIterator.class.getName(),
         Collections.singletonMap("sleepTime", "250"));
-    client.attachIterator(creds, "slow", setting, EnumSet.allOf(IteratorScope.class));
+    client.attachIterator("slow", setting, EnumSet.allOf(IteratorScope.class));
 
     // Should take 10 seconds to read every record
     for (int i = 0; i < 40; i++) {
-      client.updateAndFlush(creds, "slow", mutation("row" + i, "cf", "cq", "value"));
+      client.updateAndFlush("slow", mutation("row" + i, "cf", "cq", "value"));
     }
 
     // scan
@@ -1274,7 +661,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
           }
 
           Client client2 = proxyClient2.proxy();
-          scanner = client2.createScanner(creds, "slow", null);
+          scanner = client2.createScanner("slow", null);
           client2.nextK(scanner, 10);
           client2.closeScanner(scanner);
         } catch (Exception e) {
@@ -1291,8 +678,8 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     // look for the scan many times
     List<ActiveScan> scans = new ArrayList<>();
     for (int i = 0; i < 100 && scans.isEmpty(); i++) {
-      for (String tserver : client.getTabletServers(creds)) {
-        List<ActiveScan> scansForServer = client.getActiveScans(creds, tserver);
+      for (String tserver : client.getTabletServers()) {
+        List<ActiveScan> scansForServer = client.getActiveScans(tserver);
         for (ActiveScan scan : scansForServer) {
           if (clientPrincipal.equals(scan.getUser())) {
             scans.add(scan);
@@ -1317,7 +704,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
         assertEquals(ScanType.SINGLE, scan.getType());
         assertEquals("slow", scan.getTable());
 
-        map = client.tableIdMap(creds);
+        map = client.tableIdMap();
         assertEquals(map.get("slow"), scan.getExtent().tableId);
         assertNull(scan.getExtent().endRow);
         assertNull(scan.getExtent().prevEndRow);
@@ -1330,22 +717,22 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
   @Test
   public void attachIteratorWithCompactions() throws Exception {
-    if (client.tableExists(creds, "slow")) {
-      client.deleteTable(creds, "slow");
+    if (client.tableExists("slow")) {
+      client.deleteTable("slow");
     }
 
     // create a table that's very slow, so we can look for compactions
-    client.createTable(creds, "slow", true, TimeType.MILLIS);
+    client.createTable("slow", true, TimeType.MILLIS);
     IteratorSetting setting = new IteratorSetting(100, "slow", SlowIterator.class.getName(),
         Collections.singletonMap("sleepTime", "250"));
-    client.attachIterator(creds, "slow", setting, EnumSet.allOf(IteratorScope.class));
+    client.attachIterator("slow", setting, EnumSet.allOf(IteratorScope.class));
 
     // Should take 10 seconds to read every record
     for (int i = 0; i < 40; i++) {
-      client.updateAndFlush(creds, "slow", mutation("row" + i, "cf", "cq", "value"));
+      client.updateAndFlush("slow", mutation("row" + i, "cf", "cq", "value"));
     }
 
-    Map<String,String> map = client.tableIdMap(creds);
+    Map<String,String> map = client.tableIdMap();
 
     // start a compaction
     Thread t = new Thread() {
@@ -1362,7 +749,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
             proxyClient2 = new TestProxyClient(hostname, proxyPort, factory);
           }
           Client client2 = proxyClient2.proxy();
-          client2.compactTable(creds, "slow", null, null, null, true, true, null);
+          client2.compactTable("slow", null, null, null, true, true, null);
         } catch (Exception e) {
           throw new RuntimeException(e);
         } finally {
@@ -1383,9 +770,9 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     List<ActiveCompaction> compactions = new ArrayList<>();
     for (int i = 0; i < 100 && compactions.isEmpty(); i++) {
       // Iterate over the tservers
-      for (String tserver : client.getTabletServers(creds)) {
+      for (String tserver : client.getTabletServers()) {
         // And get the compactions on each
-        List<ActiveCompaction> compactionsOnServer = client.getActiveCompactions(creds, tserver);
+        List<ActiveCompaction> compactionsOnServer = client.getActiveCompactions(tserver);
         for (ActiveCompaction compact : compactionsOnServer) {
           // There might be other compactions occurring (e.g. on METADATA) in which
           // case we want to prune out those that aren't for our slow table
@@ -1422,16 +809,14 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
   @Test
   public void userAuthentication() throws Exception {
     if (isKerberosEnabled()) {
-      assertTrue(
-          client.authenticateUser(creds, clientPrincipal, Collections.<String,String> emptyMap()));
+      assertTrue(client.authenticateUser(clientPrincipal, Collections.<String,String> emptyMap()));
       // Can't really authenticate "badly" at the application level w/ kerberos. It's going to fail
       // to even set up
       // an RPC
     } else {
       // check password
-      assertTrue(
-          client.authenticateUser(creds, "root", s2pp(SharedMiniClusterBase.getRootPassword())));
-      assertFalse(client.authenticateUser(creds, "root", s2pp("")));
+      assertTrue(client.authenticateUser("root", s2pp(SharedMiniClusterBase.getRootPassword())));
+      assertFalse(client.authenticateUser("root", s2pp("")));
     }
   }
 
@@ -1449,22 +834,22 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     }
 
     // create a user
-    client.createLocalUser(creds, user, password);
+    client.createLocalUser(user, password);
     // change auths
-    Set<String> users = client.listLocalUsers(creds);
+    Set<String> users = client.listLocalUsers();
     Set<String> expectedUsers = new HashSet<>(Arrays.asList(clientPrincipal, user));
     assertTrue(users.containsAll(expectedUsers),
         "Did not find all expected users: " + expectedUsers);
     HashSet<ByteBuffer> auths = new HashSet<>(Arrays.asList(s2bb("A"), s2bb("B")));
-    client.changeUserAuthorizations(creds, user, auths);
-    List<ByteBuffer> update = client.getUserAuthorizations(creds, user);
+    client.changeUserAuthorizations(user, auths);
+    List<ByteBuffer> update = client.getUserAuthorizations(user);
     assertEquals(auths, new HashSet<>(update));
 
     // change password
     if (!isKerberosEnabled()) {
       password = s2bb("");
-      client.changeLocalUserPassword(creds, user, password);
-      assertTrue(client.authenticateUser(creds, user, s2pp(ByteBufferUtil.toString(password))));
+      client.changeLocalUserPassword(user, password);
+      assertTrue(client.authenticateUser(user, s2pp(ByteBufferUtil.toString(password))));
     }
 
     if (isKerberosEnabled()) {
@@ -1476,15 +861,11 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
       TestProxyClient otherProxyClient = null;
       try {
         otherProxyClient = new TestProxyClient(hostname, proxyPort, factory, proxyPrimary, ugi);
-        otherProxyClient.proxy().login(user, Collections.<String,String> emptyMap());
       } finally {
         if (otherProxyClient != null) {
           otherProxyClient.close();
         }
       }
-    } else {
-      // check login with new password
-      client.login(user, s2pp(ByteBufferUtil.toString(password)));
     }
   }
 
@@ -1514,47 +895,44 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
       origProxyClient = proxyClient;
       origClient = client;
       userClient = client = userProxyClient.proxy();
-
-      user = client.login(userName, Collections.<String,String> emptyMap());
     } else {
       userName = getUniqueNameArray(1)[0];
       // create a user
-      client.createLocalUser(creds, userName, password);
-      user = client.login(userName, s2pp(ByteBufferUtil.toString(password)));
+      client.createLocalUser(userName, password);
     }
 
     // check permission failure
     assertThrows(AccumuloSecurityException.class,
-        () -> client.createTable(user, "fail", true, TimeType.MILLIS),
+        () -> client.createTable("fail", true, TimeType.MILLIS),
         "should not be able to create the table");
     if (isKerberosEnabled()) {
       // Switch back to original client
       UserGroupInformation.loginUserFromKeytab(clientPrincipal, clientKeytab.getAbsolutePath());
       client = origClient;
     }
-    assertFalse(client.listTables(creds).contains("fail"));
+    assertFalse(client.listTables().contains("fail"));
 
     // grant permissions and test
-    assertFalse(client.hasSystemPermission(creds, userName, SystemPermission.CREATE_TABLE));
-    client.grantSystemPermission(creds, userName, SystemPermission.CREATE_TABLE);
-    assertTrue(client.hasSystemPermission(creds, userName, SystemPermission.CREATE_TABLE));
+    assertFalse(client.hasSystemPermission(userName, SystemPermission.CREATE_TABLE));
+    client.grantSystemPermission(userName, SystemPermission.CREATE_TABLE);
+    assertTrue(client.hasSystemPermission(userName, SystemPermission.CREATE_TABLE));
     if (isKerberosEnabled()) {
       // Switch back to the extra user
       UserGroupInformation.loginUserFromKeytab(otherClient.getPrincipal(),
           otherClient.getKeytab().getAbsolutePath());
       client = userClient;
     }
-    client.createTable(user, "success", true, TimeType.MILLIS);
+    client.createTable("success", true, TimeType.MILLIS);
     if (isKerberosEnabled()) {
       // Switch back to original client
       UserGroupInformation.loginUserFromKeytab(clientPrincipal, clientKeytab.getAbsolutePath());
       client = origClient;
     }
-    assertTrue(client.listTables(creds).contains("success"));
+    assertTrue(client.listTables().contains("success"));
 
     // revoke permissions
-    client.revokeSystemPermission(creds, userName, SystemPermission.CREATE_TABLE);
-    assertFalse(client.hasSystemPermission(creds, userName, SystemPermission.CREATE_TABLE));
+    client.revokeSystemPermission(userName, SystemPermission.CREATE_TABLE);
+    assertFalse(client.hasSystemPermission(userName, SystemPermission.CREATE_TABLE));
     if (isKerberosEnabled()) {
       // Switch back to the extra user
       UserGroupInformation.loginUserFromKeytab(otherClient.getPrincipal(),
@@ -1562,14 +940,14 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
       client = userClient;
     }
     assertThrows(AccumuloSecurityException.class,
-        () -> client.createTable(user, "fail", true, TimeType.MILLIS),
+        () -> client.createTable("fail", true, TimeType.MILLIS),
         "should not be able to create the table");
     if (isKerberosEnabled()) {
       // Switch back to original client
       UserGroupInformation.loginUserFromKeytab(clientPrincipal, clientKeytab.getAbsolutePath());
       client = origClient;
     }
-    assertFalse(client.listTables(creds).contains("fail"));
+    assertFalse(client.listTables().contains("fail"));
 
     // denied!
     if (isKerberosEnabled()) {
@@ -1580,7 +958,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     }
 
     {
-      final String scanner = client.createScanner(user, tableName, null);
+      final String scanner = client.createScanner(tableName, null);
       assertThrows(AccumuloSecurityException.class, () -> client.nextK(scanner, 100),
           "stooge should not read table test");
     }
@@ -1592,9 +970,9 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     }
 
     // grant
-    assertFalse(client.hasTablePermission(creds, userName, tableName, TablePermission.READ));
-    client.grantTablePermission(creds, userName, tableName, TablePermission.READ);
-    assertTrue(client.hasTablePermission(creds, userName, tableName, TablePermission.READ));
+    assertFalse(client.hasTablePermission(userName, tableName, TablePermission.READ));
+    client.grantTablePermission(userName, tableName, TablePermission.READ);
+    assertTrue(client.hasTablePermission(userName, tableName, TablePermission.READ));
 
     if (isKerberosEnabled()) {
       // Switch back to the extra user
@@ -1604,7 +982,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     }
 
     {
-      final String scanner = client.createScanner(user, tableName, null);
+      final String scanner = client.createScanner(tableName, null);
       client.nextK(scanner, 10);
       client.closeScanner(scanner);
     }
@@ -1616,8 +994,8 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     }
 
     // revoke
-    client.revokeTablePermission(creds, userName, tableName, TablePermission.READ);
-    assertFalse(client.hasTablePermission(creds, userName, tableName, TablePermission.READ));
+    client.revokeTablePermission(userName, tableName, TablePermission.READ);
+    assertFalse(client.hasTablePermission(userName, tableName, TablePermission.READ));
     if (isKerberosEnabled()) {
       // Switch back to the extra user
       UserGroupInformation.loginUserFromKeytab(otherClient.getPrincipal(),
@@ -1626,7 +1004,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     }
 
     {
-      final String scanner = client.createScanner(user, tableName, null);
+      final String scanner = client.createScanner(tableName, null);
       assertThrows(AccumuloSecurityException.class, () -> client.nextK(scanner, 100),
           "stooge should not read table test");
     }
@@ -1638,8 +1016,8 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     }
 
     // delete user
-    client.dropLocalUser(creds, userName);
-    Set<String> users = client.listLocalUsers(creds);
+    client.dropLocalUser(userName);
+    Set<String> users = client.listLocalUsers();
     assertFalse(users.contains(userName), "Should not see user after they are deleted");
 
     if (isKerberosEnabled()) {
@@ -1675,52 +1053,47 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
       origProxyClient = proxyClient;
       origClient = client;
       userClient = client = userProxyClient.proxy();
-
-      user = client.login(userName, Collections.<String,String> emptyMap());
     } else {
       userName = getUniqueNameArray(1)[0];
       // create a user
-      client.createLocalUser(creds, userName, password);
-      user = client.login(userName, s2pp(ByteBufferUtil.toString(password)));
+      client.createLocalUser(userName, password);
     }
 
     // check permission failure
     assertThrows(AccumuloSecurityException.class,
-        () -> client.createTable(user, namespaceName + ".fail", true, TimeType.MILLIS),
+        () -> client.createTable(namespaceName + ".fail", true, TimeType.MILLIS),
         "should not be able to create the table");
     if (isKerberosEnabled()) {
       // Switch back to original client
       UserGroupInformation.loginUserFromKeytab(clientPrincipal, clientKeytab.getAbsolutePath());
       client = origClient;
     }
-    assertFalse(client.listTables(creds).contains(namespaceName + ".fail"));
+    assertFalse(client.listTables().contains(namespaceName + ".fail"));
 
     // grant permissions and test
-    assertFalse(client.hasNamespacePermission(creds, userName, namespaceName,
-        NamespacePermission.CREATE_TABLE));
-    client.grantNamespacePermission(creds, userName, namespaceName,
-        NamespacePermission.CREATE_TABLE);
-    assertTrue(client.hasNamespacePermission(creds, userName, namespaceName,
-        NamespacePermission.CREATE_TABLE));
+    assertFalse(
+        client.hasNamespacePermission(userName, namespaceName, NamespacePermission.CREATE_TABLE));
+    client.grantNamespacePermission(userName, namespaceName, NamespacePermission.CREATE_TABLE);
+    assertTrue(
+        client.hasNamespacePermission(userName, namespaceName, NamespacePermission.CREATE_TABLE));
     if (isKerberosEnabled()) {
       // Switch back to the extra user
       UserGroupInformation.loginUserFromKeytab(otherClient.getPrincipal(),
           otherClient.getKeytab().getAbsolutePath());
       client = userClient;
     }
-    client.createTable(user, namespaceName + ".success", true, TimeType.MILLIS);
+    client.createTable(namespaceName + ".success", true, TimeType.MILLIS);
     if (isKerberosEnabled()) {
       // Switch back to original client
       UserGroupInformation.loginUserFromKeytab(clientPrincipal, clientKeytab.getAbsolutePath());
       client = origClient;
     }
-    assertTrue(client.listTables(creds).contains(namespaceName + ".success"));
+    assertTrue(client.listTables().contains(namespaceName + ".success"));
 
     // revoke permissions
-    client.revokeNamespacePermission(creds, userName, namespaceName,
-        NamespacePermission.CREATE_TABLE);
-    assertFalse(client.hasNamespacePermission(creds, userName, namespaceName,
-        NamespacePermission.CREATE_TABLE));
+    client.revokeNamespacePermission(userName, namespaceName, NamespacePermission.CREATE_TABLE);
+    assertFalse(
+        client.hasNamespacePermission(userName, namespaceName, NamespacePermission.CREATE_TABLE));
     if (isKerberosEnabled()) {
       // Switch back to the extra user
       UserGroupInformation.loginUserFromKeytab(otherClient.getPrincipal(),
@@ -1728,18 +1101,18 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
       client = userClient;
     }
     assertThrows(AccumuloSecurityException.class,
-        () -> client.createTable(user, namespaceName + ".fail", true, TimeType.MILLIS),
+        () -> client.createTable(namespaceName + ".fail", true, TimeType.MILLIS),
         "should not be able to create the table");
     if (isKerberosEnabled()) {
       // Switch back to original client
       UserGroupInformation.loginUserFromKeytab(clientPrincipal, clientKeytab.getAbsolutePath());
       client = origClient;
     }
-    assertFalse(client.listTables(creds).contains(namespaceName + ".fail"));
+    assertFalse(client.listTables().contains(namespaceName + ".fail"));
 
     // delete user
-    client.dropLocalUser(creds, userName);
-    Set<String> users = client.listLocalUsers(creds);
+    client.dropLocalUser(userName);
+    Set<String> users = client.listLocalUsers();
     assertFalse(users.contains(userName), "Should not see user after they are deleted");
 
     if (isKerberosEnabled()) {
@@ -1749,18 +1122,18 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     }
 
     // delete table from namespace otherwise we can't delete namespace during teardown
-    client.deleteTable(creds, namespaceName + ".success");
+    client.deleteTable(namespaceName + ".success");
   }
 
   @Test
   public void testBatchWriter() throws Exception {
-    client.addConstraint(creds, tableName, NumericValueConstraint.class.getName());
+    client.addConstraint(tableName, NumericValueConstraint.class.getName());
     // zookeeper propagation time
     sleepUninterruptibly(ZOOKEEPER_PROPAGATION_TIME, TimeUnit.MILLISECONDS);
 
     // Take the table offline and online to force a config update
-    client.offlineTable(creds, tableName, true);
-    client.onlineTable(creds, tableName, true);
+    client.offlineTable(tableName, true);
+    client.onlineTable(tableName, true);
 
     WriterOptions writerOptions = new WriterOptions();
     writerOptions.setLatencyMs(10000);
@@ -1768,16 +1141,16 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     writerOptions.setThreads(1);
     writerOptions.setTimeoutMs(100000);
 
-    Map<String,Integer> constraints = client.listConstraints(creds, tableName);
+    Map<String,Integer> constraints = client.listConstraints(tableName);
     while (!constraints.containsKey(NumericValueConstraint.class.getName())) {
       log.info("Constraints don't contain NumericValueConstraint");
       Thread.sleep(2000);
-      constraints = client.listConstraints(creds, tableName);
+      constraints = client.listConstraints(tableName);
     }
 
     boolean success = false;
     for (int i = 0; i < 15; i++) {
-      String batchWriter = client.createWriter(creds, tableName, writerOptions);
+      String batchWriter = client.createWriter(tableName, writerOptions);
       client.update(batchWriter, mutation("row1", "cf", "cq", "x"));
       client.update(batchWriter, mutation("row1", "cf", "cq", "x"));
       try {
@@ -1800,17 +1173,17 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
       fail("constraint did not fire");
     }
 
-    client.removeConstraint(creds, tableName, 2);
+    client.removeConstraint(tableName, 2);
 
     // Take the table offline and online to force a config update
-    client.offlineTable(creds, tableName, true);
-    client.onlineTable(creds, tableName, true);
+    client.offlineTable(tableName, true);
+    client.onlineTable(tableName, true);
 
-    constraints = client.listConstraints(creds, tableName);
+    constraints = client.listConstraints(tableName);
     while (constraints.containsKey(NumericValueConstraint.class.getName())) {
       log.info("Constraints still contains NumericValueConstraint");
       Thread.sleep(2000);
-      constraints = client.listConstraints(creds, tableName);
+      constraints = client.listConstraints(tableName);
     }
 
     assertScan(new String[][] {}, tableName);
@@ -1826,7 +1199,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     success = false;
     for (int i = 0; i < 15; i++) {
       try {
-        String batchWriter = client.createWriter(creds, tableName, writerOptions);
+        String batchWriter = client.createWriter(tableName, writerOptions);
 
         client.update(batchWriter, mutation("row1", "cf", "cq", "x"));
         client.flush(batchWriter);
@@ -1845,7 +1218,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
     assertScan(new String[][] {{"row1", "cf", "cq", "x"}}, tableName);
 
-    client.deleteTable(creds, tableName);
+    client.deleteTable(tableName);
   }
 
   @Test
@@ -1853,29 +1226,29 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     log.debug("Setting NumericValueConstraint on " + tableName);
 
     // constraints
-    client.addConstraint(creds, tableName, NumericValueConstraint.class.getName());
+    client.addConstraint(tableName, NumericValueConstraint.class.getName());
 
     // zookeeper propagation time
     Thread.sleep(ZOOKEEPER_PROPAGATION_TIME);
 
     // Take the table offline and online to force a config update
-    client.offlineTable(creds, tableName, true);
-    client.onlineTable(creds, tableName, true);
+    client.offlineTable(tableName, true);
+    client.onlineTable(tableName, true);
 
     log.debug("Attempting to verify client-side that constraints are observed");
 
-    Map<String,Integer> constraints = client.listConstraints(creds, tableName);
+    Map<String,Integer> constraints = client.listConstraints(tableName);
     while (!constraints.containsKey(NumericValueConstraint.class.getName())) {
       log.debug("Constraints don't contain NumericValueConstraint");
       Thread.sleep(2000);
-      constraints = client.listConstraints(creds, tableName);
+      constraints = client.listConstraints(tableName);
     }
 
-    assertEquals(2, client.listConstraints(creds, tableName).size());
+    assertEquals(2, client.listConstraints(tableName).size());
     log.debug("Verified client-side that constraints exist");
 
     // Write data that satisfies the constraint
-    client.updateAndFlush(creds, tableName, mutation("row1", "cf", "cq", "123"));
+    client.updateAndFlush(tableName, mutation("row1", "cf", "cq", "123"));
 
     log.debug("Successfully wrote data that satisfies the constraint");
     log.debug("Trying to write data that the constraint should reject");
@@ -1883,7 +1256,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     // Expect failure on data that fails the constraint
     while (true) {
       try {
-        client.updateAndFlush(creds, tableName, mutation("row1", "cf", "cq", "x"));
+        client.updateAndFlush(tableName, mutation("row1", "cf", "cq", "x"));
         log.debug("Expected mutation to be rejected, but was not. Waiting and retrying");
         Thread.sleep(5000);
       } catch (MutationsRejectedException ex) {
@@ -1894,29 +1267,29 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     log.debug("Saw expected failure on data which fails the constraint");
 
     log.debug("Removing constraint from table");
-    client.removeConstraint(creds, tableName, 2);
+    client.removeConstraint(tableName, 2);
 
     sleepUninterruptibly(ZOOKEEPER_PROPAGATION_TIME, TimeUnit.MILLISECONDS);
 
     // Take the table offline and online to force a config update
-    client.offlineTable(creds, tableName, true);
-    client.onlineTable(creds, tableName, true);
+    client.offlineTable(tableName, true);
+    client.onlineTable(tableName, true);
 
-    constraints = client.listConstraints(creds, tableName);
+    constraints = client.listConstraints(tableName);
     while (constraints.containsKey(NumericValueConstraint.class.getName())) {
       log.debug("Constraints contains NumericValueConstraint");
       Thread.sleep(2000);
-      constraints = client.listConstraints(creds, tableName);
+      constraints = client.listConstraints(tableName);
     }
 
-    assertEquals(1, client.listConstraints(creds, tableName).size());
+    assertEquals(1, client.listConstraints(tableName).size());
     log.debug("Verified client-side that the constraint was removed");
 
     log.debug("Attempting to write mutation that should succeed after constraints was removed");
     // Make sure we can write the data after we removed the constraint
     while (true) {
       try {
-        client.updateAndFlush(creds, tableName, mutation("row1", "cf", "cq", "x"));
+        client.updateAndFlush(tableName, mutation("row1", "cf", "cq", "x"));
         break;
       } catch (MutationsRejectedException ex) {
         log.debug("Expected mutation accepted, but was not. Waiting and retrying");
@@ -1931,19 +1304,18 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
   @Test
   public void tableMergesAndSplits() throws Exception {
     // add some splits
-    client.addSplits(creds, tableName,
-        new HashSet<>(Arrays.asList(s2bb("a"), s2bb("m"), s2bb("z"))));
-    List<ByteBuffer> splits = client.listSplits(creds, tableName, 1);
+    client.addSplits(tableName, new HashSet<>(Arrays.asList(s2bb("a"), s2bb("m"), s2bb("z"))));
+    List<ByteBuffer> splits = client.listSplits(tableName, 1);
     assertEquals(Arrays.asList(s2bb("m")), splits);
 
     // Merge some of the splits away
-    client.mergeTablets(creds, tableName, null, s2bb("m"));
-    splits = client.listSplits(creds, tableName, 10);
+    client.mergeTablets(tableName, null, s2bb("m"));
+    splits = client.listSplits(tableName, 10);
     assertEquals(Arrays.asList(s2bb("m"), s2bb("z")), splits);
 
     // Merge the entire table
-    client.mergeTablets(creds, tableName, null, null);
-    splits = client.listSplits(creds, tableName, 10);
+    client.mergeTablets(tableName, null, null);
+    splits = client.listSplits(tableName, 10);
     List<ByteBuffer> empty = Collections.emptyList();
 
     // No splits after merge on whole table
@@ -1958,23 +1330,23 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     options.put("columns", "cf");
     IteratorSetting setting = new IteratorSetting(10, tableName, SummingCombiner.class.getName(),
         options);
-    client.attachIterator(creds, tableName, setting, EnumSet.allOf(IteratorScope.class));
+    client.attachIterator(tableName, setting, EnumSet.allOf(IteratorScope.class));
     for (int i = 0; i < 10; i++) {
-      client.updateAndFlush(creds, tableName, mutation("row1", "cf", "cq", "1"));
+      client.updateAndFlush(tableName, mutation("row1", "cf", "cq", "1"));
     }
     // 10 updates of "1" in the value w/ SummingCombiner should return value of "10"
     assertScan(new String[][] {{"row1", "cf", "cq", "10"}}, tableName);
 
-    assertThrows(Exception.class, () -> client.checkIteratorConflicts(creds, tableName, setting,
+    assertThrows(Exception.class, () -> client.checkIteratorConflicts(tableName, setting,
         EnumSet.allOf(IteratorScope.class)));
 
-    client.deleteRows(creds, tableName, null, null);
-    client.removeIterator(creds, tableName, "test", EnumSet.allOf(IteratorScope.class));
+    client.deleteRows(tableName, null, null);
+    client.removeIterator(tableName, "test", EnumSet.allOf(IteratorScope.class));
     String[][] expected = new String[10][];
     for (int i = 0; i < 10; i++) {
-      client.updateAndFlush(creds, tableName, mutation("row" + i, "cf", "cq", "" + i));
+      client.updateAndFlush(tableName, mutation("row" + i, "cf", "cq", "" + i));
       expected[i] = new String[] {"row" + i, "cf", "cq", "" + i};
-      client.flushTable(creds, tableName, null, null, true);
+      client.flushTable(tableName, null, null, true);
     }
     assertScan(expected, tableName);
   }
@@ -1985,36 +1357,36 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
     String[][] expected = new String[10][];
     for (int i = 0; i < 10; i++) {
-      client.updateAndFlush(creds, tableName, mutation("row" + i, "cf", "cq", "" + i));
+      client.updateAndFlush(tableName, mutation("row" + i, "cf", "cq", "" + i));
       expected[i] = new String[] {"row" + i, "cf", "cq", "" + i};
-      client.flushTable(creds, tableName, null, null, true);
+      client.flushTable(tableName, null, null, true);
     }
     assertScan(expected, tableName);
 
     // clone
-    client.cloneTable(creds, tableName, TABLE_TEST2, true, null, null);
+    client.cloneTable(tableName, TABLE_TEST2, true, null, null);
     assertScan(expected, TABLE_TEST2);
-    client.deleteTable(creds, TABLE_TEST2);
+    client.deleteTable(TABLE_TEST2);
   }
 
   @Test
   public void clearLocatorCache() throws Exception {
     // don't know how to test this, call it just for fun
-    client.clearLocatorCache(creds, tableName);
+    client.clearLocatorCache(tableName);
   }
 
   @Test
   public void compactTable() throws Exception {
     String[][] expected = new String[10][];
     for (int i = 0; i < 10; i++) {
-      client.updateAndFlush(creds, tableName, mutation("row" + i, "cf", "cq", "" + i));
+      client.updateAndFlush(tableName, mutation("row" + i, "cf", "cq", "" + i));
       expected[i] = new String[] {"row" + i, "cf", "cq", "" + i};
-      client.flushTable(creds, tableName, null, null, true);
+      client.flushTable(tableName, null, null, true);
     }
     assertScan(expected, tableName);
 
     // compact
-    client.compactTable(creds, tableName, null, null, null, true, true, null);
+    client.compactTable(tableName, null, null, null, true, true, null);
     assertEquals(1, countFiles(tableName));
     assertScan(expected, tableName);
   }
@@ -2026,28 +1398,28 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     // Write some data
     String[][] expected = new String[10][];
     for (int i = 0; i < 10; i++) {
-      client.updateAndFlush(creds, tableName, mutation("row" + i, "cf", "cq", "" + i));
+      client.updateAndFlush(tableName, mutation("row" + i, "cf", "cq", "" + i));
       expected[i] = new String[] {"row" + i, "cf", "cq", "" + i};
-      client.flushTable(creds, tableName, null, null, true);
+      client.flushTable(tableName, null, null, true);
     }
     assertScan(expected, tableName);
 
     // compact
-    client.compactTable(creds, tableName, null, null, null, true, true, null);
+    client.compactTable(tableName, null, null, null, true, true, null);
     assertEquals(1, countFiles(tableName));
     assertScan(expected, tableName);
 
     // Clone the table
-    client.cloneTable(creds, tableName, TABLE_TEST2, true, null, null);
+    client.cloneTable(tableName, TABLE_TEST2, true, null, null);
     Set<String> tablesToScan = new HashSet<>();
     tablesToScan.add(tableName);
     tablesToScan.add(TABLE_TEST2);
     tablesToScan.add("foo");
 
-    client.createTable(creds, "foo", true, TimeType.MILLIS);
+    client.createTable("foo", true, TimeType.MILLIS);
 
     // get disk usage
-    List<DiskUsage> diskUsage = (client.getDiskUsage(creds, tablesToScan));
+    List<DiskUsage> diskUsage = (client.getDiskUsage(tablesToScan));
     assertEquals(2, diskUsage.size());
     // The original table and the clone are lumped together (they share the same files)
     assertEquals(2, diskUsage.get(0).getTables().size());
@@ -2055,9 +1427,9 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     assertEquals(1, diskUsage.get(1).getTables().size());
 
     // Compact the clone so it writes its own files instead of referring to the original
-    client.compactTable(creds, TABLE_TEST2, null, null, null, true, true, null);
+    client.compactTable(TABLE_TEST2, null, null, null, true, true, null);
 
-    diskUsage = (client.getDiskUsage(creds, tablesToScan));
+    diskUsage = (client.getDiskUsage(tablesToScan));
     assertEquals(3, diskUsage.size());
     // The original
     assertEquals(1, diskUsage.get(0).getTables().size());
@@ -2065,8 +1437,8 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     assertEquals(1, diskUsage.get(1).getTables().size());
     // The empty table
     assertEquals(1, diskUsage.get(2).getTables().size());
-    client.deleteTable(creds, "foo");
-    client.deleteTable(creds, TABLE_TEST2);
+    client.deleteTable("foo");
+    client.deleteTable(TABLE_TEST2);
   }
 
   @Test
@@ -2074,9 +1446,9 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     // Write some data
     String[][] expected = new String[10][];
     for (int i = 0; i < 10; i++) {
-      client.updateAndFlush(creds, tableName, mutation("row" + i, "cf", "cq", "" + i));
+      client.updateAndFlush(tableName, mutation("row" + i, "cf", "cq", "" + i));
       expected[i] = new String[] {"row" + i, "cf", "cq", "" + i};
-      client.flushTable(creds, tableName, null, null, true);
+      client.flushTable(tableName, null, null, true);
     }
     assertScan(expected, tableName);
 
@@ -2088,8 +1460,8 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     assertTrue(fs.mkdirs(dir));
     Path destDir = new Path(base, "test_dest");
     assertTrue(fs.mkdirs(destDir));
-    client.offlineTable(creds, tableName, false);
-    client.exportTable(creds, tableName, dir.toString());
+    client.offlineTable(tableName, false);
+    client.exportTable(tableName, dir.toString());
     // copy files to a new location
     FSDataInputStream is = fs.open(new Path(dir, "distcp.txt"));
     try (BufferedReader r = new BufferedReader(new InputStreamReader(is, UTF_8))) {
@@ -2101,15 +1473,15 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
         FileUtil.copy(fs, srcPath, fs, destDir, false, fs.getConf());
       }
     }
-    client.deleteTable(creds, tableName);
-    client.importTable(creds, "testify", destDir.toString());
+    client.deleteTable(tableName);
+    client.importTable("testify", destDir.toString());
     assertScan(expected, "testify");
-    client.deleteTable(creds, "testify");
+    client.deleteTable("testify");
 
     assertThrows(org.apache.accumulo.proxy.thrift.AccumuloException.class,
-        () -> client.importTable(creds, "testify2", destDir.toString()));
+        () -> client.importTable("testify2", destDir.toString()));
 
-    assertFalse(client.listTables(creds).contains("testify2"));
+    assertFalse(client.listTables().contains("testify2"));
   }
 
   @Test
@@ -2117,42 +1489,42 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     Map<String,Set<String>> groups = new HashMap<>();
     groups.put("group1", Collections.singleton("cf1"));
     groups.put("group2", Collections.singleton("cf2"));
-    client.setLocalityGroups(creds, tableName, groups);
-    assertEquals(groups, client.getLocalityGroups(creds, tableName));
+    client.setLocalityGroups(tableName, groups);
+    assertEquals(groups, client.getLocalityGroups(tableName));
   }
 
   @Test
   public void tableProperties() throws Exception {
-    Map<String,String> systemProps = client.getSystemConfiguration(creds);
+    Map<String,String> systemProps = client.getSystemConfiguration();
     String systemTableSplitThreshold = systemProps.get("table.split.threshold");
 
-    Map<String,String> orig = client.getTableProperties(creds, tableName);
-    client.setTableProperty(creds, tableName, "table.split.threshold", "500M");
+    Map<String,String> orig = client.getTableProperties(tableName);
+    client.setTableProperty(tableName, "table.split.threshold", "500M");
 
     // Get the new table property value
-    Map<String,String> update = client.getTableProperties(creds, tableName);
+    Map<String,String> update = client.getTableProperties(tableName);
     assertEquals(update.get("table.split.threshold"), "500M");
 
     // Table level properties shouldn't affect system level values
     assertEquals(systemTableSplitThreshold,
-        client.getSystemConfiguration(creds).get("table.split.threshold"));
+        client.getSystemConfiguration().get("table.split.threshold"));
 
-    client.removeTableProperty(creds, tableName, "table.split.threshold");
-    update = client.getTableProperties(creds, tableName);
+    client.removeTableProperty(tableName, "table.split.threshold");
+    update = client.getTableProperties(tableName);
     assertEquals(orig, update);
   }
 
   @Test
   public void tableRenames() throws Exception {
     // rename table
-    Map<String,String> tables = client.tableIdMap(creds);
-    client.renameTable(creds, tableName, "bar");
-    Map<String,String> tables2 = client.tableIdMap(creds);
+    Map<String,String> tables = client.tableIdMap();
+    client.renameTable(tableName, "bar");
+    Map<String,String> tables2 = client.tableIdMap();
     assertEquals(tables.get(tableName), tables2.get("bar"));
     // table exists
-    assertTrue(client.tableExists(creds, "bar"));
-    assertFalse(client.tableExists(creds, tableName));
-    client.renameTable(creds, "bar", tableName);
+    assertTrue(client.tableExists("bar"));
+    assertFalse(client.tableExists(tableName));
+    client.renameTable("bar", tableName);
   }
 
   @Test
@@ -2178,22 +1550,22 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     fs.mkdirs(new Path(dir + "/bulk/fail"));
 
     // Run the bulk import
-    client.importDirectory(creds, tableName, dir + "/bulk/import", dir + "/bulk/fail", true);
+    client.importDirectory(tableName, dir + "/bulk/import", dir + "/bulk/fail", true);
 
     // Make sure we find the data
-    String scanner = client.createScanner(creds, tableName, null);
+    String scanner = client.createScanner(tableName, null);
     ScanResult more = client.nextK(scanner, 100);
     client.closeScanner(scanner);
     assertEquals(1, more.results.size());
-    ByteBuffer maxRow = client.getMaxRow(creds, tableName, null, null, false, null, false);
+    ByteBuffer maxRow = client.getMaxRow(tableName, null, null, false, null, false);
     assertEquals(s2bb("a"), maxRow);
   }
 
   @Test
   public void testTableClassLoad() throws Exception {
-    assertFalse(client.testTableClassLoad(creds, tableName, "abc123",
-        SortedKeyValueIterator.class.getName()));
-    assertTrue(client.testTableClassLoad(creds, tableName, VersioningIterator.class.getName(),
+    assertFalse(
+        client.testTableClassLoad(tableName, "abc123", SortedKeyValueIterator.class.getName()));
+    assertTrue(client.testTableClassLoad(tableName, VersioningIterator.class.getName(),
         SortedKeyValueIterator.class.getName()));
   }
 
@@ -2218,7 +1590,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
   }
 
   private void assertScan(String[][] expected, String table) throws Exception {
-    String scid = client.createScanner(creds, table, new ScanOptions());
+    String scid = client.createScanner(table, new ScanOptions());
     ScanResult keyValues = client.nextK(scid, expected.length + 1);
 
     assertEquals(expected.length, keyValues.results.size(), "Saw " + keyValues.results);
@@ -2235,20 +1607,19 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
   @Test
   public void testConditionalWriter() throws Exception {
     log.debug("Adding constraint {} to {}", tableName, NumericValueConstraint.class.getName());
-    client.addConstraint(creds, tableName, NumericValueConstraint.class.getName());
+    client.addConstraint(tableName, NumericValueConstraint.class.getName());
     sleepUninterruptibly(ZOOKEEPER_PROPAGATION_TIME, TimeUnit.MILLISECONDS);
 
     // Take the table offline and online to force a config update
-    client.offlineTable(creds, tableName, true);
-    client.onlineTable(creds, tableName, true);
+    client.offlineTable(tableName, true);
+    client.onlineTable(tableName, true);
 
-    while (!client.listConstraints(creds, tableName)
-        .containsKey(NumericValueConstraint.class.getName())) {
+    while (!client.listConstraints(tableName).containsKey(NumericValueConstraint.class.getName())) {
       log.info("Failed to see constraint");
       Thread.sleep(1000);
     }
 
-    String cwid = client.createConditionalWriter(creds, tableName, new ConditionalWriterOptions());
+    String cwid = client.createConditionalWriter(tableName, new ConditionalWriterOptions());
 
     Map<ByteBuffer,ConditionalUpdates> updates = new HashMap<>();
 
@@ -2334,11 +1705,11 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
     // run test w/ condition that has iterators
     // following should fail w/o iterator
-    client.updateAndFlush(creds, tableName,
+    client.updateAndFlush(tableName,
         Collections.singletonMap(s2bb("00347"), Arrays.asList(newColUpdate("data", "count", "1"))));
-    client.updateAndFlush(creds, tableName,
+    client.updateAndFlush(tableName,
         Collections.singletonMap(s2bb("00347"), Arrays.asList(newColUpdate("data", "count", "1"))));
-    client.updateAndFlush(creds, tableName,
+    client.updateAndFlush(tableName,
         Collections.singletonMap(s2bb("00347"), Arrays.asList(newColUpdate("data", "count", "1"))));
 
     updates.clear();
@@ -2462,7 +1833,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
     // both conditions should succeed
 
-    ConditionalStatus result = client.updateRowConditionally(creds, tableName, s2bb("00347"),
+    ConditionalStatus result = client.updateRowConditionally(tableName, s2bb("00347"),
         new ConditionalUpdates(
             Arrays.asList(newCondition("data", "img", "1234567890"),
                 newCondition("data", "count", "1")),
@@ -2484,17 +1855,17 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     if (isKerberosEnabled()) {
       cwuser = getKdc().getClientPrincipal(1);
       principal = cwuser.getPrincipal();
-      client.createLocalUser(creds, principal, s2bb("unused"));
+      client.createLocalUser(principal, s2bb("unused"));
 
     } else {
       principal = "cwuser";
       // run test with colvis
-      client.createLocalUser(creds, principal, s2bb("bestpasswordever"));
+      client.createLocalUser(principal, s2bb("bestpasswordever"));
     }
 
-    client.changeUserAuthorizations(creds, principal, Collections.singleton(s2bb("A")));
-    client.grantTablePermission(creds, principal, tableName, TablePermission.WRITE);
-    client.grantTablePermission(creds, principal, tableName, TablePermission.READ);
+    client.changeUserAuthorizations(principal, Collections.singleton(s2bb("A")));
+    client.grantTablePermission(principal, tableName, TablePermission.WRITE);
+    client.grantTablePermission(principal, tableName, TablePermission.READ);
 
     TestProxyClient cwuserProxyClient = null;
     Client origClient = null;
@@ -2514,9 +1885,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     }
 
     try {
-      ByteBuffer cwCreds = client.login(principal, cwProperties);
-
-      final String cwid2 = client.createConditionalWriter(cwCreds, tableName,
+      final String cwid2 = client.createConditionalWriter(tableName,
           new ConditionalWriterOptions().setAuthorizations(Collections.singleton(s2bb("A"))));
 
       updates.clear();
@@ -2628,7 +1997,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
         // Re-login and restore the original client
         client = origClient;
       }
-      client.dropLocalUser(creds, principal);
+      client.dropLocalUser(principal);
     }
   }
 
@@ -2642,7 +2011,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
   // scan metadata for file entries for the given table
   private int countFiles(String table) throws Exception {
-    Map<String,String> tableIdMap = client.tableIdMap(creds);
+    Map<String,String> tableIdMap = client.tableIdMap();
     String tableId = tableIdMap.get(table);
     Key start = new Key();
     start.row = s2bb(tableId + ";");
@@ -2652,7 +2021,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     ScanOptions opt = new ScanOptions();
     opt.range = new Range(start, true, end, false);
     opt.columns = Collections.singletonList(new ScanColumn(s2bb("file")));
-    String scanner = client.createScanner(creds, MetadataTable.NAME, opt);
+    String scanner = client.createScanner(MetadataTable.NAME, opt);
     int result = 0;
     while (true) {
       ScanResult more = client.nextK(scanner, 100);
@@ -2710,23 +2079,23 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     File jarFile = new File(jarDir, "TestCompactionStrat.jar");
     FileUtils.copyInputStreamToFile(
         SimpleProxyBase.class.getResourceAsStream("/TestCompactionStrat.jar"), jarFile);
-    client.setProperty(creds, Property.VFS_CONTEXT_CLASSPATH_PROPERTY.getKey() + "context1",
+    client.setProperty(Property.VFS_CONTEXT_CLASSPATH_PROPERTY.getKey() + "context1",
         jarFile.toString());
-    client.setTableProperty(creds, tableName, Property.TABLE_CLASSPATH.getKey(), "context1");
+    client.setTableProperty(tableName, Property.TABLE_CLASSPATH.getKey(), "context1");
 
-    client.addSplits(creds, tableName, Collections.singleton(s2bb("efg")));
+    client.addSplits(tableName, Collections.singleton(s2bb("efg")));
 
-    client.updateAndFlush(creds, tableName, mutation("a", "cf", "cq", "v1"));
-    client.flushTable(creds, tableName, null, null, true);
+    client.updateAndFlush(tableName, mutation("a", "cf", "cq", "v1"));
+    client.flushTable(tableName, null, null, true);
 
-    client.updateAndFlush(creds, tableName, mutation("b", "cf", "cq", "v2"));
-    client.flushTable(creds, tableName, null, null, true);
+    client.updateAndFlush(tableName, mutation("b", "cf", "cq", "v2"));
+    client.flushTable(tableName, null, null, true);
 
-    client.updateAndFlush(creds, tableName, mutation("y", "cf", "cq", "v1"));
-    client.flushTable(creds, tableName, null, null, true);
+    client.updateAndFlush(tableName, mutation("y", "cf", "cq", "v1"));
+    client.flushTable(tableName, null, null, true);
 
-    client.updateAndFlush(creds, tableName, mutation("z", "cf", "cq", "v2"));
-    client.flushTable(creds, tableName, null, null, true);
+    client.updateAndFlush(tableName, mutation("z", "cf", "cq", "v2"));
+    client.flushTable(tableName, null, null, true);
 
     assertEquals(4, countFiles(tableName));
 
@@ -2735,7 +2104,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     // The EfgCompactionStrat will only compact tablets with and end row of efg
     csc.setClassName("org.apache.accumulo.test.EfgCompactionStrat");
 
-    client.compactTable(creds, tableName, null, null, null, true, true, csc);
+    client.compactTable(tableName, null, null, null, true, true, csc);
 
     assertEquals(3, countFiles(tableName));
   }
@@ -2747,62 +2116,59 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     assertEquals(client.defaultNamespace(), Namespace.DEFAULT.name(), "Default namespace is wrong");
 
     // namespace existence and namespace listing
-    assertTrue(client.namespaceExists(creds, namespaceName),
+    assertTrue(client.namespaceExists(namespaceName),
         "Namespace created during setup should exist");
-    assertTrue(client.listNamespaces(creds).contains(namespaceName),
+    assertTrue(client.listNamespaces().contains(namespaceName),
         "Namespace listing should contain namespace created during setup");
 
     // create new namespace
     String newNamespace = "foobar";
-    client.createNamespace(creds, newNamespace);
+    client.createNamespace(newNamespace);
 
-    assertTrue(client.namespaceExists(creds, newNamespace), "Namespace just created should exist");
-    assertTrue(client.listNamespaces(creds).contains(newNamespace),
+    assertTrue(client.namespaceExists(newNamespace), "Namespace just created should exist");
+    assertTrue(client.listNamespaces().contains(newNamespace),
         "Namespace listing should contain just created");
 
     // rename the namespace
     String renamedNamespace = "foobar_renamed";
-    client.renameNamespace(creds, newNamespace, renamedNamespace);
+    client.renameNamespace(newNamespace, renamedNamespace);
 
-    assertTrue(client.namespaceExists(creds, renamedNamespace), "Renamed namespace should exist");
-    assertTrue(client.listNamespaces(creds).contains(renamedNamespace),
+    assertTrue(client.namespaceExists(renamedNamespace), "Renamed namespace should exist");
+    assertTrue(client.listNamespaces().contains(renamedNamespace),
         "Namespace listing should contain renamed namespace");
 
-    assertFalse(client.namespaceExists(creds, newNamespace),
-        "Original namespace should no longer exist");
-    assertFalse(client.listNamespaces(creds).contains(newNamespace),
+    assertFalse(client.namespaceExists(newNamespace), "Original namespace should no longer exist");
+    assertFalse(client.listNamespaces().contains(newNamespace),
         "Namespace listing should no longer contain original namespace");
 
     // delete the namespace
-    client.deleteNamespace(creds, renamedNamespace);
-    assertFalse(client.namespaceExists(creds, renamedNamespace),
+    client.deleteNamespace(renamedNamespace);
+    assertFalse(client.namespaceExists(renamedNamespace),
         "Renamed namespace should no longer exist");
-    assertFalse(client.listNamespaces(creds).contains(renamedNamespace),
+    assertFalse(client.listNamespaces().contains(renamedNamespace),
         "Namespace listing should no longer contain renamed namespace");
 
     // namespace properties
-    Map<String,String> cfg = client.getNamespaceProperties(creds, namespaceName);
+    Map<String,String> cfg = client.getNamespaceProperties(namespaceName);
     String defaultProp = cfg.get("table.compaction.major.ratio");
     assertNotEquals(defaultProp, "10"); // let's make sure we are setting this value to something
                                         // different than default...
-    client.setNamespaceProperty(creds, namespaceName, "table.compaction.major.ratio", "10");
+    client.setNamespaceProperty(namespaceName, "table.compaction.major.ratio", "10");
     for (int i = 0; i < 5; i++) {
-      cfg = client.getNamespaceProperties(creds, namespaceName);
+      cfg = client.getNamespaceProperties(namespaceName);
       if ("10".equals(cfg.get("table.compaction.major.ratio"))) {
         break;
       }
       sleepUninterruptibly(200, TimeUnit.MILLISECONDS);
     }
     assertTrue(
-        client.getNamespaceProperties(creds, namespaceName)
-            .containsKey("table.compaction.major.ratio"),
+        client.getNamespaceProperties(namespaceName).containsKey("table.compaction.major.ratio"),
         "Namespace should contain table.compaction.major.ratio property");
-    assertEquals(
-        client.getNamespaceProperties(creds, namespaceName).get("table.compaction.major.ratio"),
+    assertEquals(client.getNamespaceProperties(namespaceName).get("table.compaction.major.ratio"),
         "10", "Namespace property table.compaction.major.ratio property should equal 10");
-    client.removeNamespaceProperty(creds, namespaceName, "table.compaction.major.ratio");
+    client.removeNamespaceProperty(namespaceName, "table.compaction.major.ratio");
     for (int i = 0; i < 5; i++) {
-      cfg = client.getNamespaceProperties(creds, namespaceName);
+      cfg = client.getNamespaceProperties(namespaceName);
       if (!defaultProp.equals(cfg.get("table.compaction.major.ratio"))) {
         break;
       }
@@ -2812,49 +2178,45 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
         "Namespace should have default value for table.compaction.major.ratio");
 
     // namespace ID map
-    assertTrue(client.namespaceIdMap(creds).containsKey("accumulo"),
+    assertTrue(client.namespaceIdMap().containsKey("accumulo"),
         "Namespace ID map should contain accumulo");
-    assertTrue(client.namespaceIdMap(creds).containsKey(namespaceName),
+    assertTrue(client.namespaceIdMap().containsKey(namespaceName),
         "Namespace ID map should contain namespace created during setup");
 
     // namespace iterators
     IteratorSetting setting = new IteratorSetting(100, "DebugTheThings",
         DebugIterator.class.getName(), Collections.emptyMap());
-    client.attachNamespaceIterator(creds, namespaceName, setting, EnumSet.of(IteratorScope.SCAN));
-    assertEquals(setting, client.getNamespaceIteratorSetting(creds, namespaceName, "DebugTheThings",
-        IteratorScope.SCAN), "Wrong iterator setting returned");
-    assertTrue(client.listNamespaceIterators(creds, namespaceName).containsKey("DebugTheThings"),
+    client.attachNamespaceIterator(namespaceName, setting, EnumSet.of(IteratorScope.SCAN));
+    assertEquals(setting,
+        client.getNamespaceIteratorSetting(namespaceName, "DebugTheThings", IteratorScope.SCAN),
+        "Wrong iterator setting returned");
+    assertTrue(client.listNamespaceIterators(namespaceName).containsKey("DebugTheThings"),
         "Namespace iterator settings should contain iterator just added");
     assertEquals(EnumSet.of(IteratorScope.SCAN),
-        client.listNamespaceIterators(creds, namespaceName).get("DebugTheThings"),
+        client.listNamespaceIterators(namespaceName).get("DebugTheThings"),
         "Namespace iterator listing should contain iterator scope just added");
-    client.checkNamespaceIteratorConflicts(creds, namespaceName, setting,
-        EnumSet.of(IteratorScope.MAJC));
-    client.removeNamespaceIterator(creds, namespaceName, "DebugTheThings",
-        EnumSet.of(IteratorScope.SCAN));
-    assertFalse(client.listNamespaceIterators(creds, namespaceName).containsKey("DebugTheThings"),
+    client.checkNamespaceIteratorConflicts(namespaceName, setting, EnumSet.of(IteratorScope.MAJC));
+    client.removeNamespaceIterator(namespaceName, "DebugTheThings", EnumSet.of(IteratorScope.SCAN));
+    assertFalse(client.listNamespaceIterators(namespaceName).containsKey("DebugTheThings"),
         "Namespace iterator settings should contain iterator just added");
 
     // namespace constraints
-    int id = client.addNamespaceConstraint(creds, namespaceName, MaxMutationSize.class.getName());
+    int id = client.addNamespaceConstraint(namespaceName, MaxMutationSize.class.getName());
     assertTrue(
-        client.listNamespaceConstraints(creds, namespaceName)
-            .containsKey(MaxMutationSize.class.getName()),
+        client.listNamespaceConstraints(namespaceName).containsKey(MaxMutationSize.class.getName()),
         "Namespace should contain max mutation size constraint");
     assertEquals(id,
-        (int) client.listNamespaceConstraints(creds, namespaceName)
-            .get(MaxMutationSize.class.getName()),
+        (int) client.listNamespaceConstraints(namespaceName).get(MaxMutationSize.class.getName()),
         "Namespace max mutation size constraint id is wrong");
-    client.removeNamespaceConstraint(creds, namespaceName, id);
+    client.removeNamespaceConstraint(namespaceName, id);
     assertFalse(
-        client.listNamespaceConstraints(creds, namespaceName)
-            .containsKey(MaxMutationSize.class.getName()),
+        client.listNamespaceConstraints(namespaceName).containsKey(MaxMutationSize.class.getName()),
         "Namespace should no longer contain max mutation size constraint");
 
     // namespace class load
-    assertTrue(client.testNamespaceClassLoad(creds, namespaceName, DebugIterator.class.getName(),
+    assertTrue(client.testNamespaceClassLoad(namespaceName, DebugIterator.class.getName(),
         SortedKeyValueIterator.class.getName()), "Namespace class load should work");
-    assertFalse(client.testNamespaceClassLoad(creds, namespaceName, "foo.bar",
+    assertFalse(client.testNamespaceClassLoad(namespaceName, "foo.bar",
         SortedKeyValueIterator.class.getName()), "Namespace class load should not work");
   }
 }
