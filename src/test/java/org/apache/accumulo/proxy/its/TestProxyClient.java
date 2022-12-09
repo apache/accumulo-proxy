@@ -24,7 +24,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import javax.security.sasl.SaslException;
 
@@ -98,32 +97,28 @@ public class TestProxyClient {
   public static void main(String[] args) throws Exception {
 
     TestProxyClient tpc = new TestProxyClient("localhost", 42424);
-    String principal = "root";
-    Map<String,String> props = new TreeMap<>();
-    props.put("password", "secret");
 
     System.out.println("Logging in");
-    ByteBuffer login = tpc.proxy().login(principal, props);
 
     System.out.println("Creating user: ");
-    if (!tpc.proxy().listLocalUsers(login).contains("testuser")) {
-      tpc.proxy().createLocalUser(login, "testuser", ByteBuffer.wrap("testpass".getBytes(UTF_8)));
+    if (!tpc.proxy().listLocalUsers().contains("testuser")) {
+      tpc.proxy().createLocalUser("testuser", ByteBuffer.wrap("testpass".getBytes(UTF_8)));
     }
-    System.out.println("UserList: " + tpc.proxy().listLocalUsers(login));
+    System.out.println("UserList: " + tpc.proxy().listLocalUsers());
 
-    System.out.println("Listing: " + tpc.proxy().listTables(login));
+    System.out.println("Listing: " + tpc.proxy().listTables());
 
     System.out.println("Deleting: ");
     String testTable = "testtableOMGOMGOMG";
 
     System.out.println("Creating: ");
 
-    if (tpc.proxy().tableExists(login, testTable))
-      tpc.proxy().deleteTable(login, testTable);
+    if (tpc.proxy().tableExists(testTable))
+      tpc.proxy().deleteTable(testTable);
 
-    tpc.proxy().createTable(login, testTable, true, TimeType.MILLIS);
+    tpc.proxy().createTable(testTable, true, TimeType.MILLIS);
 
-    System.out.println("Listing: " + tpc.proxy().listTables(login));
+    System.out.println("Listing: " + tpc.proxy().listTables());
 
     System.out.println("Writing: ");
     Date start = new Date();
@@ -139,16 +134,16 @@ public class TestProxyClient {
       mutations.put(ByteBuffer.wrap(result.getBytes(UTF_8)), Collections.singletonList(update));
 
       if (i % 1000 == 0) {
-        tpc.proxy().updateAndFlush(login, testTable, mutations);
+        tpc.proxy().updateAndFlush(testTable, mutations);
         mutations.clear();
       }
     }
-    tpc.proxy().updateAndFlush(login, testTable, mutations);
+    tpc.proxy().updateAndFlush(testTable, mutations);
     Date end = new Date();
     System.out.println(" End of writing: " + (end.getTime() - start.getTime()));
 
-    tpc.proxy().deleteTable(login, testTable);
-    tpc.proxy().createTable(login, testTable, true, TimeType.MILLIS);
+    tpc.proxy().deleteTable(testTable);
+    tpc.proxy().createTable(testTable, true, TimeType.MILLIS);
 
     // Thread.sleep(1000);
 
@@ -156,7 +151,7 @@ public class TestProxyClient {
     start = new Date();
     then = new Date();
     mutations.clear();
-    String writer = tpc.proxy().createWriter(login, testTable, null);
+    String writer = tpc.proxy().createWriter(testTable, null);
     for (int i = 0; i < maxInserts; i++) {
       String result = String.format(format, i);
       Key pkey = new Key();
@@ -184,7 +179,7 @@ public class TestProxyClient {
     IteratorSetting is = new IteratorSetting(50, regex, RegExFilter.class);
     RegExFilter.setRegexs(is, null, regex, null, null, false);
 
-    String cookie = tpc.proxy().createScanner(login, testTable, null);
+    String cookie = tpc.proxy().createScanner(testTable, null);
 
     int i = 0;
     start = new Date();

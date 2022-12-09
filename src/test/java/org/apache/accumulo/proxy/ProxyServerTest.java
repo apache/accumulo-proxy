@@ -16,7 +16,6 @@
  */
 package org.apache.accumulo.proxy;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.nio.ByteBuffer;
@@ -47,11 +46,10 @@ public class ProxyServerTest {
     bwpe.writer = writer;
     MutationsRejectedException mre = EasyMock.createMock(MutationsRejectedException.class);
 
-    final ByteBuffer login = ByteBuffer.wrap("my_login".getBytes(UTF_8));
     final String tableName = "table1";
     final Map<ByteBuffer,List<ColumnUpdate>> cells = new HashMap<>();
 
-    EasyMock.expect(server.getWriter(login, tableName, null)).andReturn(bwpe);
+    EasyMock.expect(server.getWriter(tableName, null)).andReturn(bwpe);
     server.addCellsToWriter(cells, bwpe);
     EasyMock.expectLastCall();
 
@@ -64,7 +62,7 @@ public class ProxyServerTest {
     EasyMock.replay(server, writer, mre);
 
     assertThrows(org.apache.accumulo.proxy.thrift.MutationsRejectedException.class,
-        () -> server.updateAndFlush(login, tableName, cells));
+        () -> server.updateAndFlush(tableName, cells));
 
     EasyMock.verify(server, writer, mre);
   }
@@ -79,11 +77,10 @@ public class ProxyServerTest {
     bwpe.writer = writer;
     MutationsRejectedException mre = EasyMock.createMock(MutationsRejectedException.class);
 
-    final ByteBuffer login = ByteBuffer.wrap("my_login".getBytes(UTF_8));
     final String tableName = "table1";
     final Map<ByteBuffer,List<ColumnUpdate>> cells = new HashMap<>();
 
-    EasyMock.expect(server.getWriter(login, tableName, null)).andReturn(bwpe);
+    EasyMock.expect(server.getWriter(tableName, null)).andReturn(bwpe);
     server.addCellsToWriter(cells, bwpe);
     EasyMock.expectLastCall();
 
@@ -99,7 +96,7 @@ public class ProxyServerTest {
     EasyMock.replay(server, writer, mre);
 
     assertThrows(org.apache.accumulo.proxy.thrift.MutationsRejectedException.class,
-        () -> server.updateAndFlush(login, tableName, cells));
+        () -> server.updateAndFlush(tableName, cells));
 
     EasyMock.verify(server, writer, mre);
   }
