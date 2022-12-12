@@ -39,7 +39,7 @@ public class ProxyServerTest {
   @Test
   public void updateAndFlushClosesWriterOnExceptionFromAddCells() throws Exception {
     ProxyServer server = EasyMock.createMockBuilder(ProxyServer.class)
-        .addMockedMethod("getWriter", ByteBuffer.class, String.class, WriterOptions.class)
+        .addMockedMethod("getWriter", String.class, WriterOptions.class)
         .addMockedMethod("addCellsToWriter", Map.class, BatchWriterPlusProblem.class).createMock();
     BatchWriter writer = EasyMock.createMock(BatchWriter.class);
     BatchWriterPlusProblem bwpe = new BatchWriterPlusProblem();
@@ -70,7 +70,7 @@ public class ProxyServerTest {
   @Test
   public void updateAndFlushClosesWriterOnExceptionFromFlush() throws Exception {
     ProxyServer server = EasyMock.createMockBuilder(ProxyServer.class)
-        .addMockedMethod("getWriter", ByteBuffer.class, String.class, WriterOptions.class)
+        .addMockedMethod("getWriter", String.class, WriterOptions.class)
         .addMockedMethod("addCellsToWriter", Map.class, BatchWriterPlusProblem.class).createMock();
     BatchWriter writer = EasyMock.createMock(BatchWriter.class);
     BatchWriterPlusProblem bwpe = new BatchWriterPlusProblem();
