@@ -268,7 +268,6 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
       Collections.singletonMap("sleepTime", "200"));
   String tableName;
   String namespaceName;
-  ByteBuffer badLogin;
 
   private String testName;
 
@@ -295,15 +294,6 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
       // Login in as that user we just created
       UserGroupInformation.loginUserFromKeytab(user.getPrincipal(),
           user.getKeytab().getAbsolutePath());
-      final UserGroupInformation badUgi = UserGroupInformation.getCurrentUser();
-      // Get a "Credentials" object for the proxy
-      TestProxyClient badClient = new TestProxyClient(hostname, proxyPort, factory, proxyPrimary,
-          badUgi);
-      try {
-        Client badProxy = badClient.proxy();
-      } finally {
-        badClient.close();
-      }
 
       // Log back in as the test user
       UserGroupInformation.loginUserFromKeytab(clientPrincipal, clientKeytab.getAbsolutePath());
@@ -383,44 +373,44 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
     // @formatter:off
     Stream<Executable> cases = Stream.of(
-        () -> client.addConstraint( doesNotExist, NumericValueConstraint.class.getName()),
-        () -> client.addSplits( doesNotExist, Collections.emptySet()),
-        () -> client.attachIterator( doesNotExist, setting, EnumSet.allOf(IteratorScope.class)),
-        () -> client.cancelCompaction( doesNotExist),
-        () -> client.checkIteratorConflicts( doesNotExist, setting, EnumSet.allOf(IteratorScope.class)),
-        () -> client.clearLocatorCache( doesNotExist),
-        () -> client.cloneTable( doesNotExist, newTableName, false, null, null),
-        () -> client.compactTable( doesNotExist, null, null, null, true, false, null),
-        () -> client.createBatchScanner( doesNotExist, new BatchScanOptions()),
-        () -> client.createScanner( doesNotExist, new ScanOptions()),
-        () -> client.createWriter( doesNotExist, new WriterOptions()),
-        () -> client.deleteRows( doesNotExist, null, null),
-        () -> client.deleteTable( doesNotExist),
-        () -> client.exportTable( doesNotExist, "/tmp"),
-        () -> client.flushTable( doesNotExist, null, null, false),
-        () -> client.getIteratorSetting( doesNotExist, "foo", IteratorScope.SCAN),
-        () -> client.getLocalityGroups( doesNotExist),
-        () -> client.getMaxRow( doesNotExist, Collections.emptySet(), null, false, null, false),
-        () -> client.getTableProperties( doesNotExist),
-        () -> client.grantTablePermission( "root", doesNotExist, TablePermission.WRITE),
-        () -> client.hasTablePermission( "root", doesNotExist, TablePermission.WRITE),
-        () -> client.importDirectory( doesNotExist, importDir.toString(), failuresDir.toString(), true),
-        () -> client.listConstraints( doesNotExist),
-        () -> client.listSplits( doesNotExist, 10000),
-        () -> client.mergeTablets( doesNotExist, null, null),
-        () -> client.offlineTable( doesNotExist, false),
-        () -> client.onlineTable( doesNotExist, false),
-        () -> client.removeConstraint( doesNotExist, 0),
-        () -> client.removeIterator( doesNotExist, "name", EnumSet.allOf(IteratorScope.class)),
-        () -> client.removeTableProperty( doesNotExist, Property.TABLE_FILE_MAX.getKey()),
-        () -> client.renameTable( doesNotExist, "someTableName"),
-        () -> client.revokeTablePermission( "root", doesNotExist, TablePermission.ALTER_TABLE),
-        () -> client.setTableProperty( doesNotExist, Property.TABLE_FILE_MAX.getKey(), "0"),
-        () -> client.splitRangeByTablets( doesNotExist, client.getRowRange(ByteBuffer.wrap("row".getBytes(UTF_8))), 10),
-        () -> client.updateAndFlush( doesNotExist, new HashMap<>()),
-        () -> client.getDiskUsage( Collections.singleton(doesNotExist)),
-        () -> client.testTableClassLoad( doesNotExist, VersioningIterator.class.getName(), SortedKeyValueIterator.class.getName()),
-        () -> client.createConditionalWriter( doesNotExist, new ConditionalWriterOptions())
+        () -> client.addConstraint(doesNotExist, NumericValueConstraint.class.getName()),
+        () -> client.addSplits(doesNotExist, Collections.emptySet()),
+        () -> client.attachIterator(doesNotExist, setting, EnumSet.allOf(IteratorScope.class)),
+        () -> client.cancelCompaction(doesNotExist),
+        () -> client.checkIteratorConflicts(doesNotExist, setting, EnumSet.allOf(IteratorScope.class)),
+        () -> client.clearLocatorCache(doesNotExist),
+        () -> client.cloneTable(doesNotExist, newTableName, false, null, null),
+        () -> client.compactTable(doesNotExist, null, null, null, true, false, null),
+        () -> client.createBatchScanner(doesNotExist, new BatchScanOptions()),
+        () -> client.createScanner(doesNotExist, new ScanOptions()),
+        () -> client.createWriter(doesNotExist, new WriterOptions()),
+        () -> client.deleteRows(doesNotExist, null, null),
+        () -> client.deleteTable(doesNotExist),
+        () -> client.exportTable(doesNotExist, "/tmp"),
+        () -> client.flushTable(doesNotExist, null, null, false),
+        () -> client.getIteratorSetting(doesNotExist, "foo", IteratorScope.SCAN),
+        () -> client.getLocalityGroups(doesNotExist),
+        () -> client.getMaxRow(doesNotExist, Collections.emptySet(), null, false, null, false),
+        () -> client.getTableProperties(doesNotExist),
+        () -> client.grantTablePermission("root", doesNotExist, TablePermission.WRITE),
+        () -> client.hasTablePermission("root", doesNotExist, TablePermission.WRITE),
+        () -> client.importDirectory(doesNotExist, importDir.toString(), failuresDir.toString(), true),
+        () -> client.listConstraints(doesNotExist),
+        () -> client.listSplits(doesNotExist, 10000),
+        () -> client.mergeTablets(doesNotExist, null, null),
+        () -> client.offlineTable(doesNotExist, false),
+        () -> client.onlineTable(doesNotExist, false),
+        () -> client.removeConstraint(doesNotExist, 0),
+        () -> client.removeIterator(doesNotExist, "name", EnumSet.allOf(IteratorScope.class)),
+        () -> client.removeTableProperty(doesNotExist, Property.TABLE_FILE_MAX.getKey()),
+        () -> client.renameTable(doesNotExist, "someTableName"),
+        () -> client.revokeTablePermission("root", doesNotExist, TablePermission.ALTER_TABLE),
+        () -> client.setTableProperty(doesNotExist, Property.TABLE_FILE_MAX.getKey(), "0"),
+        () -> client.splitRangeByTablets(doesNotExist, client.getRowRange(ByteBuffer.wrap("row".getBytes(UTF_8))), 10),
+        () -> client.updateAndFlush(doesNotExist, new HashMap<>()),
+        () -> client.getDiskUsage(Collections.singleton(doesNotExist)),
+        () -> client.testTableClassLoad(doesNotExist, VersioningIterator.class.getName(), SortedKeyValueIterator.class.getName()),
+        () -> client.createConditionalWriter(doesNotExist, new ConditionalWriterOptions())
     );
     // @formatter:on
 
@@ -435,20 +425,20 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
     // @formatter:off
     Stream<Executable> cases = Stream.of(
-        () -> client.deleteNamespace( doesNotExist),
-        () -> client.renameNamespace( doesNotExist, "abcdefg"),
-        () -> client.setNamespaceProperty( doesNotExist, "table.compaction.major.ratio", "4"),
-        () -> client.removeNamespaceProperty( doesNotExist, "table.compaction.major.ratio"),
-        () -> client.getNamespaceProperties( doesNotExist),
-        () -> client.attachNamespaceIterator( doesNotExist, setting, EnumSet.allOf(IteratorScope.class)),
-        () -> client.removeNamespaceIterator( doesNotExist, "DebugTheThings", EnumSet.allOf(IteratorScope.class)),
-        () -> client.getNamespaceIteratorSetting( doesNotExist, "DebugTheThings", IteratorScope.SCAN),
-        () -> client.listNamespaceIterators( doesNotExist),
-        () -> client.checkNamespaceIteratorConflicts( doesNotExist, iteratorSetting, EnumSet.allOf(IteratorScope.class)),
-        () -> client.addNamespaceConstraint( doesNotExist, MaxMutationSize.class.getName()),
-        () -> client.removeNamespaceConstraint( doesNotExist, 1),
-        () -> client.listNamespaceConstraints( doesNotExist),
-        () -> client.testNamespaceClassLoad( doesNotExist, DebugIterator.class.getName(), SortedKeyValueIterator.class.getName())
+        () -> client.deleteNamespace(doesNotExist),
+        () -> client.renameNamespace(doesNotExist, "abcdefg"),
+        () -> client.setNamespaceProperty(doesNotExist, "table.compaction.major.ratio", "4"),
+        () -> client.removeNamespaceProperty(doesNotExist, "table.compaction.major.ratio"),
+        () -> client.getNamespaceProperties(doesNotExist),
+        () -> client.attachNamespaceIterator(doesNotExist, setting, EnumSet.allOf(IteratorScope.class)),
+        () -> client.removeNamespaceIterator(doesNotExist, "DebugTheThings", EnumSet.allOf(IteratorScope.class)),
+        () -> client.getNamespaceIteratorSetting(doesNotExist, "DebugTheThings", IteratorScope.SCAN),
+        () -> client.listNamespaceIterators(doesNotExist),
+        () -> client.checkNamespaceIteratorConflicts(doesNotExist, iteratorSetting, EnumSet.allOf(IteratorScope.class)),
+        () -> client.addNamespaceConstraint(doesNotExist, MaxMutationSize.class.getName()),
+        () -> client.removeNamespaceConstraint(doesNotExist, 1),
+        () -> client.listNamespaceConstraints(doesNotExist),
+        () -> client.testNamespaceClassLoad(doesNotExist, DebugIterator.class.getName(), SortedKeyValueIterator.class.getName())
     );
     // @formatter:on
 
@@ -465,9 +455,9 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
     // @formatter:off
     Stream<Executable> cases = Stream.of(
-        () -> client.createTable( table1, false, TimeType.MILLIS),
-        () -> client.renameTable( table1, table2),
-        () -> client.cloneTable( table1, table2, false, new HashMap<>(), new HashSet<>())
+        () -> client.createTable(table1, false, TimeType.MILLIS),
+        () -> client.renameTable(table1, table2),
+        () -> client.cloneTable(table1, table2, false, new HashMap<>(), new HashSet<>())
     );
     // @formatter:on
 
@@ -480,8 +470,8 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
     // @formatter:off
     Stream<Executable> cases = Stream.of(
-        () -> client.createNamespace( namespaceName),
-        () -> client.renameNamespace( "foobar", namespaceName)
+        () -> client.createNamespace(namespaceName),
+        () -> client.renameNamespace("foobar", namespaceName)
     );
     // @formatter:on
 
@@ -1710,7 +1700,6 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
     TestProxyClient cwuserProxyClient = null;
     Client origClient = null;
-    Map<String,String> cwProperties;
     if (isKerberosEnabled()) {
       UserGroupInformation.loginUserFromKeytab(cwuser.getPrincipal(),
           cwuser.getKeytab().getAbsolutePath());
@@ -1720,9 +1709,6 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
           cwuserUgi);
       origClient = client;
       client = cwuserProxyClient.proxy();
-      cwProperties = Collections.emptyMap();
-    } else {
-      cwProperties = Collections.singletonMap("password", "bestpasswordever");
     }
 
     try {
