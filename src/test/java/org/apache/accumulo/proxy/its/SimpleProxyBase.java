@@ -863,7 +863,6 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     String userName;
     ClusterUser otherClient = null;
     ByteBuffer password = s2bb("password");
-    ByteBuffer user;
 
     TestProxyClient origProxyClient = null;
     Client origClient = null;
