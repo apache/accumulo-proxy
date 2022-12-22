@@ -24,7 +24,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import javax.security.sasl.SaslException;
 
@@ -99,11 +98,7 @@ public class TestProxyClient {
 
     TestProxyClient tpc = new TestProxyClient("localhost", 42424);
     String principal = "root";
-    Map<String,String> props = new TreeMap<>();
-    props.put("password", "secret");
-
-    System.out.println("Logging in");
-    ByteBuffer login = tpc.proxy().login(principal, props);
+    String login = "secret";
 
     System.out.println("Creating user: ");
     if (!tpc.proxy().listLocalUsers(login).contains("testuser")) {

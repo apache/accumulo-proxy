@@ -16,8 +16,6 @@
  */
 package org.apache.accumulo.proxy;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -64,7 +62,6 @@ import org.apache.accumulo.core.client.admin.TimeType;
 import org.apache.accumulo.core.client.security.SecurityErrorCode;
 import org.apache.accumulo.core.client.security.tokens.AuthenticationToken;
 import org.apache.accumulo.core.client.security.tokens.PasswordToken;
-import org.apache.accumulo.core.clientImpl.Credentials;
 import org.apache.accumulo.core.clientImpl.Namespace;
 import org.apache.accumulo.core.clientImpl.thrift.TableOperationExceptionType;
 import org.apache.accumulo.core.clientImpl.thrift.ThriftTableOperationException;
@@ -108,7 +105,6 @@ import org.apache.accumulo.proxy.thrift.UnknownScanner;
 import org.apache.accumulo.proxy.thrift.UnknownWriter;
 import org.apache.accumulo.proxy.thrift.WriterOptions;
 import org.apache.accumulo.server.rpc.ThriftServerType;
-import org.apache.accumulo.server.rpc.UGIAssumingProcessor;
 import org.apache.hadoop.io.Text;
 import org.apache.thrift.TException;
 import org.slf4j.Logger;
@@ -131,6 +127,8 @@ public class ProxyServer implements AccumuloProxy.Iface {
       + " principal did not match requested Accumulo principal";
 
   protected AccumuloClient client;
+
+  private final String secret;
 
   protected Class<? extends AuthenticationToken> tokenClass;
 
@@ -204,6 +202,8 @@ public class ProxyServer implements AccumuloProxy.Iface {
       tempServerType = ThriftServerType.get(serverTypeStr);
     }
 
+    secret = props.getProperty("secret");
+
     serverType = tempServerType;
 
     scannerCache = CacheBuilder.newBuilder().expireAfterAccess(10, TimeUnit.MINUTES)
@@ -216,14 +216,14 @@ public class ProxyServer implements AccumuloProxy.Iface {
         .maximumSize(1000).removalListener(new CloseConditionalWriter()).build();
   }
 
-  @SuppressWarnings("deprecation")
-  protected AccumuloClient getConnector(ByteBuffer login) throws Exception {
-    String[] pair = ByteBufferUtil.toString(login).split(",", 2);
-    if (client.instanceOperations().getInstanceID().equals(pair[0])) {
+  protected AccumuloClient getConnector(String login) throws Exception {
+    if (login.equals(secret)) {
       return client;
     } else {
-      throw new org.apache.accumulo.core.client.AccumuloSecurityException(pair[0],
-          org.apache.accumulo.core.clientImpl.thrift.SecurityErrorCode.INVALID_INSTANCEID);
+      System.out.println("Supposed to be " + secret + " but was " + login);
+      throw new org.apache.accumulo.core.client.AccumuloSecurityException(
+          "Incorrect secret provided",
+          org.apache.accumulo.core.clientImpl.thrift.SecurityErrorCode.PERMISSION_DENIED);
     }
   }
 
@@ -344,7 +344,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public int addConstraint(ByteBuffer login, String tableName, String constraintClassName)
+  public int addConstraint(String login, String tableName, String constraintClassName)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
@@ -358,7 +358,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void addSplits(ByteBuffer login, String tableName, Set<ByteBuffer> splits)
+  public void addSplits(String login, String tableName, Set<ByteBuffer> splits)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
@@ -375,7 +375,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void clearLocatorCache(ByteBuffer login, String tableName)
+  public void clearLocatorCache(String login, String tableName)
       throws org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
     try {
       getConnector(login).tableOperations().clearLocatorCache(tableName);
@@ -387,9 +387,9 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void compactTable(ByteBuffer login, String tableName, ByteBuffer startRow,
-      ByteBuffer endRow, List<org.apache.accumulo.proxy.thrift.IteratorSetting> iterators,
-      boolean flush, boolean wait, CompactionStrategyConfig compactionStrategy)
+  public void compactTable(String login, String tableName, ByteBuffer startRow, ByteBuffer endRow,
+      List<org.apache.accumulo.proxy.thrift.IteratorSetting> iterators, boolean flush, boolean wait,
+      CompactionStrategyConfig compactionStrategy)
       throws org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException,
       org.apache.accumulo.proxy.thrift.AccumuloException, TException {
@@ -413,7 +413,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void cancelCompaction(ByteBuffer login, String tableName)
+  public void cancelCompaction(String login, String tableName)
       throws org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException,
       org.apache.accumulo.proxy.thrift.AccumuloException, TException {
@@ -437,7 +437,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void createTable(ByteBuffer login, String tableName, boolean versioningIter,
+  public void createTable(String login, String tableName, boolean versioningIter,
       org.apache.accumulo.proxy.thrift.TimeType type)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
@@ -459,7 +459,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void deleteTable(ByteBuffer login, String tableName)
+  public void deleteTable(String login, String tableName)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
@@ -471,7 +471,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void deleteRows(ByteBuffer login, String tableName, ByteBuffer startRow, ByteBuffer endRow)
+  public void deleteRows(String login, String tableName, ByteBuffer startRow, ByteBuffer endRow)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
@@ -484,7 +484,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public boolean tableExists(ByteBuffer login, String tableName) throws TException {
+  public boolean tableExists(String login, String tableName) throws TException {
     try {
       return getConnector(login).tableOperations().exists(tableName);
     } catch (Exception e) {
@@ -493,7 +493,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void flushTable(ByteBuffer login, String tableName, ByteBuffer startRow, ByteBuffer endRow,
+  public void flushTable(String login, String tableName, ByteBuffer startRow, ByteBuffer endRow,
       boolean wait) throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
@@ -506,7 +506,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public Map<String,Set<String>> getLocalityGroups(ByteBuffer login, String tableName)
+  public Map<String,Set<String>> getLocalityGroups(String login, String tableName)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
@@ -529,7 +529,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public ByteBuffer getMaxRow(ByteBuffer login, String tableName, Set<ByteBuffer> auths,
+  public ByteBuffer getMaxRow(String login, String tableName, Set<ByteBuffer> auths,
       ByteBuffer startRow, boolean startInclusive, ByteBuffer endRow, boolean endInclusive)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
@@ -554,7 +554,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public Map<String,String> getTableProperties(ByteBuffer login, String tableName)
+  public Map<String,String> getTableProperties(String login, String tableName)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
@@ -573,7 +573,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public List<ByteBuffer> listSplits(ByteBuffer login, String tableName, int maxSplits)
+  public List<ByteBuffer> listSplits(String login, String tableName, int maxSplits)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
@@ -592,7 +592,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public Set<String> listTables(ByteBuffer login) throws TException {
+  public Set<String> listTables(String login) throws TException {
     try {
       return getConnector(login).tableOperations().list();
     } catch (Exception e) {
@@ -601,7 +601,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public Map<String,Integer> listConstraints(ByteBuffer login, String tableName)
+  public Map<String,Integer> listConstraints(String login, String tableName)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
 
@@ -614,8 +614,8 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void mergeTablets(ByteBuffer login, String tableName, ByteBuffer startRow,
-      ByteBuffer endRow) throws org.apache.accumulo.proxy.thrift.AccumuloException,
+  public void mergeTablets(String login, String tableName, ByteBuffer startRow, ByteBuffer endRow)
+      throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
     try {
@@ -627,7 +627,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void offlineTable(ByteBuffer login, String tableName, boolean wait)
+  public void offlineTable(String login, String tableName, boolean wait)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
@@ -639,7 +639,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void onlineTable(ByteBuffer login, String tableName, boolean wait)
+  public void onlineTable(String login, String tableName, boolean wait)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
@@ -651,7 +651,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void removeConstraint(ByteBuffer login, String tableName, int constraint)
+  public void removeConstraint(String login, String tableName, int constraint)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
@@ -664,7 +664,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void removeTableProperty(ByteBuffer login, String tableName, String property)
+  public void removeTableProperty(String login, String tableName, String property)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
@@ -676,7 +676,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void renameTable(ByteBuffer login, String oldTableName, String newTableName)
+  public void renameTable(String login, String oldTableName, String newTableName)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException,
@@ -689,7 +689,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void setLocalityGroups(ByteBuffer login, String tableName,
+  public void setLocalityGroups(String login, String tableName,
       Map<String,Set<String>> groupStrings)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
@@ -709,7 +709,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void setTableProperty(ByteBuffer login, String tableName, String property, String value)
+  public void setTableProperty(String login, String tableName, String property, String value)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
@@ -721,7 +721,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public Map<String,String> tableIdMap(ByteBuffer login) throws TException {
+  public Map<String,String> tableIdMap(String login) throws TException {
     try {
       return getConnector(login).tableOperations().tableIdMap();
     } catch (Exception e) {
@@ -730,7 +730,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public List<DiskUsage> getDiskUsage(ByteBuffer login, Set<String> tables)
+  public List<DiskUsage> getDiskUsage(String login, Set<String> tables)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
@@ -752,7 +752,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public Map<String,String> getSiteConfiguration(ByteBuffer login)
+  public Map<String,String> getSiteConfiguration(String login)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
     try {
@@ -764,7 +764,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public Map<String,String> getSystemConfiguration(ByteBuffer login)
+  public Map<String,String> getSystemConfiguration(String login)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
     try {
@@ -776,7 +776,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public List<String> getTabletServers(ByteBuffer login) throws TException {
+  public List<String> getTabletServers(String login) throws TException {
     try {
       return getConnector(login).instanceOperations().getTabletServers();
     } catch (Exception e) {
@@ -785,7 +785,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public List<org.apache.accumulo.proxy.thrift.ActiveScan> getActiveScans(ByteBuffer login,
+  public List<org.apache.accumulo.proxy.thrift.ActiveScan> getActiveScans(String login,
       String tserver) throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
     List<org.apache.accumulo.proxy.thrift.ActiveScan> result = new ArrayList<>();
@@ -842,8 +842,8 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public List<org.apache.accumulo.proxy.thrift.ActiveCompaction> getActiveCompactions(
-      ByteBuffer login, String tserver) throws org.apache.accumulo.proxy.thrift.AccumuloException,
+  public List<org.apache.accumulo.proxy.thrift.ActiveCompaction> getActiveCompactions(String login,
+      String tserver) throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
 
     try {
@@ -886,7 +886,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void removeProperty(ByteBuffer login, String property)
+  public void removeProperty(String login, String property)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
     try {
@@ -897,7 +897,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void setProperty(ByteBuffer login, String property, String value)
+  public void setProperty(String login, String property, String value)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
     try {
@@ -908,7 +908,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public boolean testClassLoad(ByteBuffer login, String className, String asTypeName)
+  public boolean testClassLoad(String login, String className, String asTypeName)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
     try {
@@ -920,7 +920,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public boolean authenticateUser(ByteBuffer login, String user, Map<String,String> properties)
+  public boolean authenticateUser(String login, String user, Map<String,String> properties)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
     try {
@@ -933,8 +933,8 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void changeUserAuthorizations(ByteBuffer login, String user,
-      Set<ByteBuffer> authorizations) throws org.apache.accumulo.proxy.thrift.AccumuloException,
+  public void changeUserAuthorizations(String login, String user, Set<ByteBuffer> authorizations)
+      throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
     try {
       Set<String> auths = new HashSet<>();
@@ -949,7 +949,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void changeLocalUserPassword(ByteBuffer login, String user, ByteBuffer password)
+  public void changeLocalUserPassword(String login, String user, ByteBuffer password)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
     try {
@@ -961,7 +961,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void createLocalUser(ByteBuffer login, String user, ByteBuffer password)
+  public void createLocalUser(String login, String user, ByteBuffer password)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
     try {
@@ -972,7 +972,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void dropLocalUser(ByteBuffer login, String user)
+  public void dropLocalUser(String login, String user)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
     try {
@@ -983,7 +983,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public List<ByteBuffer> getUserAuthorizations(ByteBuffer login, String user)
+  public List<ByteBuffer> getUserAuthorizations(String login, String user)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
     try {
@@ -996,7 +996,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void grantSystemPermission(ByteBuffer login, String user,
+  public void grantSystemPermission(String login, String user,
       org.apache.accumulo.proxy.thrift.SystemPermission perm)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
@@ -1009,7 +1009,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void grantTablePermission(ByteBuffer login, String user, String table,
+  public void grantTablePermission(String login, String user, String table,
       org.apache.accumulo.proxy.thrift.TablePermission perm)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
@@ -1023,7 +1023,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public boolean hasSystemPermission(ByteBuffer login, String user,
+  public boolean hasSystemPermission(String login, String user,
       org.apache.accumulo.proxy.thrift.SystemPermission perm)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
@@ -1037,7 +1037,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public boolean hasTablePermission(ByteBuffer login, String user, String table,
+  public boolean hasTablePermission(String login, String user, String table,
       org.apache.accumulo.proxy.thrift.TablePermission perm)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
@@ -1052,7 +1052,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public Set<String> listLocalUsers(ByteBuffer login)
+  public Set<String> listLocalUsers(String login)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
     try {
@@ -1064,7 +1064,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void revokeSystemPermission(ByteBuffer login, String user,
+  public void revokeSystemPermission(String login, String user,
       org.apache.accumulo.proxy.thrift.SystemPermission perm)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
@@ -1077,7 +1077,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void revokeTablePermission(ByteBuffer login, String user, String table,
+  public void revokeTablePermission(String login, String user, String table,
       org.apache.accumulo.proxy.thrift.TablePermission perm)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
@@ -1091,7 +1091,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void grantNamespacePermission(ByteBuffer login, String user, String namespaceName,
+  public void grantNamespacePermission(String login, String user, String namespaceName,
       org.apache.accumulo.proxy.thrift.NamespacePermission perm)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
@@ -1104,7 +1104,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public boolean hasNamespacePermission(ByteBuffer login, String user, String namespaceName,
+  public boolean hasNamespacePermission(String login, String user, String namespaceName,
       org.apache.accumulo.proxy.thrift.NamespacePermission perm)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
@@ -1118,7 +1118,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void revokeNamespacePermission(ByteBuffer login, String user, String namespaceName,
+  public void revokeNamespacePermission(String login, String user, String namespaceName,
       org.apache.accumulo.proxy.thrift.NamespacePermission perm)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
@@ -1139,7 +1139,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public String createScanner(ByteBuffer login, String tableName, ScanOptions opts)
+  public String createScanner(String login, String tableName, ScanOptions opts)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
@@ -1193,7 +1193,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public String createBatchScanner(ByteBuffer login, String tableName, BatchScanOptions opts)
+  public String createBatchScanner(String login, String tableName, BatchScanOptions opts)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
@@ -1343,7 +1343,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void updateAndFlush(ByteBuffer login, String tableName,
+  public void updateAndFlush(String login, String tableName,
       Map<ByteBuffer,List<ColumnUpdate>> cells)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
@@ -1426,7 +1426,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public String createWriter(ByteBuffer login, String tableName, WriterOptions opts)
+  public String createWriter(String login, String tableName, WriterOptions opts)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
@@ -1502,7 +1502,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
     return bwpe;
   }
 
-  BatchWriterPlusProblem getWriter(ByteBuffer login, String tableName, WriterOptions opts)
+  BatchWriterPlusProblem getWriter(String login, String tableName, WriterOptions opts)
       throws Exception {
     BatchWriterConfig cfg = new BatchWriterConfig();
     if (opts != null) {
@@ -1570,7 +1570,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void attachIterator(ByteBuffer login, String tableName,
+  public void attachIterator(String login, String tableName,
       org.apache.accumulo.proxy.thrift.IteratorSetting setting,
       Set<org.apache.accumulo.proxy.thrift.IteratorScope> scopes)
       throws org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
@@ -1585,7 +1585,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void checkIteratorConflicts(ByteBuffer login, String tableName,
+  public void checkIteratorConflicts(String login, String tableName,
       org.apache.accumulo.proxy.thrift.IteratorSetting setting,
       Set<org.apache.accumulo.proxy.thrift.IteratorScope> scopes)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
@@ -1600,7 +1600,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void cloneTable(ByteBuffer login, String tableName, String newTableName, boolean flush,
+  public void cloneTable(String login, String tableName, String newTableName, boolean flush,
       Map<String,String> propertiesToSet, Set<String> propertiesToExclude)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
@@ -1618,7 +1618,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void exportTable(ByteBuffer login, String tableName, String exportDir)
+  public void exportTable(String login, String tableName, String exportDir)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
@@ -1631,7 +1631,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void importTable(ByteBuffer login, String tableName, String importDir)
+  public void importTable(String login, String tableName, String importDir)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableExistsException, TException {
@@ -1646,7 +1646,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public org.apache.accumulo.proxy.thrift.IteratorSetting getIteratorSetting(ByteBuffer login,
+  public org.apache.accumulo.proxy.thrift.IteratorSetting getIteratorSetting(String login,
       String tableName, String iteratorName, org.apache.accumulo.proxy.thrift.IteratorScope scope)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
@@ -1663,8 +1663,8 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public Map<String,Set<org.apache.accumulo.proxy.thrift.IteratorScope>> listIterators(
-      ByteBuffer login, String tableName) throws org.apache.accumulo.proxy.thrift.AccumuloException,
+  public Map<String,Set<org.apache.accumulo.proxy.thrift.IteratorScope>> listIterators(String login,
+      String tableName) throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
     try {
@@ -1682,7 +1682,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void removeIterator(ByteBuffer login, String tableName, String iterName,
+  public void removeIterator(String login, String tableName, String iterName,
       Set<org.apache.accumulo.proxy.thrift.IteratorScope> scopes)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
@@ -1696,7 +1696,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public Set<org.apache.accumulo.proxy.thrift.Range> splitRangeByTablets(ByteBuffer login,
+  public Set<org.apache.accumulo.proxy.thrift.Range> splitRangeByTablets(String login,
       String tableName, org.apache.accumulo.proxy.thrift.Range range, int maxSplits)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
@@ -1736,9 +1736,8 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void importDirectory(ByteBuffer login, String tableName, String importDir,
-      String failureDir, boolean setTime)
-      throws org.apache.accumulo.proxy.thrift.TableNotFoundException,
+  public void importDirectory(String login, String tableName, String importDir, String failureDir,
+      boolean setTime) throws org.apache.accumulo.proxy.thrift.TableNotFoundException,
       org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
     try {
@@ -1775,7 +1774,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public List<String> listNamespaces(ByteBuffer login)
+  public List<String> listNamespaces(String login)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
     try {
@@ -1787,7 +1786,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public boolean namespaceExists(ByteBuffer login, String namespaceName)
+  public boolean namespaceExists(String login, String namespaceName)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
     try {
@@ -1799,7 +1798,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void createNamespace(ByteBuffer login, String namespaceName)
+  public void createNamespace(String login, String namespaceName)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.NamespaceExistsException, TException {
@@ -1813,7 +1812,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void deleteNamespace(ByteBuffer login, String namespaceName)
+  public void deleteNamespace(String login, String namespaceName)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.NamespaceNotFoundException,
@@ -1830,7 +1829,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void renameNamespace(ByteBuffer login, String oldNamespaceName, String newNamespaceName)
+  public void renameNamespace(String login, String oldNamespaceName, String newNamespaceName)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.NamespaceNotFoundException,
@@ -1847,7 +1846,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void setNamespaceProperty(ByteBuffer login, String namespaceName, String property,
+  public void setNamespaceProperty(String login, String namespaceName, String property,
       String value) throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.NamespaceNotFoundException, TException {
@@ -1859,7 +1858,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void removeNamespaceProperty(ByteBuffer login, String namespaceName, String property)
+  public void removeNamespaceProperty(String login, String namespaceName, String property)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.NamespaceNotFoundException, TException {
@@ -1871,7 +1870,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public Map<String,String> getNamespaceProperties(ByteBuffer login, String namespaceName)
+  public Map<String,String> getNamespaceProperties(String login, String namespaceName)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.NamespaceNotFoundException, TException {
@@ -1889,7 +1888,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public Map<String,String> namespaceIdMap(ByteBuffer login)
+  public Map<String,String> namespaceIdMap(String login)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
     try {
@@ -1901,7 +1900,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void attachNamespaceIterator(ByteBuffer login, String namespaceName,
+  public void attachNamespaceIterator(String login, String namespaceName,
       org.apache.accumulo.proxy.thrift.IteratorSetting setting,
       Set<org.apache.accumulo.proxy.thrift.IteratorScope> scopes)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
@@ -1921,7 +1920,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void removeNamespaceIterator(ByteBuffer login, String namespaceName, String name,
+  public void removeNamespaceIterator(String login, String namespaceName, String name,
       Set<org.apache.accumulo.proxy.thrift.IteratorScope> scopes)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
@@ -1935,9 +1934,8 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public org.apache.accumulo.proxy.thrift.IteratorSetting getNamespaceIteratorSetting(
-      ByteBuffer login, String namespaceName, String name,
-      org.apache.accumulo.proxy.thrift.IteratorScope scope)
+  public org.apache.accumulo.proxy.thrift.IteratorSetting getNamespaceIteratorSetting(String login,
+      String namespaceName, String name, org.apache.accumulo.proxy.thrift.IteratorScope scope)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.NamespaceNotFoundException, TException {
@@ -1954,8 +1952,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
 
   @Override
   public Map<String,Set<org.apache.accumulo.proxy.thrift.IteratorScope>> listNamespaceIterators(
-      ByteBuffer login, String namespaceName)
-      throws org.apache.accumulo.proxy.thrift.AccumuloException,
+      String login, String namespaceName) throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.NamespaceNotFoundException, TException {
     try {
@@ -1972,7 +1969,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void checkNamespaceIteratorConflicts(ByteBuffer login, String namespaceName,
+  public void checkNamespaceIteratorConflicts(String login, String namespaceName,
       org.apache.accumulo.proxy.thrift.IteratorSetting setting,
       Set<org.apache.accumulo.proxy.thrift.IteratorScope> scopes)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
@@ -1987,8 +1984,8 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public int addNamespaceConstraint(ByteBuffer login, String namespaceName,
-      String constraintClassName) throws org.apache.accumulo.proxy.thrift.AccumuloException,
+  public int addNamespaceConstraint(String login, String namespaceName, String constraintClassName)
+      throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.NamespaceNotFoundException, TException {
     try {
@@ -2001,7 +1998,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void removeNamespaceConstraint(ByteBuffer login, String namespaceName, int id)
+  public void removeNamespaceConstraint(String login, String namespaceName, int id)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.NamespaceNotFoundException, TException {
@@ -2013,7 +2010,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public Map<String,Integer> listNamespaceConstraints(ByteBuffer login, String namespaceName)
+  public Map<String,Integer> listNamespaceConstraints(String login, String namespaceName)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.NamespaceNotFoundException, TException {
@@ -2026,7 +2023,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public boolean testNamespaceClassLoad(ByteBuffer login, String namespaceName, String className,
+  public boolean testNamespaceClassLoad(String login, String namespaceName, String className,
       String asTypeName) throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.NamespaceNotFoundException, TException {
@@ -2040,42 +2037,13 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void pingTabletServer(ByteBuffer login, String tserver)
+  public void pingTabletServer(String login, String tserver)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
     try {
       getConnector(login).instanceOperations().ping(tserver);
     } catch (Exception e) {
       handleException(e);
-    }
-  }
-
-  @Override
-  public ByteBuffer login(String principal, Map<String,String> loginProperties)
-      throws org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
-    if (serverType == ThriftServerType.SASL) {
-      String remoteUser = UGIAssumingProcessor.rpcPrincipal();
-      if (remoteUser == null || !remoteUser.equals(principal)) {
-        logger.error("Denying login from user {} who attempted to log in as {}", remoteUser,
-            principal);
-        throw new org.apache.accumulo.proxy.thrift.AccumuloSecurityException(
-            RPC_ACCUMULO_PRINCIPAL_MISMATCH_MSG);
-      }
-    }
-
-    try {
-      AuthenticationToken token = getToken(principal, loginProperties);
-      @SuppressWarnings("deprecation")
-      ByteBuffer login = ByteBuffer.wrap((client.instanceOperations().getInstanceID() + ","
-          + new Credentials(principal, token).serialize()).getBytes(UTF_8));
-      getConnector(login); // check to make sure user exists
-      return login;
-    } catch (AccumuloSecurityException e) {
-      logger.error("Failed to login", e);
-      throw new org.apache.accumulo.proxy.thrift.AccumuloSecurityException(e.toString());
-    } catch (Exception e) {
-      logger.error("Failed to login", e);
-      throw new TException(e);
     }
   }
 
@@ -2095,7 +2063,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public boolean testTableClassLoad(ByteBuffer login, String tableName, String className,
+  public boolean testTableClassLoad(String login, String tableName, String className,
       String asTypeName) throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
@@ -2108,7 +2076,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public String createConditionalWriter(ByteBuffer login, String tableName,
+  public String createConditionalWriter(String login, String tableName,
       ConditionalWriterOptions options) throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
@@ -2216,9 +2184,8 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public ConditionalStatus updateRowConditionally(ByteBuffer login, String tableName,
-      ByteBuffer row, ConditionalUpdates updates)
-      throws org.apache.accumulo.proxy.thrift.AccumuloException,
+  public ConditionalStatus updateRowConditionally(String login, String tableName, ByteBuffer row,
+      ConditionalUpdates updates) throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
 

@@ -98,6 +98,10 @@ public class ProxyDurabilityIT extends ConfigurableMacBase {
       proxyProps.put("tokenClass", PasswordToken.class.getName());
       proxyProps.putAll(getClientProperties());
 
+      String login = ROOT_PASSWORD;
+
+      proxyProps.put("secret", login);
+
       TJSONProtocol.Factory protocol = new TJSONProtocol.Factory();
 
       int proxyPort = PortUtils.getRandomFreePort();
@@ -106,9 +110,6 @@ public class ProxyDurabilityIT extends ConfigurableMacBase {
       while (!proxyServer.isServing())
         sleepUninterruptibly(100, TimeUnit.MILLISECONDS);
       Client client = new TestProxyClient("localhost", proxyPort, protocol).proxy();
-      Map<String,String> properties = new TreeMap<>();
-      properties.put("password", ROOT_PASSWORD);
-      ByteBuffer login = client.login("root", properties);
 
       String tableName = getUniqueNames(1)[0];
       client.createTable(login, tableName, true, TimeType.MILLIS);

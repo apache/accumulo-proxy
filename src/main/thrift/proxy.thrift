@@ -326,17 +326,9 @@ exception NamespaceNotEmptyException {
 
 service AccumuloProxy {
 
-  // get an authentication token
-  binary login(
-    1:string principal
-    2:map<string, string> loginProperties
-  ) throws (
-    1:AccumuloSecurityException ouch2
-  )
-
   // table operations
   i32 addConstraint (
-    1:binary login
+    1:string login
     2:string tableName
     3:string constraintClassName
   ) throws (
@@ -346,7 +338,7 @@ service AccumuloProxy {
   )
 
   void addSplits (
-    1:binary login
+    1:string login
     2:string tableName
     3:set<binary> splits
   ) throws (
@@ -356,7 +348,7 @@ service AccumuloProxy {
   )
 
   void attachIterator (
-    1:binary login
+    1:string login
     2:string tableName
     3:IteratorSetting setting
     4:set<IteratorScope> scopes
@@ -367,7 +359,7 @@ service AccumuloProxy {
   )
 
   void checkIteratorConflicts (
-    1:binary login
+    1:string login
     2:string tableName
     3:IteratorSetting setting
     4:set<IteratorScope> scopes
@@ -378,14 +370,14 @@ service AccumuloProxy {
   )
 
   void clearLocatorCache (
-    1:binary login
+    1:string login
     2:string tableName
   ) throws (
     1:TableNotFoundException ouch1
   )
 
   void cloneTable (
-    1:binary login
+    1:string login
     2:string tableName
     3:string newTableName
     4:bool flush
@@ -400,7 +392,7 @@ service AccumuloProxy {
 
   // changed in 1.7.0, see comment at top about compatibility
   void compactTable (
-    1:binary login
+    1:string login
     2:string tableName
     3:binary startRow
     4:binary endRow
@@ -415,7 +407,7 @@ service AccumuloProxy {
   )
 
   void cancelCompaction(
-    1:binary login
+    1:string login
     2:string tableName
   ) throws (
     1:AccumuloSecurityException ouch1
@@ -424,7 +416,7 @@ service AccumuloProxy {
   )
 
   void createTable (
-    1:binary login
+    1:string login
     2:string tableName
     3:bool versioningIter
     4:TimeType type
@@ -435,7 +427,7 @@ service AccumuloProxy {
   )
 
   void deleteTable (
-    1:binary login
+    1:string login
     2:string tableName
   ) throws (
     1:AccumuloException ouch1
@@ -444,7 +436,7 @@ service AccumuloProxy {
   )
 
   void deleteRows (
-    1:binary login
+    1:string login
     2:string tableName
     3:binary startRow
     4:binary endRow
@@ -455,7 +447,7 @@ service AccumuloProxy {
   )
 
   void exportTable (
-    1:binary login
+    1:string login
     2:string tableName
     3:string exportDir
   ) throws (
@@ -465,7 +457,7 @@ service AccumuloProxy {
   )
 
   void flushTable (
-    1:binary login
+    1:string login
     2:string tableName
     3:binary startRow
     4:binary endRow
@@ -478,7 +470,7 @@ service AccumuloProxy {
 
   // since 1.6.0
   list<DiskUsage> getDiskUsage(
-    1:binary login
+    1:string login
     2:set<string> tables
   ) throws (
     1:AccumuloException ouch1
@@ -487,7 +479,7 @@ service AccumuloProxy {
   )
 
   map<string, set<string>> getLocalityGroups (
-    1:binary login
+    1:string login
     2:string tableName
   ) throws (
     1:AccumuloException ouch1
@@ -496,7 +488,7 @@ service AccumuloProxy {
   )
 
   IteratorSetting getIteratorSetting (
-    1:binary login
+    1:string login
     2:string tableName
     3:string iteratorName
     4:IteratorScope scope
@@ -507,7 +499,7 @@ service AccumuloProxy {
   )
 
   binary getMaxRow (
-    1:binary login
+    1:string login
     2:string tableName
     3:set<binary> auths
     4:binary startRow
@@ -521,7 +513,7 @@ service AccumuloProxy {
   )
 
   map<string, string> getTableProperties (
-    1:binary login
+    1:string login
     2:string tableName
   ) throws (
     1:AccumuloException ouch1
@@ -530,7 +522,7 @@ service AccumuloProxy {
   )
 
   void importDirectory (
-    1:binary login
+    1:string login
     2:string tableName
     3:string importDir
     4:string failureDir
@@ -542,7 +534,7 @@ service AccumuloProxy {
   )
 
   void importTable (
-    1:binary login
+    1:string login
     2:string tableName
     3:string importDir
   ) throws (
@@ -552,7 +544,7 @@ service AccumuloProxy {
   )
 
   list<binary> listSplits (
-    1:binary login
+    1:string login
     2:string tableName
     3:i32 maxSplits
   ) throws (
@@ -562,11 +554,11 @@ service AccumuloProxy {
   )
 
   set<string> listTables (
-    1:binary login
+    1:string login
   )
 
   map<string, set<IteratorScope>> listIterators (
-    1:binary login
+    1:string login
     2:string tableName
   ) throws (
     1:AccumuloException ouch1
@@ -575,7 +567,7 @@ service AccumuloProxy {
   )
 
   map<string, i32> listConstraints (
-    1:binary login
+    1:string login
     2:string tableName
   ) throws (
     1:AccumuloException ouch1
@@ -584,7 +576,7 @@ service AccumuloProxy {
   )
 
   void mergeTablets (
-    1:binary login
+    1:string login
     2:string tableName
     3:binary startRow
     4:binary endRow
@@ -596,7 +588,7 @@ service AccumuloProxy {
 
   // changed in 1.6.0, see comment at top about compatibility
   void offlineTable (
-    1:binary login
+    1:string login
     2:string tableName
     3:bool wait=false
   ) throws (
@@ -607,7 +599,7 @@ service AccumuloProxy {
 
   // changed in 1.6.0, see comment at top about compatibility
   void onlineTable (
-    1:binary login
+    1:string login
     2:string tableName
     3:bool wait=false
   ) throws (
@@ -617,7 +609,7 @@ service AccumuloProxy {
   )
 
   void removeConstraint (
-    1:binary login
+    1:string login
     2:string tableName
     3:i32 constraint
   ) throws (
@@ -627,7 +619,7 @@ service AccumuloProxy {
   )
 
   void removeIterator (
-    1:binary login
+    1:string login
     2:string tableName
     3:string iterName
     4:set<IteratorScope> scopes
@@ -638,7 +630,7 @@ service AccumuloProxy {
   )
 
   void removeTableProperty (
-    1:binary login
+    1:string login
     2:string tableName
     3:string property
   ) throws (
@@ -648,7 +640,7 @@ service AccumuloProxy {
   )
 
   void renameTable (
-    1:binary login
+    1:string login
     2:string oldTableName
     3:string newTableName
   ) throws (
@@ -659,7 +651,7 @@ service AccumuloProxy {
   )
 
   void setLocalityGroups (
-    1:binary login
+    1:string login
     2:string tableName
     3:map<string, set<string>> groups
   ) throws (
@@ -669,7 +661,7 @@ service AccumuloProxy {
   )
 
   void setTableProperty (
-    1:binary login
+    1:string login
     2:string tableName
     3:string property
     4:string value
@@ -680,7 +672,7 @@ service AccumuloProxy {
   )
 
   set<Range> splitRangeByTablets (
-    1:binary login
+    1:string login
     2:string tableName
     3:Range range
     4:i32 maxSplits
@@ -691,16 +683,16 @@ service AccumuloProxy {
   )
 
   bool tableExists (
-    1:binary login
+    1:string login
     2:string tableName
   )
 
   map<string, string> tableIdMap (
-    1:binary login
+    1:string login
   )
 
   bool testTableClassLoad (
-    1:binary login
+    1:string login
     2:string tableName
     3:string className 
     4:string asTypeName
@@ -712,7 +704,7 @@ service AccumuloProxy {
 
   // instance operations
   void pingTabletServer(
-    1:binary login
+    1:string login
     2:string tserver
   ) throws (
     1:AccumuloException ouch1
@@ -720,7 +712,7 @@ service AccumuloProxy {
   )
 
   list<ActiveScan> getActiveScans (
-    1:binary login
+    1:string login
     2:string tserver
   ) throws (
     1:AccumuloException ouch1
@@ -728,7 +720,7 @@ service AccumuloProxy {
   )
 
   list<ActiveCompaction> getActiveCompactions(
-    1:binary login
+    1:string login
     2:string tserver
   ) throws (
     1:AccumuloException ouch1
@@ -736,25 +728,25 @@ service AccumuloProxy {
   )
 
   map<string, string> getSiteConfiguration (
-    1:binary login
+    1:string login
   ) throws (
     1:AccumuloException ouch1
     2:AccumuloSecurityException ouch2
   )
 
   map<string, string> getSystemConfiguration (
-    1:binary login
+    1:string login
   ) throws (
     1:AccumuloException ouch1
     2:AccumuloSecurityException ouch2
   )
 
   list<string> getTabletServers (
-    1:binary login
+    1:string login
   )
 
   void removeProperty (
-    1:binary login
+    1:string login
     2:string property
   ) throws (
     1:AccumuloException ouch1
@@ -762,7 +754,7 @@ service AccumuloProxy {
   )
 
   void setProperty (
-    1:binary login
+    1:string login
     2:string property
     3:string value
   ) throws (
@@ -771,7 +763,7 @@ service AccumuloProxy {
   )
 
   bool testClassLoad (
-    1:binary login
+    1:string login
     2:string className
     3:string asTypeName
   ) throws (
@@ -781,7 +773,7 @@ service AccumuloProxy {
 
   // security operations
   bool authenticateUser (
-    1:binary login
+    1:string login
     2:string user
     3:map<string, string> properties
   ) throws (
@@ -790,7 +782,7 @@ service AccumuloProxy {
   )
 
   void changeUserAuthorizations (
-    1:binary login
+    1:string login
     2:string user
     3:set<binary> authorizations
   ) throws (
@@ -799,7 +791,7 @@ service AccumuloProxy {
   )
 
   void changeLocalUserPassword (
-    1:binary login
+    1:string login
     2:string user
     3:binary password
   ) throws (
@@ -808,7 +800,7 @@ service AccumuloProxy {
   )
 
   void createLocalUser (
-    1:binary login
+    1:string login
     2:string user
     3:binary password
   ) throws (
@@ -817,7 +809,7 @@ service AccumuloProxy {
   )
 
   void dropLocalUser (
-    1:binary login
+    1:string login
     2:string user
   ) throws (
     1:AccumuloException ouch1
@@ -825,7 +817,7 @@ service AccumuloProxy {
   )
 
   list<binary> getUserAuthorizations (
-    1:binary login
+    1:string login
     2:string user
   ) throws (
     1:AccumuloException ouch1
@@ -833,7 +825,7 @@ service AccumuloProxy {
   )
 
   void grantSystemPermission (
-    1:binary login
+    1:string login
     2:string user
     3:SystemPermission perm
   ) throws (
@@ -842,7 +834,7 @@ service AccumuloProxy {
   )
 
   void grantTablePermission (
-    1:binary login
+    1:string login
     2:string user
     3:string table
     4:TablePermission perm
@@ -853,7 +845,7 @@ service AccumuloProxy {
   )
 
   bool hasSystemPermission (
-    1:binary login
+    1:string login
     2:string user
     3:SystemPermission perm
   ) throws (
@@ -862,7 +854,7 @@ service AccumuloProxy {
   )
 
   bool hasTablePermission (
-    1:binary login
+    1:string login
     2:string user
     3:string table
     4:TablePermission perm
@@ -873,7 +865,7 @@ service AccumuloProxy {
   )
 
   set<string> listLocalUsers (
-    1:binary login
+    1:string login
   ) throws (
     1:AccumuloException ouch1
     2:AccumuloSecurityException ouch2
@@ -881,7 +873,7 @@ service AccumuloProxy {
   )
 
   void revokeSystemPermission (
-    1:binary login
+    1:string login
     2:string user
     3:SystemPermission perm
   ) throws (
@@ -890,7 +882,7 @@ service AccumuloProxy {
   )
 
   void revokeTablePermission (
-    1:binary login
+    1:string login
     2:string user
     3:string table
     4:TablePermission perm
@@ -901,7 +893,7 @@ service AccumuloProxy {
   )
 
   void grantNamespacePermission (
-    1:binary login
+    1:string login
     2:string user
     3:string namespaceName
     4:NamespacePermission perm
@@ -911,7 +903,7 @@ service AccumuloProxy {
   )
 
   bool hasNamespacePermission (
-    1:binary login
+    1:string login
     2:string user
     3:string namespaceName
     4:NamespacePermission perm
@@ -921,7 +913,7 @@ service AccumuloProxy {
   )
 
   void revokeNamespacePermission (
-    1:binary login
+    1:string login
     2:string user
     3:string namespaceName
     4:NamespacePermission perm
@@ -932,7 +924,7 @@ service AccumuloProxy {
 
   // scanning
   string createBatchScanner(
-    1:binary login
+    1:string login
     2:string tableName
     3:BatchScanOptions options
   ) throws (
@@ -942,7 +934,7 @@ service AccumuloProxy {
   )
 
   string createScanner(
-    1:binary login
+    1:string login
     2:string tableName
     3:ScanOptions options
   ) throws (
@@ -983,7 +975,7 @@ service AccumuloProxy {
 
   // writing
   void updateAndFlush(
-    1:binary login
+    1:string login
     2:string tableName
     3:map<binary, list<ColumnUpdate>> cells
   ) throws (
@@ -994,7 +986,7 @@ service AccumuloProxy {
   )
 
   string createWriter(
-    1:binary login
+    1:string login
     2:string tableName
     3:WriterOptions opts
   ) throws (
@@ -1025,7 +1017,7 @@ service AccumuloProxy {
 
   // api for a single conditional update
   ConditionalStatus updateRowConditionally(
-    1:binary login
+    1:string login
     2:string tableName
     3:binary row
     4:ConditionalUpdates updates
@@ -1037,7 +1029,7 @@ service AccumuloProxy {
 
   // since 1.6.0; api for batch conditional updates
   string createConditionalWriter(
-    1:binary login
+    1:string login
     2:string tableName
     3:ConditionalWriterOptions options
   ) throws (
@@ -1076,14 +1068,14 @@ service AccumuloProxy {
   string defaultNamespace()
 
   list<string> listNamespaces(
-    1:binary login
+    1:string login
   ) throws (
     1:AccumuloException ouch1
     2:AccumuloSecurityException ouch2
   )
 
   bool namespaceExists(
-    1:binary login
+    1:string login
     2:string namespaceName
   ) throws (
     1:AccumuloException ouch1
@@ -1091,7 +1083,7 @@ service AccumuloProxy {
   )
 
   void createNamespace(
-    1:binary login
+    1:string login
     2:string namespaceName
   ) throws (
     1:AccumuloException ouch1
@@ -1100,7 +1092,7 @@ service AccumuloProxy {
   )
 
   void deleteNamespace(
-    1:binary login
+    1:string login
     2:string namespaceName
   ) throws (
     1:AccumuloException ouch1
@@ -1110,7 +1102,7 @@ service AccumuloProxy {
   )
 
   void renameNamespace(
-    1:binary login
+    1:string login
     2:string oldNamespaceName
     3:string newNamespaceName
   ) throws (
@@ -1121,7 +1113,7 @@ service AccumuloProxy {
   )
 
   void setNamespaceProperty(
-    1:binary login
+    1:string login
     2:string namespaceName
     3:string property
     4:string value
@@ -1132,7 +1124,7 @@ service AccumuloProxy {
   )
 
   void removeNamespaceProperty(
-    1:binary login
+    1:string login
     2:string namespaceName
     3:string property
   ) throws (
@@ -1142,7 +1134,7 @@ service AccumuloProxy {
   )
 
   map<string, string> getNamespaceProperties(
-    1:binary login
+    1:string login
     2:string namespaceName
   ) throws (
     1:AccumuloException ouch1
@@ -1151,14 +1143,14 @@ service AccumuloProxy {
   )
 
   map<string, string> namespaceIdMap(
-    1:binary login
+    1:string login
   ) throws (
     1:AccumuloException ouch1
     2:AccumuloSecurityException ouch2
   )
 
   void attachNamespaceIterator(
-    1:binary login
+    1:string login
     2:string namespaceName
     3:IteratorSetting setting
     4:set<IteratorScope> scopes
@@ -1169,7 +1161,7 @@ service AccumuloProxy {
   )
 
   void removeNamespaceIterator(
-    1:binary login
+    1:string login
     2:string namespaceName
     3:string name
     4:set<IteratorScope> scopes
@@ -1180,7 +1172,7 @@ service AccumuloProxy {
   )
 
   IteratorSetting getNamespaceIteratorSetting(
-    1:binary login
+    1:string login
     2:string namespaceName
     3:string name
     4:IteratorScope scope
@@ -1191,7 +1183,7 @@ service AccumuloProxy {
   )
 
   map<string, set<IteratorScope>> listNamespaceIterators(
-    1:binary login
+    1:string login
     2:string namespaceName
   ) throws (
     1:AccumuloException ouch1
@@ -1200,7 +1192,7 @@ service AccumuloProxy {
   )
 
   void checkNamespaceIteratorConflicts(
-    1:binary login
+    1:string login
     2:string namespaceName
     3:IteratorSetting setting
     4:set<IteratorScope> scopes
@@ -1211,7 +1203,7 @@ service AccumuloProxy {
   )
 
   i32 addNamespaceConstraint(
-    1:binary login
+    1:string login
     2:string namespaceName
     3:string constraintClassName
   ) throws (
@@ -1221,7 +1213,7 @@ service AccumuloProxy {
   )
 
   void removeNamespaceConstraint(
-    1:binary login
+    1:string login
     2:string namespaceName
     3:i32 id
   ) throws (
@@ -1231,7 +1223,7 @@ service AccumuloProxy {
   )
 
   map<string, i32> listNamespaceConstraints(
-    1:binary login
+    1:string login
     2:string namespaceName
   ) throws (
     1:AccumuloException ouch1
@@ -1240,7 +1232,7 @@ service AccumuloProxy {
   )
 
   bool testNamespaceClassLoad(
-    1:binary login
+    1:string login
     2:string namespaceName
     3:string className
     4:string asTypeName

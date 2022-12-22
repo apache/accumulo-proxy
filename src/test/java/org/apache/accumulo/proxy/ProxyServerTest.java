@@ -16,7 +16,6 @@
  */
 package org.apache.accumulo.proxy;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.nio.ByteBuffer;
@@ -40,14 +39,14 @@ public class ProxyServerTest {
   @Test
   public void updateAndFlushClosesWriterOnExceptionFromAddCells() throws Exception {
     ProxyServer server = EasyMock.createMockBuilder(ProxyServer.class)
-        .addMockedMethod("getWriter", ByteBuffer.class, String.class, WriterOptions.class)
+        .addMockedMethod("getWriter", String.class, String.class, WriterOptions.class)
         .addMockedMethod("addCellsToWriter", Map.class, BatchWriterPlusProblem.class).createMock();
     BatchWriter writer = EasyMock.createMock(BatchWriter.class);
     BatchWriterPlusProblem bwpe = new BatchWriterPlusProblem();
     bwpe.writer = writer;
     MutationsRejectedException mre = EasyMock.createMock(MutationsRejectedException.class);
 
-    final ByteBuffer login = ByteBuffer.wrap("my_login".getBytes(UTF_8));
+    final String login = "my_login";
     final String tableName = "table1";
     final Map<ByteBuffer,List<ColumnUpdate>> cells = new HashMap<>();
 
@@ -72,14 +71,14 @@ public class ProxyServerTest {
   @Test
   public void updateAndFlushClosesWriterOnExceptionFromFlush() throws Exception {
     ProxyServer server = EasyMock.createMockBuilder(ProxyServer.class)
-        .addMockedMethod("getWriter", ByteBuffer.class, String.class, WriterOptions.class)
+        .addMockedMethod("getWriter", String.class, String.class, WriterOptions.class)
         .addMockedMethod("addCellsToWriter", Map.class, BatchWriterPlusProblem.class).createMock();
     BatchWriter writer = EasyMock.createMock(BatchWriter.class);
     BatchWriterPlusProblem bwpe = new BatchWriterPlusProblem();
     bwpe.writer = writer;
     MutationsRejectedException mre = EasyMock.createMock(MutationsRejectedException.class);
 
-    final ByteBuffer login = ByteBuffer.wrap("my_login".getBytes(UTF_8));
+    final String login = "my_login";
     final String tableName = "table1";
     final Map<ByteBuffer,List<ColumnUpdate>> cells = new HashMap<>();
 

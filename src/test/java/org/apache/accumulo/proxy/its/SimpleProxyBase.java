@@ -168,7 +168,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
   private static String hostname, proxyPrincipal, proxyPrimary, clientPrincipal;
   private static File proxyKeytab, clientKeytab;
 
-  private ByteBuffer creds = null;
+  private static String creds;
 
   // Implementations can set this
   static TProtocolFactory factory = null;
@@ -246,7 +246,8 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
       } else {
         clientPrincipal = "root";
         tokenClass = PasswordToken.class.getName();
-        properties.put("password", SharedMiniClusterBase.getRootPassword());
+        creds = SharedMiniClusterBase.getRootPassword();
+        props.put("secret", creds);
         hostname = "localhost";
       }
 
@@ -273,7 +274,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
       Collections.singletonMap("sleepTime", "200"));
   String tableName;
   String namespaceName;
-  ByteBuffer badLogin;
+  String badLogin;
 
   private String testName;
 
@@ -292,7 +293,6 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
       proxyClient = new TestProxyClient(hostname, proxyPort, factory, proxyPrimary,
           UserGroupInformation.getCurrentUser());
       client = proxyClient.proxy();
-      creds = client.login(clientPrincipal, properties);
 
       TestingKdc kdc = getKdc();
       final ClusterUser user = kdc.getClientPrincipal(0);
@@ -307,7 +307,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
           badUgi);
       try {
         Client badProxy = badClient.proxy();
-        badLogin = badProxy.login(user.getPrincipal(), properties);
+        badLogin = "bad secret";
       } finally {
         badClient.close();
       }
@@ -320,12 +320,11 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     } else {
       proxyClient = new TestProxyClient(hostname, proxyPort, factory);
       client = proxyClient.proxy();
-      creds = client.login("root", properties);
 
       // Create 'user'
       client.createLocalUser(creds, "user", s2bb(SharedMiniClusterBase.getRootPassword()));
       // Log in as 'user'
-      badLogin = client.login("user", properties);
+      badLogin = "bad secret";
       // Drop 'user', invalidating the credentials
       client.dropLocalUser(creds, "user");
     }
@@ -806,12 +805,6 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
   @Timeout(5)
   public void pingTabletServerLoginFailure() {
     assertThrows(AccumuloSecurityException.class, () -> client.pingTabletServer(badLogin, "fake"));
-  }
-
-  @Test
-  @Timeout(5)
-  public void loginFailure() {
-    assertThrows(AccumuloSecurityException.class, () -> client.login("badUser", properties));
   }
 
   @Test
@@ -1466,26 +1459,6 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
       client.changeLocalUserPassword(creds, user, password);
       assertTrue(client.authenticateUser(creds, user, s2pp(ByteBufferUtil.toString(password))));
     }
-
-    if (isKerberosEnabled()) {
-      UserGroupInformation.loginUserFromKeytab(otherClient.getPrincipal(),
-          otherClient.getKeytab().getAbsolutePath());
-      final UserGroupInformation ugi = UserGroupInformation.getCurrentUser();
-      // Re-login in and make a new connection. Can't use the previous one
-
-      TestProxyClient otherProxyClient = null;
-      try {
-        otherProxyClient = new TestProxyClient(hostname, proxyPort, factory, proxyPrimary, ugi);
-        otherProxyClient.proxy().login(user, Collections.<String,String> emptyMap());
-      } finally {
-        if (otherProxyClient != null) {
-          otherProxyClient.close();
-        }
-      }
-    } else {
-      // check login with new password
-      client.login(user, s2pp(ByteBufferUtil.toString(password)));
-    }
   }
 
   @Test
@@ -1493,7 +1466,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     String userName = getUniqueNameArray(1)[0];
     ClusterUser otherClient = null;
     ByteBuffer password = s2bb("password");
-    ByteBuffer user;
+    String user = "secret";
 
     TestProxyClient origProxyClient = null;
     Client origClient = null;
@@ -1515,12 +1488,10 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
       origClient = client;
       userClient = client = userProxyClient.proxy();
 
-      user = client.login(userName, Collections.<String,String> emptyMap());
     } else {
       userName = getUniqueNameArray(1)[0];
       // create a user
       client.createLocalUser(creds, userName, password);
-      user = client.login(userName, s2pp(ByteBufferUtil.toString(password)));
     }
 
     // check permission failure
@@ -1654,7 +1625,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     String userName;
     ClusterUser otherClient = null;
     ByteBuffer password = s2bb("password");
-    ByteBuffer user;
+    String user = "secret";
 
     TestProxyClient origProxyClient = null;
     Client origClient = null;
@@ -1676,12 +1647,10 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
       origClient = client;
       userClient = client = userProxyClient.proxy();
 
-      user = client.login(userName, Collections.<String,String> emptyMap());
     } else {
       userName = getUniqueNameArray(1)[0];
       // create a user
       client.createLocalUser(creds, userName, password);
-      user = client.login(userName, s2pp(ByteBufferUtil.toString(password)));
     }
 
     // check permission failure
@@ -2514,7 +2483,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     }
 
     try {
-      ByteBuffer cwCreds = client.login(principal, cwProperties);
+      String cwCreds = cwProperties.get("password");
 
       final String cwid2 = client.createConditionalWriter(cwCreds, tableName,
           new ConditionalWriterOptions().setAuthorizations(Collections.singleton(s2bb("A"))));
