@@ -220,7 +220,6 @@ public class ProxyServer implements AccumuloProxy.Iface {
     if (login.equals(secret)) {
       return client;
     } else {
-      System.out.println("Supposed to be " + secret + " but was " + login);
       throw new org.apache.accumulo.core.client.AccumuloSecurityException(
           "Incorrect secret provided",
           org.apache.accumulo.core.clientImpl.thrift.SecurityErrorCode.PERMISSION_DENIED);
