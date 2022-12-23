@@ -2483,7 +2483,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     }
 
     try {
-      String cwCreds = cwProperties.get("password");
+      String cwCreds = cwProperties.get("secret");
 
       final String cwid2 = client.createConditionalWriter(cwCreds, tableName,
           new ConditionalWriterOptions().setAuthorizations(Collections.singleton(s2bb("A"))));
