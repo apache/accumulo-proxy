@@ -418,10 +418,10 @@ public class ProxyServer implements AccumuloProxy.Iface {
         Map<String,String> options = configurerConfig.options == null ? Map.of()
             : configurerConfig.options;
 
-        org.apache.accumulo.core.client.admin.PluginConfig spc = new org.apache.accumulo.core.client.admin.PluginConfig(
+        org.apache.accumulo.core.client.admin.PluginConfig cpc = new org.apache.accumulo.core.client.admin.PluginConfig(
             configurerConfig.getClassName(), options);
 
-        compactionConfig.setConfigurer(spc);
+        compactionConfig.setConfigurer(cpc);
       }
 
       getConnector(login).tableOperations().compact(tableName, compactionConfig);
