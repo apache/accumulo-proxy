@@ -21,17 +21,10 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.security.SecureRandom;
-import java.util.Collection;
-import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 
-import org.apache.accumulo.core.client.admin.compaction.CompactableFile;
-import org.apache.accumulo.core.client.admin.compaction.CompactionSelector;
 import org.apache.accumulo.proxy.thrift.IteratorSetting;
 import org.apache.accumulo.proxy.thrift.Key;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class Util {
 
@@ -73,36 +66,6 @@ public class Util {
       return new byte[0];
     else
       return in;
-  }
-
-  /**
-   * Select half of the files to compact
-   */
-  public static class SelectHalfSelector implements CompactionSelector {
-    public final Logger log = LoggerFactory.getLogger(SelectHalfSelector.class);
-
-    @Override
-    public void init(InitParameters iparams) {}
-
-    @Override
-    public Selection select(SelectionParameters sparams) {
-      log.info(sparams.getAvailableFiles().toString());
-      Collection<CompactableFile> totalFiles = sparams.getAvailableFiles();
-      final int fileCount = totalFiles.size();
-
-      if (fileCount < 1) {
-        return new Selection(List.of());
-      }
-
-      final int numToCompact = fileCount / 2;
-
-      List<CompactableFile> toCompact = totalFiles.stream().limit(numToCompact)
-          .collect(Collectors.toList());
-
-      log.info("files to select: {}", toCompact);
-      return new Selection(toCompact);
-    }
-
   }
 
 }

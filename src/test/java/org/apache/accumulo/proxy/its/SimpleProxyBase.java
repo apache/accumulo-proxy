@@ -78,7 +78,7 @@ import org.apache.accumulo.harness.TestingKdc;
 import org.apache.accumulo.miniclusterImpl.MiniAccumuloClusterImpl;
 import org.apache.accumulo.miniclusterImpl.MiniAccumuloConfigImpl;
 import org.apache.accumulo.proxy.Proxy;
-import org.apache.accumulo.proxy.Util.SelectHalfSelector;
+import org.apache.accumulo.proxy.SelectHalfSelector;
 import org.apache.accumulo.proxy.thrift.AccumuloProxy.Client;
 import org.apache.accumulo.proxy.thrift.AccumuloSecurityException;
 import org.apache.accumulo.proxy.thrift.ActiveCompaction;
