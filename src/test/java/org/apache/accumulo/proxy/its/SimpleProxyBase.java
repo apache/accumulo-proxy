@@ -2707,8 +2707,8 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
   @Test
   public void testCompactionSelector() throws Exception {
 
-    List<String> data = List.of("A", "B", "C", "D");
-    final int expectedFileCount = data.size();
+    String[] data = "A B C D E F G H I J K L M N O P Q R S T U V W X Y Z".split(" ");
+    final int expectedFileCount = data.length;
 
     for (String datum : data) {
       client.addSplits(creds, tableName, Set.of(s2bb(datum)));
