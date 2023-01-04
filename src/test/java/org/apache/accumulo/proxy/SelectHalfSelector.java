@@ -16,40 +16,29 @@
  */
 package org.apache.accumulo.proxy;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.accumulo.core.client.admin.compaction.CompactableFile;
 import org.apache.accumulo.core.client.admin.compaction.CompactionSelector;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Select half of the files to compact
  */
 public class SelectHalfSelector implements CompactionSelector {
-  public final Logger log = LoggerFactory.getLogger(SelectHalfSelector.class);
 
   @Override
   public void init(InitParameters iparams) {}
 
   @Override
   public Selection select(SelectionParameters sparams) {
-    log.info(sparams.getAvailableFiles().toString());
-    Collection<CompactableFile> totalFiles = sparams.getAvailableFiles();
-    final int fileCount = totalFiles.size();
+    final var totalFiles = sparams.getAvailableFiles();
 
-    if (fileCount < 1) {
-      return new Selection(List.of());
-    }
+    final int halfOfFileCount = totalFiles.size() / 2;
 
-    final int numToCompact = fileCount / 2;
-
-    List<CompactableFile> toCompact = totalFiles.stream().limit(numToCompact)
+    final List<CompactableFile> toCompact = totalFiles.stream().limit(halfOfFileCount)
         .collect(Collectors.toList());
 
-    log.info("files to select: {}", toCompact);
     return new Selection(toCompact);
   }
 
