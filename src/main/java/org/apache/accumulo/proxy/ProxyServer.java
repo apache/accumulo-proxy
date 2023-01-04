@@ -18,6 +18,7 @@ package org.apache.accumulo.proxy;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+import java.lang.reflect.InvocationTargetException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -807,7 +808,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
         pscan.type = ScanType.valueOf(scan.getType().toString());
         pscan.state = ScanState.valueOf(scan.getState().toString());
         TabletId e = scan.getTablet();
-        pscan.extent = new org.apache.accumulo.proxy.thrift.KeyExtent(e.getTableId().toString(),
+        pscan.extent = new org.apache.accumulo.proxy.thrift.KeyExtent(e.getTable().toString(),
             TextUtil.getByteBuffer(e.getEndRow()), TextUtil.getByteBuffer(e.getPrevEndRow()));
         pscan.columns = new ArrayList<>();
         if (scan.getColumns() != null) {
@@ -861,7 +862,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
         pcomp.entriesRead = comp.getEntriesRead();
         pcomp.entriesWritten = comp.getEntriesWritten();
         TabletId e = comp.getTablet();
-        pcomp.extent = new org.apache.accumulo.proxy.thrift.KeyExtent(e.getTableId().toString(),
+        pcomp.extent = new org.apache.accumulo.proxy.thrift.KeyExtent(e.getTable().toString(),
             TextUtil.getByteBuffer(e.getEndRow()), TextUtil.getByteBuffer(e.getPrevEndRow()));
         pcomp.inputFiles = new ArrayList<>();
         if (comp.getInputFiles() != null) {
@@ -2091,8 +2092,9 @@ public class ProxyServer implements AccumuloProxy.Iface {
     props.putAllStrings(properties);
     AuthenticationToken token;
     try {
-      token = tokenClass.newInstance();
-    } catch (InstantiationException | IllegalAccessException e) {
+      token = tokenClass.getDeclaredConstructor().newInstance();
+    } catch (InstantiationException | IllegalAccessException | NoSuchMethodException
+        | InvocationTargetException e) {
       logger.error("Error constructing authentication token", e);
       throw new AccumuloException(e);
     }
