@@ -2093,8 +2093,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
     AuthenticationToken token;
     try {
       token = tokenClass.getDeclaredConstructor().newInstance();
-    } catch (InstantiationException | IllegalAccessException | NoSuchMethodException
-        | InvocationTargetException e) {
+    } catch (ReflectiveOperationException e) {
       logger.error("Error constructing authentication token", e);
       throw new AccumuloException(e);
     }
