@@ -28,7 +28,7 @@ import org.apache.accumulo.proxy.thrift.Key;
 
 public class Util {
 
-  private static Random random = new SecureRandom();
+  private static final Random random = new SecureRandom();
 
   public static String randString(int numbytes) {
     return new BigInteger(numbytes * 5, random).toString(32);
