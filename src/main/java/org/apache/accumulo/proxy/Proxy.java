@@ -159,7 +159,7 @@ public class Proxy implements KeywordExecutable {
         .forName(
             proxyProps.getProperty("protocolFactory", TCompactProtocol.Factory.class.getName()))
         .asSubclass(TProtocolFactory.class);
-    TProtocolFactory protoFactory = protoFactoryClass.newInstance();
+    TProtocolFactory protoFactory = protoFactoryClass.getDeclaredConstructor().newInstance();
     int port = Integer.parseInt(proxyProps.getProperty("port"));
     String hostname = proxyProps.getProperty(THRIFT_SERVER_HOSTNAME,
         THRIFT_SERVER_HOSTNAME_DEFAULT);
