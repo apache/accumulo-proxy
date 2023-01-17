@@ -36,6 +36,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import org.apache.accumulo.core.client.AccumuloClient;
 import org.apache.accumulo.core.client.AccumuloException;
@@ -339,8 +340,6 @@ public class ProxyServer implements AccumuloProxy.Iface {
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
     try {
       throw ex;
-    } catch (AccumuloException e) {
-      throw new org.apache.accumulo.proxy.thrift.AccumuloException(e.toString());
     } catch (AccumuloSecurityException e) {
       throw new org.apache.accumulo.proxy.thrift.AccumuloSecurityException(e.toString());
     } catch (Exception e) {
@@ -445,13 +444,12 @@ public class ProxyServer implements AccumuloProxy.Iface {
 
   private List<IteratorSetting> getIteratorSettings(
       List<org.apache.accumulo.proxy.thrift.IteratorSetting> iterators) {
-    List<IteratorSetting> result = new ArrayList<>();
-    if (iterators != null) {
-      for (org.apache.accumulo.proxy.thrift.IteratorSetting is : iterators) {
-        result.add(getIteratorSetting(is));
-      }
+
+    if (iterators == null) {
+      return List.of();
     }
-    return result;
+
+    return iterators.stream().map(this::getIteratorSetting).collect(Collectors.toList());
   }
 
   @Override
@@ -598,11 +596,8 @@ public class ProxyServer implements AccumuloProxy.Iface {
     try {
       Collection<Text> splits = getConnector(login).tableOperations().listSplits(tableName,
           maxSplits);
-      List<ByteBuffer> ret = new ArrayList<>();
-      for (Text split : splits) {
-        ret.add(TextUtil.getByteBuffer(split));
-      }
-      return ret;
+
+      return splits.stream().map(TextUtil::getByteBuffer).collect(Collectors.toList());
     } catch (Exception e) {
       handleExceptionTNF(e);
       return null;
@@ -955,12 +950,11 @@ public class ProxyServer implements AccumuloProxy.Iface {
       Set<ByteBuffer> authorizations) throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
     try {
-      Set<String> auths = new HashSet<>();
-      for (ByteBuffer auth : authorizations) {
-        auths.add(ByteBufferUtil.toString(auth));
-      }
+      String[] auths = authorizations.stream().distinct().map(ByteBufferUtil::toString)
+          .toArray(String[]::new);
+
       getConnector(login).securityOperations().changeUserAuthorizations(user,
-          new Authorizations(auths.toArray(new String[0])));
+          new Authorizations(auths));
     } catch (Exception e) {
       handleException(e);
     }
@@ -1149,11 +1143,9 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   private Authorizations getAuthorizations(Set<ByteBuffer> authorizations) {
-    List<String> auths = new ArrayList<>();
-    for (ByteBuffer bbauth : authorizations) {
-      auths.add(ByteBufferUtil.toString(bbauth));
-    }
-    return new Authorizations(auths.toArray(new String[0]));
+    String[] auths = authorizations.stream().map(ByteBufferUtil::toString).toArray(String[]::new);
+
+    return new Authorizations(auths);
   }
 
   @Override
@@ -1722,11 +1714,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
     try {
       Set<Range> ranges = getConnector(login).tableOperations().splitRangeByTablets(tableName,
           getRange(range), maxSplits);
-      Set<org.apache.accumulo.proxy.thrift.Range> result = new HashSet<>();
-      for (Range r : ranges) {
-        result.add(getRange(r));
-      }
-      return result;
+      return ranges.stream().map(this::getRange).collect(Collectors.toSet());
     } catch (Exception e) {
       handleExceptionTNF(e);
       return null;
@@ -2083,7 +2071,6 @@ public class ProxyServer implements AccumuloProxy.Iface {
 
     try {
       AuthenticationToken token = getToken(principal, loginProperties);
-      @SuppressWarnings("deprecation")
       ByteBuffer login = ByteBuffer
           .wrap((instance.getInstanceID() + "," + new Credentials(principal, token).serialize())
               .getBytes(UTF_8));
