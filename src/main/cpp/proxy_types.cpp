@@ -3913,25 +3913,25 @@ void WriterOptions::printTo(std::ostream& out) const {
 }
 
 
-CompactionStrategyConfig::~CompactionStrategyConfig() noexcept {
+PluginConfig::~PluginConfig() noexcept {
 }
 
 
-void CompactionStrategyConfig::__set_className(const std::string& val) {
+void PluginConfig::__set_className(const std::string& val) {
   this->className = val;
 }
 
-void CompactionStrategyConfig::__set_options(const std::map<std::string, std::string> & val) {
+void PluginConfig::__set_options(const std::map<std::string, std::string> & val) {
   this->options = val;
 }
-std::ostream& operator<<(std::ostream& out, const CompactionStrategyConfig& obj)
+std::ostream& operator<<(std::ostream& out, const PluginConfig& obj)
 {
   obj.printTo(out);
   return out;
 }
 
 
-uint32_t CompactionStrategyConfig::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t PluginConfig::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -3995,10 +3995,10 @@ uint32_t CompactionStrategyConfig::read(::apache::thrift::protocol::TProtocol* i
   return xfer;
 }
 
-uint32_t CompactionStrategyConfig::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t PluginConfig::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("CompactionStrategyConfig");
+  xfer += oprot->writeStructBegin("PluginConfig");
 
   xfer += oprot->writeFieldBegin("className", ::apache::thrift::protocol::T_STRING, 1);
   xfer += oprot->writeString(this->className);
@@ -4022,27 +4022,27 @@ uint32_t CompactionStrategyConfig::write(::apache::thrift::protocol::TProtocol* 
   return xfer;
 }
 
-void swap(CompactionStrategyConfig &a, CompactionStrategyConfig &b) {
+void swap(PluginConfig &a, PluginConfig &b) {
   using ::std::swap;
   swap(a.className, b.className);
   swap(a.options, b.options);
   swap(a.__isset, b.__isset);
 }
 
-CompactionStrategyConfig::CompactionStrategyConfig(const CompactionStrategyConfig& other171) {
+PluginConfig::PluginConfig(const PluginConfig& other171) {
   className = other171.className;
   options = other171.options;
   __isset = other171.__isset;
 }
-CompactionStrategyConfig& CompactionStrategyConfig::operator=(const CompactionStrategyConfig& other172) {
+PluginConfig& PluginConfig::operator=(const PluginConfig& other172) {
   className = other172.className;
   options = other172.options;
   __isset = other172.__isset;
   return *this;
 }
-void CompactionStrategyConfig::printTo(std::ostream& out) const {
+void PluginConfig::printTo(std::ostream& out) const {
   using ::apache::thrift::to_string;
-  out << "CompactionStrategyConfig(";
+  out << "PluginConfig(";
   out << "className=" << to_string(className);
   out << ", " << "options=" << to_string(options);
   out << ")";

@@ -271,7 +271,7 @@ class ActiveCompaction;
 
 class WriterOptions;
 
-class CompactionStrategyConfig;
+class PluginConfig;
 
 class UnknownScanner;
 
@@ -1600,32 +1600,32 @@ void swap(WriterOptions &a, WriterOptions &b);
 
 std::ostream& operator<<(std::ostream& out, const WriterOptions& obj);
 
-typedef struct _CompactionStrategyConfig__isset {
-  _CompactionStrategyConfig__isset() : className(false), options(false) {}
+typedef struct _PluginConfig__isset {
+  _PluginConfig__isset() : className(false), options(false) {}
   bool className :1;
   bool options :1;
-} _CompactionStrategyConfig__isset;
+} _PluginConfig__isset;
 
-class CompactionStrategyConfig : public virtual ::apache::thrift::TBase {
+class PluginConfig : public virtual ::apache::thrift::TBase {
  public:
 
-  CompactionStrategyConfig(const CompactionStrategyConfig&);
-  CompactionStrategyConfig& operator=(const CompactionStrategyConfig&);
-  CompactionStrategyConfig() noexcept
-                           : className() {
+  PluginConfig(const PluginConfig&);
+  PluginConfig& operator=(const PluginConfig&);
+  PluginConfig() noexcept
+               : className() {
   }
 
-  virtual ~CompactionStrategyConfig() noexcept;
+  virtual ~PluginConfig() noexcept;
   std::string className;
   std::map<std::string, std::string>  options;
 
-  _CompactionStrategyConfig__isset __isset;
+  _PluginConfig__isset __isset;
 
   void __set_className(const std::string& val);
 
   void __set_options(const std::map<std::string, std::string> & val);
 
-  bool operator == (const CompactionStrategyConfig & rhs) const
+  bool operator == (const PluginConfig & rhs) const
   {
     if (!(className == rhs.className))
       return false;
@@ -1633,11 +1633,11 @@ class CompactionStrategyConfig : public virtual ::apache::thrift::TBase {
       return false;
     return true;
   }
-  bool operator != (const CompactionStrategyConfig &rhs) const {
+  bool operator != (const PluginConfig &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const CompactionStrategyConfig & ) const;
+  bool operator < (const PluginConfig & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot) override;
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const override;
@@ -1645,9 +1645,9 @@ class CompactionStrategyConfig : public virtual ::apache::thrift::TBase {
   virtual void printTo(std::ostream& out) const;
 };
 
-void swap(CompactionStrategyConfig &a, CompactionStrategyConfig &b);
+void swap(PluginConfig &a, PluginConfig &b);
 
-std::ostream& operator<<(std::ostream& out, const CompactionStrategyConfig& obj);
+std::ostream& operator<<(std::ostream& out, const PluginConfig& obj);
 
 typedef struct _UnknownScanner__isset {
   _UnknownScanner__isset() : msg(false) {}

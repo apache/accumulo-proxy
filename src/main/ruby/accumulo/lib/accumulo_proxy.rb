@@ -146,13 +146,13 @@ module Accumulo
         return
       end
 
-      def compactTable(login, tableName, startRow, endRow, iterators, flush, wait, compactionStrategy)
-        send_compactTable(login, tableName, startRow, endRow, iterators, flush, wait, compactionStrategy)
+      def compactTable(login, tableName, startRow, endRow, iterators, flush, wait, selectorConfig, configurerConfig)
+        send_compactTable(login, tableName, startRow, endRow, iterators, flush, wait, selectorConfig, configurerConfig)
         recv_compactTable()
       end
 
-      def send_compactTable(login, tableName, startRow, endRow, iterators, flush, wait, compactionStrategy)
-        send_message('compactTable', CompactTable_args, :login => login, :tableName => tableName, :startRow => startRow, :endRow => endRow, :iterators => iterators, :flush => flush, :wait => wait, :compactionStrategy => compactionStrategy)
+      def send_compactTable(login, tableName, startRow, endRow, iterators, flush, wait, selectorConfig, configurerConfig)
+        send_message('compactTable', CompactTable_args, :login => login, :tableName => tableName, :startRow => startRow, :endRow => endRow, :iterators => iterators, :flush => flush, :wait => wait, :selectorConfig => selectorConfig, :configurerConfig => configurerConfig)
       end
 
       def recv_compactTable()
@@ -1820,7 +1820,7 @@ module Accumulo
         args = read_args(iprot, CompactTable_args)
         result = CompactTable_result.new()
         begin
-          @handler.compactTable(args.login, args.tableName, args.startRow, args.endRow, args.iterators, args.flush, args.wait, args.compactionStrategy)
+          @handler.compactTable(args.login, args.tableName, args.startRow, args.endRow, args.iterators, args.flush, args.wait, args.selectorConfig, args.configurerConfig)
         rescue ::Accumulo::AccumuloSecurityException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::TableNotFoundException => ouch2
@@ -3377,7 +3377,8 @@ module Accumulo
       ITERATORS = 5
       FLUSH = 6
       WAIT = 7
-      COMPACTIONSTRATEGY = 8
+      SELECTORCONFIG = 8
+      CONFIGURERCONFIG = 9
 
       FIELDS = {
         LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
@@ -3387,7 +3388,8 @@ module Accumulo
         ITERATORS => {:type => ::Thrift::Types::LIST, :name => 'iterators', :element => {:type => ::Thrift::Types::STRUCT, :class => ::Accumulo::IteratorSetting}},
         FLUSH => {:type => ::Thrift::Types::BOOL, :name => 'flush'},
         WAIT => {:type => ::Thrift::Types::BOOL, :name => 'wait'},
-        COMPACTIONSTRATEGY => {:type => ::Thrift::Types::STRUCT, :name => 'compactionStrategy', :class => ::Accumulo::CompactionStrategyConfig}
+        SELECTORCONFIG => {:type => ::Thrift::Types::STRUCT, :name => 'selectorConfig', :class => ::Accumulo::PluginConfig},
+        CONFIGURERCONFIG => {:type => ::Thrift::Types::STRUCT, :name => 'configurerConfig', :class => ::Accumulo::PluginConfig}
       }
 
       def struct_fields; FIELDS; end

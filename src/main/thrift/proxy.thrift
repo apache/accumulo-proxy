@@ -264,7 +264,7 @@ struct WriterOptions {
  5:optional Durability durability
 }
 
-struct CompactionStrategyConfig {
+struct PluginConfig {
   1:string className
   2:map<string, string> options
 }
@@ -407,7 +407,8 @@ service AccumuloProxy {
     5:list<IteratorSetting> iterators
     6:bool flush
     7:bool wait
-    8:CompactionStrategyConfig compactionStrategy
+    8:PluginConfig selectorConfig
+    9:PluginConfig configurerConfig
   ) throws (
     1:AccumuloSecurityException ouch1
     2:TableNotFoundException ouch2

@@ -73,7 +73,7 @@ class AccumuloProxyHandler : virtual public AccumuloProxyIf {
     printf("cloneTable\n");
   }
 
-  void compactTable(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow, const std::vector<IteratorSetting> & iterators, const bool flush, const bool wait, const CompactionStrategyConfig& compactionStrategy) {
+  void compactTable(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow, const std::vector<IteratorSetting> & iterators, const bool flush, const bool wait, const PluginConfig& selectorConfig, const PluginConfig& configurerConfig) {
     // Your implementation goes here
     printf("compactTable\n");
   }

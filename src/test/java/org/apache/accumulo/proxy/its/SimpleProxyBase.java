@@ -86,7 +86,6 @@ import org.apache.accumulo.proxy.thrift.BatchScanOptions;
 import org.apache.accumulo.proxy.thrift.Column;
 import org.apache.accumulo.proxy.thrift.ColumnUpdate;
 import org.apache.accumulo.proxy.thrift.CompactionReason;
-import org.apache.accumulo.proxy.thrift.CompactionStrategyConfig;
 import org.apache.accumulo.proxy.thrift.CompactionType;
 import org.apache.accumulo.proxy.thrift.Condition;
 import org.apache.accumulo.proxy.thrift.ConditionalStatus;
@@ -103,6 +102,7 @@ import org.apache.accumulo.proxy.thrift.NamespaceNotEmptyException;
 import org.apache.accumulo.proxy.thrift.NamespaceNotFoundException;
 import org.apache.accumulo.proxy.thrift.NamespacePermission;
 import org.apache.accumulo.proxy.thrift.PartialKey;
+import org.apache.accumulo.proxy.thrift.PluginConfig;
 import org.apache.accumulo.proxy.thrift.Range;
 import org.apache.accumulo.proxy.thrift.ScanColumn;
 import org.apache.accumulo.proxy.thrift.ScanOptions;
@@ -122,7 +122,6 @@ import org.apache.accumulo.test.constraints.MaxMutationSize;
 import org.apache.accumulo.test.constraints.NumericValueConstraint;
 import org.apache.accumulo.test.functional.SlowIterator;
 import org.apache.accumulo.test.util.Wait;
-import org.apache.commons.io.FileUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.CommonConfigurationKeysPublic;
 import org.apache.hadoop.fs.FSDataInputStream;
@@ -406,7 +405,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
   @Timeout(5)
   public void compactTableLoginFailure() {
     assertThrows(AccumuloSecurityException.class,
-        () -> client.compactTable(badLogin, tableName, null, null, null, true, false, null));
+        () -> client.compactTable(badLogin, tableName, null, null, null, true, false, null, null));
   }
 
   @Test
@@ -1005,7 +1004,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
         () -> client.checkIteratorConflicts(creds, doesNotExist, setting, EnumSet.allOf(IteratorScope.class)),
         () -> client.clearLocatorCache(creds, doesNotExist),
         () -> client.cloneTable(creds, doesNotExist, newTableName, false, null, null),
-        () -> client.compactTable(creds, doesNotExist, null, null, null, true, false, null),
+        () -> client.compactTable(creds, doesNotExist, null, null, null, true, false, null,null),
         () -> client.createBatchScanner(creds, doesNotExist, new BatchScanOptions()),
         () -> client.createScanner(creds, doesNotExist, new ScanOptions()),
         () -> client.createWriter(creds, doesNotExist, new WriterOptions()),
@@ -1361,7 +1360,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
           proxyClient2 = new TestProxyClient(hostname, proxyPort, factory);
         }
         Client client2 = proxyClient2.proxy();
-        client2.compactTable(creds, "slow", null, null, null, true, true, null);
+        client2.compactTable(creds, "slow", null, null, null, true, true, null, null);
       } catch (Exception e) {
         throw new RuntimeException(e);
       } finally {
@@ -1995,7 +1994,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     assertScan(expected, tableName);
 
     // compact
-    client.compactTable(creds, tableName, null, null, null, true, true, null);
+    client.compactTable(creds, tableName, null, null, null, true, true, null, null);
     assertEquals(1, countFiles(tableName));
     assertScan(expected, tableName);
   }
@@ -2014,7 +2013,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     assertScan(expected, tableName);
 
     // compact
-    client.compactTable(creds, tableName, null, null, null, true, true, null);
+    client.compactTable(creds, tableName, null, null, null, true, true, null, null);
     assertEquals(1, countFiles(tableName));
     assertScan(expected, tableName);
 
@@ -2036,7 +2035,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     assertEquals(1, diskUsage.get(1).getTables().size());
 
     // Compact the clone so it writes its own files instead of referring to the original
-    client.compactTable(creds, TABLE_TEST2, null, null, null, true, true, null);
+    client.compactTable(creds, TABLE_TEST2, null, null, null, true, true, null, null);
 
     diskUsage = (client.getDiskUsage(creds, tablesToScan));
     assertEquals(3, diskUsage.size());
@@ -2670,40 +2669,26 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
   }
 
   @Test
-  public void testCompactionStrategy() throws Exception {
-    File jarDir = new File(System.getProperty("user.dir"), "target");
-    assertTrue(jarDir.mkdirs() || jarDir.isDirectory());
-    File jarFile = new File(jarDir, "TestCompactionStrat.jar");
-    FileUtils.copyInputStreamToFile(
-        SimpleProxyBase.class.getResourceAsStream("/TestCompactionStrat.jar"), jarFile);
-    client.setProperty(creds, Property.VFS_CONTEXT_CLASSPATH_PROPERTY.getKey() + "context1",
-        jarFile.toString());
-    client.setTableProperty(creds, tableName, Property.TABLE_CLASSPATH.getKey(), "context1");
+  public void testCompactionSelector() throws Exception {
 
-    client.addSplits(creds, tableName, Collections.singleton(s2bb("efg")));
+    String[] data = "A B C D E F G H I J K L M N O P Q R S T U V W X Y Z".split(" ");
+    final int expectedFileCount = data.length;
 
-    client.updateAndFlush(creds, tableName, mutation("a", "cf", "cq", "v1"));
-    client.flushTable(creds, tableName, null, null, true);
+    for (String datum : data) {
+      client.addSplits(creds, tableName, Set.of(s2bb(datum)));
+      client.updateAndFlush(creds, tableName, mutation(datum, "cf", "cq", datum));
+      client.flushTable(creds, tableName, null, null, true);
+    }
 
-    client.updateAndFlush(creds, tableName, mutation("b", "cf", "cq", "v2"));
-    client.flushTable(creds, tableName, null, null, true);
+    assertEquals(expectedFileCount, countFiles(tableName), "Unexpected file count");
 
-    client.updateAndFlush(creds, tableName, mutation("y", "cf", "cq", "v1"));
-    client.flushTable(creds, tableName, null, null, true);
+    String selectorClassname = SelectHalfSelector.class.getName();
+    PluginConfig selector = new PluginConfig(selectorClassname, Map.of());
 
-    client.updateAndFlush(creds, tableName, mutation("z", "cf", "cq", "v2"));
-    client.flushTable(creds, tableName, null, null, true);
+    client.compactTable(creds, tableName, null, null, null, true, true, selector, null);
 
-    assertEquals(4, countFiles(tableName));
-
-    CompactionStrategyConfig csc = new CompactionStrategyConfig();
-
-    // The EfgCompactionStrat will only compact tablets with and end row of efg
-    csc.setClassName("org.apache.accumulo.test.EfgCompactionStrat");
-
-    client.compactTable(creds, tableName, null, null, null, true, true, csc);
-
-    assertEquals(3, countFiles(tableName));
+    // SelectHalfSelector should lead to half the files being compacted
+    Wait.waitFor(() -> countFiles(tableName) == (expectedFileCount / 2));
   }
 
   @Test

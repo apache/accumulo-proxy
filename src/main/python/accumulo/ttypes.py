@@ -2276,7 +2276,7 @@ class WriterOptions(object):
         return not (self == other)
 
 
-class CompactionStrategyConfig(object):
+class PluginConfig(object):
     """
     Attributes:
      - className
@@ -2323,7 +2323,7 @@ class CompactionStrategyConfig(object):
         if oprot._fast_encode is not None and self.thrift_spec is not None:
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
-        oprot.writeStructBegin('CompactionStrategyConfig')
+        oprot.writeStructBegin('PluginConfig')
         if self.className is not None:
             oprot.writeFieldBegin('className', TType.STRING, 1)
             oprot.writeString(self.className.encode('utf-8') if sys.version_info[0] == 2 else self.className)
@@ -3314,8 +3314,8 @@ WriterOptions.thrift_spec = (
     (4, TType.I32, 'threads', None, None, ),  # 4
     (5, TType.I32, 'durability', None, None, ),  # 5
 )
-all_structs.append(CompactionStrategyConfig)
-CompactionStrategyConfig.thrift_spec = (
+all_structs.append(PluginConfig)
+PluginConfig.thrift_spec = (
     None,  # 0
     (1, TType.STRING, 'className', 'UTF8', None, ),  # 1
     (2, TType.MAP, 'options', (TType.STRING, 'UTF8', TType.STRING, 'UTF8', False), None, ),  # 2

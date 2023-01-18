@@ -60,6 +60,7 @@ import org.apache.accumulo.core.client.admin.ActiveCompaction;
 import org.apache.accumulo.core.client.admin.ActiveScan;
 import org.apache.accumulo.core.client.admin.CompactionConfig;
 import org.apache.accumulo.core.client.admin.NewTableConfiguration;
+import org.apache.accumulo.core.client.admin.PluginConfig;
 import org.apache.accumulo.core.client.admin.TimeType;
 import org.apache.accumulo.core.client.security.SecurityErrorCode;
 import org.apache.accumulo.core.client.security.tokens.AuthenticationToken;
@@ -89,7 +90,6 @@ import org.apache.accumulo.proxy.thrift.AccumuloProxy;
 import org.apache.accumulo.proxy.thrift.BatchScanOptions;
 import org.apache.accumulo.proxy.thrift.ColumnUpdate;
 import org.apache.accumulo.proxy.thrift.CompactionReason;
-import org.apache.accumulo.proxy.thrift.CompactionStrategyConfig;
 import org.apache.accumulo.proxy.thrift.CompactionType;
 import org.apache.accumulo.proxy.thrift.Condition;
 import org.apache.accumulo.proxy.thrift.ConditionalStatus;
@@ -396,7 +396,8 @@ public class ProxyServer implements AccumuloProxy.Iface {
   @Override
   public void compactTable(ByteBuffer login, String tableName, ByteBuffer startRow,
       ByteBuffer endRow, List<org.apache.accumulo.proxy.thrift.IteratorSetting> iterators,
-      boolean flush, boolean wait, CompactionStrategyConfig compactionStrategy)
+      boolean flush, boolean wait, org.apache.accumulo.proxy.thrift.PluginConfig selectorConfig,
+      org.apache.accumulo.proxy.thrift.PluginConfig configurerConfig)
       throws org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException,
       org.apache.accumulo.proxy.thrift.AccumuloException, TException {
@@ -405,14 +406,26 @@ public class ProxyServer implements AccumuloProxy.Iface {
           .setStartRow(ByteBufferUtil.toText(startRow)).setEndRow(ByteBufferUtil.toText(endRow))
           .setIterators(getIteratorSettings(iterators)).setFlush(flush).setWait(wait);
 
-      if (compactionStrategy != null) {
-        org.apache.accumulo.core.client.admin.CompactionStrategyConfig ccc =
-            new org.apache.accumulo.core.client.admin.CompactionStrategyConfig(
-                compactionStrategy.getClassName());
-        if (compactionStrategy.options != null) {
-          ccc.setOptions(compactionStrategy.options);
-        }
-        compactionConfig.setCompactionStrategy(ccc);
+      if (selectorConfig != null) {
+        Map<String,String> options =
+            selectorConfig.options == null ? Map.of() : selectorConfig.options;
+
+        org.apache.accumulo.core.client.admin.PluginConfig spc =
+            new org.apache.accumulo.core.client.admin.PluginConfig(selectorConfig.getClassName(),
+                options);
+
+        compactionConfig.setSelector(spc);
+      }
+
+      if (configurerConfig != null) {
+        Map<String,String> options =
+            configurerConfig.options == null ? Map.of() : configurerConfig.options;
+
+        org.apache.accumulo.core.client.admin.PluginConfig cpc =
+            new org.apache.accumulo.core.client.admin.PluginConfig(configurerConfig.getClassName(),
+                options);
+
+        compactionConfig.setConfigurer(cpc);
       }
 
       getConnector(login).tableOperations().compact(tableName, compactionConfig);

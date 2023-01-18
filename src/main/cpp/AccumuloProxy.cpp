@@ -2149,8 +2149,16 @@ uint32_t AccumuloProxy_compactTable_args::read(::apache::thrift::protocol::TProt
         break;
       case 8:
         if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->compactionStrategy.read(iprot);
-          this->__isset.compactionStrategy = true;
+          xfer += this->selectorConfig.read(iprot);
+          this->__isset.selectorConfig = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 9:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->configurerConfig.read(iprot);
+          this->__isset.configurerConfig = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -2208,8 +2216,12 @@ uint32_t AccumuloProxy_compactTable_args::write(::apache::thrift::protocol::TPro
   xfer += oprot->writeBool(this->wait);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("compactionStrategy", ::apache::thrift::protocol::T_STRUCT, 8);
-  xfer += this->compactionStrategy.write(oprot);
+  xfer += oprot->writeFieldBegin("selectorConfig", ::apache::thrift::protocol::T_STRUCT, 8);
+  xfer += this->selectorConfig.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("configurerConfig", ::apache::thrift::protocol::T_STRUCT, 9);
+  xfer += this->configurerConfig.write(oprot);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -2263,8 +2275,12 @@ uint32_t AccumuloProxy_compactTable_pargs::write(::apache::thrift::protocol::TPr
   xfer += oprot->writeBool((*(this->wait)));
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("compactionStrategy", ::apache::thrift::protocol::T_STRUCT, 8);
-  xfer += (*(this->compactionStrategy)).write(oprot);
+  xfer += oprot->writeFieldBegin("selectorConfig", ::apache::thrift::protocol::T_STRUCT, 8);
+  xfer += (*(this->selectorConfig)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("configurerConfig", ::apache::thrift::protocol::T_STRUCT, 9);
+  xfer += (*(this->configurerConfig)).write(oprot);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -27334,13 +27350,13 @@ void AccumuloProxyClient::recv_cloneTable()
   return;
 }
 
-void AccumuloProxyClient::compactTable(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow, const std::vector<IteratorSetting> & iterators, const bool flush, const bool wait, const CompactionStrategyConfig& compactionStrategy)
+void AccumuloProxyClient::compactTable(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow, const std::vector<IteratorSetting> & iterators, const bool flush, const bool wait, const PluginConfig& selectorConfig, const PluginConfig& configurerConfig)
 {
-  send_compactTable(login, tableName, startRow, endRow, iterators, flush, wait, compactionStrategy);
+  send_compactTable(login, tableName, startRow, endRow, iterators, flush, wait, selectorConfig, configurerConfig);
   recv_compactTable();
 }
 
-void AccumuloProxyClient::send_compactTable(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow, const std::vector<IteratorSetting> & iterators, const bool flush, const bool wait, const CompactionStrategyConfig& compactionStrategy)
+void AccumuloProxyClient::send_compactTable(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow, const std::vector<IteratorSetting> & iterators, const bool flush, const bool wait, const PluginConfig& selectorConfig, const PluginConfig& configurerConfig)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("compactTable", ::apache::thrift::protocol::T_CALL, cseqid);
@@ -27353,7 +27369,8 @@ void AccumuloProxyClient::send_compactTable(const std::string& login, const std:
   args.iterators = &iterators;
   args.flush = &flush;
   args.wait = &wait;
-  args.compactionStrategy = &compactionStrategy;
+  args.selectorConfig = &selectorConfig;
+  args.configurerConfig = &configurerConfig;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -33765,7 +33782,7 @@ void AccumuloProxyProcessor::process_compactTable(int32_t seqid, ::apache::thrif
 
   AccumuloProxy_compactTable_result result;
   try {
-    iface_->compactTable(args.login, args.tableName, args.startRow, args.endRow, args.iterators, args.flush, args.wait, args.compactionStrategy);
+    iface_->compactTable(args.login, args.tableName, args.startRow, args.endRow, args.iterators, args.flush, args.wait, args.selectorConfig, args.configurerConfig);
   } catch (AccumuloSecurityException &ouch1) {
     result.ouch1 = std::move(ouch1);
     result.__isset.ouch1 = true;
@@ -40028,13 +40045,13 @@ void AccumuloProxyConcurrentClient::recv_cloneTable(const int32_t seqid)
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::compactTable(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow, const std::vector<IteratorSetting> & iterators, const bool flush, const bool wait, const CompactionStrategyConfig& compactionStrategy)
+void AccumuloProxyConcurrentClient::compactTable(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow, const std::vector<IteratorSetting> & iterators, const bool flush, const bool wait, const PluginConfig& selectorConfig, const PluginConfig& configurerConfig)
 {
-  int32_t seqid = send_compactTable(login, tableName, startRow, endRow, iterators, flush, wait, compactionStrategy);
+  int32_t seqid = send_compactTable(login, tableName, startRow, endRow, iterators, flush, wait, selectorConfig, configurerConfig);
   recv_compactTable(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_compactTable(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow, const std::vector<IteratorSetting> & iterators, const bool flush, const bool wait, const CompactionStrategyConfig& compactionStrategy)
+int32_t AccumuloProxyConcurrentClient::send_compactTable(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow, const std::vector<IteratorSetting> & iterators, const bool flush, const bool wait, const PluginConfig& selectorConfig, const PluginConfig& configurerConfig)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
@@ -40048,7 +40065,8 @@ int32_t AccumuloProxyConcurrentClient::send_compactTable(const std::string& logi
   args.iterators = &iterators;
   args.flush = &flush;
   args.wait = &wait;
-  args.compactionStrategy = &compactionStrategy;
+  args.selectorConfig = &selectorConfig;
+  args.configurerConfig = &configurerConfig;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();

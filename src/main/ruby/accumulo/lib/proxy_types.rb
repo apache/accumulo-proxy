@@ -183,7 +183,7 @@ module Accumulo
 
   class WriterOptions; end
 
-  class CompactionStrategyConfig; end
+  class PluginConfig; end
 
   class UnknownScanner < ::Thrift::Exception; end
 
@@ -655,7 +655,7 @@ module Accumulo
     ::Thrift::Struct.generate_accessors self
   end
 
-  class CompactionStrategyConfig
+  class PluginConfig
     include ::Thrift::Struct, ::Thrift::Struct_Union
     CLASSNAME = 1
     OPTIONS = 2

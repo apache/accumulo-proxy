@@ -108,7 +108,7 @@ class Iface(object):
         """
         pass
 
-    def compactTable(self, login, tableName, startRow, endRow, iterators, flush, wait, compactionStrategy):
+    def compactTable(self, login, tableName, startRow, endRow, iterators, flush, wait, selectorConfig, configurerConfig):
         """
         Parameters:
          - login
@@ -118,7 +118,8 @@ class Iface(object):
          - iterators
          - flush
          - wait
-         - compactionStrategy
+         - selectorConfig
+         - configurerConfig
 
         """
         pass
@@ -1296,7 +1297,7 @@ class Client(Iface):
             raise result.ouch4
         return
 
-    def compactTable(self, login, tableName, startRow, endRow, iterators, flush, wait, compactionStrategy):
+    def compactTable(self, login, tableName, startRow, endRow, iterators, flush, wait, selectorConfig, configurerConfig):
         """
         Parameters:
          - login
@@ -1306,13 +1307,14 @@ class Client(Iface):
          - iterators
          - flush
          - wait
-         - compactionStrategy
+         - selectorConfig
+         - configurerConfig
 
         """
-        self.send_compactTable(login, tableName, startRow, endRow, iterators, flush, wait, compactionStrategy)
+        self.send_compactTable(login, tableName, startRow, endRow, iterators, flush, wait, selectorConfig, configurerConfig)
         self.recv_compactTable()
 
-    def send_compactTable(self, login, tableName, startRow, endRow, iterators, flush, wait, compactionStrategy):
+    def send_compactTable(self, login, tableName, startRow, endRow, iterators, flush, wait, selectorConfig, configurerConfig):
         self._oprot.writeMessageBegin('compactTable', TMessageType.CALL, self._seqid)
         args = compactTable_args()
         args.login = login
@@ -1322,7 +1324,8 @@ class Client(Iface):
         args.iterators = iterators
         args.flush = flush
         args.wait = wait
-        args.compactionStrategy = compactionStrategy
+        args.selectorConfig = selectorConfig
+        args.configurerConfig = configurerConfig
         args.write(self._oprot)
         self._oprot.writeMessageEnd()
         self._oprot.trans.flush()
@@ -5274,7 +5277,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = compactTable_result()
         try:
-            self._handler.compactTable(args.login, args.tableName, args.startRow, args.endRow, args.iterators, args.flush, args.wait, args.compactionStrategy)
+            self._handler.compactTable(args.login, args.tableName, args.startRow, args.endRow, args.iterators, args.flush, args.wait, args.selectorConfig, args.configurerConfig)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -9360,12 +9363,13 @@ class compactTable_args(object):
      - iterators
      - flush
      - wait
-     - compactionStrategy
+     - selectorConfig
+     - configurerConfig
 
     """
 
 
-    def __init__(self, login=None, tableName=None, startRow=None, endRow=None, iterators=None, flush=None, wait=None, compactionStrategy=None,):
+    def __init__(self, login=None, tableName=None, startRow=None, endRow=None, iterators=None, flush=None, wait=None, selectorConfig=None, configurerConfig=None,):
         self.login = login
         self.tableName = tableName
         self.startRow = startRow
@@ -9373,7 +9377,8 @@ class compactTable_args(object):
         self.iterators = iterators
         self.flush = flush
         self.wait = wait
-        self.compactionStrategy = compactionStrategy
+        self.selectorConfig = selectorConfig
+        self.configurerConfig = configurerConfig
 
     def read(self, iprot):
         if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
@@ -9427,8 +9432,14 @@ class compactTable_args(object):
                     iprot.skip(ftype)
             elif fid == 8:
                 if ftype == TType.STRUCT:
-                    self.compactionStrategy = CompactionStrategyConfig()
-                    self.compactionStrategy.read(iprot)
+                    self.selectorConfig = PluginConfig()
+                    self.selectorConfig.read(iprot)
+                else:
+                    iprot.skip(ftype)
+            elif fid == 9:
+                if ftype == TType.STRUCT:
+                    self.configurerConfig = PluginConfig()
+                    self.configurerConfig.read(iprot)
                 else:
                     iprot.skip(ftype)
             else:
@@ -9472,9 +9483,13 @@ class compactTable_args(object):
             oprot.writeFieldBegin('wait', TType.BOOL, 7)
             oprot.writeBool(self.wait)
             oprot.writeFieldEnd()
-        if self.compactionStrategy is not None:
-            oprot.writeFieldBegin('compactionStrategy', TType.STRUCT, 8)
-            self.compactionStrategy.write(oprot)
+        if self.selectorConfig is not None:
+            oprot.writeFieldBegin('selectorConfig', TType.STRUCT, 8)
+            self.selectorConfig.write(oprot)
+            oprot.writeFieldEnd()
+        if self.configurerConfig is not None:
+            oprot.writeFieldBegin('configurerConfig', TType.STRUCT, 9)
+            self.configurerConfig.write(oprot)
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
         oprot.writeStructEnd()
@@ -9502,7 +9517,8 @@ compactTable_args.thrift_spec = (
     (5, TType.LIST, 'iterators', (TType.STRUCT, [IteratorSetting, None], False), None, ),  # 5
     (6, TType.BOOL, 'flush', None, None, ),  # 6
     (7, TType.BOOL, 'wait', None, None, ),  # 7
-    (8, TType.STRUCT, 'compactionStrategy', [CompactionStrategyConfig, None], None, ),  # 8
+    (8, TType.STRUCT, 'selectorConfig', [PluginConfig, None], None, ),  # 8
+    (9, TType.STRUCT, 'configurerConfig', [PluginConfig, None], None, ),  # 9
 )
 
 
