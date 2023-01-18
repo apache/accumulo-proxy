@@ -86,7 +86,6 @@ import org.apache.accumulo.proxy.thrift.BatchScanOptions;
 import org.apache.accumulo.proxy.thrift.Column;
 import org.apache.accumulo.proxy.thrift.ColumnUpdate;
 import org.apache.accumulo.proxy.thrift.CompactionReason;
-import org.apache.accumulo.proxy.thrift.CompactionStrategyConfig;
 import org.apache.accumulo.proxy.thrift.CompactionType;
 import org.apache.accumulo.proxy.thrift.Condition;
 import org.apache.accumulo.proxy.thrift.ConditionalStatus;
@@ -103,6 +102,7 @@ import org.apache.accumulo.proxy.thrift.NamespaceNotEmptyException;
 import org.apache.accumulo.proxy.thrift.NamespaceNotFoundException;
 import org.apache.accumulo.proxy.thrift.NamespacePermission;
 import org.apache.accumulo.proxy.thrift.PartialKey;
+import org.apache.accumulo.proxy.thrift.PluginConfig;
 import org.apache.accumulo.proxy.thrift.Range;
 import org.apache.accumulo.proxy.thrift.ScanColumn;
 import org.apache.accumulo.proxy.thrift.ScanOptions;
@@ -121,7 +121,7 @@ import org.apache.accumulo.server.util.PortUtils;
 import org.apache.accumulo.test.constraints.MaxMutationSize;
 import org.apache.accumulo.test.constraints.NumericValueConstraint;
 import org.apache.accumulo.test.functional.SlowIterator;
-import org.apache.commons.io.FileUtils;
+import org.apache.accumulo.test.util.Wait;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.CommonConfigurationKeysPublic;
 import org.apache.hadoop.fs.FSDataInputStream;
@@ -144,13 +144,11 @@ import org.junit.jupiter.api.function.Executable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.Iterators;
-
 /**
  * Call every method on the proxy and try to verify that it works.
  */
 public abstract class SimpleProxyBase extends SharedMiniClusterBase {
-  private static final Logger log = LoggerFactory.getLogger(SimpleProxyBase.class);
+  private final Logger log = LoggerFactory.getLogger(getClass());
 
   @Override
   protected Duration defaultTimeout() {
@@ -164,9 +162,10 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
   private TestProxyClient proxyClient;
   private org.apache.accumulo.proxy.thrift.AccumuloProxy.Client client;
 
-  private static Map<String,String> properties = new HashMap<>();
-  private static String hostname, proxyPrincipal, proxyPrimary, clientPrincipal;
-  private static File proxyKeytab, clientKeytab;
+  private static String hostname;
+  private static String proxyPrimary;
+  private static String clientPrincipal;
+  private static File clientKeytab;
 
   private static String creds;
 
@@ -174,7 +173,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
   static TProtocolFactory factory = null;
 
   private static void waitForAccumulo(AccumuloClient c) throws Exception {
-    Iterators.size(c.createScanner(MetadataTable.NAME, Authorizations.EMPTY).iterator());
+    assertNotEquals(0, c.createScanner(MetadataTable.NAME, Authorizations.EMPTY).stream().count());
   }
 
   private static boolean isKerberosEnabled() {
@@ -217,12 +216,12 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
         TestingKdc kdc = getKdc();
 
         // Create a principal+keytab for the proxy
-        proxyKeytab = new File(kdc.getKeytabDir(), "proxy.keytab");
+        File proxyKeytab = new File(kdc.getKeytabDir(), "proxy.keytab");
         hostname = InetAddress.getLocalHost().getCanonicalHostName();
         // Set the primary because the client needs to know it
         proxyPrimary = "proxy";
         // Qualify with an instance
-        proxyPrincipal = proxyPrimary + "/" + hostname;
+        String proxyPrincipal = proxyPrimary + "/" + hostname;
         kdc.createPrincipal(proxyKeytab, proxyPrincipal);
         // Tack on the realm too
         proxyPrincipal = kdc.qualifyUser(proxyPrincipal);
@@ -256,13 +255,14 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
       proxyPort = PortUtils.getRandomFreePort();
       proxyServer = Proxy.createProxyServer(HostAndPort.fromParts(hostname, proxyPort), factory,
           props).server;
-      while (!proxyServer.isServing())
+      while (!proxyServer.isServing()) {
         sleepUninterruptibly(100, TimeUnit.MILLISECONDS);
+      }
     }
   }
 
   @AfterAll
-  public static void tearDownProxy() throws Exception {
+  public static void tearDownProxy() {
     if (proxyServer != null) {
       proxyServer.stop();
     }
@@ -280,8 +280,9 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
   private String[] getUniqueNameArray(int num) {
     String[] names = new String[num];
-    for (int i = 0; i < num; i++)
+    for (int i = 0; i < num; i++) {
       names[i] = this.getClass().getSimpleName() + "_" + testName + i;
+    }
     return names;
   }
 
@@ -303,10 +304,9 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
           user.getKeytab().getAbsolutePath());
       final UserGroupInformation badUgi = UserGroupInformation.getCurrentUser();
       // Get a "Credentials" object for the proxy
-      TestProxyClient badClient = new TestProxyClient(hostname, proxyPort, factory, proxyPrimary,
-          badUgi);
+      TestProxyClient badClient =
+          new TestProxyClient(hostname, proxyPort, factory, proxyPrimary, badUgi);
       try {
-        Client badProxy = badClient.proxy();
         badLogin = "bad secret";
       } finally {
         badClient.close();
@@ -402,7 +402,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
   @Timeout(5)
   public void compactTableLoginFailure() {
     assertThrows(AccumuloSecurityException.class,
-        () -> client.compactTable(badLogin, tableName, null, null, null, true, false, null));
+        () -> client.compactTable(badLogin, tableName, null, null, null, true, false, null, null));
   }
 
   @Test
@@ -440,7 +440,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
   @Test
   @Timeout(5)
-  public void flustTableLoginFailure() {
+  public void flushTableLoginFailure() {
     assertThrows(AccumuloSecurityException.class,
         () -> client.flushTable(badLogin, tableName, null, null, false));
   }
@@ -456,7 +456,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
   @Timeout(5)
   public void getMaxRowLoginFailure() {
     assertThrows(AccumuloSecurityException.class, () -> client.getMaxRow(badLogin, tableName,
-        Collections.<ByteBuffer> emptySet(), null, false, null, false));
+        Collections.emptySet(), null, false, null, false));
   }
 
   @Test
@@ -617,7 +617,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
   @Test
   @Timeout(5)
   public void changeUserAuthorizationsLoginFailure() {
-    HashSet<ByteBuffer> auths = new HashSet<>(Arrays.asList(s2bb("A"), s2bb("B")));
+    HashSet<ByteBuffer> auths = new HashSet<>(List.of(s2bb("A"), s2bb("B")));
     assertThrows(AccumuloSecurityException.class,
         () -> client.changeUserAuthorizations(badLogin, "stooge", auths));
   }
@@ -995,7 +995,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
         () -> client.checkIteratorConflicts(creds, doesNotExist, setting, EnumSet.allOf(IteratorScope.class)),
         () -> client.clearLocatorCache(creds, doesNotExist),
         () -> client.cloneTable(creds, doesNotExist, newTableName, false, null, null),
-        () -> client.compactTable(creds, doesNotExist, null, null, null, true, false, null),
+        () -> client.compactTable(creds, doesNotExist, null, null, null, true, false, null,null),
         () -> client.createBatchScanner(creds, doesNotExist, new BatchScanOptions()),
         () -> client.createScanner(creds, doesNotExist, new ScanOptions()),
         () -> client.createWriter(creds, doesNotExist, new WriterOptions()),
@@ -1152,8 +1152,8 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
     ColumnUpdate upd = new ColumnUpdate(s2bb("cf"), s2bb("cq"));
     upd.setDeleteCell(false);
-    Map<ByteBuffer,List<ColumnUpdate>> notDelete = Collections.singletonMap(s2bb("row0"),
-        Collections.singletonList(upd));
+    Map<ByteBuffer,List<ColumnUpdate>> notDelete =
+        Collections.singletonMap(s2bb("row0"), Collections.singletonList(upd));
     client.updateAndFlush(creds, tableName, notDelete);
     String scanner = client.createScanner(creds, tableName, null);
     ScanResult entries = client.nextK(scanner, 10);
@@ -1163,8 +1163,8 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
     upd = new ColumnUpdate(s2bb("cf"), s2bb("cq"));
     upd.setDeleteCell(true);
-    Map<ByteBuffer,List<ColumnUpdate>> delete = Collections.singletonMap(s2bb("row0"),
-        Collections.singletonList(upd));
+    Map<ByteBuffer,List<ColumnUpdate>> delete =
+        Collections.singletonMap(s2bb("row0"), Collections.singletonList(upd));
 
     client.updateAndFlush(creds, tableName, delete);
 
@@ -1189,8 +1189,9 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     // check that we can read it
     for (int i = 0; i < 5; i++) {
       cfg = client.getSystemConfiguration(creds);
-      if ("500M".equals(cfg.get("table.split.threshold")))
+      if ("500M".equals(cfg.get("table.split.threshold"))) {
         break;
+      }
       sleepUninterruptibly(200, TimeUnit.MILLISECONDS);
     }
     assertEquals("500M", cfg.get("table.split.threshold"));
@@ -1199,8 +1200,9 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     client.removeProperty(creds, "table.split.threshold");
     for (int i = 0; i < 5; i++) {
       cfg = client.getSystemConfiguration(creds);
-      if (!"500M".equals(cfg.get("table.split.threshold")))
+      if (!"500M".equals(cfg.get("table.split.threshold"))) {
         break;
+      }
       sleepUninterruptibly(200, TimeUnit.MILLISECONDS);
     }
     assertNotEquals("500M", cfg.get("table.split.threshold"));
@@ -1251,34 +1253,30 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     }
 
     // scan
-    Thread t = new Thread() {
-      @Override
-      public void run() {
-        String scanner;
-        TestProxyClient proxyClient2 = null;
-        try {
-          if (isKerberosEnabled()) {
-            UserGroupInformation.loginUserFromKeytab(clientPrincipal,
-                clientKeytab.getAbsolutePath());
-            proxyClient2 = new TestProxyClient(hostname, proxyPort, factory, proxyPrimary,
-                UserGroupInformation.getCurrentUser());
-          } else {
-            proxyClient2 = new TestProxyClient(hostname, proxyPort, factory);
-          }
+    Thread t = new Thread(() -> {
+      String scanner;
+      TestProxyClient proxyClient2 = null;
+      try {
+        if (isKerberosEnabled()) {
+          UserGroupInformation.loginUserFromKeytab(clientPrincipal, clientKeytab.getAbsolutePath());
+          proxyClient2 = new TestProxyClient(hostname, proxyPort, factory, proxyPrimary,
+              UserGroupInformation.getCurrentUser());
+        } else {
+          proxyClient2 = new TestProxyClient(hostname, proxyPort, factory);
+        }
 
-          Client client2 = proxyClient2.proxy();
-          scanner = client2.createScanner(creds, "slow", null);
-          client2.nextK(scanner, 10);
-          client2.closeScanner(scanner);
-        } catch (Exception e) {
-          throw new RuntimeException(e);
-        } finally {
-          if (proxyClient2 != null) {
-            proxyClient2.close();
-          }
+        Client client2 = proxyClient2.proxy();
+        scanner = client2.createScanner(creds, "slow", null);
+        client2.nextK(scanner, 10);
+        client2.closeScanner(scanner);
+      } catch (Exception e) {
+        throw new RuntimeException(e);
+      } finally {
+        if (proxyClient2 != null) {
+          proxyClient2.close();
         }
       }
-    };
+    });
     t.start();
 
     // look for the scan many times
@@ -1292,8 +1290,9 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
           }
         }
 
-        if (!scans.isEmpty())
+        if (!scans.isEmpty()) {
           break;
+        }
         sleepUninterruptibly(100, TimeUnit.MILLISECONDS);
       }
     }
@@ -1301,7 +1300,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
     assertFalse(scans.isEmpty(), "Expected to find scans, but found none");
     boolean found = false;
-    Map<String,String> map = null;
+    Map<String,String> map;
     for (int i = 0; i < scans.size() && !found; i++) {
       ActiveScan scan = scans.get(i);
       if (clientPrincipal.equals(scan.getUser())) {
@@ -1341,30 +1340,26 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     Map<String,String> map = client.tableIdMap(creds);
 
     // start a compaction
-    Thread t = new Thread() {
-      @Override
-      public void run() {
-        TestProxyClient proxyClient2 = null;
-        try {
-          if (isKerberosEnabled()) {
-            UserGroupInformation.loginUserFromKeytab(clientPrincipal,
-                clientKeytab.getAbsolutePath());
-            proxyClient2 = new TestProxyClient(hostname, proxyPort, factory, proxyPrimary,
-                UserGroupInformation.getCurrentUser());
-          } else {
-            proxyClient2 = new TestProxyClient(hostname, proxyPort, factory);
-          }
-          Client client2 = proxyClient2.proxy();
-          client2.compactTable(creds, "slow", null, null, null, true, true, null);
-        } catch (Exception e) {
-          throw new RuntimeException(e);
-        } finally {
-          if (proxyClient2 != null) {
-            proxyClient2.close();
-          }
+    Thread t = new Thread(() -> {
+      TestProxyClient proxyClient2 = null;
+      try {
+        if (isKerberosEnabled()) {
+          UserGroupInformation.loginUserFromKeytab(clientPrincipal, clientKeytab.getAbsolutePath());
+          proxyClient2 = new TestProxyClient(hostname, proxyPort, factory, proxyPrimary,
+              UserGroupInformation.getCurrentUser());
+        } else {
+          proxyClient2 = new TestProxyClient(hostname, proxyPort, factory);
+        }
+        Client client2 = proxyClient2.proxy();
+        client2.compactTable(creds, "slow", null, null, null, true, true, null, null);
+      } catch (Exception e) {
+        throw new RuntimeException(e);
+      } finally {
+        if (proxyClient2 != null) {
+          proxyClient2.close();
         }
       }
-    };
+    });
     t.start();
 
     final String desiredTableId = map.get("slow");
@@ -1388,8 +1383,9 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
         }
 
         // If we found a compaction for the table we wanted, so we can stop looking
-        if (!compactions.isEmpty())
+        if (!compactions.isEmpty()) {
           break;
+        }
       }
       sleepUninterruptibly(10, TimeUnit.MILLISECONDS);
     }
@@ -1415,8 +1411,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
   @Test
   public void userAuthentication() throws Exception {
     if (isKerberosEnabled()) {
-      assertTrue(
-          client.authenticateUser(creds, clientPrincipal, Collections.<String,String> emptyMap()));
+      assertTrue(client.authenticateUser(creds, clientPrincipal, Collections.emptyMap()));
       // Can't really authenticate "badly" at the application level w/ kerberos. It's going to fail
       // to even set up
       // an RPC
@@ -1445,10 +1440,10 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     client.createLocalUser(creds, user, password);
     // change auths
     Set<String> users = client.listLocalUsers(creds);
-    Set<String> expectedUsers = new HashSet<>(Arrays.asList(clientPrincipal, user));
+    Set<String> expectedUsers = new HashSet<>(List.of(clientPrincipal, user));
     assertTrue(users.containsAll(expectedUsers),
         "Did not find all expected users: " + expectedUsers);
-    HashSet<ByteBuffer> auths = new HashSet<>(Arrays.asList(s2bb("A"), s2bb("B")));
+    HashSet<ByteBuffer> auths = new HashSet<>(List.of(s2bb("A"), s2bb("B")));
     client.changeUserAuthorizations(creds, user, auths);
     List<ByteBuffer> update = client.getUserAuthorizations(creds, user);
     assertEquals(auths, new HashSet<>(update));
@@ -1737,12 +1732,8 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     writerOptions.setThreads(1);
     writerOptions.setTimeoutMs(100000);
 
-    Map<String,Integer> constraints = client.listConstraints(creds, tableName);
-    while (!constraints.containsKey(NumericValueConstraint.class.getName())) {
-      log.info("Constraints don't contain NumericValueConstraint");
-      Thread.sleep(2000);
-      constraints = client.listConstraints(creds, tableName);
-    }
+    Wait.waitFor(() -> client.listConstraints(creds, tableName)
+        .containsKey(NumericValueConstraint.class.getName()), 30_000L, 2_000L);
 
     boolean success = false;
     for (int i = 0; i < 15; i++) {
@@ -1775,12 +1766,8 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     client.offlineTable(creds, tableName, true);
     client.onlineTable(creds, tableName, true);
 
-    constraints = client.listConstraints(creds, tableName);
-    while (constraints.containsKey(NumericValueConstraint.class.getName())) {
-      log.info("Constraints still contains NumericValueConstraint");
-      Thread.sleep(2000);
-      constraints = client.listConstraints(creds, tableName);
-    }
+    Wait.waitFor(() -> !client.listConstraints(creds, tableName)
+        .containsKey(NumericValueConstraint.class.getName()), 30_000L, 2_000L);
 
     assertScan(new String[][] {}, tableName);
 
@@ -1833,12 +1820,8 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
     log.debug("Attempting to verify client-side that constraints are observed");
 
-    Map<String,Integer> constraints = client.listConstraints(creds, tableName);
-    while (!constraints.containsKey(NumericValueConstraint.class.getName())) {
-      log.debug("Constraints don't contain NumericValueConstraint");
-      Thread.sleep(2000);
-      constraints = client.listConstraints(creds, tableName);
-    }
+    Wait.waitFor(() -> client.listConstraints(creds, tableName)
+        .containsKey(NumericValueConstraint.class.getName()), 30_000L, 2_000L);
 
     assertEquals(2, client.listConstraints(creds, tableName).size());
     log.debug("Verified client-side that constraints exist");
@@ -1871,12 +1854,8 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     client.offlineTable(creds, tableName, true);
     client.onlineTable(creds, tableName, true);
 
-    constraints = client.listConstraints(creds, tableName);
-    while (constraints.containsKey(NumericValueConstraint.class.getName())) {
-      log.debug("Constraints contains NumericValueConstraint");
-      Thread.sleep(2000);
-      constraints = client.listConstraints(creds, tableName);
-    }
+    Wait.waitFor(() -> !client.listConstraints(creds, tableName)
+        .containsKey(NumericValueConstraint.class.getName()), 30_000L, 2_000L);
 
     assertEquals(1, client.listConstraints(creds, tableName).size());
     log.debug("Verified client-side that the constraint was removed");
@@ -1900,15 +1879,14 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
   @Test
   public void tableMergesAndSplits() throws Exception {
     // add some splits
-    client.addSplits(creds, tableName,
-        new HashSet<>(Arrays.asList(s2bb("a"), s2bb("m"), s2bb("z"))));
+    client.addSplits(creds, tableName, new HashSet<>(List.of(s2bb("a"), s2bb("m"), s2bb("z"))));
     List<ByteBuffer> splits = client.listSplits(creds, tableName, 1);
-    assertEquals(Arrays.asList(s2bb("m")), splits);
+    assertEquals(List.of(s2bb("m")), splits);
 
     // Merge some of the splits away
     client.mergeTablets(creds, tableName, null, s2bb("m"));
     splits = client.listSplits(creds, tableName, 10);
-    assertEquals(Arrays.asList(s2bb("m"), s2bb("z")), splits);
+    assertEquals(List.of(s2bb("m"), s2bb("z")), splits);
 
     // Merge the entire table
     client.mergeTablets(creds, tableName, null, null);
@@ -1925,8 +1903,8 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     HashMap<String,String> options = new HashMap<>();
     options.put("type", "STRING");
     options.put("columns", "cf");
-    IteratorSetting setting = new IteratorSetting(10, tableName, SummingCombiner.class.getName(),
-        options);
+    IteratorSetting setting =
+        new IteratorSetting(10, tableName, SummingCombiner.class.getName(), options);
     client.attachIterator(creds, tableName, setting, EnumSet.allOf(IteratorScope.class));
     for (int i = 0; i < 10; i++) {
       client.updateAndFlush(creds, tableName, mutation("row1", "cf", "cq", "1"));
@@ -1983,7 +1961,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     assertScan(expected, tableName);
 
     // compact
-    client.compactTable(creds, tableName, null, null, null, true, true, null);
+    client.compactTable(creds, tableName, null, null, null, true, true, null, null);
     assertEquals(1, countFiles(tableName));
     assertScan(expected, tableName);
   }
@@ -2002,7 +1980,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     assertScan(expected, tableName);
 
     // compact
-    client.compactTable(creds, tableName, null, null, null, true, true, null);
+    client.compactTable(creds, tableName, null, null, null, true, true, null, null);
     assertEquals(1, countFiles(tableName));
     assertScan(expected, tableName);
 
@@ -2024,7 +2002,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     assertEquals(1, diskUsage.get(1).getTables().size());
 
     // Compact the clone so it writes its own files instead of referring to the original
-    client.compactTable(creds, TABLE_TEST2, null, null, null, true, true, null);
+    client.compactTable(creds, TABLE_TEST2, null, null, null, true, true, null, null);
 
     diskUsage = (client.getDiskUsage(creds, tablesToScan));
     assertEquals(3, diskUsage.size());
@@ -2064,8 +2042,9 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     try (BufferedReader r = new BufferedReader(new InputStreamReader(is, UTF_8))) {
       while (true) {
         String line = r.readLine();
-        if (line == null)
+        if (line == null) {
           break;
+        }
         Path srcPath = new Path(line);
         FileUtil.copy(fs, srcPath, fs, destDir, false, fs.getConf());
       }
@@ -2211,19 +2190,15 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     client.offlineTable(creds, tableName, true);
     client.onlineTable(creds, tableName, true);
 
-    while (!client.listConstraints(creds, tableName)
-        .containsKey(NumericValueConstraint.class.getName())) {
-      log.info("Failed to see constraint");
-      Thread.sleep(1000);
-    }
+    Wait.waitFor(() -> client.listConstraints(creds, tableName)
+        .containsKey(NumericValueConstraint.class.getName()), 30_000L, 1_000L);
 
     String cwid = client.createConditionalWriter(creds, tableName, new ConditionalWriterOptions());
 
     Map<ByteBuffer,ConditionalUpdates> updates = new HashMap<>();
 
-    updates.put(s2bb("00345"),
-        new ConditionalUpdates(Arrays.asList(newCondition("meta", "seq")), Arrays.asList(
-            newColUpdate("meta", "seq", 10, "1"), newColUpdate("data", "img", "73435435"))));
+    updates.put(s2bb("00345"), new ConditionalUpdates(List.of(newCondition("meta", "seq")),
+        List.of(newColUpdate("meta", "seq", 10, "1"), newColUpdate("data", "img", "73435435"))));
 
     Map<ByteBuffer,ConditionalStatus> results = client.updateRowsConditionally(cwid, updates);
 
@@ -2236,10 +2211,10 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     // test not setting values on conditions
     updates.clear();
 
-    updates.put(s2bb("00345"), new ConditionalUpdates(Arrays.asList(newCondition("meta", "seq")),
-        Arrays.asList(newColUpdate("meta", "seq", "2"))));
-    updates.put(s2bb("00346"), new ConditionalUpdates(Arrays.asList(newCondition("meta", "seq")),
-        Arrays.asList(newColUpdate("meta", "seq", "1"))));
+    updates.put(s2bb("00345"), new ConditionalUpdates(List.of(newCondition("meta", "seq")),
+        List.of(newColUpdate("meta", "seq", "2"))));
+    updates.put(s2bb("00346"), new ConditionalUpdates(List.of(newCondition("meta", "seq")),
+        List.of(newColUpdate("meta", "seq", "1"))));
 
     results = client.updateRowsConditionally(cwid, updates);
 
@@ -2254,12 +2229,11 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     updates.clear();
 
     updates.put(s2bb("00345"),
-        new ConditionalUpdates(Arrays.asList(newCondition("meta", "seq", "1")), Arrays
+        new ConditionalUpdates(List.of(newCondition("meta", "seq", "1")), Arrays
             .asList(newColUpdate("meta", "seq", 20, "2"), newColUpdate("data", "img", "567890"))));
 
-    updates.put(s2bb("00346"),
-        new ConditionalUpdates(Arrays.asList(newCondition("meta", "seq", "2")),
-            Arrays.asList(newColUpdate("meta", "seq", "3"))));
+    updates.put(s2bb("00346"), new ConditionalUpdates(List.of(newCondition("meta", "seq", "2")),
+        List.of(newColUpdate("meta", "seq", "3"))));
 
     results = client.updateRowsConditionally(cwid, updates);
 
@@ -2273,9 +2247,8 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     // test setting timestamp on condition to a nonexistent version
     updates.clear();
 
-    updates.put(s2bb("00345"),
-        new ConditionalUpdates(Arrays.asList(newCondition("meta", "seq", 10, "2")), Arrays.asList(
-            newColUpdate("meta", "seq", 30, "3"), newColUpdate("data", "img", "1234567890"))));
+    updates.put(s2bb("00345"), new ConditionalUpdates(List.of(newCondition("meta", "seq", 10, "2")),
+        List.of(newColUpdate("meta", "seq", 30, "3"), newColUpdate("data", "img", "1234567890"))));
 
     results = client.updateRowsConditionally(cwid, updates);
 
@@ -2289,9 +2262,8 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
     updates.clear();
 
-    updates.put(s2bb("00345"),
-        new ConditionalUpdates(Arrays.asList(newCondition("meta", "seq", 20, "2")), Arrays.asList(
-            newColUpdate("meta", "seq", 30, "3"), newColUpdate("data", "img", "1234567890"))));
+    updates.put(s2bb("00345"), new ConditionalUpdates(List.of(newCondition("meta", "seq", 20, "2")),
+        List.of(newColUpdate("meta", "seq", 30, "3"), newColUpdate("data", "img", "1234567890"))));
 
     results = client.updateRowsConditionally(cwid, updates);
 
@@ -2304,16 +2276,15 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     // run test w/ condition that has iterators
     // following should fail w/o iterator
     client.updateAndFlush(creds, tableName,
-        Collections.singletonMap(s2bb("00347"), Arrays.asList(newColUpdate("data", "count", "1"))));
+        Collections.singletonMap(s2bb("00347"), List.of(newColUpdate("data", "count", "1"))));
     client.updateAndFlush(creds, tableName,
-        Collections.singletonMap(s2bb("00347"), Arrays.asList(newColUpdate("data", "count", "1"))));
+        Collections.singletonMap(s2bb("00347"), List.of(newColUpdate("data", "count", "1"))));
     client.updateAndFlush(creds, tableName,
-        Collections.singletonMap(s2bb("00347"), Arrays.asList(newColUpdate("data", "count", "1"))));
+        Collections.singletonMap(s2bb("00347"), List.of(newColUpdate("data", "count", "1"))));
 
     updates.clear();
-    updates.put(s2bb("00347"),
-        new ConditionalUpdates(Arrays.asList(newCondition("data", "count", "3")),
-            Arrays.asList(newColUpdate("data", "img", "1234567890"))));
+    updates.put(s2bb("00347"), new ConditionalUpdates(List.of(newCondition("data", "count", "3")),
+        List.of(newColUpdate("data", "img", "1234567890"))));
 
     results = client.updateRowsConditionally(cwid, updates);
 
@@ -2331,11 +2302,11 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     props.put("type", "STRING");
     props.put("columns", "data:count");
     IteratorSetting is = new IteratorSetting(1, "sumc", SummingCombiner.class.getName(), props);
-    iterCond.setIterators(Arrays.asList(is));
+    iterCond.setIterators(List.of(is));
 
     updates.clear();
-    updates.put(s2bb("00347"), new ConditionalUpdates(Arrays.asList(iterCond),
-        Arrays.asList(newColUpdate("data", "img", "1234567890"))));
+    updates.put(s2bb("00347"), new ConditionalUpdates(List.of(iterCond),
+        List.of(newColUpdate("data", "img", "1234567890"))));
 
     results = client.updateRowsConditionally(cwid, updates);
 
@@ -2351,8 +2322,8 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
       // test a mutation that violated a constraint
       updates.clear();
       updates.put(s2bb("00347"),
-          new ConditionalUpdates(Arrays.asList(newCondition("data", "img", "1234567890")),
-              Arrays.asList(newColUpdate("data", "count", "A"))));
+          new ConditionalUpdates(List.of(newCondition("data", "img", "1234567890")),
+              List.of(newColUpdate("data", "count", "A"))));
 
       results = client.updateRowsConditionally(cwid, updates);
 
@@ -2379,11 +2350,9 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     // run test with two conditions
     // both conditions should fail
     updates.clear();
-    updates.put(s2bb("00347"),
-        new ConditionalUpdates(
-            Arrays.asList(newCondition("data", "img", "565"), newCondition("data", "count", "2")),
-            Arrays.asList(newColUpdate("data", "count", "3"),
-                newColUpdate("data", "img", "0987654321"))));
+    updates.put(s2bb("00347"), new ConditionalUpdates(
+        List.of(newCondition("data", "img", "565"), newCondition("data", "count", "2")),
+        List.of(newColUpdate("data", "count", "3"), newColUpdate("data", "img", "0987654321"))));
 
     results = client.updateRowsConditionally(cwid, updates);
 
@@ -2396,12 +2365,9 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
     // one condition should fail
     updates.clear();
-    updates.put(s2bb("00347"),
-        new ConditionalUpdates(
-            Arrays.asList(newCondition("data", "img", "1234567890"),
-                newCondition("data", "count", "2")),
-            Arrays.asList(newColUpdate("data", "count", "3"),
-                newColUpdate("data", "img", "0987654321"))));
+    updates.put(s2bb("00347"), new ConditionalUpdates(
+        List.of(newCondition("data", "img", "1234567890"), newCondition("data", "count", "2")),
+        List.of(newColUpdate("data", "count", "3"), newColUpdate("data", "img", "0987654321"))));
 
     results = client.updateRowsConditionally(cwid, updates);
 
@@ -2414,11 +2380,9 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
     // one condition should fail
     updates.clear();
-    updates.put(s2bb("00347"),
-        new ConditionalUpdates(
-            Arrays.asList(newCondition("data", "img", "565"), newCondition("data", "count", "1")),
-            Arrays.asList(newColUpdate("data", "count", "3"),
-                newColUpdate("data", "img", "0987654321"))));
+    updates.put(s2bb("00347"), new ConditionalUpdates(
+        List.of(newCondition("data", "img", "565"), newCondition("data", "count", "1")),
+        List.of(newColUpdate("data", "count", "3"), newColUpdate("data", "img", "0987654321"))));
 
     results = client.updateRowsConditionally(cwid, updates);
 
@@ -2433,9 +2397,8 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
     ConditionalStatus result = client.updateRowConditionally(creds, tableName, s2bb("00347"),
         new ConditionalUpdates(
-            Arrays.asList(newCondition("data", "img", "1234567890"),
-                newCondition("data", "count", "1")),
-            Arrays.asList(newColUpdate("data", "count", "3"),
+            List.of(newCondition("data", "img", "1234567890"), newCondition("data", "count", "1")),
+            List.of(newColUpdate("data", "count", "3"),
                 newColUpdate("data", "img", "0987654321"))));
 
     assertEquals(ConditionalStatus.ACCEPTED, result);
@@ -2473,8 +2436,8 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
           cwuser.getKeytab().getAbsolutePath());
       final UserGroupInformation cwuserUgi = UserGroupInformation.getCurrentUser();
       // Re-login in and make a new connection. Can't use the previous one
-      cwuserProxyClient = new TestProxyClient(hostname, proxyPort, factory, proxyPrimary,
-          cwuserUgi);
+      cwuserProxyClient =
+          new TestProxyClient(hostname, proxyPort, factory, proxyPrimary, cwuserUgi);
       origClient = client;
       client = cwuserProxyClient.proxy();
       cwProperties = Collections.emptyMap();
@@ -2491,13 +2454,13 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
       updates.clear();
       updates.put(s2bb("00348"),
           new ConditionalUpdates(
-              Arrays.asList(new Condition(new Column(s2bb("data"), s2bb("c"), s2bb("A")))),
-              Arrays.asList(newColUpdate("data", "seq", "1"),
+              List.of(new Condition(new Column(s2bb("data"), s2bb("c"), s2bb("A")))),
+              List.of(newColUpdate("data", "seq", "1"),
                   newColUpdate("data", "c", "1").setColVisibility(s2bb("A")))));
       updates.put(s2bb("00349"),
           new ConditionalUpdates(
-              Arrays.asList(new Condition(new Column(s2bb("data"), s2bb("c"), s2bb("B")))),
-              Arrays.asList(newColUpdate("data", "seq", "1"))));
+              List.of(new Condition(new Column(s2bb("data"), s2bb("c"), s2bb("B")))),
+              List.of(newColUpdate("data", "seq", "1"))));
 
       results = client.updateRowsConditionally(cwid2, updates);
 
@@ -2524,11 +2487,10 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
       updates.clear();
 
-      updates.clear();
       updates.put(s2bb("00348"), new ConditionalUpdates(
-          Arrays.asList(
+          List.of(
               new Condition(new Column(s2bb("data"), s2bb("c"), s2bb("A"))).setValue(s2bb("0"))),
-          Arrays.asList(newColUpdate("data", "seq", "2"),
+          List.of(newColUpdate("data", "seq", "2"),
               newColUpdate("data", "c", "2").setColVisibility(s2bb("A")))));
 
       results = client.updateRowsConditionally(cwid2, updates);
@@ -2556,9 +2518,9 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
       updates.clear();
       updates.put(s2bb("00348"), new ConditionalUpdates(
-          Arrays.asList(
+          List.of(
               new Condition(new Column(s2bb("data"), s2bb("c"), s2bb("A"))).setValue(s2bb("1"))),
-          Arrays.asList(newColUpdate("data", "seq", "2"),
+          List.of(newColUpdate("data", "seq", "2"),
               newColUpdate("data", "c", "2").setColVisibility(s2bb("A")))));
 
       results = client.updateRowsConditionally(cwid2, updates);
@@ -2626,8 +2588,9 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     while (true) {
       ScanResult more = client.nextK(scanner, 100);
       result += more.getResults().size();
-      if (!more.more)
+      if (!more.more) {
         break;
+      }
     }
     return result;
   }
@@ -2656,8 +2619,8 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
   @Test
   public void testGetRowRange() throws Exception {
     Range range = client.getRowRange(s2bb("xyzzy"));
-    org.apache.accumulo.core.data.Range range2 = new org.apache.accumulo.core.data.Range(
-        new Text("xyzzy"));
+    org.apache.accumulo.core.data.Range range2 =
+        new org.apache.accumulo.core.data.Range(new Text("xyzzy"));
     assertEquals(0, range.start.row.compareTo(t2bb(range2.getStartKey().getRow())));
     assertEquals(0, range.stop.row.compareTo(t2bb(range2.getEndKey().getRow())));
     assertEquals(range.startInclusive, range2.isStartKeyInclusive());
@@ -2673,40 +2636,26 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
   }
 
   @Test
-  public void testCompactionStrategy() throws Exception {
-    File jarDir = new File(System.getProperty("user.dir"), "target");
-    assertTrue(jarDir.mkdirs() || jarDir.isDirectory());
-    File jarFile = new File(jarDir, "TestCompactionStrat.jar");
-    FileUtils.copyInputStreamToFile(
-        SimpleProxyBase.class.getResourceAsStream("/TestCompactionStrat.jar"), jarFile);
-    client.setProperty(creds, Property.VFS_CONTEXT_CLASSPATH_PROPERTY.getKey() + "context1",
-        jarFile.toString());
-    client.setTableProperty(creds, tableName, Property.TABLE_CLASSPATH.getKey(), "context1");
+  public void testCompactionSelector() throws Exception {
 
-    client.addSplits(creds, tableName, Collections.singleton(s2bb("efg")));
+    String[] data = "A B C D E F G H I J K L M N O P Q R S T U V W X Y Z".split(" ");
+    final int expectedFileCount = data.length;
 
-    client.updateAndFlush(creds, tableName, mutation("a", "cf", "cq", "v1"));
-    client.flushTable(creds, tableName, null, null, true);
+    for (String datum : data) {
+      client.addSplits(creds, tableName, Set.of(s2bb(datum)));
+      client.updateAndFlush(creds, tableName, mutation(datum, "cf", "cq", datum));
+      client.flushTable(creds, tableName, null, null, true);
+    }
 
-    client.updateAndFlush(creds, tableName, mutation("b", "cf", "cq", "v2"));
-    client.flushTable(creds, tableName, null, null, true);
+    assertEquals(expectedFileCount, countFiles(tableName), "Unexpected file count");
 
-    client.updateAndFlush(creds, tableName, mutation("y", "cf", "cq", "v1"));
-    client.flushTable(creds, tableName, null, null, true);
+    String selectorClassname = SelectHalfSelector.class.getName();
+    PluginConfig selector = new PluginConfig(selectorClassname, Map.of());
 
-    client.updateAndFlush(creds, tableName, mutation("z", "cf", "cq", "v2"));
-    client.flushTable(creds, tableName, null, null, true);
+    client.compactTable(creds, tableName, null, null, null, true, true, selector, null);
 
-    assertEquals(4, countFiles(tableName));
-
-    CompactionStrategyConfig csc = new CompactionStrategyConfig();
-
-    // The EfgCompactionStrat will only compact tablets with and end row of efg
-    csc.setClassName("org.apache.accumulo.test.EfgCompactionStrat");
-
-    client.compactTable(creds, tableName, null, null, null, true, true, csc);
-
-    assertEquals(3, countFiles(tableName));
+    // SelectHalfSelector should lead to half the files being compacted
+    Wait.waitFor(() -> countFiles(tableName) == (expectedFileCount / 2));
   }
 
   @Test

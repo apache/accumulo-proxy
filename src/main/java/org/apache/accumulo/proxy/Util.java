@@ -28,7 +28,7 @@ import org.apache.accumulo.proxy.thrift.Key;
 
 public class Util {
 
-  private static Random random = new SecureRandom();
+  private static final Random random = new SecureRandom();
 
   public static String randString(int numbytes) {
     return new BigInteger(numbytes * 5, random).toString(32);
@@ -38,8 +38,8 @@ public class Util {
     return ByteBuffer.wrap(new BigInteger(numbytes * 5, random).toString(32).getBytes(UTF_8));
   }
 
-  public static IteratorSetting iteratorSetting2ProxyIteratorSetting(
-      org.apache.accumulo.core.client.IteratorSetting is) {
+  public static IteratorSetting
+      iteratorSetting2ProxyIteratorSetting(org.apache.accumulo.core.client.IteratorSetting is) {
     return new IteratorSetting(is.getPriority(), is.getName(), is.getIteratorClass(),
         is.getOptions());
   }
@@ -54,17 +54,19 @@ public class Util {
   }
 
   public static org.apache.accumulo.core.data.Key fromThrift(Key pkey) {
-    if (pkey == null)
+    if (pkey == null) {
       return null;
+    }
     return new org.apache.accumulo.core.data.Key(deNullify(pkey.getRow()),
         deNullify(pkey.getColFamily()), deNullify(pkey.getColQualifier()),
         deNullify(pkey.getColVisibility()), pkey.getTimestamp());
   }
 
   protected static byte[] deNullify(byte[] in) {
-    if (in == null)
+    if (in == null) {
       return new byte[0];
-    else
+    } else {
       return in;
+    }
   }
 }

@@ -31,9 +31,6 @@ import org.apache.accumulo.proxy.thrift.WriterOptions;
 import org.easymock.EasyMock;
 import org.junit.jupiter.api.Test;
 
-/**
- *
- */
 public class ProxyServerTest {
 
   @Test

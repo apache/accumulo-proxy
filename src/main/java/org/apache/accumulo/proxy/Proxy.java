@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.util.Properties;
 
@@ -144,9 +145,9 @@ public class Proxy implements KeywordExecutable {
       proxyProps.putAll(accumulo.getClientProperties());
       Runtime.getRuntime().addShutdownHook(new Thread(() -> {
         try {
-          accumulo.stop();
-        } catch (InterruptedException | IOException e) {
-          throw new RuntimeException(e);
+          accumulo.close();
+        } catch (IOException e) {
+          throw new UncheckedIOException(e);
         } finally {
           if (!folder.delete()) {
             log.warn("Unexpected error removing {}", folder);
@@ -159,10 +160,10 @@ public class Proxy implements KeywordExecutable {
         .forName(
             proxyProps.getProperty("protocolFactory", TCompactProtocol.Factory.class.getName()))
         .asSubclass(TProtocolFactory.class);
-    TProtocolFactory protoFactory = protoFactoryClass.newInstance();
+    TProtocolFactory protoFactory = protoFactoryClass.getDeclaredConstructor().newInstance();
     int port = Integer.parseInt(proxyProps.getProperty("port"));
-    String hostname = proxyProps.getProperty(THRIFT_SERVER_HOSTNAME,
-        THRIFT_SERVER_HOSTNAME_DEFAULT);
+    String hostname =
+        proxyProps.getProperty(THRIFT_SERVER_HOSTNAME, THRIFT_SERVER_HOSTNAME_DEFAULT);
     HostAndPort address = HostAndPort.fromParts(hostname, port);
     ServerAddress server = createProxyServer(address, protoFactory, proxyProps);
     // Wait for the server to come up
@@ -233,7 +234,7 @@ public class Proxy implements KeywordExecutable {
         final String kerberosKeytab = kerberosToken.getKeytab().getAbsolutePath();
         if (StringUtils.isBlank(kerberosPrincipal) || StringUtils.isBlank(kerberosKeytab)) {
           throw new IllegalStateException(
-              String.format("Kerberos principal '%s' and keytab '%s'" + " must be provided",
+              String.format("Kerberos principal '%s' and keytab '%s' must be provided",
                   kerberosPrincipal, kerberosKeytab));
         }
         UserGroupInformation.loginUserFromKeytab(kerberosPrincipal, kerberosKeytab);

@@ -97,7 +97,6 @@ public class TestProxyClient {
   public static void main(String[] args) throws Exception {
 
     TestProxyClient tpc = new TestProxyClient("localhost", 42424);
-    String principal = "root";
     String login = "secret";
 
     System.out.println("Creating user: ");
@@ -113,8 +112,9 @@ public class TestProxyClient {
 
     System.out.println("Creating: ");
 
-    if (tpc.proxy().tableExists(login, testTable))
+    if (tpc.proxy().tableExists(login, testTable)) {
       tpc.proxy().deleteTable(login, testTable);
+    }
 
     tpc.proxy().createTable(login, testTable, true, TimeType.MILLIS);
 
