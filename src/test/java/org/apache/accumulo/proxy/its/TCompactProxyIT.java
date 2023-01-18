@@ -28,4 +28,5 @@ public class TCompactProxyIT extends SimpleProxyBase {
     SimpleProxyBase.factory = new TCompactProtocol.Factory();
     setUpProxy();
   }
+
 }
