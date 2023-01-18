@@ -118,8 +118,9 @@ public class TestProxyClient {
 
     System.out.println("Creating: ");
 
-    if (tpc.proxy().tableExists(login, testTable))
+    if (tpc.proxy().tableExists(login, testTable)) {
       tpc.proxy().deleteTable(login, testTable);
+    }
 
     tpc.proxy().createTable(login, testTable, true, TimeType.MILLIS);
 

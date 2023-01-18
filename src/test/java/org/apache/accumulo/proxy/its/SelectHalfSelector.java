@@ -36,8 +36,8 @@ public class SelectHalfSelector implements CompactionSelector {
 
     final int halfOfFileCount = totalFiles.size() / 2;
 
-    final List<CompactableFile> toCompact = totalFiles.stream().limit(halfOfFileCount)
-        .collect(Collectors.toList());
+    final List<CompactableFile> toCompact =
+        totalFiles.stream().limit(halfOfFileCount).collect(Collectors.toList());
 
     return new Selection(toCompact);
   }
