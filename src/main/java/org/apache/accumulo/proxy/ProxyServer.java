@@ -128,7 +128,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
 
   protected AccumuloClient client;
 
-  private final String secret;
+  private final String sharedSecret;
 
   protected Class<? extends AuthenticationToken> tokenClass;
 
@@ -204,7 +204,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
       tempServerType = ThriftServerType.get(serverTypeStr);
     }
 
-    secret = props.getProperty("secret");
+    sharedSecret = props.getProperty("sharedSecret");
 
     serverType = tempServerType;
 
@@ -218,12 +218,12 @@ public class ProxyServer implements AccumuloProxy.Iface {
         .maximumSize(1000).removalListener(new CloseConditionalWriter()).build();
   }
 
-  protected AccumuloClient getConnector(String login) throws Exception {
-    if (login.equals(secret)) {
+  protected AccumuloClient getClient(String sharedSecret) throws Exception {
+    if (sharedSecret.equals(this.sharedSecret)) {
       return client;
     } else {
       throw new org.apache.accumulo.core.client.AccumuloSecurityException(
-          "Incorrect secret provided",
+          "Incorrect shared secret provided",
           org.apache.accumulo.core.clientImpl.thrift.SecurityErrorCode.PERMISSION_DENIED);
     }
   }
@@ -344,13 +344,14 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public int addConstraint(String login, String tableName, String constraintClassName)
+  public int addConstraint(String sharedSecret, String tableName, String constraintClassName)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
 
     try {
-      return getConnector(login).tableOperations().addConstraint(tableName, constraintClassName);
+      return getClient(sharedSecret).tableOperations().addConstraint(tableName,
+          constraintClassName);
     } catch (Exception e) {
       handleExceptionTNF(e);
       return -1;
@@ -358,7 +359,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void addSplits(String login, String tableName, Set<ByteBuffer> splits)
+  public void addSplits(String sharedSecret, String tableName, Set<ByteBuffer> splits)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
@@ -368,17 +369,17 @@ public class ProxyServer implements AccumuloProxy.Iface {
       for (ByteBuffer split : splits) {
         sorted.add(ByteBufferUtil.toText(split));
       }
-      getConnector(login).tableOperations().addSplits(tableName, sorted);
+      getClient(sharedSecret).tableOperations().addSplits(tableName, sorted);
     } catch (Exception e) {
       handleExceptionTNF(e);
     }
   }
 
   @Override
-  public void clearLocatorCache(String login, String tableName)
+  public void clearLocatorCache(String sharedSecret, String tableName)
       throws org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
     try {
-      getConnector(login).tableOperations().clearLocatorCache(tableName);
+      getClient(sharedSecret).tableOperations().clearLocatorCache(tableName);
     } catch (TableNotFoundException e) {
       throw new org.apache.accumulo.proxy.thrift.TableNotFoundException(e.toString());
     } catch (Exception e) {
@@ -387,9 +388,9 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void compactTable(String login, String tableName, ByteBuffer startRow, ByteBuffer endRow,
-      List<org.apache.accumulo.proxy.thrift.IteratorSetting> iterators, boolean flush, boolean wait,
-      org.apache.accumulo.proxy.thrift.PluginConfig selectorConfig,
+  public void compactTable(String sharedSecret, String tableName, ByteBuffer startRow,
+      ByteBuffer endRow, List<org.apache.accumulo.proxy.thrift.IteratorSetting> iterators,
+      boolean flush, boolean wait, org.apache.accumulo.proxy.thrift.PluginConfig selectorConfig,
       org.apache.accumulo.proxy.thrift.PluginConfig configurerConfig)
       throws org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException,
@@ -421,20 +422,20 @@ public class ProxyServer implements AccumuloProxy.Iface {
         compactionConfig.setConfigurer(cpc);
       }
 
-      getConnector(login).tableOperations().compact(tableName, compactionConfig);
+      getClient(sharedSecret).tableOperations().compact(tableName, compactionConfig);
     } catch (Exception e) {
       handleExceptionTNF(e);
     }
   }
 
   @Override
-  public void cancelCompaction(String login, String tableName)
+  public void cancelCompaction(String sharedSecret, String tableName)
       throws org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException,
       org.apache.accumulo.proxy.thrift.AccumuloException, TException {
 
     try {
-      getConnector(login).tableOperations().cancelCompaction(tableName);
+      getClient(sharedSecret).tableOperations().cancelCompaction(tableName);
     } catch (Exception e) {
       handleExceptionTNF(e);
     }
@@ -451,7 +452,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void createTable(String login, String tableName, boolean versioningIter,
+  public void createTable(String sharedSecret, String tableName, boolean versioningIter,
       org.apache.accumulo.proxy.thrift.TimeType type)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
@@ -466,7 +467,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
       if (!versioningIter) {
         tConfig = tConfig.withoutDefaultIterators();
       }
-      getConnector(login).tableOperations().create(tableName, tConfig);
+      getClient(sharedSecret).tableOperations().create(tableName, tConfig);
     } catch (TableExistsException e) {
       throw new org.apache.accumulo.proxy.thrift.TableExistsException(e.toString());
     } catch (Exception e) {
@@ -475,46 +476,46 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void deleteTable(String login, String tableName)
+  public void deleteTable(String sharedSecret, String tableName)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
     try {
-      getConnector(login).tableOperations().delete(tableName);
+      getClient(sharedSecret).tableOperations().delete(tableName);
     } catch (Exception e) {
       handleExceptionTNF(e);
     }
   }
 
   @Override
-  public void deleteRows(String login, String tableName, ByteBuffer startRow, ByteBuffer endRow)
-      throws org.apache.accumulo.proxy.thrift.AccumuloException,
+  public void deleteRows(String sharedSecret, String tableName, ByteBuffer startRow,
+      ByteBuffer endRow) throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
     try {
-      getConnector(login).tableOperations().deleteRows(tableName, ByteBufferUtil.toText(startRow),
-          ByteBufferUtil.toText(endRow));
+      getClient(sharedSecret).tableOperations().deleteRows(tableName,
+          ByteBufferUtil.toText(startRow), ByteBufferUtil.toText(endRow));
     } catch (Exception e) {
       handleExceptionTNF(e);
     }
   }
 
   @Override
-  public boolean tableExists(String login, String tableName) throws TException {
+  public boolean tableExists(String sharedSecret, String tableName) throws TException {
     try {
-      return getConnector(login).tableOperations().exists(tableName);
+      return getClient(sharedSecret).tableOperations().exists(tableName);
     } catch (Exception e) {
       throw new TException(e);
     }
   }
 
   @Override
-  public void flushTable(String login, String tableName, ByteBuffer startRow, ByteBuffer endRow,
-      boolean wait) throws org.apache.accumulo.proxy.thrift.AccumuloException,
+  public void flushTable(String sharedSecret, String tableName, ByteBuffer startRow,
+      ByteBuffer endRow, boolean wait) throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
     try {
-      getConnector(login).tableOperations().flush(tableName, ByteBufferUtil.toText(startRow),
+      getClient(sharedSecret).tableOperations().flush(tableName, ByteBufferUtil.toText(startRow),
           ByteBufferUtil.toText(endRow), wait);
     } catch (Exception e) {
       handleExceptionTNF(e);
@@ -522,13 +523,13 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public Map<String,Set<String>> getLocalityGroups(String login, String tableName)
+  public Map<String,Set<String>> getLocalityGroups(String sharedSecret, String tableName)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
     try {
       Map<String,Set<Text>> groups =
-          getConnector(login).tableOperations().getLocalityGroups(tableName);
+          getClient(sharedSecret).tableOperations().getLocalityGroups(tableName);
       Map<String,Set<String>> ret = new HashMap<>();
       for (Entry<String,Set<Text>> entry : groups.entrySet()) {
         Set<String> value = new HashSet<>();
@@ -545,13 +546,13 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public ByteBuffer getMaxRow(String login, String tableName, Set<ByteBuffer> auths,
+  public ByteBuffer getMaxRow(String sharedSecret, String tableName, Set<ByteBuffer> auths,
       ByteBuffer startRow, boolean startInclusive, ByteBuffer endRow, boolean endInclusive)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
     try {
-      AccumuloClient accumuloClient = getConnector(login);
+      AccumuloClient accumuloClient = getClient(sharedSecret);
       Text startText = ByteBufferUtil.toText(startRow);
       Text endText = ByteBufferUtil.toText(endRow);
       Authorizations auth;
@@ -570,14 +571,14 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public Map<String,String> getTableProperties(String login, String tableName)
+  public Map<String,String> getTableProperties(String sharedSecret, String tableName)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
     try {
       Map<String,String> ret = new HashMap<>();
 
-      for (Map.Entry<String,String> entry : getConnector(login).tableOperations()
+      for (Map.Entry<String,String> entry : getClient(sharedSecret).tableOperations()
           .getProperties(tableName)) {
         ret.put(entry.getKey(), entry.getValue());
       }
@@ -589,13 +590,13 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public List<ByteBuffer> listSplits(String login, String tableName, int maxSplits)
+  public List<ByteBuffer> listSplits(String sharedSecret, String tableName, int maxSplits)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
     try {
       Collection<Text> splits =
-          getConnector(login).tableOperations().listSplits(tableName, maxSplits);
+          getClient(sharedSecret).tableOperations().listSplits(tableName, maxSplits);
 
       return splits.stream().map(TextUtil::getByteBuffer).collect(Collectors.toList());
     } catch (Exception e) {
@@ -605,21 +606,21 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public Set<String> listTables(String login) throws TException {
+  public Set<String> listTables(String sharedSecret) throws TException {
     try {
-      return getConnector(login).tableOperations().list();
+      return getClient(sharedSecret).tableOperations().list();
     } catch (Exception e) {
       throw new TException(e);
     }
   }
 
   @Override
-  public Map<String,Integer> listConstraints(String login, String tableName)
+  public Map<String,Integer> listConstraints(String sharedSecret, String tableName)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
 
     try {
-      return getConnector(login).tableOperations().listConstraints(tableName);
+      return getClient(sharedSecret).tableOperations().listConstraints(tableName);
     } catch (Exception e) {
       handleExceptionTNF(e);
       return null;
@@ -627,12 +628,12 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void mergeTablets(String login, String tableName, ByteBuffer startRow, ByteBuffer endRow)
-      throws org.apache.accumulo.proxy.thrift.AccumuloException,
+  public void mergeTablets(String sharedSecret, String tableName, ByteBuffer startRow,
+      ByteBuffer endRow) throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
     try {
-      getConnector(login).tableOperations().merge(tableName, ByteBufferUtil.toText(startRow),
+      getClient(sharedSecret).tableOperations().merge(tableName, ByteBufferUtil.toText(startRow),
           ByteBufferUtil.toText(endRow));
     } catch (Exception e) {
       handleExceptionTNF(e);
@@ -640,69 +641,69 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void offlineTable(String login, String tableName, boolean wait)
+  public void offlineTable(String sharedSecret, String tableName, boolean wait)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
     try {
-      getConnector(login).tableOperations().offline(tableName, wait);
+      getClient(sharedSecret).tableOperations().offline(tableName, wait);
     } catch (Exception e) {
       handleExceptionTNF(e);
     }
   }
 
   @Override
-  public void onlineTable(String login, String tableName, boolean wait)
+  public void onlineTable(String sharedSecret, String tableName, boolean wait)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
     try {
-      getConnector(login).tableOperations().online(tableName, wait);
+      getClient(sharedSecret).tableOperations().online(tableName, wait);
     } catch (Exception e) {
       handleExceptionTNF(e);
     }
   }
 
   @Override
-  public void removeConstraint(String login, String tableName, int constraint)
+  public void removeConstraint(String sharedSecret, String tableName, int constraint)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
 
     try {
-      getConnector(login).tableOperations().removeConstraint(tableName, constraint);
+      getClient(sharedSecret).tableOperations().removeConstraint(tableName, constraint);
     } catch (Exception e) {
       handleExceptionTNF(e);
     }
   }
 
   @Override
-  public void removeTableProperty(String login, String tableName, String property)
+  public void removeTableProperty(String sharedSecret, String tableName, String property)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
     try {
-      getConnector(login).tableOperations().removeProperty(tableName, property);
+      getClient(sharedSecret).tableOperations().removeProperty(tableName, property);
     } catch (Exception e) {
       handleExceptionTNF(e);
     }
   }
 
   @Override
-  public void renameTable(String login, String oldTableName, String newTableName)
+  public void renameTable(String sharedSecret, String oldTableName, String newTableName)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException,
       org.apache.accumulo.proxy.thrift.TableExistsException, TException {
     try {
-      getConnector(login).tableOperations().rename(oldTableName, newTableName);
+      getClient(sharedSecret).tableOperations().rename(oldTableName, newTableName);
     } catch (Exception e) {
       handleExceptionTEE(e);
     }
   }
 
   @Override
-  public void setLocalityGroups(String login, String tableName,
+  public void setLocalityGroups(String sharedSecret, String tableName,
       Map<String,Set<String>> groupStrings)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
@@ -715,41 +716,41 @@ public class ProxyServer implements AccumuloProxy.Iface {
           groups.get(groupEntry.getKey()).add(new Text(val));
         }
       }
-      getConnector(login).tableOperations().setLocalityGroups(tableName, groups);
+      getClient(sharedSecret).tableOperations().setLocalityGroups(tableName, groups);
     } catch (Exception e) {
       handleExceptionTNF(e);
     }
   }
 
   @Override
-  public void setTableProperty(String login, String tableName, String property, String value)
+  public void setTableProperty(String sharedSecret, String tableName, String property, String value)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
     try {
-      getConnector(login).tableOperations().setProperty(tableName, property, value);
+      getClient(sharedSecret).tableOperations().setProperty(tableName, property, value);
     } catch (Exception e) {
       handleExceptionTNF(e);
     }
   }
 
   @Override
-  public Map<String,String> tableIdMap(String login) throws TException {
+  public Map<String,String> tableIdMap(String sharedSecret) throws TException {
     try {
-      return getConnector(login).tableOperations().tableIdMap();
+      return getClient(sharedSecret).tableOperations().tableIdMap();
     } catch (Exception e) {
       throw new TException(e);
     }
   }
 
   @Override
-  public List<DiskUsage> getDiskUsage(String login, Set<String> tables)
+  public List<DiskUsage> getDiskUsage(String sharedSecret, Set<String> tables)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
     try {
       List<org.apache.accumulo.core.client.admin.DiskUsage> diskUsages =
-          getConnector(login).tableOperations().getDiskUsage(tables);
+          getClient(sharedSecret).tableOperations().getDiskUsage(tables);
       List<DiskUsage> retUsages = new ArrayList<>();
       for (org.apache.accumulo.core.client.admin.DiskUsage diskUsage : diskUsages) {
         DiskUsage usage = new DiskUsage();
@@ -765,11 +766,11 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public Map<String,String> getSiteConfiguration(String login)
+  public Map<String,String> getSiteConfiguration(String sharedSecret)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
     try {
-      return getConnector(login).instanceOperations().getSiteConfiguration();
+      return getClient(sharedSecret).instanceOperations().getSiteConfiguration();
     } catch (Exception e) {
       handleException(e);
       return null;
@@ -777,11 +778,11 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public Map<String,String> getSystemConfiguration(String login)
+  public Map<String,String> getSystemConfiguration(String sharedSecret)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
     try {
-      return getConnector(login).instanceOperations().getSystemConfiguration();
+      return getClient(sharedSecret).instanceOperations().getSystemConfiguration();
     } catch (Exception e) {
       handleException(e);
       return null;
@@ -789,22 +790,22 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public List<String> getTabletServers(String login) throws TException {
+  public List<String> getTabletServers(String sharedSecret) throws TException {
     try {
-      return getConnector(login).instanceOperations().getTabletServers();
+      return getClient(sharedSecret).instanceOperations().getTabletServers();
     } catch (Exception e) {
       throw new TException(e);
     }
   }
 
   @Override
-  public List<org.apache.accumulo.proxy.thrift.ActiveScan> getActiveScans(String login,
+  public List<org.apache.accumulo.proxy.thrift.ActiveScan> getActiveScans(String sharedSecret,
       String tserver) throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
     List<org.apache.accumulo.proxy.thrift.ActiveScan> result = new ArrayList<>();
     try {
       List<ActiveScan> activeScans =
-          getConnector(login).instanceOperations().getActiveScans(tserver);
+          getClient(sharedSecret).instanceOperations().getActiveScans(tserver);
       for (ActiveScan scan : activeScans) {
         org.apache.accumulo.proxy.thrift.ActiveScan pscan =
             new org.apache.accumulo.proxy.thrift.ActiveScan();
@@ -858,14 +859,15 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public List<org.apache.accumulo.proxy.thrift.ActiveCompaction> getActiveCompactions(String login,
-      String tserver) throws org.apache.accumulo.proxy.thrift.AccumuloException,
-      org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
+  public List<org.apache.accumulo.proxy.thrift.ActiveCompaction>
+      getActiveCompactions(String sharedSecret, String tserver)
+          throws org.apache.accumulo.proxy.thrift.AccumuloException,
+          org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
 
     try {
       List<org.apache.accumulo.proxy.thrift.ActiveCompaction> result = new ArrayList<>();
       List<ActiveCompaction> active =
-          getConnector(login).instanceOperations().getActiveCompactions(tserver);
+          getClient(sharedSecret).instanceOperations().getActiveCompactions(tserver);
       for (ActiveCompaction comp : active) {
         org.apache.accumulo.proxy.thrift.ActiveCompaction pcomp =
             new org.apache.accumulo.proxy.thrift.ActiveCompaction();
@@ -903,33 +905,33 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void removeProperty(String login, String property)
+  public void removeProperty(String sharedSecret, String property)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
     try {
-      getConnector(login).instanceOperations().removeProperty(property);
+      getClient(sharedSecret).instanceOperations().removeProperty(property);
     } catch (Exception e) {
       handleException(e);
     }
   }
 
   @Override
-  public void setProperty(String login, String property, String value)
+  public void setProperty(String sharedSecret, String property, String value)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
     try {
-      getConnector(login).instanceOperations().setProperty(property, value);
+      getClient(sharedSecret).instanceOperations().setProperty(property, value);
     } catch (Exception e) {
       handleException(e);
     }
   }
 
   @Override
-  public boolean testClassLoad(String login, String className, String asTypeName)
+  public boolean testClassLoad(String sharedSecret, String className, String asTypeName)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
     try {
-      return getConnector(login).instanceOperations().testClassLoad(className, asTypeName);
+      return getClient(sharedSecret).instanceOperations().testClassLoad(className, asTypeName);
     } catch (Exception e) {
       handleException(e);
       return false;
@@ -937,11 +939,11 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public boolean authenticateUser(String login, String user, Map<String,String> properties)
+  public boolean authenticateUser(String sharedSecret, String user, Map<String,String> properties)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
     try {
-      return getConnector(login).securityOperations().authenticateUser(user,
+      return getClient(sharedSecret).securityOperations().authenticateUser(user,
           getToken(user, properties));
     } catch (Exception e) {
       handleException(e);
@@ -950,14 +952,14 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void changeUserAuthorizations(String login, String user, Set<ByteBuffer> authorizations)
-      throws org.apache.accumulo.proxy.thrift.AccumuloException,
+  public void changeUserAuthorizations(String sharedSecret, String user,
+      Set<ByteBuffer> authorizations) throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
     try {
       String[] auths =
           authorizations.stream().distinct().map(ByteBufferUtil::toString).toArray(String[]::new);
 
-      getConnector(login).securityOperations().changeUserAuthorizations(user,
+      getClient(sharedSecret).securityOperations().changeUserAuthorizations(user,
           new Authorizations(auths));
     } catch (Exception e) {
       handleException(e);
@@ -965,11 +967,11 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void changeLocalUserPassword(String login, String user, ByteBuffer password)
+  public void changeLocalUserPassword(String sharedSecret, String user, ByteBuffer password)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
     try {
-      getConnector(login).securityOperations().changeLocalUserPassword(user,
+      getClient(sharedSecret).securityOperations().changeLocalUserPassword(user,
           new PasswordToken(password));
     } catch (Exception e) {
       handleException(e);
@@ -977,33 +979,34 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void createLocalUser(String login, String user, ByteBuffer password)
+  public void createLocalUser(String sharedSecret, String user, ByteBuffer password)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
     try {
-      getConnector(login).securityOperations().createLocalUser(user, new PasswordToken(password));
+      getClient(sharedSecret).securityOperations().createLocalUser(user,
+          new PasswordToken(password));
     } catch (Exception e) {
       handleException(e);
     }
   }
 
   @Override
-  public void dropLocalUser(String login, String user)
+  public void dropLocalUser(String sharedSecret, String user)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
     try {
-      getConnector(login).securityOperations().dropLocalUser(user);
+      getClient(sharedSecret).securityOperations().dropLocalUser(user);
     } catch (Exception e) {
       handleException(e);
     }
   }
 
   @Override
-  public List<ByteBuffer> getUserAuthorizations(String login, String user)
+  public List<ByteBuffer> getUserAuthorizations(String sharedSecret, String user)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
     try {
-      return getConnector(login).securityOperations().getUserAuthorizations(user)
+      return getClient(sharedSecret).securityOperations().getUserAuthorizations(user)
           .getAuthorizationsBB();
     } catch (Exception e) {
       handleException(e);
@@ -1012,12 +1015,12 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void grantSystemPermission(String login, String user,
+  public void grantSystemPermission(String sharedSecret, String user,
       org.apache.accumulo.proxy.thrift.SystemPermission perm)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
     try {
-      getConnector(login).securityOperations().grantSystemPermission(user,
+      getClient(sharedSecret).securityOperations().grantSystemPermission(user,
           SystemPermission.getPermissionById((byte) perm.getValue()));
     } catch (Exception e) {
       handleException(e);
@@ -1025,13 +1028,13 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void grantTablePermission(String login, String user, String table,
+  public void grantTablePermission(String sharedSecret, String user, String table,
       org.apache.accumulo.proxy.thrift.TablePermission perm)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
     try {
-      getConnector(login).securityOperations().grantTablePermission(user, table,
+      getClient(sharedSecret).securityOperations().grantTablePermission(user, table,
           TablePermission.getPermissionById((byte) perm.getValue()));
     } catch (Exception e) {
       handleExceptionTNF(e);
@@ -1039,12 +1042,12 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public boolean hasSystemPermission(String login, String user,
+  public boolean hasSystemPermission(String sharedSecret, String user,
       org.apache.accumulo.proxy.thrift.SystemPermission perm)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
     try {
-      return getConnector(login).securityOperations().hasSystemPermission(user,
+      return getClient(sharedSecret).securityOperations().hasSystemPermission(user,
           SystemPermission.getPermissionById((byte) perm.getValue()));
     } catch (Exception e) {
       handleException(e);
@@ -1053,13 +1056,13 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public boolean hasTablePermission(String login, String user, String table,
+  public boolean hasTablePermission(String sharedSecret, String user, String table,
       org.apache.accumulo.proxy.thrift.TablePermission perm)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
     try {
-      return getConnector(login).securityOperations().hasTablePermission(user, table,
+      return getClient(sharedSecret).securityOperations().hasTablePermission(user, table,
           TablePermission.getPermissionById((byte) perm.getValue()));
     } catch (Exception e) {
       handleExceptionTNF(e);
@@ -1068,11 +1071,11 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public Set<String> listLocalUsers(String login)
+  public Set<String> listLocalUsers(String sharedSecret)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
     try {
-      return getConnector(login).securityOperations().listLocalUsers();
+      return getClient(sharedSecret).securityOperations().listLocalUsers();
     } catch (Exception e) {
       handleException(e);
       return null;
@@ -1080,12 +1083,12 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void revokeSystemPermission(String login, String user,
+  public void revokeSystemPermission(String sharedSecret, String user,
       org.apache.accumulo.proxy.thrift.SystemPermission perm)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
     try {
-      getConnector(login).securityOperations().revokeSystemPermission(user,
+      getClient(sharedSecret).securityOperations().revokeSystemPermission(user,
           SystemPermission.getPermissionById((byte) perm.getValue()));
     } catch (Exception e) {
       handleException(e);
@@ -1093,13 +1096,13 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void revokeTablePermission(String login, String user, String table,
+  public void revokeTablePermission(String sharedSecret, String user, String table,
       org.apache.accumulo.proxy.thrift.TablePermission perm)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
     try {
-      getConnector(login).securityOperations().revokeTablePermission(user, table,
+      getClient(sharedSecret).securityOperations().revokeTablePermission(user, table,
           TablePermission.getPermissionById((byte) perm.getValue()));
     } catch (Exception e) {
       handleExceptionTNF(e);
@@ -1107,12 +1110,12 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void grantNamespacePermission(String login, String user, String namespaceName,
+  public void grantNamespacePermission(String sharedSecret, String user, String namespaceName,
       org.apache.accumulo.proxy.thrift.NamespacePermission perm)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
     try {
-      getConnector(login).securityOperations().grantNamespacePermission(user, namespaceName,
+      getClient(sharedSecret).securityOperations().grantNamespacePermission(user, namespaceName,
           NamespacePermission.getPermissionById((byte) perm.getValue()));
     } catch (Exception e) {
       handleException(e);
@@ -1120,13 +1123,13 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public boolean hasNamespacePermission(String login, String user, String namespaceName,
+  public boolean hasNamespacePermission(String sharedSecret, String user, String namespaceName,
       org.apache.accumulo.proxy.thrift.NamespacePermission perm)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
     try {
-      return getConnector(login).securityOperations().hasNamespacePermission(user, namespaceName,
-          NamespacePermission.getPermissionById((byte) perm.getValue()));
+      return getClient(sharedSecret).securityOperations().hasNamespacePermission(user,
+          namespaceName, NamespacePermission.getPermissionById((byte) perm.getValue()));
     } catch (Exception e) {
       handleException(e);
       return false;
@@ -1134,12 +1137,12 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void revokeNamespacePermission(String login, String user, String namespaceName,
+  public void revokeNamespacePermission(String sharedSecret, String user, String namespaceName,
       org.apache.accumulo.proxy.thrift.NamespacePermission perm)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
     try {
-      getConnector(login).securityOperations().revokeNamespacePermission(user, namespaceName,
+      getClient(sharedSecret).securityOperations().revokeNamespacePermission(user, namespaceName,
           NamespacePermission.getPermissionById((byte) perm.getValue()));
     } catch (Exception e) {
       handleException(e);
@@ -1153,12 +1156,12 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public String createScanner(String login, String tableName, ScanOptions opts)
+  public String createScanner(String sharedSecret, String tableName, ScanOptions opts)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
     try {
-      AccumuloClient accumuloClient = getConnector(login);
+      AccumuloClient accumuloClient = getClient(sharedSecret);
 
       Authorizations auth;
       if (opts != null && opts.isSetAuthorizations()) {
@@ -1208,12 +1211,12 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public String createBatchScanner(String login, String tableName, BatchScanOptions opts)
+  public String createBatchScanner(String sharedSecret, String tableName, BatchScanOptions opts)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
     try {
-      AccumuloClient accumuloClient = getConnector(login);
+      AccumuloClient accumuloClient = getClient(sharedSecret);
 
       int threads = 10;
       Authorizations auth;
@@ -1360,7 +1363,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void updateAndFlush(String login, String tableName,
+  public void updateAndFlush(String sharedSecret, String tableName,
       Map<ByteBuffer,List<ColumnUpdate>> cells)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
@@ -1368,7 +1371,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
       org.apache.accumulo.proxy.thrift.MutationsRejectedException, TException {
     BatchWriterPlusProblem bwpe = null;
     try {
-      bwpe = getWriter(login, tableName, null);
+      bwpe = getWriter(sharedSecret, tableName, null);
       addCellsToWriter(cells, bwpe);
       if (bwpe.exception != null) {
         throw bwpe.exception;
@@ -1446,12 +1449,12 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public String createWriter(String login, String tableName, WriterOptions opts)
+  public String createWriter(String sharedSecret, String tableName, WriterOptions opts)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
     try {
-      BatchWriterPlusProblem writer = getWriter(login, tableName, opts);
+      BatchWriterPlusProblem writer = getWriter(sharedSecret, tableName, opts);
       UUID uuid = UUID.randomUUID();
       writerCache.put(uuid, writer);
       return uuid.toString();
@@ -1524,7 +1527,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
     return bwpe;
   }
 
-  BatchWriterPlusProblem getWriter(String login, String tableName, WriterOptions opts)
+  BatchWriterPlusProblem getWriter(String sharedSecret, String tableName, WriterOptions opts)
       throws Exception {
     BatchWriterConfig cfg = new BatchWriterConfig();
     if (opts != null) {
@@ -1545,7 +1548,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
       }
     }
     BatchWriterPlusProblem result = new BatchWriterPlusProblem();
-    result.writer = getConnector(login).createBatchWriter(tableName, cfg);
+    result.writer = getClient(sharedSecret).createBatchWriter(tableName, cfg);
     return result;
   }
 
@@ -1596,29 +1599,14 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void attachIterator(String login, String tableName,
+  public void attachIterator(String sharedSecret, String tableName,
       org.apache.accumulo.proxy.thrift.IteratorSetting setting,
       Set<org.apache.accumulo.proxy.thrift.IteratorScope> scopes)
       throws org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
     try {
-      getConnector(login).tableOperations().attachIterator(tableName, getIteratorSetting(setting),
-          getIteratorScopes(scopes));
-    } catch (Exception e) {
-      handleExceptionTNF(e);
-    }
-  }
-
-  @Override
-  public void checkIteratorConflicts(String login, String tableName,
-      org.apache.accumulo.proxy.thrift.IteratorSetting setting,
-      Set<org.apache.accumulo.proxy.thrift.IteratorScope> scopes)
-      throws org.apache.accumulo.proxy.thrift.AccumuloException,
-      org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
-      org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
-    try {
-      getConnector(login).tableOperations().checkIteratorConflicts(tableName,
+      getClient(sharedSecret).tableOperations().attachIterator(tableName,
           getIteratorSetting(setting), getIteratorScopes(scopes));
     } catch (Exception e) {
       handleExceptionTNF(e);
@@ -1626,7 +1614,22 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void cloneTable(String login, String tableName, String newTableName, boolean flush,
+  public void checkIteratorConflicts(String sharedSecret, String tableName,
+      org.apache.accumulo.proxy.thrift.IteratorSetting setting,
+      Set<org.apache.accumulo.proxy.thrift.IteratorScope> scopes)
+      throws org.apache.accumulo.proxy.thrift.AccumuloException,
+      org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
+      org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
+    try {
+      getClient(sharedSecret).tableOperations().checkIteratorConflicts(tableName,
+          getIteratorSetting(setting), getIteratorScopes(scopes));
+    } catch (Exception e) {
+      handleExceptionTNF(e);
+    }
+  }
+
+  @Override
+  public void cloneTable(String sharedSecret, String tableName, String newTableName, boolean flush,
       Map<String,String> propertiesToSet, Set<String> propertiesToExclude)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
@@ -1636,34 +1639,34 @@ public class ProxyServer implements AccumuloProxy.Iface {
       propertiesToExclude = propertiesToExclude == null ? new HashSet<>() : propertiesToExclude;
       propertiesToSet = propertiesToSet == null ? new HashMap<>() : propertiesToSet;
 
-      getConnector(login).tableOperations().clone(tableName, newTableName, flush, propertiesToSet,
-          propertiesToExclude);
+      getClient(sharedSecret).tableOperations().clone(tableName, newTableName, flush,
+          propertiesToSet, propertiesToExclude);
     } catch (Exception e) {
       handleExceptionTEE(e);
     }
   }
 
   @Override
-  public void exportTable(String login, String tableName, String exportDir)
+  public void exportTable(String sharedSecret, String tableName, String exportDir)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
 
     try {
-      getConnector(login).tableOperations().exportTable(tableName, exportDir);
+      getClient(sharedSecret).tableOperations().exportTable(tableName, exportDir);
     } catch (Exception e) {
       handleExceptionTNF(e);
     }
   }
 
   @Override
-  public void importTable(String login, String tableName, String importDir)
+  public void importTable(String sharedSecret, String tableName, String importDir)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableExistsException, TException {
 
     try {
-      getConnector(login).tableOperations().importTable(tableName, importDir);
+      getClient(sharedSecret).tableOperations().importTable(tableName, importDir);
     } catch (TableExistsException e) {
       throw new org.apache.accumulo.proxy.thrift.TableExistsException(e.toString());
     } catch (Exception e) {
@@ -1672,13 +1675,13 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public org.apache.accumulo.proxy.thrift.IteratorSetting getIteratorSetting(String login,
+  public org.apache.accumulo.proxy.thrift.IteratorSetting getIteratorSetting(String sharedSecret,
       String tableName, String iteratorName, org.apache.accumulo.proxy.thrift.IteratorScope scope)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
     try {
-      IteratorSetting is = getConnector(login).tableOperations().getIteratorSetting(tableName,
+      IteratorSetting is = getClient(sharedSecret).tableOperations().getIteratorSetting(tableName,
           iteratorName, getIteratorScope(scope));
       return new org.apache.accumulo.proxy.thrift.IteratorSetting(is.getPriority(), is.getName(),
           is.getIteratorClass(), is.getOptions());
@@ -1689,13 +1692,14 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public Map<String,Set<org.apache.accumulo.proxy.thrift.IteratorScope>> listIterators(String login,
-      String tableName) throws org.apache.accumulo.proxy.thrift.AccumuloException,
-      org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
-      org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
+  public Map<String,Set<org.apache.accumulo.proxy.thrift.IteratorScope>>
+      listIterators(String sharedSecret, String tableName)
+          throws org.apache.accumulo.proxy.thrift.AccumuloException,
+          org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
+          org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
     try {
       Map<String,EnumSet<IteratorScope>> iterMap =
-          getConnector(login).tableOperations().listIterators(tableName);
+          getClient(sharedSecret).tableOperations().listIterators(tableName);
       Map<String,Set<org.apache.accumulo.proxy.thrift.IteratorScope>> result = new HashMap<>();
       for (Map.Entry<String,EnumSet<IteratorScope>> entry : iterMap.entrySet()) {
         result.put(entry.getKey(), getProxyIteratorScopes(entry.getValue()));
@@ -1708,13 +1712,13 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void removeIterator(String login, String tableName, String iterName,
+  public void removeIterator(String sharedSecret, String tableName, String iterName,
       Set<org.apache.accumulo.proxy.thrift.IteratorScope> scopes)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
     try {
-      getConnector(login).tableOperations().removeIterator(tableName, iterName,
+      getClient(sharedSecret).tableOperations().removeIterator(tableName, iterName,
           getIteratorScopes(scopes));
     } catch (Exception e) {
       handleExceptionTNF(e);
@@ -1722,13 +1726,13 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public Set<org.apache.accumulo.proxy.thrift.Range> splitRangeByTablets(String login,
+  public Set<org.apache.accumulo.proxy.thrift.Range> splitRangeByTablets(String sharedSecret,
       String tableName, org.apache.accumulo.proxy.thrift.Range range, int maxSplits)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
     try {
-      Set<Range> ranges = getConnector(login).tableOperations().splitRangeByTablets(tableName,
+      Set<Range> ranges = getClient(sharedSecret).tableOperations().splitRangeByTablets(tableName,
           getRange(range), maxSplits);
       return ranges.stream().map(this::getRange).collect(Collectors.toSet());
     } catch (Exception e) {
@@ -1759,12 +1763,13 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void importDirectory(String login, String tableName, String importDir, String failureDir,
-      boolean setTime) throws org.apache.accumulo.proxy.thrift.TableNotFoundException,
+  public void importDirectory(String sharedSecret, String tableName, String importDir,
+      String failureDir, boolean setTime)
+      throws org.apache.accumulo.proxy.thrift.TableNotFoundException,
       org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
     try {
-      getConnector(login).tableOperations().importDirectory(importDir).to(tableName)
+      getClient(sharedSecret).tableOperations().importDirectory(importDir).to(tableName)
           .tableTime(setTime).load();
 
     } catch (Exception e) {
@@ -1797,11 +1802,11 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public List<String> listNamespaces(String login)
+  public List<String> listNamespaces(String sharedSecret)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
     try {
-      return new LinkedList<>(getConnector(login).namespaceOperations().list());
+      return new LinkedList<>(getClient(sharedSecret).namespaceOperations().list());
     } catch (Exception e) {
       handleException(e);
       return null;
@@ -1809,11 +1814,11 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public boolean namespaceExists(String login, String namespaceName)
+  public boolean namespaceExists(String sharedSecret, String namespaceName)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
     try {
-      return getConnector(login).namespaceOperations().exists(namespaceName);
+      return getClient(sharedSecret).namespaceOperations().exists(namespaceName);
     } catch (Exception e) {
       handleException(e);
       return false;
@@ -1821,12 +1826,12 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void createNamespace(String login, String namespaceName)
+  public void createNamespace(String sharedSecret, String namespaceName)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.NamespaceExistsException, TException {
     try {
-      getConnector(login).namespaceOperations().create(namespaceName);
+      getClient(sharedSecret).namespaceOperations().create(namespaceName);
     } catch (NamespaceExistsException e) {
       throw new org.apache.accumulo.proxy.thrift.NamespaceExistsException(e.toString());
     } catch (Exception e) {
@@ -1835,13 +1840,13 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void deleteNamespace(String login, String namespaceName)
+  public void deleteNamespace(String sharedSecret, String namespaceName)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.NamespaceNotFoundException,
       org.apache.accumulo.proxy.thrift.NamespaceNotEmptyException, TException {
     try {
-      getConnector(login).namespaceOperations().delete(namespaceName);
+      getClient(sharedSecret).namespaceOperations().delete(namespaceName);
     } catch (NamespaceNotFoundException e) {
       throw new org.apache.accumulo.proxy.thrift.NamespaceNotFoundException(e.toString());
     } catch (NamespaceNotEmptyException e) {
@@ -1852,13 +1857,13 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void renameNamespace(String login, String oldNamespaceName, String newNamespaceName)
+  public void renameNamespace(String sharedSecret, String oldNamespaceName, String newNamespaceName)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.NamespaceNotFoundException,
       org.apache.accumulo.proxy.thrift.NamespaceExistsException, TException {
     try {
-      getConnector(login).namespaceOperations().rename(oldNamespaceName, newNamespaceName);
+      getClient(sharedSecret).namespaceOperations().rename(oldNamespaceName, newNamespaceName);
     } catch (NamespaceNotFoundException e) {
       throw new org.apache.accumulo.proxy.thrift.NamespaceNotFoundException(e.toString());
     } catch (NamespaceExistsException e) {
@@ -1869,37 +1874,37 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void setNamespaceProperty(String login, String namespaceName, String property,
+  public void setNamespaceProperty(String sharedSecret, String namespaceName, String property,
       String value) throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.NamespaceNotFoundException, TException {
     try {
-      getConnector(login).namespaceOperations().setProperty(namespaceName, property, value);
+      getClient(sharedSecret).namespaceOperations().setProperty(namespaceName, property, value);
     } catch (Exception e) {
       handleExceptionNNF(e);
     }
   }
 
   @Override
-  public void removeNamespaceProperty(String login, String namespaceName, String property)
+  public void removeNamespaceProperty(String sharedSecret, String namespaceName, String property)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.NamespaceNotFoundException, TException {
     try {
-      getConnector(login).namespaceOperations().removeProperty(namespaceName, property);
+      getClient(sharedSecret).namespaceOperations().removeProperty(namespaceName, property);
     } catch (Exception e) {
       handleExceptionNNF(e);
     }
   }
 
   @Override
-  public Map<String,String> getNamespaceProperties(String login, String namespaceName)
+  public Map<String,String> getNamespaceProperties(String sharedSecret, String namespaceName)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.NamespaceNotFoundException, TException {
     try {
       Map<String,String> props = new HashMap<>();
-      for (Map.Entry<String,String> entry : getConnector(login).namespaceOperations()
+      for (Map.Entry<String,String> entry : getClient(sharedSecret).namespaceOperations()
           .getProperties(namespaceName)) {
         props.put(entry.getKey(), entry.getValue());
       }
@@ -1911,11 +1916,11 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public Map<String,String> namespaceIdMap(String login)
+  public Map<String,String> namespaceIdMap(String sharedSecret)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
     try {
-      return getConnector(login).namespaceOperations().namespaceIdMap();
+      return getClient(sharedSecret).namespaceOperations().namespaceIdMap();
     } catch (Exception e) {
       handleException(e);
       return null;
@@ -1923,7 +1928,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void attachNamespaceIterator(String login, String namespaceName,
+  public void attachNamespaceIterator(String sharedSecret, String namespaceName,
       org.apache.accumulo.proxy.thrift.IteratorSetting setting,
       Set<org.apache.accumulo.proxy.thrift.IteratorScope> scopes)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
@@ -1931,10 +1936,10 @@ public class ProxyServer implements AccumuloProxy.Iface {
       org.apache.accumulo.proxy.thrift.NamespaceNotFoundException, TException {
     try {
       if (scopes != null && scopes.size() > 0) {
-        getConnector(login).namespaceOperations().attachIterator(namespaceName,
+        getClient(sharedSecret).namespaceOperations().attachIterator(namespaceName,
             getIteratorSetting(setting), getIteratorScopes(scopes));
       } else {
-        getConnector(login).namespaceOperations().attachIterator(namespaceName,
+        getClient(sharedSecret).namespaceOperations().attachIterator(namespaceName,
             getIteratorSetting(setting));
       }
     } catch (Exception e) {
@@ -1943,13 +1948,13 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void removeNamespaceIterator(String login, String namespaceName, String name,
+  public void removeNamespaceIterator(String sharedSecret, String namespaceName, String name,
       Set<org.apache.accumulo.proxy.thrift.IteratorScope> scopes)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.NamespaceNotFoundException, TException {
     try {
-      getConnector(login).namespaceOperations().removeIterator(namespaceName, name,
+      getClient(sharedSecret).namespaceOperations().removeIterator(namespaceName, name,
           getIteratorScopes(scopes));
     } catch (Exception e) {
       handleExceptionNNF(e);
@@ -1957,13 +1962,14 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public org.apache.accumulo.proxy.thrift.IteratorSetting getNamespaceIteratorSetting(String login,
-      String namespaceName, String name, org.apache.accumulo.proxy.thrift.IteratorScope scope)
+  public org.apache.accumulo.proxy.thrift.IteratorSetting getNamespaceIteratorSetting(
+      String sharedSecret, String namespaceName, String name,
+      org.apache.accumulo.proxy.thrift.IteratorScope scope)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.NamespaceNotFoundException, TException {
     try {
-      IteratorSetting setting = getConnector(login).namespaceOperations()
+      IteratorSetting setting = getClient(sharedSecret).namespaceOperations()
           .getIteratorSetting(namespaceName, name, getIteratorScope(scope));
       return new org.apache.accumulo.proxy.thrift.IteratorSetting(setting.getPriority(),
           setting.getName(), setting.getIteratorClass(), setting.getOptions());
@@ -1974,14 +1980,15 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public Map<String,Set<org.apache.accumulo.proxy.thrift.IteratorScope>> listNamespaceIterators(
-      String login, String namespaceName) throws org.apache.accumulo.proxy.thrift.AccumuloException,
-      org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
-      org.apache.accumulo.proxy.thrift.NamespaceNotFoundException, TException {
+  public Map<String,Set<org.apache.accumulo.proxy.thrift.IteratorScope>>
+      listNamespaceIterators(String sharedSecret, String namespaceName)
+          throws org.apache.accumulo.proxy.thrift.AccumuloException,
+          org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
+          org.apache.accumulo.proxy.thrift.NamespaceNotFoundException, TException {
     try {
       Map<String,Set<org.apache.accumulo.proxy.thrift.IteratorScope>> namespaceIters =
           new HashMap<>();
-      for (Map.Entry<String,EnumSet<IteratorScope>> entry : getConnector(login)
+      for (Map.Entry<String,EnumSet<IteratorScope>> entry : getClient(sharedSecret)
           .namespaceOperations().listIterators(namespaceName).entrySet()) {
         namespaceIters.put(entry.getKey(), getProxyIteratorScopes(entry.getValue()));
       }
@@ -1993,14 +2000,14 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void checkNamespaceIteratorConflicts(String login, String namespaceName,
+  public void checkNamespaceIteratorConflicts(String sharedSecret, String namespaceName,
       org.apache.accumulo.proxy.thrift.IteratorSetting setting,
       Set<org.apache.accumulo.proxy.thrift.IteratorScope> scopes)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.NamespaceNotFoundException, TException {
     try {
-      getConnector(login).namespaceOperations().checkIteratorConflicts(namespaceName,
+      getClient(sharedSecret).namespaceOperations().checkIteratorConflicts(namespaceName,
           getIteratorSetting(setting), getIteratorScopes(scopes));
     } catch (Exception e) {
       handleExceptionNNF(e);
@@ -2008,12 +2015,12 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public int addNamespaceConstraint(String login, String namespaceName, String constraintClassName)
-      throws org.apache.accumulo.proxy.thrift.AccumuloException,
+  public int addNamespaceConstraint(String sharedSecret, String namespaceName,
+      String constraintClassName) throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.NamespaceNotFoundException, TException {
     try {
-      return getConnector(login).namespaceOperations().addConstraint(namespaceName,
+      return getClient(sharedSecret).namespaceOperations().addConstraint(namespaceName,
           constraintClassName);
     } catch (Exception e) {
       handleExceptionNNF(e);
@@ -2022,24 +2029,24 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void removeNamespaceConstraint(String login, String namespaceName, int id)
+  public void removeNamespaceConstraint(String sharedSecret, String namespaceName, int id)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.NamespaceNotFoundException, TException {
     try {
-      getConnector(login).namespaceOperations().removeConstraint(namespaceName, id);
+      getClient(sharedSecret).namespaceOperations().removeConstraint(namespaceName, id);
     } catch (Exception e) {
       handleExceptionNNF(e);
     }
   }
 
   @Override
-  public Map<String,Integer> listNamespaceConstraints(String login, String namespaceName)
+  public Map<String,Integer> listNamespaceConstraints(String sharedSecret, String namespaceName)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.NamespaceNotFoundException, TException {
     try {
-      return getConnector(login).namespaceOperations().listConstraints(namespaceName);
+      return getClient(sharedSecret).namespaceOperations().listConstraints(namespaceName);
     } catch (Exception e) {
       handleExceptionNNF(e);
       return null;
@@ -2047,12 +2054,12 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public boolean testNamespaceClassLoad(String login, String namespaceName, String className,
+  public boolean testNamespaceClassLoad(String sharedSecret, String namespaceName, String className,
       String asTypeName) throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.NamespaceNotFoundException, TException {
     try {
-      return getConnector(login).namespaceOperations().testClassLoad(namespaceName, className,
+      return getClient(sharedSecret).namespaceOperations().testClassLoad(namespaceName, className,
           asTypeName);
     } catch (Exception e) {
       handleExceptionNNF(e);
@@ -2061,11 +2068,11 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public void pingTabletServer(String login, String tserver)
+  public void pingTabletServer(String sharedSecret, String tserver)
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
     try {
-      getConnector(login).instanceOperations().ping(tserver);
+      getClient(sharedSecret).instanceOperations().ping(tserver);
     } catch (Exception e) {
       handleException(e);
     }
@@ -2087,12 +2094,13 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public boolean testTableClassLoad(String login, String tableName, String className,
+  public boolean testTableClassLoad(String sharedSecret, String tableName, String className,
       String asTypeName) throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
     try {
-      return getConnector(login).tableOperations().testClassLoad(tableName, className, asTypeName);
+      return getClient(sharedSecret).tableOperations().testClassLoad(tableName, className,
+          asTypeName);
     } catch (Exception e) {
       handleExceptionTNF(e);
       return false;
@@ -2100,7 +2108,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public String createConditionalWriter(String login, String tableName,
+  public String createConditionalWriter(String sharedSecret, String tableName,
       ConditionalWriterOptions options) throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
@@ -2122,7 +2130,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
         cwc.setDurability(getDurability(options.getDurability()));
       }
 
-      ConditionalWriter cw = getConnector(login).createConditionalWriter(tableName, cwc);
+      ConditionalWriter cw = getClient(sharedSecret).createConditionalWriter(tableName, cwc);
 
       UUID id = UUID.randomUUID();
 
@@ -2215,12 +2223,13 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   @Override
-  public ConditionalStatus updateRowConditionally(String login, String tableName, ByteBuffer row,
-      ConditionalUpdates updates) throws org.apache.accumulo.proxy.thrift.AccumuloException,
+  public ConditionalStatus updateRowConditionally(String sharedSecret, String tableName,
+      ByteBuffer row, ConditionalUpdates updates)
+      throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException,
       org.apache.accumulo.proxy.thrift.TableNotFoundException, TException {
 
-    String cwid = createConditionalWriter(login, tableName, new ConditionalWriterOptions());
+    String cwid = createConditionalWriter(sharedSecret, tableName, new ConditionalWriterOptions());
     try {
       return updateRowsConditionally(cwid, Collections.singletonMap(row, updates)).get(row);
     } finally {

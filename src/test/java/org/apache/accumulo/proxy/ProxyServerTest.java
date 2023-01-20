@@ -43,11 +43,11 @@ public class ProxyServerTest {
     bwpe.writer = writer;
     MutationsRejectedException mre = EasyMock.createMock(MutationsRejectedException.class);
 
-    final String login = "my_login";
+    final String sharedSecret = "proxy_secret";
     final String tableName = "table1";
     final Map<ByteBuffer,List<ColumnUpdate>> cells = new HashMap<>();
 
-    EasyMock.expect(server.getWriter(login, tableName, null)).andReturn(bwpe);
+    EasyMock.expect(server.getWriter(sharedSecret, tableName, null)).andReturn(bwpe);
     server.addCellsToWriter(cells, bwpe);
     EasyMock.expectLastCall();
 
@@ -60,7 +60,7 @@ public class ProxyServerTest {
     EasyMock.replay(server, writer, mre);
 
     assertThrows(org.apache.accumulo.proxy.thrift.MutationsRejectedException.class,
-        () -> server.updateAndFlush(login, tableName, cells));
+        () -> server.updateAndFlush(sharedSecret, tableName, cells));
 
     EasyMock.verify(server, writer, mre);
   }
@@ -75,11 +75,11 @@ public class ProxyServerTest {
     bwpe.writer = writer;
     MutationsRejectedException mre = EasyMock.createMock(MutationsRejectedException.class);
 
-    final String login = "my_login";
+    final String sharedSecret = "proxy_secret";
     final String tableName = "table1";
     final Map<ByteBuffer,List<ColumnUpdate>> cells = new HashMap<>();
 
-    EasyMock.expect(server.getWriter(login, tableName, null)).andReturn(bwpe);
+    EasyMock.expect(server.getWriter(sharedSecret, tableName, null)).andReturn(bwpe);
     server.addCellsToWriter(cells, bwpe);
     EasyMock.expectLastCall();
 
@@ -95,7 +95,7 @@ public class ProxyServerTest {
     EasyMock.replay(server, writer, mre);
 
     assertThrows(org.apache.accumulo.proxy.thrift.MutationsRejectedException.class,
-        () -> server.updateAndFlush(login, tableName, cells));
+        () -> server.updateAndFlush(sharedSecret, tableName, cells));
 
     EasyMock.verify(server, writer, mre);
   }
