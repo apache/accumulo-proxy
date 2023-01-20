@@ -27,262 +27,6 @@
 namespace accumulo {
 
 
-AccumuloProxy_login_args::~AccumuloProxy_login_args() noexcept {
-}
-
-
-uint32_t AccumuloProxy_login_args::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-        if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readString(this->principal);
-          this->__isset.principal = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 2:
-        if (ftype == ::apache::thrift::protocol::T_MAP) {
-          {
-            this->loginProperties.clear();
-            uint32_t _size195;
-            ::apache::thrift::protocol::TType _ktype196;
-            ::apache::thrift::protocol::TType _vtype197;
-            xfer += iprot->readMapBegin(_ktype196, _vtype197, _size195);
-            uint32_t _i199;
-            for (_i199 = 0; _i199 < _size195; ++_i199)
-            {
-              std::string _key200;
-              xfer += iprot->readString(_key200);
-              std::string& _val201 = this->loginProperties[_key200];
-              xfer += iprot->readString(_val201);
-            }
-            xfer += iprot->readMapEnd();
-          }
-          this->__isset.loginProperties = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
-uint32_t AccumuloProxy_login_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
-  uint32_t xfer = 0;
-  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("AccumuloProxy_login_args");
-
-  xfer += oprot->writeFieldBegin("principal", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeString(this->principal);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("loginProperties", ::apache::thrift::protocol::T_MAP, 2);
-  {
-    xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->loginProperties.size()));
-    std::map<std::string, std::string> ::const_iterator _iter202;
-    for (_iter202 = this->loginProperties.begin(); _iter202 != this->loginProperties.end(); ++_iter202)
-    {
-      xfer += oprot->writeString(_iter202->first);
-      xfer += oprot->writeString(_iter202->second);
-    }
-    xfer += oprot->writeMapEnd();
-  }
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-AccumuloProxy_login_pargs::~AccumuloProxy_login_pargs() noexcept {
-}
-
-
-uint32_t AccumuloProxy_login_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
-  uint32_t xfer = 0;
-  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("AccumuloProxy_login_pargs");
-
-  xfer += oprot->writeFieldBegin("principal", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeString((*(this->principal)));
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("loginProperties", ::apache::thrift::protocol::T_MAP, 2);
-  {
-    xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>((*(this->loginProperties)).size()));
-    std::map<std::string, std::string> ::const_iterator _iter203;
-    for (_iter203 = (*(this->loginProperties)).begin(); _iter203 != (*(this->loginProperties)).end(); ++_iter203)
-    {
-      xfer += oprot->writeString(_iter203->first);
-      xfer += oprot->writeString(_iter203->second);
-    }
-    xfer += oprot->writeMapEnd();
-  }
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-AccumuloProxy_login_result::~AccumuloProxy_login_result() noexcept {
-}
-
-
-uint32_t AccumuloProxy_login_result::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-        if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->success);
-          this->__isset.success = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 1:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->ouch2.read(iprot);
-          this->__isset.ouch2 = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
-uint32_t AccumuloProxy_login_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
-
-  uint32_t xfer = 0;
-
-  xfer += oprot->writeStructBegin("AccumuloProxy_login_result");
-
-  if (this->__isset.success) {
-    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRING, 0);
-    xfer += oprot->writeBinary(this->success);
-    xfer += oprot->writeFieldEnd();
-  } else if (this->__isset.ouch2) {
-    xfer += oprot->writeFieldBegin("ouch2", ::apache::thrift::protocol::T_STRUCT, 1);
-    xfer += this->ouch2.write(oprot);
-    xfer += oprot->writeFieldEnd();
-  }
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-AccumuloProxy_login_presult::~AccumuloProxy_login_presult() noexcept {
-}
-
-
-uint32_t AccumuloProxy_login_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-        if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary((*(this->success)));
-          this->__isset.success = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 1:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->ouch2.read(iprot);
-          this->__isset.ouch2 = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
-
 AccumuloProxy_addConstraint_args::~AccumuloProxy_addConstraint_args() noexcept {
 }
 
@@ -310,8 +54,8 @@ uint32_t AccumuloProxy_addConstraint_args::read(::apache::thrift::protocol::TPro
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -349,8 +93,8 @@ uint32_t AccumuloProxy_addConstraint_args::write(::apache::thrift::protocol::TPr
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_addConstraint_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -376,8 +120,8 @@ uint32_t AccumuloProxy_addConstraint_pargs::write(::apache::thrift::protocol::TP
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_addConstraint_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -589,8 +333,8 @@ uint32_t AccumuloProxy_addSplits_args::read(::apache::thrift::protocol::TProtoco
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -607,15 +351,15 @@ uint32_t AccumuloProxy_addSplits_args::read(::apache::thrift::protocol::TProtoco
         if (ftype == ::apache::thrift::protocol::T_SET) {
           {
             this->splits.clear();
-            uint32_t _size204;
-            ::apache::thrift::protocol::TType _etype207;
-            xfer += iprot->readSetBegin(_etype207, _size204);
-            uint32_t _i208;
-            for (_i208 = 0; _i208 < _size204; ++_i208)
+            uint32_t _size195;
+            ::apache::thrift::protocol::TType _etype198;
+            xfer += iprot->readSetBegin(_etype198, _size195);
+            uint32_t _i199;
+            for (_i199 = 0; _i199 < _size195; ++_i199)
             {
-              std::string _elem209;
-              xfer += iprot->readBinary(_elem209);
-              this->splits.insert(_elem209);
+              std::string _elem200;
+              xfer += iprot->readBinary(_elem200);
+              this->splits.insert(_elem200);
             }
             xfer += iprot->readSetEnd();
           }
@@ -641,8 +385,8 @@ uint32_t AccumuloProxy_addSplits_args::write(::apache::thrift::protocol::TProtoc
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_addSplits_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -652,10 +396,10 @@ uint32_t AccumuloProxy_addSplits_args::write(::apache::thrift::protocol::TProtoc
   xfer += oprot->writeFieldBegin("splits", ::apache::thrift::protocol::T_SET, 3);
   {
     xfer += oprot->writeSetBegin(::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->splits.size()));
-    std::set<std::string> ::const_iterator _iter210;
-    for (_iter210 = this->splits.begin(); _iter210 != this->splits.end(); ++_iter210)
+    std::set<std::string> ::const_iterator _iter201;
+    for (_iter201 = this->splits.begin(); _iter201 != this->splits.end(); ++_iter201)
     {
-      xfer += oprot->writeBinary((*_iter210));
+      xfer += oprot->writeBinary((*_iter201));
     }
     xfer += oprot->writeSetEnd();
   }
@@ -676,8 +420,8 @@ uint32_t AccumuloProxy_addSplits_pargs::write(::apache::thrift::protocol::TProto
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_addSplits_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -687,10 +431,10 @@ uint32_t AccumuloProxy_addSplits_pargs::write(::apache::thrift::protocol::TProto
   xfer += oprot->writeFieldBegin("splits", ::apache::thrift::protocol::T_SET, 3);
   {
     xfer += oprot->writeSetBegin(::apache::thrift::protocol::T_STRING, static_cast<uint32_t>((*(this->splits)).size()));
-    std::set<std::string> ::const_iterator _iter211;
-    for (_iter211 = (*(this->splits)).begin(); _iter211 != (*(this->splits)).end(); ++_iter211)
+    std::set<std::string> ::const_iterator _iter202;
+    for (_iter202 = (*(this->splits)).begin(); _iter202 != (*(this->splits)).end(); ++_iter202)
     {
-      xfer += oprot->writeBinary((*_iter211));
+      xfer += oprot->writeBinary((*_iter202));
     }
     xfer += oprot->writeSetEnd();
   }
@@ -877,8 +621,8 @@ uint32_t AccumuloProxy_attachIterator_args::read(::apache::thrift::protocol::TPr
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -903,17 +647,17 @@ uint32_t AccumuloProxy_attachIterator_args::read(::apache::thrift::protocol::TPr
         if (ftype == ::apache::thrift::protocol::T_SET) {
           {
             this->scopes.clear();
-            uint32_t _size212;
-            ::apache::thrift::protocol::TType _etype215;
-            xfer += iprot->readSetBegin(_etype215, _size212);
-            uint32_t _i216;
-            for (_i216 = 0; _i216 < _size212; ++_i216)
+            uint32_t _size203;
+            ::apache::thrift::protocol::TType _etype206;
+            xfer += iprot->readSetBegin(_etype206, _size203);
+            uint32_t _i207;
+            for (_i207 = 0; _i207 < _size203; ++_i207)
             {
-              IteratorScope::type _elem217;
-              int32_t ecast218;
-              xfer += iprot->readI32(ecast218);
-              _elem217 = static_cast<IteratorScope::type>(ecast218);
-              this->scopes.insert(_elem217);
+              IteratorScope::type _elem208;
+              int32_t ecast209;
+              xfer += iprot->readI32(ecast209);
+              _elem208 = static_cast<IteratorScope::type>(ecast209);
+              this->scopes.insert(_elem208);
             }
             xfer += iprot->readSetEnd();
           }
@@ -939,8 +683,8 @@ uint32_t AccumuloProxy_attachIterator_args::write(::apache::thrift::protocol::TP
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_attachIterator_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -954,10 +698,10 @@ uint32_t AccumuloProxy_attachIterator_args::write(::apache::thrift::protocol::TP
   xfer += oprot->writeFieldBegin("scopes", ::apache::thrift::protocol::T_SET, 4);
   {
     xfer += oprot->writeSetBegin(::apache::thrift::protocol::T_I32, static_cast<uint32_t>(this->scopes.size()));
-    std::set<IteratorScope::type> ::const_iterator _iter219;
-    for (_iter219 = this->scopes.begin(); _iter219 != this->scopes.end(); ++_iter219)
+    std::set<IteratorScope::type> ::const_iterator _iter210;
+    for (_iter210 = this->scopes.begin(); _iter210 != this->scopes.end(); ++_iter210)
     {
-      xfer += oprot->writeI32(static_cast<int32_t>((*_iter219)));
+      xfer += oprot->writeI32(static_cast<int32_t>((*_iter210)));
     }
     xfer += oprot->writeSetEnd();
   }
@@ -978,8 +722,8 @@ uint32_t AccumuloProxy_attachIterator_pargs::write(::apache::thrift::protocol::T
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_attachIterator_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -993,10 +737,10 @@ uint32_t AccumuloProxy_attachIterator_pargs::write(::apache::thrift::protocol::T
   xfer += oprot->writeFieldBegin("scopes", ::apache::thrift::protocol::T_SET, 4);
   {
     xfer += oprot->writeSetBegin(::apache::thrift::protocol::T_I32, static_cast<uint32_t>((*(this->scopes)).size()));
-    std::set<IteratorScope::type> ::const_iterator _iter220;
-    for (_iter220 = (*(this->scopes)).begin(); _iter220 != (*(this->scopes)).end(); ++_iter220)
+    std::set<IteratorScope::type> ::const_iterator _iter211;
+    for (_iter211 = (*(this->scopes)).begin(); _iter211 != (*(this->scopes)).end(); ++_iter211)
     {
-      xfer += oprot->writeI32(static_cast<int32_t>((*_iter220)));
+      xfer += oprot->writeI32(static_cast<int32_t>((*_iter211)));
     }
     xfer += oprot->writeSetEnd();
   }
@@ -1183,8 +927,8 @@ uint32_t AccumuloProxy_checkIteratorConflicts_args::read(::apache::thrift::proto
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -1209,17 +953,17 @@ uint32_t AccumuloProxy_checkIteratorConflicts_args::read(::apache::thrift::proto
         if (ftype == ::apache::thrift::protocol::T_SET) {
           {
             this->scopes.clear();
-            uint32_t _size221;
-            ::apache::thrift::protocol::TType _etype224;
-            xfer += iprot->readSetBegin(_etype224, _size221);
-            uint32_t _i225;
-            for (_i225 = 0; _i225 < _size221; ++_i225)
+            uint32_t _size212;
+            ::apache::thrift::protocol::TType _etype215;
+            xfer += iprot->readSetBegin(_etype215, _size212);
+            uint32_t _i216;
+            for (_i216 = 0; _i216 < _size212; ++_i216)
             {
-              IteratorScope::type _elem226;
-              int32_t ecast227;
-              xfer += iprot->readI32(ecast227);
-              _elem226 = static_cast<IteratorScope::type>(ecast227);
-              this->scopes.insert(_elem226);
+              IteratorScope::type _elem217;
+              int32_t ecast218;
+              xfer += iprot->readI32(ecast218);
+              _elem217 = static_cast<IteratorScope::type>(ecast218);
+              this->scopes.insert(_elem217);
             }
             xfer += iprot->readSetEnd();
           }
@@ -1245,8 +989,8 @@ uint32_t AccumuloProxy_checkIteratorConflicts_args::write(::apache::thrift::prot
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_checkIteratorConflicts_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -1260,10 +1004,10 @@ uint32_t AccumuloProxy_checkIteratorConflicts_args::write(::apache::thrift::prot
   xfer += oprot->writeFieldBegin("scopes", ::apache::thrift::protocol::T_SET, 4);
   {
     xfer += oprot->writeSetBegin(::apache::thrift::protocol::T_I32, static_cast<uint32_t>(this->scopes.size()));
-    std::set<IteratorScope::type> ::const_iterator _iter228;
-    for (_iter228 = this->scopes.begin(); _iter228 != this->scopes.end(); ++_iter228)
+    std::set<IteratorScope::type> ::const_iterator _iter219;
+    for (_iter219 = this->scopes.begin(); _iter219 != this->scopes.end(); ++_iter219)
     {
-      xfer += oprot->writeI32(static_cast<int32_t>((*_iter228)));
+      xfer += oprot->writeI32(static_cast<int32_t>((*_iter219)));
     }
     xfer += oprot->writeSetEnd();
   }
@@ -1284,8 +1028,8 @@ uint32_t AccumuloProxy_checkIteratorConflicts_pargs::write(::apache::thrift::pro
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_checkIteratorConflicts_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -1299,10 +1043,10 @@ uint32_t AccumuloProxy_checkIteratorConflicts_pargs::write(::apache::thrift::pro
   xfer += oprot->writeFieldBegin("scopes", ::apache::thrift::protocol::T_SET, 4);
   {
     xfer += oprot->writeSetBegin(::apache::thrift::protocol::T_I32, static_cast<uint32_t>((*(this->scopes)).size()));
-    std::set<IteratorScope::type> ::const_iterator _iter229;
-    for (_iter229 = (*(this->scopes)).begin(); _iter229 != (*(this->scopes)).end(); ++_iter229)
+    std::set<IteratorScope::type> ::const_iterator _iter220;
+    for (_iter220 = (*(this->scopes)).begin(); _iter220 != (*(this->scopes)).end(); ++_iter220)
     {
-      xfer += oprot->writeI32(static_cast<int32_t>((*_iter229)));
+      xfer += oprot->writeI32(static_cast<int32_t>((*_iter220)));
     }
     xfer += oprot->writeSetEnd();
   }
@@ -1489,8 +1233,8 @@ uint32_t AccumuloProxy_clearLocatorCache_args::read(::apache::thrift::protocol::
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -1520,8 +1264,8 @@ uint32_t AccumuloProxy_clearLocatorCache_args::write(::apache::thrift::protocol:
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_clearLocatorCache_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -1543,8 +1287,8 @@ uint32_t AccumuloProxy_clearLocatorCache_pargs::write(::apache::thrift::protocol
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_clearLocatorCache_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -1692,8 +1436,8 @@ uint32_t AccumuloProxy_cloneTable_args::read(::apache::thrift::protocol::TProtoc
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -1726,17 +1470,17 @@ uint32_t AccumuloProxy_cloneTable_args::read(::apache::thrift::protocol::TProtoc
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             this->propertiesToSet.clear();
-            uint32_t _size230;
-            ::apache::thrift::protocol::TType _ktype231;
-            ::apache::thrift::protocol::TType _vtype232;
-            xfer += iprot->readMapBegin(_ktype231, _vtype232, _size230);
-            uint32_t _i234;
-            for (_i234 = 0; _i234 < _size230; ++_i234)
+            uint32_t _size221;
+            ::apache::thrift::protocol::TType _ktype222;
+            ::apache::thrift::protocol::TType _vtype223;
+            xfer += iprot->readMapBegin(_ktype222, _vtype223, _size221);
+            uint32_t _i225;
+            for (_i225 = 0; _i225 < _size221; ++_i225)
             {
-              std::string _key235;
-              xfer += iprot->readString(_key235);
-              std::string& _val236 = this->propertiesToSet[_key235];
-              xfer += iprot->readString(_val236);
+              std::string _key226;
+              xfer += iprot->readString(_key226);
+              std::string& _val227 = this->propertiesToSet[_key226];
+              xfer += iprot->readString(_val227);
             }
             xfer += iprot->readMapEnd();
           }
@@ -1749,15 +1493,15 @@ uint32_t AccumuloProxy_cloneTable_args::read(::apache::thrift::protocol::TProtoc
         if (ftype == ::apache::thrift::protocol::T_SET) {
           {
             this->propertiesToExclude.clear();
-            uint32_t _size237;
-            ::apache::thrift::protocol::TType _etype240;
-            xfer += iprot->readSetBegin(_etype240, _size237);
-            uint32_t _i241;
-            for (_i241 = 0; _i241 < _size237; ++_i241)
+            uint32_t _size228;
+            ::apache::thrift::protocol::TType _etype231;
+            xfer += iprot->readSetBegin(_etype231, _size228);
+            uint32_t _i232;
+            for (_i232 = 0; _i232 < _size228; ++_i232)
             {
-              std::string _elem242;
-              xfer += iprot->readString(_elem242);
-              this->propertiesToExclude.insert(_elem242);
+              std::string _elem233;
+              xfer += iprot->readString(_elem233);
+              this->propertiesToExclude.insert(_elem233);
             }
             xfer += iprot->readSetEnd();
           }
@@ -1783,8 +1527,8 @@ uint32_t AccumuloProxy_cloneTable_args::write(::apache::thrift::protocol::TProto
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_cloneTable_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -1802,11 +1546,11 @@ uint32_t AccumuloProxy_cloneTable_args::write(::apache::thrift::protocol::TProto
   xfer += oprot->writeFieldBegin("propertiesToSet", ::apache::thrift::protocol::T_MAP, 5);
   {
     xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->propertiesToSet.size()));
-    std::map<std::string, std::string> ::const_iterator _iter243;
-    for (_iter243 = this->propertiesToSet.begin(); _iter243 != this->propertiesToSet.end(); ++_iter243)
+    std::map<std::string, std::string> ::const_iterator _iter234;
+    for (_iter234 = this->propertiesToSet.begin(); _iter234 != this->propertiesToSet.end(); ++_iter234)
     {
-      xfer += oprot->writeString(_iter243->first);
-      xfer += oprot->writeString(_iter243->second);
+      xfer += oprot->writeString(_iter234->first);
+      xfer += oprot->writeString(_iter234->second);
     }
     xfer += oprot->writeMapEnd();
   }
@@ -1815,10 +1559,10 @@ uint32_t AccumuloProxy_cloneTable_args::write(::apache::thrift::protocol::TProto
   xfer += oprot->writeFieldBegin("propertiesToExclude", ::apache::thrift::protocol::T_SET, 6);
   {
     xfer += oprot->writeSetBegin(::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->propertiesToExclude.size()));
-    std::set<std::string> ::const_iterator _iter244;
-    for (_iter244 = this->propertiesToExclude.begin(); _iter244 != this->propertiesToExclude.end(); ++_iter244)
+    std::set<std::string> ::const_iterator _iter235;
+    for (_iter235 = this->propertiesToExclude.begin(); _iter235 != this->propertiesToExclude.end(); ++_iter235)
     {
-      xfer += oprot->writeString((*_iter244));
+      xfer += oprot->writeString((*_iter235));
     }
     xfer += oprot->writeSetEnd();
   }
@@ -1839,8 +1583,8 @@ uint32_t AccumuloProxy_cloneTable_pargs::write(::apache::thrift::protocol::TProt
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_cloneTable_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -1858,11 +1602,11 @@ uint32_t AccumuloProxy_cloneTable_pargs::write(::apache::thrift::protocol::TProt
   xfer += oprot->writeFieldBegin("propertiesToSet", ::apache::thrift::protocol::T_MAP, 5);
   {
     xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>((*(this->propertiesToSet)).size()));
-    std::map<std::string, std::string> ::const_iterator _iter245;
-    for (_iter245 = (*(this->propertiesToSet)).begin(); _iter245 != (*(this->propertiesToSet)).end(); ++_iter245)
+    std::map<std::string, std::string> ::const_iterator _iter236;
+    for (_iter236 = (*(this->propertiesToSet)).begin(); _iter236 != (*(this->propertiesToSet)).end(); ++_iter236)
     {
-      xfer += oprot->writeString(_iter245->first);
-      xfer += oprot->writeString(_iter245->second);
+      xfer += oprot->writeString(_iter236->first);
+      xfer += oprot->writeString(_iter236->second);
     }
     xfer += oprot->writeMapEnd();
   }
@@ -1871,10 +1615,10 @@ uint32_t AccumuloProxy_cloneTable_pargs::write(::apache::thrift::protocol::TProt
   xfer += oprot->writeFieldBegin("propertiesToExclude", ::apache::thrift::protocol::T_SET, 6);
   {
     xfer += oprot->writeSetBegin(::apache::thrift::protocol::T_STRING, static_cast<uint32_t>((*(this->propertiesToExclude)).size()));
-    std::set<std::string> ::const_iterator _iter246;
-    for (_iter246 = (*(this->propertiesToExclude)).begin(); _iter246 != (*(this->propertiesToExclude)).end(); ++_iter246)
+    std::set<std::string> ::const_iterator _iter237;
+    for (_iter237 = (*(this->propertiesToExclude)).begin(); _iter237 != (*(this->propertiesToExclude)).end(); ++_iter237)
     {
-      xfer += oprot->writeString((*_iter246));
+      xfer += oprot->writeString((*_iter237));
     }
     xfer += oprot->writeSetEnd();
   }
@@ -2081,8 +1825,8 @@ uint32_t AccumuloProxy_compactTable_args::read(::apache::thrift::protocol::TProt
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -2115,14 +1859,14 @@ uint32_t AccumuloProxy_compactTable_args::read(::apache::thrift::protocol::TProt
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->iterators.clear();
-            uint32_t _size247;
-            ::apache::thrift::protocol::TType _etype250;
-            xfer += iprot->readListBegin(_etype250, _size247);
-            this->iterators.resize(_size247);
-            uint32_t _i251;
-            for (_i251 = 0; _i251 < _size247; ++_i251)
+            uint32_t _size238;
+            ::apache::thrift::protocol::TType _etype241;
+            xfer += iprot->readListBegin(_etype241, _size238);
+            this->iterators.resize(_size238);
+            uint32_t _i242;
+            for (_i242 = 0; _i242 < _size238; ++_i242)
             {
-              xfer += this->iterators[_i251].read(iprot);
+              xfer += this->iterators[_i242].read(iprot);
             }
             xfer += iprot->readListEnd();
           }
@@ -2180,8 +1924,8 @@ uint32_t AccumuloProxy_compactTable_args::write(::apache::thrift::protocol::TPro
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_compactTable_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -2199,10 +1943,10 @@ uint32_t AccumuloProxy_compactTable_args::write(::apache::thrift::protocol::TPro
   xfer += oprot->writeFieldBegin("iterators", ::apache::thrift::protocol::T_LIST, 5);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->iterators.size()));
-    std::vector<IteratorSetting> ::const_iterator _iter252;
-    for (_iter252 = this->iterators.begin(); _iter252 != this->iterators.end(); ++_iter252)
+    std::vector<IteratorSetting> ::const_iterator _iter243;
+    for (_iter243 = this->iterators.begin(); _iter243 != this->iterators.end(); ++_iter243)
     {
-      xfer += (*_iter252).write(oprot);
+      xfer += (*_iter243).write(oprot);
     }
     xfer += oprot->writeListEnd();
   }
@@ -2239,8 +1983,8 @@ uint32_t AccumuloProxy_compactTable_pargs::write(::apache::thrift::protocol::TPr
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_compactTable_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -2258,10 +2002,10 @@ uint32_t AccumuloProxy_compactTable_pargs::write(::apache::thrift::protocol::TPr
   xfer += oprot->writeFieldBegin("iterators", ::apache::thrift::protocol::T_LIST, 5);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>((*(this->iterators)).size()));
-    std::vector<IteratorSetting> ::const_iterator _iter253;
-    for (_iter253 = (*(this->iterators)).begin(); _iter253 != (*(this->iterators)).end(); ++_iter253)
+    std::vector<IteratorSetting> ::const_iterator _iter244;
+    for (_iter244 = (*(this->iterators)).begin(); _iter244 != (*(this->iterators)).end(); ++_iter244)
     {
-      xfer += (*_iter253).write(oprot);
+      xfer += (*_iter244).write(oprot);
     }
     xfer += oprot->writeListEnd();
   }
@@ -2464,8 +2208,8 @@ uint32_t AccumuloProxy_cancelCompaction_args::read(::apache::thrift::protocol::T
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -2495,8 +2239,8 @@ uint32_t AccumuloProxy_cancelCompaction_args::write(::apache::thrift::protocol::
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_cancelCompaction_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -2518,8 +2262,8 @@ uint32_t AccumuloProxy_cancelCompaction_pargs::write(::apache::thrift::protocol:
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_cancelCompaction_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -2707,8 +2451,8 @@ uint32_t AccumuloProxy_createTable_args::read(::apache::thrift::protocol::TProto
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -2731,9 +2475,9 @@ uint32_t AccumuloProxy_createTable_args::read(::apache::thrift::protocol::TProto
         break;
       case 4:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast254;
-          xfer += iprot->readI32(ecast254);
-          this->type = static_cast<TimeType::type>(ecast254);
+          int32_t ecast245;
+          xfer += iprot->readI32(ecast245);
+          this->type = static_cast<TimeType::type>(ecast245);
           this->__isset.type = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -2756,8 +2500,8 @@ uint32_t AccumuloProxy_createTable_args::write(::apache::thrift::protocol::TProt
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_createTable_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -2787,8 +2531,8 @@ uint32_t AccumuloProxy_createTable_pargs::write(::apache::thrift::protocol::TPro
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_createTable_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -2984,8 +2728,8 @@ uint32_t AccumuloProxy_deleteTable_args::read(::apache::thrift::protocol::TProto
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -3015,8 +2759,8 @@ uint32_t AccumuloProxy_deleteTable_args::write(::apache::thrift::protocol::TProt
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_deleteTable_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -3038,8 +2782,8 @@ uint32_t AccumuloProxy_deleteTable_pargs::write(::apache::thrift::protocol::TPro
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_deleteTable_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -3227,8 +2971,8 @@ uint32_t AccumuloProxy_deleteRows_args::read(::apache::thrift::protocol::TProtoc
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -3274,8 +3018,8 @@ uint32_t AccumuloProxy_deleteRows_args::write(::apache::thrift::protocol::TProto
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_deleteRows_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -3305,8 +3049,8 @@ uint32_t AccumuloProxy_deleteRows_pargs::write(::apache::thrift::protocol::TProt
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_deleteRows_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -3502,8 +3246,8 @@ uint32_t AccumuloProxy_exportTable_args::read(::apache::thrift::protocol::TProto
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -3541,8 +3285,8 @@ uint32_t AccumuloProxy_exportTable_args::write(::apache::thrift::protocol::TProt
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_exportTable_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -3568,8 +3312,8 @@ uint32_t AccumuloProxy_exportTable_pargs::write(::apache::thrift::protocol::TPro
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_exportTable_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -3761,8 +3505,8 @@ uint32_t AccumuloProxy_flushTable_args::read(::apache::thrift::protocol::TProtoc
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -3816,8 +3560,8 @@ uint32_t AccumuloProxy_flushTable_args::write(::apache::thrift::protocol::TProto
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_flushTable_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -3851,8 +3595,8 @@ uint32_t AccumuloProxy_flushTable_pargs::write(::apache::thrift::protocol::TProt
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_flushTable_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -4052,8 +3796,8 @@ uint32_t AccumuloProxy_getDiskUsage_args::read(::apache::thrift::protocol::TProt
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -4062,15 +3806,15 @@ uint32_t AccumuloProxy_getDiskUsage_args::read(::apache::thrift::protocol::TProt
         if (ftype == ::apache::thrift::protocol::T_SET) {
           {
             this->tables.clear();
-            uint32_t _size255;
-            ::apache::thrift::protocol::TType _etype258;
-            xfer += iprot->readSetBegin(_etype258, _size255);
-            uint32_t _i259;
-            for (_i259 = 0; _i259 < _size255; ++_i259)
+            uint32_t _size246;
+            ::apache::thrift::protocol::TType _etype249;
+            xfer += iprot->readSetBegin(_etype249, _size246);
+            uint32_t _i250;
+            for (_i250 = 0; _i250 < _size246; ++_i250)
             {
-              std::string _elem260;
-              xfer += iprot->readString(_elem260);
-              this->tables.insert(_elem260);
+              std::string _elem251;
+              xfer += iprot->readString(_elem251);
+              this->tables.insert(_elem251);
             }
             xfer += iprot->readSetEnd();
           }
@@ -4096,17 +3840,17 @@ uint32_t AccumuloProxy_getDiskUsage_args::write(::apache::thrift::protocol::TPro
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_getDiskUsage_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tables", ::apache::thrift::protocol::T_SET, 2);
   {
     xfer += oprot->writeSetBegin(::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->tables.size()));
-    std::set<std::string> ::const_iterator _iter261;
-    for (_iter261 = this->tables.begin(); _iter261 != this->tables.end(); ++_iter261)
+    std::set<std::string> ::const_iterator _iter252;
+    for (_iter252 = this->tables.begin(); _iter252 != this->tables.end(); ++_iter252)
     {
-      xfer += oprot->writeString((*_iter261));
+      xfer += oprot->writeString((*_iter252));
     }
     xfer += oprot->writeSetEnd();
   }
@@ -4127,17 +3871,17 @@ uint32_t AccumuloProxy_getDiskUsage_pargs::write(::apache::thrift::protocol::TPr
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_getDiskUsage_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tables", ::apache::thrift::protocol::T_SET, 2);
   {
     xfer += oprot->writeSetBegin(::apache::thrift::protocol::T_STRING, static_cast<uint32_t>((*(this->tables)).size()));
-    std::set<std::string> ::const_iterator _iter262;
-    for (_iter262 = (*(this->tables)).begin(); _iter262 != (*(this->tables)).end(); ++_iter262)
+    std::set<std::string> ::const_iterator _iter253;
+    for (_iter253 = (*(this->tables)).begin(); _iter253 != (*(this->tables)).end(); ++_iter253)
     {
-      xfer += oprot->writeString((*_iter262));
+      xfer += oprot->writeString((*_iter253));
     }
     xfer += oprot->writeSetEnd();
   }
@@ -4178,14 +3922,14 @@ uint32_t AccumuloProxy_getDiskUsage_result::read(::apache::thrift::protocol::TPr
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->success.clear();
-            uint32_t _size263;
-            ::apache::thrift::protocol::TType _etype266;
-            xfer += iprot->readListBegin(_etype266, _size263);
-            this->success.resize(_size263);
-            uint32_t _i267;
-            for (_i267 = 0; _i267 < _size263; ++_i267)
+            uint32_t _size254;
+            ::apache::thrift::protocol::TType _etype257;
+            xfer += iprot->readListBegin(_etype257, _size254);
+            this->success.resize(_size254);
+            uint32_t _i258;
+            for (_i258 = 0; _i258 < _size254; ++_i258)
             {
-              xfer += this->success[_i267].read(iprot);
+              xfer += this->success[_i258].read(iprot);
             }
             xfer += iprot->readListEnd();
           }
@@ -4240,10 +3984,10 @@ uint32_t AccumuloProxy_getDiskUsage_result::write(::apache::thrift::protocol::TP
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_LIST, 0);
     {
       xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->success.size()));
-      std::vector<DiskUsage> ::const_iterator _iter268;
-      for (_iter268 = this->success.begin(); _iter268 != this->success.end(); ++_iter268)
+      std::vector<DiskUsage> ::const_iterator _iter259;
+      for (_iter259 = this->success.begin(); _iter259 != this->success.end(); ++_iter259)
       {
-        xfer += (*_iter268).write(oprot);
+        xfer += (*_iter259).write(oprot);
       }
       xfer += oprot->writeListEnd();
     }
@@ -4296,14 +4040,14 @@ uint32_t AccumuloProxy_getDiskUsage_presult::read(::apache::thrift::protocol::TP
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             (*(this->success)).clear();
-            uint32_t _size269;
-            ::apache::thrift::protocol::TType _etype272;
-            xfer += iprot->readListBegin(_etype272, _size269);
-            (*(this->success)).resize(_size269);
-            uint32_t _i273;
-            for (_i273 = 0; _i273 < _size269; ++_i273)
+            uint32_t _size260;
+            ::apache::thrift::protocol::TType _etype263;
+            xfer += iprot->readListBegin(_etype263, _size260);
+            (*(this->success)).resize(_size260);
+            uint32_t _i264;
+            for (_i264 = 0; _i264 < _size260; ++_i264)
             {
-              xfer += (*(this->success))[_i273].read(iprot);
+              xfer += (*(this->success))[_i264].read(iprot);
             }
             xfer += iprot->readListEnd();
           }
@@ -4376,8 +4120,8 @@ uint32_t AccumuloProxy_getLocalityGroups_args::read(::apache::thrift::protocol::
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -4407,8 +4151,8 @@ uint32_t AccumuloProxy_getLocalityGroups_args::write(::apache::thrift::protocol:
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_getLocalityGroups_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -4430,8 +4174,8 @@ uint32_t AccumuloProxy_getLocalityGroups_pargs::write(::apache::thrift::protocol
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_getLocalityGroups_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -4473,27 +4217,27 @@ uint32_t AccumuloProxy_getLocalityGroups_result::read(::apache::thrift::protocol
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             this->success.clear();
-            uint32_t _size274;
-            ::apache::thrift::protocol::TType _ktype275;
-            ::apache::thrift::protocol::TType _vtype276;
-            xfer += iprot->readMapBegin(_ktype275, _vtype276, _size274);
-            uint32_t _i278;
-            for (_i278 = 0; _i278 < _size274; ++_i278)
+            uint32_t _size265;
+            ::apache::thrift::protocol::TType _ktype266;
+            ::apache::thrift::protocol::TType _vtype267;
+            xfer += iprot->readMapBegin(_ktype266, _vtype267, _size265);
+            uint32_t _i269;
+            for (_i269 = 0; _i269 < _size265; ++_i269)
             {
-              std::string _key279;
-              xfer += iprot->readString(_key279);
-              std::set<std::string> & _val280 = this->success[_key279];
+              std::string _key270;
+              xfer += iprot->readString(_key270);
+              std::set<std::string> & _val271 = this->success[_key270];
               {
-                _val280.clear();
-                uint32_t _size281;
-                ::apache::thrift::protocol::TType _etype284;
-                xfer += iprot->readSetBegin(_etype284, _size281);
-                uint32_t _i285;
-                for (_i285 = 0; _i285 < _size281; ++_i285)
+                _val271.clear();
+                uint32_t _size272;
+                ::apache::thrift::protocol::TType _etype275;
+                xfer += iprot->readSetBegin(_etype275, _size272);
+                uint32_t _i276;
+                for (_i276 = 0; _i276 < _size272; ++_i276)
                 {
-                  std::string _elem286;
-                  xfer += iprot->readString(_elem286);
-                  _val280.insert(_elem286);
+                  std::string _elem277;
+                  xfer += iprot->readString(_elem277);
+                  _val271.insert(_elem277);
                 }
                 xfer += iprot->readSetEnd();
               }
@@ -4551,16 +4295,16 @@ uint32_t AccumuloProxy_getLocalityGroups_result::write(::apache::thrift::protoco
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_MAP, 0);
     {
       xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_SET, static_cast<uint32_t>(this->success.size()));
-      std::map<std::string, std::set<std::string> > ::const_iterator _iter287;
-      for (_iter287 = this->success.begin(); _iter287 != this->success.end(); ++_iter287)
+      std::map<std::string, std::set<std::string> > ::const_iterator _iter278;
+      for (_iter278 = this->success.begin(); _iter278 != this->success.end(); ++_iter278)
       {
-        xfer += oprot->writeString(_iter287->first);
+        xfer += oprot->writeString(_iter278->first);
         {
-          xfer += oprot->writeSetBegin(::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(_iter287->second.size()));
-          std::set<std::string> ::const_iterator _iter288;
-          for (_iter288 = _iter287->second.begin(); _iter288 != _iter287->second.end(); ++_iter288)
+          xfer += oprot->writeSetBegin(::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(_iter278->second.size()));
+          std::set<std::string> ::const_iterator _iter279;
+          for (_iter279 = _iter278->second.begin(); _iter279 != _iter278->second.end(); ++_iter279)
           {
-            xfer += oprot->writeString((*_iter288));
+            xfer += oprot->writeString((*_iter279));
           }
           xfer += oprot->writeSetEnd();
         }
@@ -4616,27 +4360,27 @@ uint32_t AccumuloProxy_getLocalityGroups_presult::read(::apache::thrift::protoco
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             (*(this->success)).clear();
-            uint32_t _size289;
-            ::apache::thrift::protocol::TType _ktype290;
-            ::apache::thrift::protocol::TType _vtype291;
-            xfer += iprot->readMapBegin(_ktype290, _vtype291, _size289);
-            uint32_t _i293;
-            for (_i293 = 0; _i293 < _size289; ++_i293)
+            uint32_t _size280;
+            ::apache::thrift::protocol::TType _ktype281;
+            ::apache::thrift::protocol::TType _vtype282;
+            xfer += iprot->readMapBegin(_ktype281, _vtype282, _size280);
+            uint32_t _i284;
+            for (_i284 = 0; _i284 < _size280; ++_i284)
             {
-              std::string _key294;
-              xfer += iprot->readString(_key294);
-              std::set<std::string> & _val295 = (*(this->success))[_key294];
+              std::string _key285;
+              xfer += iprot->readString(_key285);
+              std::set<std::string> & _val286 = (*(this->success))[_key285];
               {
-                _val295.clear();
-                uint32_t _size296;
-                ::apache::thrift::protocol::TType _etype299;
-                xfer += iprot->readSetBegin(_etype299, _size296);
-                uint32_t _i300;
-                for (_i300 = 0; _i300 < _size296; ++_i300)
+                _val286.clear();
+                uint32_t _size287;
+                ::apache::thrift::protocol::TType _etype290;
+                xfer += iprot->readSetBegin(_etype290, _size287);
+                uint32_t _i291;
+                for (_i291 = 0; _i291 < _size287; ++_i291)
                 {
-                  std::string _elem301;
-                  xfer += iprot->readString(_elem301);
-                  _val295.insert(_elem301);
+                  std::string _elem292;
+                  xfer += iprot->readString(_elem292);
+                  _val286.insert(_elem292);
                 }
                 xfer += iprot->readSetEnd();
               }
@@ -4712,8 +4456,8 @@ uint32_t AccumuloProxy_getIteratorSetting_args::read(::apache::thrift::protocol:
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -4736,9 +4480,9 @@ uint32_t AccumuloProxy_getIteratorSetting_args::read(::apache::thrift::protocol:
         break;
       case 4:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast302;
-          xfer += iprot->readI32(ecast302);
-          this->scope = static_cast<IteratorScope::type>(ecast302);
+          int32_t ecast293;
+          xfer += iprot->readI32(ecast293);
+          this->scope = static_cast<IteratorScope::type>(ecast293);
           this->__isset.scope = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -4761,8 +4505,8 @@ uint32_t AccumuloProxy_getIteratorSetting_args::write(::apache::thrift::protocol
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_getIteratorSetting_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -4792,8 +4536,8 @@ uint32_t AccumuloProxy_getIteratorSetting_pargs::write(::apache::thrift::protoco
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_getIteratorSetting_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -5009,8 +4753,8 @@ uint32_t AccumuloProxy_getMaxRow_args::read(::apache::thrift::protocol::TProtoco
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -5027,15 +4771,15 @@ uint32_t AccumuloProxy_getMaxRow_args::read(::apache::thrift::protocol::TProtoco
         if (ftype == ::apache::thrift::protocol::T_SET) {
           {
             this->auths.clear();
-            uint32_t _size303;
-            ::apache::thrift::protocol::TType _etype306;
-            xfer += iprot->readSetBegin(_etype306, _size303);
-            uint32_t _i307;
-            for (_i307 = 0; _i307 < _size303; ++_i307)
+            uint32_t _size294;
+            ::apache::thrift::protocol::TType _etype297;
+            xfer += iprot->readSetBegin(_etype297, _size294);
+            uint32_t _i298;
+            for (_i298 = 0; _i298 < _size294; ++_i298)
             {
-              std::string _elem308;
-              xfer += iprot->readBinary(_elem308);
-              this->auths.insert(_elem308);
+              std::string _elem299;
+              xfer += iprot->readBinary(_elem299);
+              this->auths.insert(_elem299);
             }
             xfer += iprot->readSetEnd();
           }
@@ -5093,8 +4837,8 @@ uint32_t AccumuloProxy_getMaxRow_args::write(::apache::thrift::protocol::TProtoc
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_getMaxRow_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -5104,10 +4848,10 @@ uint32_t AccumuloProxy_getMaxRow_args::write(::apache::thrift::protocol::TProtoc
   xfer += oprot->writeFieldBegin("auths", ::apache::thrift::protocol::T_SET, 3);
   {
     xfer += oprot->writeSetBegin(::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->auths.size()));
-    std::set<std::string> ::const_iterator _iter309;
-    for (_iter309 = this->auths.begin(); _iter309 != this->auths.end(); ++_iter309)
+    std::set<std::string> ::const_iterator _iter300;
+    for (_iter300 = this->auths.begin(); _iter300 != this->auths.end(); ++_iter300)
     {
-      xfer += oprot->writeBinary((*_iter309));
+      xfer += oprot->writeBinary((*_iter300));
     }
     xfer += oprot->writeSetEnd();
   }
@@ -5144,8 +4888,8 @@ uint32_t AccumuloProxy_getMaxRow_pargs::write(::apache::thrift::protocol::TProto
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_getMaxRow_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -5155,10 +4899,10 @@ uint32_t AccumuloProxy_getMaxRow_pargs::write(::apache::thrift::protocol::TProto
   xfer += oprot->writeFieldBegin("auths", ::apache::thrift::protocol::T_SET, 3);
   {
     xfer += oprot->writeSetBegin(::apache::thrift::protocol::T_STRING, static_cast<uint32_t>((*(this->auths)).size()));
-    std::set<std::string> ::const_iterator _iter310;
-    for (_iter310 = (*(this->auths)).begin(); _iter310 != (*(this->auths)).end(); ++_iter310)
+    std::set<std::string> ::const_iterator _iter301;
+    for (_iter301 = (*(this->auths)).begin(); _iter301 != (*(this->auths)).end(); ++_iter301)
     {
-      xfer += oprot->writeBinary((*_iter310));
+      xfer += oprot->writeBinary((*_iter301));
     }
     xfer += oprot->writeSetEnd();
   }
@@ -5381,8 +5125,8 @@ uint32_t AccumuloProxy_getTableProperties_args::read(::apache::thrift::protocol:
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -5412,8 +5156,8 @@ uint32_t AccumuloProxy_getTableProperties_args::write(::apache::thrift::protocol
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_getTableProperties_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -5435,8 +5179,8 @@ uint32_t AccumuloProxy_getTableProperties_pargs::write(::apache::thrift::protoco
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_getTableProperties_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -5478,17 +5222,17 @@ uint32_t AccumuloProxy_getTableProperties_result::read(::apache::thrift::protoco
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             this->success.clear();
-            uint32_t _size311;
-            ::apache::thrift::protocol::TType _ktype312;
-            ::apache::thrift::protocol::TType _vtype313;
-            xfer += iprot->readMapBegin(_ktype312, _vtype313, _size311);
-            uint32_t _i315;
-            for (_i315 = 0; _i315 < _size311; ++_i315)
+            uint32_t _size302;
+            ::apache::thrift::protocol::TType _ktype303;
+            ::apache::thrift::protocol::TType _vtype304;
+            xfer += iprot->readMapBegin(_ktype303, _vtype304, _size302);
+            uint32_t _i306;
+            for (_i306 = 0; _i306 < _size302; ++_i306)
             {
-              std::string _key316;
-              xfer += iprot->readString(_key316);
-              std::string& _val317 = this->success[_key316];
-              xfer += iprot->readString(_val317);
+              std::string _key307;
+              xfer += iprot->readString(_key307);
+              std::string& _val308 = this->success[_key307];
+              xfer += iprot->readString(_val308);
             }
             xfer += iprot->readMapEnd();
           }
@@ -5543,11 +5287,11 @@ uint32_t AccumuloProxy_getTableProperties_result::write(::apache::thrift::protoc
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_MAP, 0);
     {
       xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->success.size()));
-      std::map<std::string, std::string> ::const_iterator _iter318;
-      for (_iter318 = this->success.begin(); _iter318 != this->success.end(); ++_iter318)
+      std::map<std::string, std::string> ::const_iterator _iter309;
+      for (_iter309 = this->success.begin(); _iter309 != this->success.end(); ++_iter309)
       {
-        xfer += oprot->writeString(_iter318->first);
-        xfer += oprot->writeString(_iter318->second);
+        xfer += oprot->writeString(_iter309->first);
+        xfer += oprot->writeString(_iter309->second);
       }
       xfer += oprot->writeMapEnd();
     }
@@ -5600,17 +5344,17 @@ uint32_t AccumuloProxy_getTableProperties_presult::read(::apache::thrift::protoc
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             (*(this->success)).clear();
-            uint32_t _size319;
-            ::apache::thrift::protocol::TType _ktype320;
-            ::apache::thrift::protocol::TType _vtype321;
-            xfer += iprot->readMapBegin(_ktype320, _vtype321, _size319);
-            uint32_t _i323;
-            for (_i323 = 0; _i323 < _size319; ++_i323)
+            uint32_t _size310;
+            ::apache::thrift::protocol::TType _ktype311;
+            ::apache::thrift::protocol::TType _vtype312;
+            xfer += iprot->readMapBegin(_ktype311, _vtype312, _size310);
+            uint32_t _i314;
+            for (_i314 = 0; _i314 < _size310; ++_i314)
             {
-              std::string _key324;
-              xfer += iprot->readString(_key324);
-              std::string& _val325 = (*(this->success))[_key324];
-              xfer += iprot->readString(_val325);
+              std::string _key315;
+              xfer += iprot->readString(_key315);
+              std::string& _val316 = (*(this->success))[_key315];
+              xfer += iprot->readString(_val316);
             }
             xfer += iprot->readMapEnd();
           }
@@ -5683,8 +5427,8 @@ uint32_t AccumuloProxy_importDirectory_args::read(::apache::thrift::protocol::TP
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -5738,8 +5482,8 @@ uint32_t AccumuloProxy_importDirectory_args::write(::apache::thrift::protocol::T
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_importDirectory_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -5773,8 +5517,8 @@ uint32_t AccumuloProxy_importDirectory_pargs::write(::apache::thrift::protocol::
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_importDirectory_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -5974,8 +5718,8 @@ uint32_t AccumuloProxy_importTable_args::read(::apache::thrift::protocol::TProto
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -6013,8 +5757,8 @@ uint32_t AccumuloProxy_importTable_args::write(::apache::thrift::protocol::TProt
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_importTable_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -6040,8 +5784,8 @@ uint32_t AccumuloProxy_importTable_pargs::write(::apache::thrift::protocol::TPro
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_importTable_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -6233,8 +5977,8 @@ uint32_t AccumuloProxy_listSplits_args::read(::apache::thrift::protocol::TProtoc
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -6272,8 +6016,8 @@ uint32_t AccumuloProxy_listSplits_args::write(::apache::thrift::protocol::TProto
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_listSplits_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -6299,8 +6043,8 @@ uint32_t AccumuloProxy_listSplits_pargs::write(::apache::thrift::protocol::TProt
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_listSplits_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -6346,14 +6090,14 @@ uint32_t AccumuloProxy_listSplits_result::read(::apache::thrift::protocol::TProt
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->success.clear();
-            uint32_t _size326;
-            ::apache::thrift::protocol::TType _etype329;
-            xfer += iprot->readListBegin(_etype329, _size326);
-            this->success.resize(_size326);
-            uint32_t _i330;
-            for (_i330 = 0; _i330 < _size326; ++_i330)
+            uint32_t _size317;
+            ::apache::thrift::protocol::TType _etype320;
+            xfer += iprot->readListBegin(_etype320, _size317);
+            this->success.resize(_size317);
+            uint32_t _i321;
+            for (_i321 = 0; _i321 < _size317; ++_i321)
             {
-              xfer += iprot->readBinary(this->success[_i330]);
+              xfer += iprot->readBinary(this->success[_i321]);
             }
             xfer += iprot->readListEnd();
           }
@@ -6408,10 +6152,10 @@ uint32_t AccumuloProxy_listSplits_result::write(::apache::thrift::protocol::TPro
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_LIST, 0);
     {
       xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->success.size()));
-      std::vector<std::string> ::const_iterator _iter331;
-      for (_iter331 = this->success.begin(); _iter331 != this->success.end(); ++_iter331)
+      std::vector<std::string> ::const_iterator _iter322;
+      for (_iter322 = this->success.begin(); _iter322 != this->success.end(); ++_iter322)
       {
-        xfer += oprot->writeBinary((*_iter331));
+        xfer += oprot->writeBinary((*_iter322));
       }
       xfer += oprot->writeListEnd();
     }
@@ -6464,14 +6208,14 @@ uint32_t AccumuloProxy_listSplits_presult::read(::apache::thrift::protocol::TPro
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             (*(this->success)).clear();
-            uint32_t _size332;
-            ::apache::thrift::protocol::TType _etype335;
-            xfer += iprot->readListBegin(_etype335, _size332);
-            (*(this->success)).resize(_size332);
-            uint32_t _i336;
-            for (_i336 = 0; _i336 < _size332; ++_i336)
+            uint32_t _size323;
+            ::apache::thrift::protocol::TType _etype326;
+            xfer += iprot->readListBegin(_etype326, _size323);
+            (*(this->success)).resize(_size323);
+            uint32_t _i327;
+            for (_i327 = 0; _i327 < _size323; ++_i327)
             {
-              xfer += iprot->readBinary((*(this->success))[_i336]);
+              xfer += iprot->readBinary((*(this->success))[_i327]);
             }
             xfer += iprot->readListEnd();
           }
@@ -6544,8 +6288,8 @@ uint32_t AccumuloProxy_listTables_args::read(::apache::thrift::protocol::TProtoc
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -6567,8 +6311,8 @@ uint32_t AccumuloProxy_listTables_args::write(::apache::thrift::protocol::TProto
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_listTables_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -6586,8 +6330,8 @@ uint32_t AccumuloProxy_listTables_pargs::write(::apache::thrift::protocol::TProt
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_listTables_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -6625,15 +6369,15 @@ uint32_t AccumuloProxy_listTables_result::read(::apache::thrift::protocol::TProt
         if (ftype == ::apache::thrift::protocol::T_SET) {
           {
             this->success.clear();
-            uint32_t _size337;
-            ::apache::thrift::protocol::TType _etype340;
-            xfer += iprot->readSetBegin(_etype340, _size337);
-            uint32_t _i341;
-            for (_i341 = 0; _i341 < _size337; ++_i341)
+            uint32_t _size328;
+            ::apache::thrift::protocol::TType _etype331;
+            xfer += iprot->readSetBegin(_etype331, _size328);
+            uint32_t _i332;
+            for (_i332 = 0; _i332 < _size328; ++_i332)
             {
-              std::string _elem342;
-              xfer += iprot->readString(_elem342);
-              this->success.insert(_elem342);
+              std::string _elem333;
+              xfer += iprot->readString(_elem333);
+              this->success.insert(_elem333);
             }
             xfer += iprot->readSetEnd();
           }
@@ -6664,10 +6408,10 @@ uint32_t AccumuloProxy_listTables_result::write(::apache::thrift::protocol::TPro
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_SET, 0);
     {
       xfer += oprot->writeSetBegin(::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->success.size()));
-      std::set<std::string> ::const_iterator _iter343;
-      for (_iter343 = this->success.begin(); _iter343 != this->success.end(); ++_iter343)
+      std::set<std::string> ::const_iterator _iter334;
+      for (_iter334 = this->success.begin(); _iter334 != this->success.end(); ++_iter334)
       {
-        xfer += oprot->writeString((*_iter343));
+        xfer += oprot->writeString((*_iter334));
       }
       xfer += oprot->writeSetEnd();
     }
@@ -6708,15 +6452,15 @@ uint32_t AccumuloProxy_listTables_presult::read(::apache::thrift::protocol::TPro
         if (ftype == ::apache::thrift::protocol::T_SET) {
           {
             (*(this->success)).clear();
-            uint32_t _size344;
-            ::apache::thrift::protocol::TType _etype347;
-            xfer += iprot->readSetBegin(_etype347, _size344);
-            uint32_t _i348;
-            for (_i348 = 0; _i348 < _size344; ++_i348)
+            uint32_t _size335;
+            ::apache::thrift::protocol::TType _etype338;
+            xfer += iprot->readSetBegin(_etype338, _size335);
+            uint32_t _i339;
+            for (_i339 = 0; _i339 < _size335; ++_i339)
             {
-              std::string _elem349;
-              xfer += iprot->readString(_elem349);
-              (*(this->success)).insert(_elem349);
+              std::string _elem340;
+              xfer += iprot->readString(_elem340);
+              (*(this->success)).insert(_elem340);
             }
             xfer += iprot->readSetEnd();
           }
@@ -6765,8 +6509,8 @@ uint32_t AccumuloProxy_listIterators_args::read(::apache::thrift::protocol::TPro
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -6796,8 +6540,8 @@ uint32_t AccumuloProxy_listIterators_args::write(::apache::thrift::protocol::TPr
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_listIterators_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -6819,8 +6563,8 @@ uint32_t AccumuloProxy_listIterators_pargs::write(::apache::thrift::protocol::TP
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_listIterators_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -6862,29 +6606,29 @@ uint32_t AccumuloProxy_listIterators_result::read(::apache::thrift::protocol::TP
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             this->success.clear();
-            uint32_t _size350;
-            ::apache::thrift::protocol::TType _ktype351;
-            ::apache::thrift::protocol::TType _vtype352;
-            xfer += iprot->readMapBegin(_ktype351, _vtype352, _size350);
-            uint32_t _i354;
-            for (_i354 = 0; _i354 < _size350; ++_i354)
+            uint32_t _size341;
+            ::apache::thrift::protocol::TType _ktype342;
+            ::apache::thrift::protocol::TType _vtype343;
+            xfer += iprot->readMapBegin(_ktype342, _vtype343, _size341);
+            uint32_t _i345;
+            for (_i345 = 0; _i345 < _size341; ++_i345)
             {
-              std::string _key355;
-              xfer += iprot->readString(_key355);
-              std::set<IteratorScope::type> & _val356 = this->success[_key355];
+              std::string _key346;
+              xfer += iprot->readString(_key346);
+              std::set<IteratorScope::type> & _val347 = this->success[_key346];
               {
-                _val356.clear();
-                uint32_t _size357;
-                ::apache::thrift::protocol::TType _etype360;
-                xfer += iprot->readSetBegin(_etype360, _size357);
-                uint32_t _i361;
-                for (_i361 = 0; _i361 < _size357; ++_i361)
+                _val347.clear();
+                uint32_t _size348;
+                ::apache::thrift::protocol::TType _etype351;
+                xfer += iprot->readSetBegin(_etype351, _size348);
+                uint32_t _i352;
+                for (_i352 = 0; _i352 < _size348; ++_i352)
                 {
-                  IteratorScope::type _elem362;
-                  int32_t ecast363;
-                  xfer += iprot->readI32(ecast363);
-                  _elem362 = static_cast<IteratorScope::type>(ecast363);
-                  _val356.insert(_elem362);
+                  IteratorScope::type _elem353;
+                  int32_t ecast354;
+                  xfer += iprot->readI32(ecast354);
+                  _elem353 = static_cast<IteratorScope::type>(ecast354);
+                  _val347.insert(_elem353);
                 }
                 xfer += iprot->readSetEnd();
               }
@@ -6942,16 +6686,16 @@ uint32_t AccumuloProxy_listIterators_result::write(::apache::thrift::protocol::T
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_MAP, 0);
     {
       xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_SET, static_cast<uint32_t>(this->success.size()));
-      std::map<std::string, std::set<IteratorScope::type> > ::const_iterator _iter364;
-      for (_iter364 = this->success.begin(); _iter364 != this->success.end(); ++_iter364)
+      std::map<std::string, std::set<IteratorScope::type> > ::const_iterator _iter355;
+      for (_iter355 = this->success.begin(); _iter355 != this->success.end(); ++_iter355)
       {
-        xfer += oprot->writeString(_iter364->first);
+        xfer += oprot->writeString(_iter355->first);
         {
-          xfer += oprot->writeSetBegin(::apache::thrift::protocol::T_I32, static_cast<uint32_t>(_iter364->second.size()));
-          std::set<IteratorScope::type> ::const_iterator _iter365;
-          for (_iter365 = _iter364->second.begin(); _iter365 != _iter364->second.end(); ++_iter365)
+          xfer += oprot->writeSetBegin(::apache::thrift::protocol::T_I32, static_cast<uint32_t>(_iter355->second.size()));
+          std::set<IteratorScope::type> ::const_iterator _iter356;
+          for (_iter356 = _iter355->second.begin(); _iter356 != _iter355->second.end(); ++_iter356)
           {
-            xfer += oprot->writeI32(static_cast<int32_t>((*_iter365)));
+            xfer += oprot->writeI32(static_cast<int32_t>((*_iter356)));
           }
           xfer += oprot->writeSetEnd();
         }
@@ -7007,29 +6751,29 @@ uint32_t AccumuloProxy_listIterators_presult::read(::apache::thrift::protocol::T
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             (*(this->success)).clear();
-            uint32_t _size366;
-            ::apache::thrift::protocol::TType _ktype367;
-            ::apache::thrift::protocol::TType _vtype368;
-            xfer += iprot->readMapBegin(_ktype367, _vtype368, _size366);
-            uint32_t _i370;
-            for (_i370 = 0; _i370 < _size366; ++_i370)
+            uint32_t _size357;
+            ::apache::thrift::protocol::TType _ktype358;
+            ::apache::thrift::protocol::TType _vtype359;
+            xfer += iprot->readMapBegin(_ktype358, _vtype359, _size357);
+            uint32_t _i361;
+            for (_i361 = 0; _i361 < _size357; ++_i361)
             {
-              std::string _key371;
-              xfer += iprot->readString(_key371);
-              std::set<IteratorScope::type> & _val372 = (*(this->success))[_key371];
+              std::string _key362;
+              xfer += iprot->readString(_key362);
+              std::set<IteratorScope::type> & _val363 = (*(this->success))[_key362];
               {
-                _val372.clear();
-                uint32_t _size373;
-                ::apache::thrift::protocol::TType _etype376;
-                xfer += iprot->readSetBegin(_etype376, _size373);
-                uint32_t _i377;
-                for (_i377 = 0; _i377 < _size373; ++_i377)
+                _val363.clear();
+                uint32_t _size364;
+                ::apache::thrift::protocol::TType _etype367;
+                xfer += iprot->readSetBegin(_etype367, _size364);
+                uint32_t _i368;
+                for (_i368 = 0; _i368 < _size364; ++_i368)
                 {
-                  IteratorScope::type _elem378;
-                  int32_t ecast379;
-                  xfer += iprot->readI32(ecast379);
-                  _elem378 = static_cast<IteratorScope::type>(ecast379);
-                  _val372.insert(_elem378);
+                  IteratorScope::type _elem369;
+                  int32_t ecast370;
+                  xfer += iprot->readI32(ecast370);
+                  _elem369 = static_cast<IteratorScope::type>(ecast370);
+                  _val363.insert(_elem369);
                 }
                 xfer += iprot->readSetEnd();
               }
@@ -7105,8 +6849,8 @@ uint32_t AccumuloProxy_listConstraints_args::read(::apache::thrift::protocol::TP
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -7136,8 +6880,8 @@ uint32_t AccumuloProxy_listConstraints_args::write(::apache::thrift::protocol::T
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_listConstraints_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -7159,8 +6903,8 @@ uint32_t AccumuloProxy_listConstraints_pargs::write(::apache::thrift::protocol::
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_listConstraints_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -7202,17 +6946,17 @@ uint32_t AccumuloProxy_listConstraints_result::read(::apache::thrift::protocol::
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             this->success.clear();
-            uint32_t _size380;
-            ::apache::thrift::protocol::TType _ktype381;
-            ::apache::thrift::protocol::TType _vtype382;
-            xfer += iprot->readMapBegin(_ktype381, _vtype382, _size380);
-            uint32_t _i384;
-            for (_i384 = 0; _i384 < _size380; ++_i384)
+            uint32_t _size371;
+            ::apache::thrift::protocol::TType _ktype372;
+            ::apache::thrift::protocol::TType _vtype373;
+            xfer += iprot->readMapBegin(_ktype372, _vtype373, _size371);
+            uint32_t _i375;
+            for (_i375 = 0; _i375 < _size371; ++_i375)
             {
-              std::string _key385;
-              xfer += iprot->readString(_key385);
-              int32_t& _val386 = this->success[_key385];
-              xfer += iprot->readI32(_val386);
+              std::string _key376;
+              xfer += iprot->readString(_key376);
+              int32_t& _val377 = this->success[_key376];
+              xfer += iprot->readI32(_val377);
             }
             xfer += iprot->readMapEnd();
           }
@@ -7267,11 +7011,11 @@ uint32_t AccumuloProxy_listConstraints_result::write(::apache::thrift::protocol:
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_MAP, 0);
     {
       xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_I32, static_cast<uint32_t>(this->success.size()));
-      std::map<std::string, int32_t> ::const_iterator _iter387;
-      for (_iter387 = this->success.begin(); _iter387 != this->success.end(); ++_iter387)
+      std::map<std::string, int32_t> ::const_iterator _iter378;
+      for (_iter378 = this->success.begin(); _iter378 != this->success.end(); ++_iter378)
       {
-        xfer += oprot->writeString(_iter387->first);
-        xfer += oprot->writeI32(_iter387->second);
+        xfer += oprot->writeString(_iter378->first);
+        xfer += oprot->writeI32(_iter378->second);
       }
       xfer += oprot->writeMapEnd();
     }
@@ -7324,17 +7068,17 @@ uint32_t AccumuloProxy_listConstraints_presult::read(::apache::thrift::protocol:
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             (*(this->success)).clear();
-            uint32_t _size388;
-            ::apache::thrift::protocol::TType _ktype389;
-            ::apache::thrift::protocol::TType _vtype390;
-            xfer += iprot->readMapBegin(_ktype389, _vtype390, _size388);
-            uint32_t _i392;
-            for (_i392 = 0; _i392 < _size388; ++_i392)
+            uint32_t _size379;
+            ::apache::thrift::protocol::TType _ktype380;
+            ::apache::thrift::protocol::TType _vtype381;
+            xfer += iprot->readMapBegin(_ktype380, _vtype381, _size379);
+            uint32_t _i383;
+            for (_i383 = 0; _i383 < _size379; ++_i383)
             {
-              std::string _key393;
-              xfer += iprot->readString(_key393);
-              int32_t& _val394 = (*(this->success))[_key393];
-              xfer += iprot->readI32(_val394);
+              std::string _key384;
+              xfer += iprot->readString(_key384);
+              int32_t& _val385 = (*(this->success))[_key384];
+              xfer += iprot->readI32(_val385);
             }
             xfer += iprot->readMapEnd();
           }
@@ -7407,8 +7151,8 @@ uint32_t AccumuloProxy_mergeTablets_args::read(::apache::thrift::protocol::TProt
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -7454,8 +7198,8 @@ uint32_t AccumuloProxy_mergeTablets_args::write(::apache::thrift::protocol::TPro
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_mergeTablets_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -7485,8 +7229,8 @@ uint32_t AccumuloProxy_mergeTablets_pargs::write(::apache::thrift::protocol::TPr
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_mergeTablets_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -7682,8 +7426,8 @@ uint32_t AccumuloProxy_offlineTable_args::read(::apache::thrift::protocol::TProt
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -7721,8 +7465,8 @@ uint32_t AccumuloProxy_offlineTable_args::write(::apache::thrift::protocol::TPro
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_offlineTable_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -7748,8 +7492,8 @@ uint32_t AccumuloProxy_offlineTable_pargs::write(::apache::thrift::protocol::TPr
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_offlineTable_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -7941,8 +7685,8 @@ uint32_t AccumuloProxy_onlineTable_args::read(::apache::thrift::protocol::TProto
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -7980,8 +7724,8 @@ uint32_t AccumuloProxy_onlineTable_args::write(::apache::thrift::protocol::TProt
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_onlineTable_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -8007,8 +7751,8 @@ uint32_t AccumuloProxy_onlineTable_pargs::write(::apache::thrift::protocol::TPro
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_onlineTable_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -8200,8 +7944,8 @@ uint32_t AccumuloProxy_removeConstraint_args::read(::apache::thrift::protocol::T
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -8239,8 +7983,8 @@ uint32_t AccumuloProxy_removeConstraint_args::write(::apache::thrift::protocol::
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_removeConstraint_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -8266,8 +8010,8 @@ uint32_t AccumuloProxy_removeConstraint_pargs::write(::apache::thrift::protocol:
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_removeConstraint_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -8459,8 +8203,8 @@ uint32_t AccumuloProxy_removeIterator_args::read(::apache::thrift::protocol::TPr
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -8485,17 +8229,17 @@ uint32_t AccumuloProxy_removeIterator_args::read(::apache::thrift::protocol::TPr
         if (ftype == ::apache::thrift::protocol::T_SET) {
           {
             this->scopes.clear();
-            uint32_t _size395;
-            ::apache::thrift::protocol::TType _etype398;
-            xfer += iprot->readSetBegin(_etype398, _size395);
-            uint32_t _i399;
-            for (_i399 = 0; _i399 < _size395; ++_i399)
+            uint32_t _size386;
+            ::apache::thrift::protocol::TType _etype389;
+            xfer += iprot->readSetBegin(_etype389, _size386);
+            uint32_t _i390;
+            for (_i390 = 0; _i390 < _size386; ++_i390)
             {
-              IteratorScope::type _elem400;
-              int32_t ecast401;
-              xfer += iprot->readI32(ecast401);
-              _elem400 = static_cast<IteratorScope::type>(ecast401);
-              this->scopes.insert(_elem400);
+              IteratorScope::type _elem391;
+              int32_t ecast392;
+              xfer += iprot->readI32(ecast392);
+              _elem391 = static_cast<IteratorScope::type>(ecast392);
+              this->scopes.insert(_elem391);
             }
             xfer += iprot->readSetEnd();
           }
@@ -8521,8 +8265,8 @@ uint32_t AccumuloProxy_removeIterator_args::write(::apache::thrift::protocol::TP
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_removeIterator_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -8536,10 +8280,10 @@ uint32_t AccumuloProxy_removeIterator_args::write(::apache::thrift::protocol::TP
   xfer += oprot->writeFieldBegin("scopes", ::apache::thrift::protocol::T_SET, 4);
   {
     xfer += oprot->writeSetBegin(::apache::thrift::protocol::T_I32, static_cast<uint32_t>(this->scopes.size()));
-    std::set<IteratorScope::type> ::const_iterator _iter402;
-    for (_iter402 = this->scopes.begin(); _iter402 != this->scopes.end(); ++_iter402)
+    std::set<IteratorScope::type> ::const_iterator _iter393;
+    for (_iter393 = this->scopes.begin(); _iter393 != this->scopes.end(); ++_iter393)
     {
-      xfer += oprot->writeI32(static_cast<int32_t>((*_iter402)));
+      xfer += oprot->writeI32(static_cast<int32_t>((*_iter393)));
     }
     xfer += oprot->writeSetEnd();
   }
@@ -8560,8 +8304,8 @@ uint32_t AccumuloProxy_removeIterator_pargs::write(::apache::thrift::protocol::T
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_removeIterator_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -8575,10 +8319,10 @@ uint32_t AccumuloProxy_removeIterator_pargs::write(::apache::thrift::protocol::T
   xfer += oprot->writeFieldBegin("scopes", ::apache::thrift::protocol::T_SET, 4);
   {
     xfer += oprot->writeSetBegin(::apache::thrift::protocol::T_I32, static_cast<uint32_t>((*(this->scopes)).size()));
-    std::set<IteratorScope::type> ::const_iterator _iter403;
-    for (_iter403 = (*(this->scopes)).begin(); _iter403 != (*(this->scopes)).end(); ++_iter403)
+    std::set<IteratorScope::type> ::const_iterator _iter394;
+    for (_iter394 = (*(this->scopes)).begin(); _iter394 != (*(this->scopes)).end(); ++_iter394)
     {
-      xfer += oprot->writeI32(static_cast<int32_t>((*_iter403)));
+      xfer += oprot->writeI32(static_cast<int32_t>((*_iter394)));
     }
     xfer += oprot->writeSetEnd();
   }
@@ -8765,8 +8509,8 @@ uint32_t AccumuloProxy_removeTableProperty_args::read(::apache::thrift::protocol
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -8804,8 +8548,8 @@ uint32_t AccumuloProxy_removeTableProperty_args::write(::apache::thrift::protoco
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_removeTableProperty_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -8831,8 +8575,8 @@ uint32_t AccumuloProxy_removeTableProperty_pargs::write(::apache::thrift::protoc
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_removeTableProperty_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -9024,8 +8768,8 @@ uint32_t AccumuloProxy_renameTable_args::read(::apache::thrift::protocol::TProto
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -9063,8 +8807,8 @@ uint32_t AccumuloProxy_renameTable_args::write(::apache::thrift::protocol::TProt
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_renameTable_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("oldTableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -9090,8 +8834,8 @@ uint32_t AccumuloProxy_renameTable_pargs::write(::apache::thrift::protocol::TPro
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_renameTable_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("oldTableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -9303,8 +9047,8 @@ uint32_t AccumuloProxy_setLocalityGroups_args::read(::apache::thrift::protocol::
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -9321,27 +9065,27 @@ uint32_t AccumuloProxy_setLocalityGroups_args::read(::apache::thrift::protocol::
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             this->groups.clear();
-            uint32_t _size404;
-            ::apache::thrift::protocol::TType _ktype405;
-            ::apache::thrift::protocol::TType _vtype406;
-            xfer += iprot->readMapBegin(_ktype405, _vtype406, _size404);
-            uint32_t _i408;
-            for (_i408 = 0; _i408 < _size404; ++_i408)
+            uint32_t _size395;
+            ::apache::thrift::protocol::TType _ktype396;
+            ::apache::thrift::protocol::TType _vtype397;
+            xfer += iprot->readMapBegin(_ktype396, _vtype397, _size395);
+            uint32_t _i399;
+            for (_i399 = 0; _i399 < _size395; ++_i399)
             {
-              std::string _key409;
-              xfer += iprot->readString(_key409);
-              std::set<std::string> & _val410 = this->groups[_key409];
+              std::string _key400;
+              xfer += iprot->readString(_key400);
+              std::set<std::string> & _val401 = this->groups[_key400];
               {
-                _val410.clear();
-                uint32_t _size411;
-                ::apache::thrift::protocol::TType _etype414;
-                xfer += iprot->readSetBegin(_etype414, _size411);
-                uint32_t _i415;
-                for (_i415 = 0; _i415 < _size411; ++_i415)
+                _val401.clear();
+                uint32_t _size402;
+                ::apache::thrift::protocol::TType _etype405;
+                xfer += iprot->readSetBegin(_etype405, _size402);
+                uint32_t _i406;
+                for (_i406 = 0; _i406 < _size402; ++_i406)
                 {
-                  std::string _elem416;
-                  xfer += iprot->readString(_elem416);
-                  _val410.insert(_elem416);
+                  std::string _elem407;
+                  xfer += iprot->readString(_elem407);
+                  _val401.insert(_elem407);
                 }
                 xfer += iprot->readSetEnd();
               }
@@ -9370,8 +9114,8 @@ uint32_t AccumuloProxy_setLocalityGroups_args::write(::apache::thrift::protocol:
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_setLocalityGroups_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -9381,16 +9125,16 @@ uint32_t AccumuloProxy_setLocalityGroups_args::write(::apache::thrift::protocol:
   xfer += oprot->writeFieldBegin("groups", ::apache::thrift::protocol::T_MAP, 3);
   {
     xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_SET, static_cast<uint32_t>(this->groups.size()));
-    std::map<std::string, std::set<std::string> > ::const_iterator _iter417;
-    for (_iter417 = this->groups.begin(); _iter417 != this->groups.end(); ++_iter417)
+    std::map<std::string, std::set<std::string> > ::const_iterator _iter408;
+    for (_iter408 = this->groups.begin(); _iter408 != this->groups.end(); ++_iter408)
     {
-      xfer += oprot->writeString(_iter417->first);
+      xfer += oprot->writeString(_iter408->first);
       {
-        xfer += oprot->writeSetBegin(::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(_iter417->second.size()));
-        std::set<std::string> ::const_iterator _iter418;
-        for (_iter418 = _iter417->second.begin(); _iter418 != _iter417->second.end(); ++_iter418)
+        xfer += oprot->writeSetBegin(::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(_iter408->second.size()));
+        std::set<std::string> ::const_iterator _iter409;
+        for (_iter409 = _iter408->second.begin(); _iter409 != _iter408->second.end(); ++_iter409)
         {
-          xfer += oprot->writeString((*_iter418));
+          xfer += oprot->writeString((*_iter409));
         }
         xfer += oprot->writeSetEnd();
       }
@@ -9414,8 +9158,8 @@ uint32_t AccumuloProxy_setLocalityGroups_pargs::write(::apache::thrift::protocol
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_setLocalityGroups_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -9425,16 +9169,16 @@ uint32_t AccumuloProxy_setLocalityGroups_pargs::write(::apache::thrift::protocol
   xfer += oprot->writeFieldBegin("groups", ::apache::thrift::protocol::T_MAP, 3);
   {
     xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_SET, static_cast<uint32_t>((*(this->groups)).size()));
-    std::map<std::string, std::set<std::string> > ::const_iterator _iter419;
-    for (_iter419 = (*(this->groups)).begin(); _iter419 != (*(this->groups)).end(); ++_iter419)
+    std::map<std::string, std::set<std::string> > ::const_iterator _iter410;
+    for (_iter410 = (*(this->groups)).begin(); _iter410 != (*(this->groups)).end(); ++_iter410)
     {
-      xfer += oprot->writeString(_iter419->first);
+      xfer += oprot->writeString(_iter410->first);
       {
-        xfer += oprot->writeSetBegin(::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(_iter419->second.size()));
-        std::set<std::string> ::const_iterator _iter420;
-        for (_iter420 = _iter419->second.begin(); _iter420 != _iter419->second.end(); ++_iter420)
+        xfer += oprot->writeSetBegin(::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(_iter410->second.size()));
+        std::set<std::string> ::const_iterator _iter411;
+        for (_iter411 = _iter410->second.begin(); _iter411 != _iter410->second.end(); ++_iter411)
         {
-          xfer += oprot->writeString((*_iter420));
+          xfer += oprot->writeString((*_iter411));
         }
         xfer += oprot->writeSetEnd();
       }
@@ -9624,8 +9368,8 @@ uint32_t AccumuloProxy_setTableProperty_args::read(::apache::thrift::protocol::T
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -9671,8 +9415,8 @@ uint32_t AccumuloProxy_setTableProperty_args::write(::apache::thrift::protocol::
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_setTableProperty_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -9702,8 +9446,8 @@ uint32_t AccumuloProxy_setTableProperty_pargs::write(::apache::thrift::protocol:
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_setTableProperty_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -9899,8 +9643,8 @@ uint32_t AccumuloProxy_splitRangeByTablets_args::read(::apache::thrift::protocol
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -9946,8 +9690,8 @@ uint32_t AccumuloProxy_splitRangeByTablets_args::write(::apache::thrift::protoco
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_splitRangeByTablets_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -9977,8 +9721,8 @@ uint32_t AccumuloProxy_splitRangeByTablets_pargs::write(::apache::thrift::protoc
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_splitRangeByTablets_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -10028,15 +9772,15 @@ uint32_t AccumuloProxy_splitRangeByTablets_result::read(::apache::thrift::protoc
         if (ftype == ::apache::thrift::protocol::T_SET) {
           {
             this->success.clear();
-            uint32_t _size421;
-            ::apache::thrift::protocol::TType _etype424;
-            xfer += iprot->readSetBegin(_etype424, _size421);
-            uint32_t _i425;
-            for (_i425 = 0; _i425 < _size421; ++_i425)
+            uint32_t _size412;
+            ::apache::thrift::protocol::TType _etype415;
+            xfer += iprot->readSetBegin(_etype415, _size412);
+            uint32_t _i416;
+            for (_i416 = 0; _i416 < _size412; ++_i416)
             {
-              Range _elem426;
-              xfer += _elem426.read(iprot);
-              this->success.insert(_elem426);
+              Range _elem417;
+              xfer += _elem417.read(iprot);
+              this->success.insert(_elem417);
             }
             xfer += iprot->readSetEnd();
           }
@@ -10091,10 +9835,10 @@ uint32_t AccumuloProxy_splitRangeByTablets_result::write(::apache::thrift::proto
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_SET, 0);
     {
       xfer += oprot->writeSetBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->success.size()));
-      std::set<Range> ::const_iterator _iter427;
-      for (_iter427 = this->success.begin(); _iter427 != this->success.end(); ++_iter427)
+      std::set<Range> ::const_iterator _iter418;
+      for (_iter418 = this->success.begin(); _iter418 != this->success.end(); ++_iter418)
       {
-        xfer += (*_iter427).write(oprot);
+        xfer += (*_iter418).write(oprot);
       }
       xfer += oprot->writeSetEnd();
     }
@@ -10147,15 +9891,15 @@ uint32_t AccumuloProxy_splitRangeByTablets_presult::read(::apache::thrift::proto
         if (ftype == ::apache::thrift::protocol::T_SET) {
           {
             (*(this->success)).clear();
-            uint32_t _size428;
-            ::apache::thrift::protocol::TType _etype431;
-            xfer += iprot->readSetBegin(_etype431, _size428);
-            uint32_t _i432;
-            for (_i432 = 0; _i432 < _size428; ++_i432)
+            uint32_t _size419;
+            ::apache::thrift::protocol::TType _etype422;
+            xfer += iprot->readSetBegin(_etype422, _size419);
+            uint32_t _i423;
+            for (_i423 = 0; _i423 < _size419; ++_i423)
             {
-              Range _elem433;
-              xfer += _elem433.read(iprot);
-              (*(this->success)).insert(_elem433);
+              Range _elem424;
+              xfer += _elem424.read(iprot);
+              (*(this->success)).insert(_elem424);
             }
             xfer += iprot->readSetEnd();
           }
@@ -10228,8 +9972,8 @@ uint32_t AccumuloProxy_tableExists_args::read(::apache::thrift::protocol::TProto
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -10259,8 +10003,8 @@ uint32_t AccumuloProxy_tableExists_args::write(::apache::thrift::protocol::TProt
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_tableExists_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -10282,8 +10026,8 @@ uint32_t AccumuloProxy_tableExists_pargs::write(::apache::thrift::protocol::TPro
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_tableExists_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -10431,8 +10175,8 @@ uint32_t AccumuloProxy_tableIdMap_args::read(::apache::thrift::protocol::TProtoc
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -10454,8 +10198,8 @@ uint32_t AccumuloProxy_tableIdMap_args::write(::apache::thrift::protocol::TProto
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_tableIdMap_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -10473,8 +10217,8 @@ uint32_t AccumuloProxy_tableIdMap_pargs::write(::apache::thrift::protocol::TProt
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_tableIdMap_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -10512,17 +10256,17 @@ uint32_t AccumuloProxy_tableIdMap_result::read(::apache::thrift::protocol::TProt
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             this->success.clear();
-            uint32_t _size434;
-            ::apache::thrift::protocol::TType _ktype435;
-            ::apache::thrift::protocol::TType _vtype436;
-            xfer += iprot->readMapBegin(_ktype435, _vtype436, _size434);
-            uint32_t _i438;
-            for (_i438 = 0; _i438 < _size434; ++_i438)
+            uint32_t _size425;
+            ::apache::thrift::protocol::TType _ktype426;
+            ::apache::thrift::protocol::TType _vtype427;
+            xfer += iprot->readMapBegin(_ktype426, _vtype427, _size425);
+            uint32_t _i429;
+            for (_i429 = 0; _i429 < _size425; ++_i429)
             {
-              std::string _key439;
-              xfer += iprot->readString(_key439);
-              std::string& _val440 = this->success[_key439];
-              xfer += iprot->readString(_val440);
+              std::string _key430;
+              xfer += iprot->readString(_key430);
+              std::string& _val431 = this->success[_key430];
+              xfer += iprot->readString(_val431);
             }
             xfer += iprot->readMapEnd();
           }
@@ -10553,11 +10297,11 @@ uint32_t AccumuloProxy_tableIdMap_result::write(::apache::thrift::protocol::TPro
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_MAP, 0);
     {
       xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->success.size()));
-      std::map<std::string, std::string> ::const_iterator _iter441;
-      for (_iter441 = this->success.begin(); _iter441 != this->success.end(); ++_iter441)
+      std::map<std::string, std::string> ::const_iterator _iter432;
+      for (_iter432 = this->success.begin(); _iter432 != this->success.end(); ++_iter432)
       {
-        xfer += oprot->writeString(_iter441->first);
-        xfer += oprot->writeString(_iter441->second);
+        xfer += oprot->writeString(_iter432->first);
+        xfer += oprot->writeString(_iter432->second);
       }
       xfer += oprot->writeMapEnd();
     }
@@ -10598,17 +10342,17 @@ uint32_t AccumuloProxy_tableIdMap_presult::read(::apache::thrift::protocol::TPro
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             (*(this->success)).clear();
-            uint32_t _size442;
-            ::apache::thrift::protocol::TType _ktype443;
-            ::apache::thrift::protocol::TType _vtype444;
-            xfer += iprot->readMapBegin(_ktype443, _vtype444, _size442);
-            uint32_t _i446;
-            for (_i446 = 0; _i446 < _size442; ++_i446)
+            uint32_t _size433;
+            ::apache::thrift::protocol::TType _ktype434;
+            ::apache::thrift::protocol::TType _vtype435;
+            xfer += iprot->readMapBegin(_ktype434, _vtype435, _size433);
+            uint32_t _i437;
+            for (_i437 = 0; _i437 < _size433; ++_i437)
             {
-              std::string _key447;
-              xfer += iprot->readString(_key447);
-              std::string& _val448 = (*(this->success))[_key447];
-              xfer += iprot->readString(_val448);
+              std::string _key438;
+              xfer += iprot->readString(_key438);
+              std::string& _val439 = (*(this->success))[_key438];
+              xfer += iprot->readString(_val439);
             }
             xfer += iprot->readMapEnd();
           }
@@ -10657,8 +10401,8 @@ uint32_t AccumuloProxy_testTableClassLoad_args::read(::apache::thrift::protocol:
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -10704,8 +10448,8 @@ uint32_t AccumuloProxy_testTableClassLoad_args::write(::apache::thrift::protocol
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_testTableClassLoad_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -10735,8 +10479,8 @@ uint32_t AccumuloProxy_testTableClassLoad_pargs::write(::apache::thrift::protoco
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_testTableClassLoad_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -10952,8 +10696,8 @@ uint32_t AccumuloProxy_pingTabletServer_args::read(::apache::thrift::protocol::T
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -10983,8 +10727,8 @@ uint32_t AccumuloProxy_pingTabletServer_args::write(::apache::thrift::protocol::
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_pingTabletServer_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tserver", ::apache::thrift::protocol::T_STRING, 2);
@@ -11006,8 +10750,8 @@ uint32_t AccumuloProxy_pingTabletServer_pargs::write(::apache::thrift::protocol:
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_pingTabletServer_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tserver", ::apache::thrift::protocol::T_STRING, 2);
@@ -11175,8 +10919,8 @@ uint32_t AccumuloProxy_getActiveScans_args::read(::apache::thrift::protocol::TPr
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -11206,8 +10950,8 @@ uint32_t AccumuloProxy_getActiveScans_args::write(::apache::thrift::protocol::TP
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_getActiveScans_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tserver", ::apache::thrift::protocol::T_STRING, 2);
@@ -11229,8 +10973,8 @@ uint32_t AccumuloProxy_getActiveScans_pargs::write(::apache::thrift::protocol::T
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_getActiveScans_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tserver", ::apache::thrift::protocol::T_STRING, 2);
@@ -11272,14 +11016,14 @@ uint32_t AccumuloProxy_getActiveScans_result::read(::apache::thrift::protocol::T
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->success.clear();
-            uint32_t _size449;
-            ::apache::thrift::protocol::TType _etype452;
-            xfer += iprot->readListBegin(_etype452, _size449);
-            this->success.resize(_size449);
-            uint32_t _i453;
-            for (_i453 = 0; _i453 < _size449; ++_i453)
+            uint32_t _size440;
+            ::apache::thrift::protocol::TType _etype443;
+            xfer += iprot->readListBegin(_etype443, _size440);
+            this->success.resize(_size440);
+            uint32_t _i444;
+            for (_i444 = 0; _i444 < _size440; ++_i444)
             {
-              xfer += this->success[_i453].read(iprot);
+              xfer += this->success[_i444].read(iprot);
             }
             xfer += iprot->readListEnd();
           }
@@ -11326,10 +11070,10 @@ uint32_t AccumuloProxy_getActiveScans_result::write(::apache::thrift::protocol::
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_LIST, 0);
     {
       xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->success.size()));
-      std::vector<ActiveScan> ::const_iterator _iter454;
-      for (_iter454 = this->success.begin(); _iter454 != this->success.end(); ++_iter454)
+      std::vector<ActiveScan> ::const_iterator _iter445;
+      for (_iter445 = this->success.begin(); _iter445 != this->success.end(); ++_iter445)
       {
-        xfer += (*_iter454).write(oprot);
+        xfer += (*_iter445).write(oprot);
       }
       xfer += oprot->writeListEnd();
     }
@@ -11378,14 +11122,14 @@ uint32_t AccumuloProxy_getActiveScans_presult::read(::apache::thrift::protocol::
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             (*(this->success)).clear();
-            uint32_t _size455;
-            ::apache::thrift::protocol::TType _etype458;
-            xfer += iprot->readListBegin(_etype458, _size455);
-            (*(this->success)).resize(_size455);
-            uint32_t _i459;
-            for (_i459 = 0; _i459 < _size455; ++_i459)
+            uint32_t _size446;
+            ::apache::thrift::protocol::TType _etype449;
+            xfer += iprot->readListBegin(_etype449, _size446);
+            (*(this->success)).resize(_size446);
+            uint32_t _i450;
+            for (_i450 = 0; _i450 < _size446; ++_i450)
             {
-              xfer += (*(this->success))[_i459].read(iprot);
+              xfer += (*(this->success))[_i450].read(iprot);
             }
             xfer += iprot->readListEnd();
           }
@@ -11450,8 +11194,8 @@ uint32_t AccumuloProxy_getActiveCompactions_args::read(::apache::thrift::protoco
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -11481,8 +11225,8 @@ uint32_t AccumuloProxy_getActiveCompactions_args::write(::apache::thrift::protoc
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_getActiveCompactions_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tserver", ::apache::thrift::protocol::T_STRING, 2);
@@ -11504,8 +11248,8 @@ uint32_t AccumuloProxy_getActiveCompactions_pargs::write(::apache::thrift::proto
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_getActiveCompactions_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tserver", ::apache::thrift::protocol::T_STRING, 2);
@@ -11547,14 +11291,14 @@ uint32_t AccumuloProxy_getActiveCompactions_result::read(::apache::thrift::proto
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->success.clear();
-            uint32_t _size460;
-            ::apache::thrift::protocol::TType _etype463;
-            xfer += iprot->readListBegin(_etype463, _size460);
-            this->success.resize(_size460);
-            uint32_t _i464;
-            for (_i464 = 0; _i464 < _size460; ++_i464)
+            uint32_t _size451;
+            ::apache::thrift::protocol::TType _etype454;
+            xfer += iprot->readListBegin(_etype454, _size451);
+            this->success.resize(_size451);
+            uint32_t _i455;
+            for (_i455 = 0; _i455 < _size451; ++_i455)
             {
-              xfer += this->success[_i464].read(iprot);
+              xfer += this->success[_i455].read(iprot);
             }
             xfer += iprot->readListEnd();
           }
@@ -11601,10 +11345,10 @@ uint32_t AccumuloProxy_getActiveCompactions_result::write(::apache::thrift::prot
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_LIST, 0);
     {
       xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->success.size()));
-      std::vector<ActiveCompaction> ::const_iterator _iter465;
-      for (_iter465 = this->success.begin(); _iter465 != this->success.end(); ++_iter465)
+      std::vector<ActiveCompaction> ::const_iterator _iter456;
+      for (_iter456 = this->success.begin(); _iter456 != this->success.end(); ++_iter456)
       {
-        xfer += (*_iter465).write(oprot);
+        xfer += (*_iter456).write(oprot);
       }
       xfer += oprot->writeListEnd();
     }
@@ -11653,14 +11397,14 @@ uint32_t AccumuloProxy_getActiveCompactions_presult::read(::apache::thrift::prot
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             (*(this->success)).clear();
-            uint32_t _size466;
-            ::apache::thrift::protocol::TType _etype469;
-            xfer += iprot->readListBegin(_etype469, _size466);
-            (*(this->success)).resize(_size466);
-            uint32_t _i470;
-            for (_i470 = 0; _i470 < _size466; ++_i470)
+            uint32_t _size457;
+            ::apache::thrift::protocol::TType _etype460;
+            xfer += iprot->readListBegin(_etype460, _size457);
+            (*(this->success)).resize(_size457);
+            uint32_t _i461;
+            for (_i461 = 0; _i461 < _size457; ++_i461)
             {
-              xfer += (*(this->success))[_i470].read(iprot);
+              xfer += (*(this->success))[_i461].read(iprot);
             }
             xfer += iprot->readListEnd();
           }
@@ -11725,8 +11469,8 @@ uint32_t AccumuloProxy_getSiteConfiguration_args::read(::apache::thrift::protoco
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -11748,8 +11492,8 @@ uint32_t AccumuloProxy_getSiteConfiguration_args::write(::apache::thrift::protoc
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_getSiteConfiguration_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -11767,8 +11511,8 @@ uint32_t AccumuloProxy_getSiteConfiguration_pargs::write(::apache::thrift::proto
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_getSiteConfiguration_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -11806,17 +11550,17 @@ uint32_t AccumuloProxy_getSiteConfiguration_result::read(::apache::thrift::proto
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             this->success.clear();
-            uint32_t _size471;
-            ::apache::thrift::protocol::TType _ktype472;
-            ::apache::thrift::protocol::TType _vtype473;
-            xfer += iprot->readMapBegin(_ktype472, _vtype473, _size471);
-            uint32_t _i475;
-            for (_i475 = 0; _i475 < _size471; ++_i475)
+            uint32_t _size462;
+            ::apache::thrift::protocol::TType _ktype463;
+            ::apache::thrift::protocol::TType _vtype464;
+            xfer += iprot->readMapBegin(_ktype463, _vtype464, _size462);
+            uint32_t _i466;
+            for (_i466 = 0; _i466 < _size462; ++_i466)
             {
-              std::string _key476;
-              xfer += iprot->readString(_key476);
-              std::string& _val477 = this->success[_key476];
-              xfer += iprot->readString(_val477);
+              std::string _key467;
+              xfer += iprot->readString(_key467);
+              std::string& _val468 = this->success[_key467];
+              xfer += iprot->readString(_val468);
             }
             xfer += iprot->readMapEnd();
           }
@@ -11863,11 +11607,11 @@ uint32_t AccumuloProxy_getSiteConfiguration_result::write(::apache::thrift::prot
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_MAP, 0);
     {
       xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->success.size()));
-      std::map<std::string, std::string> ::const_iterator _iter478;
-      for (_iter478 = this->success.begin(); _iter478 != this->success.end(); ++_iter478)
+      std::map<std::string, std::string> ::const_iterator _iter469;
+      for (_iter469 = this->success.begin(); _iter469 != this->success.end(); ++_iter469)
       {
-        xfer += oprot->writeString(_iter478->first);
-        xfer += oprot->writeString(_iter478->second);
+        xfer += oprot->writeString(_iter469->first);
+        xfer += oprot->writeString(_iter469->second);
       }
       xfer += oprot->writeMapEnd();
     }
@@ -11916,17 +11660,17 @@ uint32_t AccumuloProxy_getSiteConfiguration_presult::read(::apache::thrift::prot
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             (*(this->success)).clear();
-            uint32_t _size479;
-            ::apache::thrift::protocol::TType _ktype480;
-            ::apache::thrift::protocol::TType _vtype481;
-            xfer += iprot->readMapBegin(_ktype480, _vtype481, _size479);
-            uint32_t _i483;
-            for (_i483 = 0; _i483 < _size479; ++_i483)
+            uint32_t _size470;
+            ::apache::thrift::protocol::TType _ktype471;
+            ::apache::thrift::protocol::TType _vtype472;
+            xfer += iprot->readMapBegin(_ktype471, _vtype472, _size470);
+            uint32_t _i474;
+            for (_i474 = 0; _i474 < _size470; ++_i474)
             {
-              std::string _key484;
-              xfer += iprot->readString(_key484);
-              std::string& _val485 = (*(this->success))[_key484];
-              xfer += iprot->readString(_val485);
+              std::string _key475;
+              xfer += iprot->readString(_key475);
+              std::string& _val476 = (*(this->success))[_key475];
+              xfer += iprot->readString(_val476);
             }
             xfer += iprot->readMapEnd();
           }
@@ -11991,8 +11735,8 @@ uint32_t AccumuloProxy_getSystemConfiguration_args::read(::apache::thrift::proto
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -12014,8 +11758,8 @@ uint32_t AccumuloProxy_getSystemConfiguration_args::write(::apache::thrift::prot
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_getSystemConfiguration_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -12033,8 +11777,8 @@ uint32_t AccumuloProxy_getSystemConfiguration_pargs::write(::apache::thrift::pro
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_getSystemConfiguration_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -12072,17 +11816,17 @@ uint32_t AccumuloProxy_getSystemConfiguration_result::read(::apache::thrift::pro
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             this->success.clear();
-            uint32_t _size486;
-            ::apache::thrift::protocol::TType _ktype487;
-            ::apache::thrift::protocol::TType _vtype488;
-            xfer += iprot->readMapBegin(_ktype487, _vtype488, _size486);
-            uint32_t _i490;
-            for (_i490 = 0; _i490 < _size486; ++_i490)
+            uint32_t _size477;
+            ::apache::thrift::protocol::TType _ktype478;
+            ::apache::thrift::protocol::TType _vtype479;
+            xfer += iprot->readMapBegin(_ktype478, _vtype479, _size477);
+            uint32_t _i481;
+            for (_i481 = 0; _i481 < _size477; ++_i481)
             {
-              std::string _key491;
-              xfer += iprot->readString(_key491);
-              std::string& _val492 = this->success[_key491];
-              xfer += iprot->readString(_val492);
+              std::string _key482;
+              xfer += iprot->readString(_key482);
+              std::string& _val483 = this->success[_key482];
+              xfer += iprot->readString(_val483);
             }
             xfer += iprot->readMapEnd();
           }
@@ -12129,11 +11873,11 @@ uint32_t AccumuloProxy_getSystemConfiguration_result::write(::apache::thrift::pr
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_MAP, 0);
     {
       xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->success.size()));
-      std::map<std::string, std::string> ::const_iterator _iter493;
-      for (_iter493 = this->success.begin(); _iter493 != this->success.end(); ++_iter493)
+      std::map<std::string, std::string> ::const_iterator _iter484;
+      for (_iter484 = this->success.begin(); _iter484 != this->success.end(); ++_iter484)
       {
-        xfer += oprot->writeString(_iter493->first);
-        xfer += oprot->writeString(_iter493->second);
+        xfer += oprot->writeString(_iter484->first);
+        xfer += oprot->writeString(_iter484->second);
       }
       xfer += oprot->writeMapEnd();
     }
@@ -12182,17 +11926,17 @@ uint32_t AccumuloProxy_getSystemConfiguration_presult::read(::apache::thrift::pr
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             (*(this->success)).clear();
-            uint32_t _size494;
-            ::apache::thrift::protocol::TType _ktype495;
-            ::apache::thrift::protocol::TType _vtype496;
-            xfer += iprot->readMapBegin(_ktype495, _vtype496, _size494);
-            uint32_t _i498;
-            for (_i498 = 0; _i498 < _size494; ++_i498)
+            uint32_t _size485;
+            ::apache::thrift::protocol::TType _ktype486;
+            ::apache::thrift::protocol::TType _vtype487;
+            xfer += iprot->readMapBegin(_ktype486, _vtype487, _size485);
+            uint32_t _i489;
+            for (_i489 = 0; _i489 < _size485; ++_i489)
             {
-              std::string _key499;
-              xfer += iprot->readString(_key499);
-              std::string& _val500 = (*(this->success))[_key499];
-              xfer += iprot->readString(_val500);
+              std::string _key490;
+              xfer += iprot->readString(_key490);
+              std::string& _val491 = (*(this->success))[_key490];
+              xfer += iprot->readString(_val491);
             }
             xfer += iprot->readMapEnd();
           }
@@ -12257,8 +12001,8 @@ uint32_t AccumuloProxy_getTabletServers_args::read(::apache::thrift::protocol::T
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -12280,8 +12024,8 @@ uint32_t AccumuloProxy_getTabletServers_args::write(::apache::thrift::protocol::
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_getTabletServers_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -12299,8 +12043,8 @@ uint32_t AccumuloProxy_getTabletServers_pargs::write(::apache::thrift::protocol:
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_getTabletServers_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -12338,14 +12082,14 @@ uint32_t AccumuloProxy_getTabletServers_result::read(::apache::thrift::protocol:
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->success.clear();
-            uint32_t _size501;
-            ::apache::thrift::protocol::TType _etype504;
-            xfer += iprot->readListBegin(_etype504, _size501);
-            this->success.resize(_size501);
-            uint32_t _i505;
-            for (_i505 = 0; _i505 < _size501; ++_i505)
+            uint32_t _size492;
+            ::apache::thrift::protocol::TType _etype495;
+            xfer += iprot->readListBegin(_etype495, _size492);
+            this->success.resize(_size492);
+            uint32_t _i496;
+            for (_i496 = 0; _i496 < _size492; ++_i496)
             {
-              xfer += iprot->readString(this->success[_i505]);
+              xfer += iprot->readString(this->success[_i496]);
             }
             xfer += iprot->readListEnd();
           }
@@ -12376,10 +12120,10 @@ uint32_t AccumuloProxy_getTabletServers_result::write(::apache::thrift::protocol
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_LIST, 0);
     {
       xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->success.size()));
-      std::vector<std::string> ::const_iterator _iter506;
-      for (_iter506 = this->success.begin(); _iter506 != this->success.end(); ++_iter506)
+      std::vector<std::string> ::const_iterator _iter497;
+      for (_iter497 = this->success.begin(); _iter497 != this->success.end(); ++_iter497)
       {
-        xfer += oprot->writeString((*_iter506));
+        xfer += oprot->writeString((*_iter497));
       }
       xfer += oprot->writeListEnd();
     }
@@ -12420,14 +12164,14 @@ uint32_t AccumuloProxy_getTabletServers_presult::read(::apache::thrift::protocol
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             (*(this->success)).clear();
-            uint32_t _size507;
-            ::apache::thrift::protocol::TType _etype510;
-            xfer += iprot->readListBegin(_etype510, _size507);
-            (*(this->success)).resize(_size507);
-            uint32_t _i511;
-            for (_i511 = 0; _i511 < _size507; ++_i511)
+            uint32_t _size498;
+            ::apache::thrift::protocol::TType _etype501;
+            xfer += iprot->readListBegin(_etype501, _size498);
+            (*(this->success)).resize(_size498);
+            uint32_t _i502;
+            for (_i502 = 0; _i502 < _size498; ++_i502)
             {
-              xfer += iprot->readString((*(this->success))[_i511]);
+              xfer += iprot->readString((*(this->success))[_i502]);
             }
             xfer += iprot->readListEnd();
           }
@@ -12476,8 +12220,8 @@ uint32_t AccumuloProxy_removeProperty_args::read(::apache::thrift::protocol::TPr
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -12507,8 +12251,8 @@ uint32_t AccumuloProxy_removeProperty_args::write(::apache::thrift::protocol::TP
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_removeProperty_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("property", ::apache::thrift::protocol::T_STRING, 2);
@@ -12530,8 +12274,8 @@ uint32_t AccumuloProxy_removeProperty_pargs::write(::apache::thrift::protocol::T
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_removeProperty_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("property", ::apache::thrift::protocol::T_STRING, 2);
@@ -12699,8 +12443,8 @@ uint32_t AccumuloProxy_setProperty_args::read(::apache::thrift::protocol::TProto
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -12738,8 +12482,8 @@ uint32_t AccumuloProxy_setProperty_args::write(::apache::thrift::protocol::TProt
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_setProperty_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("property", ::apache::thrift::protocol::T_STRING, 2);
@@ -12765,8 +12509,8 @@ uint32_t AccumuloProxy_setProperty_pargs::write(::apache::thrift::protocol::TPro
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_setProperty_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("property", ::apache::thrift::protocol::T_STRING, 2);
@@ -12938,8 +12682,8 @@ uint32_t AccumuloProxy_testClassLoad_args::read(::apache::thrift::protocol::TPro
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -12977,8 +12721,8 @@ uint32_t AccumuloProxy_testClassLoad_args::write(::apache::thrift::protocol::TPr
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_testClassLoad_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("className", ::apache::thrift::protocol::T_STRING, 2);
@@ -13004,8 +12748,8 @@ uint32_t AccumuloProxy_testClassLoad_pargs::write(::apache::thrift::protocol::TP
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_testClassLoad_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("className", ::apache::thrift::protocol::T_STRING, 2);
@@ -13197,8 +12941,8 @@ uint32_t AccumuloProxy_authenticateUser_args::read(::apache::thrift::protocol::T
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -13215,17 +12959,17 @@ uint32_t AccumuloProxy_authenticateUser_args::read(::apache::thrift::protocol::T
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             this->properties.clear();
-            uint32_t _size512;
-            ::apache::thrift::protocol::TType _ktype513;
-            ::apache::thrift::protocol::TType _vtype514;
-            xfer += iprot->readMapBegin(_ktype513, _vtype514, _size512);
-            uint32_t _i516;
-            for (_i516 = 0; _i516 < _size512; ++_i516)
+            uint32_t _size503;
+            ::apache::thrift::protocol::TType _ktype504;
+            ::apache::thrift::protocol::TType _vtype505;
+            xfer += iprot->readMapBegin(_ktype504, _vtype505, _size503);
+            uint32_t _i507;
+            for (_i507 = 0; _i507 < _size503; ++_i507)
             {
-              std::string _key517;
-              xfer += iprot->readString(_key517);
-              std::string& _val518 = this->properties[_key517];
-              xfer += iprot->readString(_val518);
+              std::string _key508;
+              xfer += iprot->readString(_key508);
+              std::string& _val509 = this->properties[_key508];
+              xfer += iprot->readString(_val509);
             }
             xfer += iprot->readMapEnd();
           }
@@ -13251,8 +12995,8 @@ uint32_t AccumuloProxy_authenticateUser_args::write(::apache::thrift::protocol::
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_authenticateUser_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("user", ::apache::thrift::protocol::T_STRING, 2);
@@ -13262,11 +13006,11 @@ uint32_t AccumuloProxy_authenticateUser_args::write(::apache::thrift::protocol::
   xfer += oprot->writeFieldBegin("properties", ::apache::thrift::protocol::T_MAP, 3);
   {
     xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->properties.size()));
-    std::map<std::string, std::string> ::const_iterator _iter519;
-    for (_iter519 = this->properties.begin(); _iter519 != this->properties.end(); ++_iter519)
+    std::map<std::string, std::string> ::const_iterator _iter510;
+    for (_iter510 = this->properties.begin(); _iter510 != this->properties.end(); ++_iter510)
     {
-      xfer += oprot->writeString(_iter519->first);
-      xfer += oprot->writeString(_iter519->second);
+      xfer += oprot->writeString(_iter510->first);
+      xfer += oprot->writeString(_iter510->second);
     }
     xfer += oprot->writeMapEnd();
   }
@@ -13287,8 +13031,8 @@ uint32_t AccumuloProxy_authenticateUser_pargs::write(::apache::thrift::protocol:
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_authenticateUser_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("user", ::apache::thrift::protocol::T_STRING, 2);
@@ -13298,11 +13042,11 @@ uint32_t AccumuloProxy_authenticateUser_pargs::write(::apache::thrift::protocol:
   xfer += oprot->writeFieldBegin("properties", ::apache::thrift::protocol::T_MAP, 3);
   {
     xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>((*(this->properties)).size()));
-    std::map<std::string, std::string> ::const_iterator _iter520;
-    for (_iter520 = (*(this->properties)).begin(); _iter520 != (*(this->properties)).end(); ++_iter520)
+    std::map<std::string, std::string> ::const_iterator _iter511;
+    for (_iter511 = (*(this->properties)).begin(); _iter511 != (*(this->properties)).end(); ++_iter511)
     {
-      xfer += oprot->writeString(_iter520->first);
-      xfer += oprot->writeString(_iter520->second);
+      xfer += oprot->writeString(_iter511->first);
+      xfer += oprot->writeString(_iter511->second);
     }
     xfer += oprot->writeMapEnd();
   }
@@ -13489,8 +13233,8 @@ uint32_t AccumuloProxy_changeUserAuthorizations_args::read(::apache::thrift::pro
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -13507,15 +13251,15 @@ uint32_t AccumuloProxy_changeUserAuthorizations_args::read(::apache::thrift::pro
         if (ftype == ::apache::thrift::protocol::T_SET) {
           {
             this->authorizations.clear();
-            uint32_t _size521;
-            ::apache::thrift::protocol::TType _etype524;
-            xfer += iprot->readSetBegin(_etype524, _size521);
-            uint32_t _i525;
-            for (_i525 = 0; _i525 < _size521; ++_i525)
+            uint32_t _size512;
+            ::apache::thrift::protocol::TType _etype515;
+            xfer += iprot->readSetBegin(_etype515, _size512);
+            uint32_t _i516;
+            for (_i516 = 0; _i516 < _size512; ++_i516)
             {
-              std::string _elem526;
-              xfer += iprot->readBinary(_elem526);
-              this->authorizations.insert(_elem526);
+              std::string _elem517;
+              xfer += iprot->readBinary(_elem517);
+              this->authorizations.insert(_elem517);
             }
             xfer += iprot->readSetEnd();
           }
@@ -13541,8 +13285,8 @@ uint32_t AccumuloProxy_changeUserAuthorizations_args::write(::apache::thrift::pr
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_changeUserAuthorizations_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("user", ::apache::thrift::protocol::T_STRING, 2);
@@ -13552,10 +13296,10 @@ uint32_t AccumuloProxy_changeUserAuthorizations_args::write(::apache::thrift::pr
   xfer += oprot->writeFieldBegin("authorizations", ::apache::thrift::protocol::T_SET, 3);
   {
     xfer += oprot->writeSetBegin(::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->authorizations.size()));
-    std::set<std::string> ::const_iterator _iter527;
-    for (_iter527 = this->authorizations.begin(); _iter527 != this->authorizations.end(); ++_iter527)
+    std::set<std::string> ::const_iterator _iter518;
+    for (_iter518 = this->authorizations.begin(); _iter518 != this->authorizations.end(); ++_iter518)
     {
-      xfer += oprot->writeBinary((*_iter527));
+      xfer += oprot->writeBinary((*_iter518));
     }
     xfer += oprot->writeSetEnd();
   }
@@ -13576,8 +13320,8 @@ uint32_t AccumuloProxy_changeUserAuthorizations_pargs::write(::apache::thrift::p
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_changeUserAuthorizations_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("user", ::apache::thrift::protocol::T_STRING, 2);
@@ -13587,10 +13331,10 @@ uint32_t AccumuloProxy_changeUserAuthorizations_pargs::write(::apache::thrift::p
   xfer += oprot->writeFieldBegin("authorizations", ::apache::thrift::protocol::T_SET, 3);
   {
     xfer += oprot->writeSetBegin(::apache::thrift::protocol::T_STRING, static_cast<uint32_t>((*(this->authorizations)).size()));
-    std::set<std::string> ::const_iterator _iter528;
-    for (_iter528 = (*(this->authorizations)).begin(); _iter528 != (*(this->authorizations)).end(); ++_iter528)
+    std::set<std::string> ::const_iterator _iter519;
+    for (_iter519 = (*(this->authorizations)).begin(); _iter519 != (*(this->authorizations)).end(); ++_iter519)
     {
-      xfer += oprot->writeBinary((*_iter528));
+      xfer += oprot->writeBinary((*_iter519));
     }
     xfer += oprot->writeSetEnd();
   }
@@ -13757,8 +13501,8 @@ uint32_t AccumuloProxy_changeLocalUserPassword_args::read(::apache::thrift::prot
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -13796,8 +13540,8 @@ uint32_t AccumuloProxy_changeLocalUserPassword_args::write(::apache::thrift::pro
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_changeLocalUserPassword_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("user", ::apache::thrift::protocol::T_STRING, 2);
@@ -13823,8 +13567,8 @@ uint32_t AccumuloProxy_changeLocalUserPassword_pargs::write(::apache::thrift::pr
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_changeLocalUserPassword_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("user", ::apache::thrift::protocol::T_STRING, 2);
@@ -13996,8 +13740,8 @@ uint32_t AccumuloProxy_createLocalUser_args::read(::apache::thrift::protocol::TP
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -14035,8 +13779,8 @@ uint32_t AccumuloProxy_createLocalUser_args::write(::apache::thrift::protocol::T
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_createLocalUser_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("user", ::apache::thrift::protocol::T_STRING, 2);
@@ -14062,8 +13806,8 @@ uint32_t AccumuloProxy_createLocalUser_pargs::write(::apache::thrift::protocol::
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_createLocalUser_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("user", ::apache::thrift::protocol::T_STRING, 2);
@@ -14235,8 +13979,8 @@ uint32_t AccumuloProxy_dropLocalUser_args::read(::apache::thrift::protocol::TPro
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -14266,8 +14010,8 @@ uint32_t AccumuloProxy_dropLocalUser_args::write(::apache::thrift::protocol::TPr
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_dropLocalUser_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("user", ::apache::thrift::protocol::T_STRING, 2);
@@ -14289,8 +14033,8 @@ uint32_t AccumuloProxy_dropLocalUser_pargs::write(::apache::thrift::protocol::TP
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_dropLocalUser_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("user", ::apache::thrift::protocol::T_STRING, 2);
@@ -14458,8 +14202,8 @@ uint32_t AccumuloProxy_getUserAuthorizations_args::read(::apache::thrift::protoc
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -14489,8 +14233,8 @@ uint32_t AccumuloProxy_getUserAuthorizations_args::write(::apache::thrift::proto
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_getUserAuthorizations_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("user", ::apache::thrift::protocol::T_STRING, 2);
@@ -14512,8 +14256,8 @@ uint32_t AccumuloProxy_getUserAuthorizations_pargs::write(::apache::thrift::prot
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_getUserAuthorizations_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("user", ::apache::thrift::protocol::T_STRING, 2);
@@ -14555,14 +14299,14 @@ uint32_t AccumuloProxy_getUserAuthorizations_result::read(::apache::thrift::prot
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->success.clear();
-            uint32_t _size529;
-            ::apache::thrift::protocol::TType _etype532;
-            xfer += iprot->readListBegin(_etype532, _size529);
-            this->success.resize(_size529);
-            uint32_t _i533;
-            for (_i533 = 0; _i533 < _size529; ++_i533)
+            uint32_t _size520;
+            ::apache::thrift::protocol::TType _etype523;
+            xfer += iprot->readListBegin(_etype523, _size520);
+            this->success.resize(_size520);
+            uint32_t _i524;
+            for (_i524 = 0; _i524 < _size520; ++_i524)
             {
-              xfer += iprot->readBinary(this->success[_i533]);
+              xfer += iprot->readBinary(this->success[_i524]);
             }
             xfer += iprot->readListEnd();
           }
@@ -14609,10 +14353,10 @@ uint32_t AccumuloProxy_getUserAuthorizations_result::write(::apache::thrift::pro
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_LIST, 0);
     {
       xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->success.size()));
-      std::vector<std::string> ::const_iterator _iter534;
-      for (_iter534 = this->success.begin(); _iter534 != this->success.end(); ++_iter534)
+      std::vector<std::string> ::const_iterator _iter525;
+      for (_iter525 = this->success.begin(); _iter525 != this->success.end(); ++_iter525)
       {
-        xfer += oprot->writeBinary((*_iter534));
+        xfer += oprot->writeBinary((*_iter525));
       }
       xfer += oprot->writeListEnd();
     }
@@ -14661,14 +14405,14 @@ uint32_t AccumuloProxy_getUserAuthorizations_presult::read(::apache::thrift::pro
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             (*(this->success)).clear();
-            uint32_t _size535;
-            ::apache::thrift::protocol::TType _etype538;
-            xfer += iprot->readListBegin(_etype538, _size535);
-            (*(this->success)).resize(_size535);
-            uint32_t _i539;
-            for (_i539 = 0; _i539 < _size535; ++_i539)
+            uint32_t _size526;
+            ::apache::thrift::protocol::TType _etype529;
+            xfer += iprot->readListBegin(_etype529, _size526);
+            (*(this->success)).resize(_size526);
+            uint32_t _i530;
+            for (_i530 = 0; _i530 < _size526; ++_i530)
             {
-              xfer += iprot->readBinary((*(this->success))[_i539]);
+              xfer += iprot->readBinary((*(this->success))[_i530]);
             }
             xfer += iprot->readListEnd();
           }
@@ -14733,8 +14477,8 @@ uint32_t AccumuloProxy_grantSystemPermission_args::read(::apache::thrift::protoc
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -14749,9 +14493,9 @@ uint32_t AccumuloProxy_grantSystemPermission_args::read(::apache::thrift::protoc
         break;
       case 3:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast540;
-          xfer += iprot->readI32(ecast540);
-          this->perm = static_cast<SystemPermission::type>(ecast540);
+          int32_t ecast531;
+          xfer += iprot->readI32(ecast531);
+          this->perm = static_cast<SystemPermission::type>(ecast531);
           this->__isset.perm = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -14774,8 +14518,8 @@ uint32_t AccumuloProxy_grantSystemPermission_args::write(::apache::thrift::proto
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_grantSystemPermission_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("user", ::apache::thrift::protocol::T_STRING, 2);
@@ -14801,8 +14545,8 @@ uint32_t AccumuloProxy_grantSystemPermission_pargs::write(::apache::thrift::prot
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_grantSystemPermission_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("user", ::apache::thrift::protocol::T_STRING, 2);
@@ -14974,8 +14718,8 @@ uint32_t AccumuloProxy_grantTablePermission_args::read(::apache::thrift::protoco
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -14998,9 +14742,9 @@ uint32_t AccumuloProxy_grantTablePermission_args::read(::apache::thrift::protoco
         break;
       case 4:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast541;
-          xfer += iprot->readI32(ecast541);
-          this->perm = static_cast<TablePermission::type>(ecast541);
+          int32_t ecast532;
+          xfer += iprot->readI32(ecast532);
+          this->perm = static_cast<TablePermission::type>(ecast532);
           this->__isset.perm = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -15023,8 +14767,8 @@ uint32_t AccumuloProxy_grantTablePermission_args::write(::apache::thrift::protoc
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_grantTablePermission_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("user", ::apache::thrift::protocol::T_STRING, 2);
@@ -15054,8 +14798,8 @@ uint32_t AccumuloProxy_grantTablePermission_pargs::write(::apache::thrift::proto
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_grantTablePermission_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("user", ::apache::thrift::protocol::T_STRING, 2);
@@ -15251,8 +14995,8 @@ uint32_t AccumuloProxy_hasSystemPermission_args::read(::apache::thrift::protocol
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -15267,9 +15011,9 @@ uint32_t AccumuloProxy_hasSystemPermission_args::read(::apache::thrift::protocol
         break;
       case 3:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast542;
-          xfer += iprot->readI32(ecast542);
-          this->perm = static_cast<SystemPermission::type>(ecast542);
+          int32_t ecast533;
+          xfer += iprot->readI32(ecast533);
+          this->perm = static_cast<SystemPermission::type>(ecast533);
           this->__isset.perm = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -15292,8 +15036,8 @@ uint32_t AccumuloProxy_hasSystemPermission_args::write(::apache::thrift::protoco
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_hasSystemPermission_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("user", ::apache::thrift::protocol::T_STRING, 2);
@@ -15319,8 +15063,8 @@ uint32_t AccumuloProxy_hasSystemPermission_pargs::write(::apache::thrift::protoc
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_hasSystemPermission_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("user", ::apache::thrift::protocol::T_STRING, 2);
@@ -15512,8 +15256,8 @@ uint32_t AccumuloProxy_hasTablePermission_args::read(::apache::thrift::protocol:
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -15536,9 +15280,9 @@ uint32_t AccumuloProxy_hasTablePermission_args::read(::apache::thrift::protocol:
         break;
       case 4:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast543;
-          xfer += iprot->readI32(ecast543);
-          this->perm = static_cast<TablePermission::type>(ecast543);
+          int32_t ecast534;
+          xfer += iprot->readI32(ecast534);
+          this->perm = static_cast<TablePermission::type>(ecast534);
           this->__isset.perm = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -15561,8 +15305,8 @@ uint32_t AccumuloProxy_hasTablePermission_args::write(::apache::thrift::protocol
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_hasTablePermission_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("user", ::apache::thrift::protocol::T_STRING, 2);
@@ -15592,8 +15336,8 @@ uint32_t AccumuloProxy_hasTablePermission_pargs::write(::apache::thrift::protoco
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_hasTablePermission_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("user", ::apache::thrift::protocol::T_STRING, 2);
@@ -15809,8 +15553,8 @@ uint32_t AccumuloProxy_listLocalUsers_args::read(::apache::thrift::protocol::TPr
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -15832,8 +15576,8 @@ uint32_t AccumuloProxy_listLocalUsers_args::write(::apache::thrift::protocol::TP
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_listLocalUsers_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -15851,8 +15595,8 @@ uint32_t AccumuloProxy_listLocalUsers_pargs::write(::apache::thrift::protocol::T
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_listLocalUsers_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -15890,15 +15634,15 @@ uint32_t AccumuloProxy_listLocalUsers_result::read(::apache::thrift::protocol::T
         if (ftype == ::apache::thrift::protocol::T_SET) {
           {
             this->success.clear();
-            uint32_t _size544;
-            ::apache::thrift::protocol::TType _etype547;
-            xfer += iprot->readSetBegin(_etype547, _size544);
-            uint32_t _i548;
-            for (_i548 = 0; _i548 < _size544; ++_i548)
+            uint32_t _size535;
+            ::apache::thrift::protocol::TType _etype538;
+            xfer += iprot->readSetBegin(_etype538, _size535);
+            uint32_t _i539;
+            for (_i539 = 0; _i539 < _size535; ++_i539)
             {
-              std::string _elem549;
-              xfer += iprot->readString(_elem549);
-              this->success.insert(_elem549);
+              std::string _elem540;
+              xfer += iprot->readString(_elem540);
+              this->success.insert(_elem540);
             }
             xfer += iprot->readSetEnd();
           }
@@ -15953,10 +15697,10 @@ uint32_t AccumuloProxy_listLocalUsers_result::write(::apache::thrift::protocol::
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_SET, 0);
     {
       xfer += oprot->writeSetBegin(::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->success.size()));
-      std::set<std::string> ::const_iterator _iter550;
-      for (_iter550 = this->success.begin(); _iter550 != this->success.end(); ++_iter550)
+      std::set<std::string> ::const_iterator _iter541;
+      for (_iter541 = this->success.begin(); _iter541 != this->success.end(); ++_iter541)
       {
-        xfer += oprot->writeString((*_iter550));
+        xfer += oprot->writeString((*_iter541));
       }
       xfer += oprot->writeSetEnd();
     }
@@ -16009,15 +15753,15 @@ uint32_t AccumuloProxy_listLocalUsers_presult::read(::apache::thrift::protocol::
         if (ftype == ::apache::thrift::protocol::T_SET) {
           {
             (*(this->success)).clear();
-            uint32_t _size551;
-            ::apache::thrift::protocol::TType _etype554;
-            xfer += iprot->readSetBegin(_etype554, _size551);
-            uint32_t _i555;
-            for (_i555 = 0; _i555 < _size551; ++_i555)
+            uint32_t _size542;
+            ::apache::thrift::protocol::TType _etype545;
+            xfer += iprot->readSetBegin(_etype545, _size542);
+            uint32_t _i546;
+            for (_i546 = 0; _i546 < _size542; ++_i546)
             {
-              std::string _elem556;
-              xfer += iprot->readString(_elem556);
-              (*(this->success)).insert(_elem556);
+              std::string _elem547;
+              xfer += iprot->readString(_elem547);
+              (*(this->success)).insert(_elem547);
             }
             xfer += iprot->readSetEnd();
           }
@@ -16090,8 +15834,8 @@ uint32_t AccumuloProxy_revokeSystemPermission_args::read(::apache::thrift::proto
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -16106,9 +15850,9 @@ uint32_t AccumuloProxy_revokeSystemPermission_args::read(::apache::thrift::proto
         break;
       case 3:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast557;
-          xfer += iprot->readI32(ecast557);
-          this->perm = static_cast<SystemPermission::type>(ecast557);
+          int32_t ecast548;
+          xfer += iprot->readI32(ecast548);
+          this->perm = static_cast<SystemPermission::type>(ecast548);
           this->__isset.perm = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -16131,8 +15875,8 @@ uint32_t AccumuloProxy_revokeSystemPermission_args::write(::apache::thrift::prot
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_revokeSystemPermission_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("user", ::apache::thrift::protocol::T_STRING, 2);
@@ -16158,8 +15902,8 @@ uint32_t AccumuloProxy_revokeSystemPermission_pargs::write(::apache::thrift::pro
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_revokeSystemPermission_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("user", ::apache::thrift::protocol::T_STRING, 2);
@@ -16331,8 +16075,8 @@ uint32_t AccumuloProxy_revokeTablePermission_args::read(::apache::thrift::protoc
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -16355,9 +16099,9 @@ uint32_t AccumuloProxy_revokeTablePermission_args::read(::apache::thrift::protoc
         break;
       case 4:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast558;
-          xfer += iprot->readI32(ecast558);
-          this->perm = static_cast<TablePermission::type>(ecast558);
+          int32_t ecast549;
+          xfer += iprot->readI32(ecast549);
+          this->perm = static_cast<TablePermission::type>(ecast549);
           this->__isset.perm = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -16380,8 +16124,8 @@ uint32_t AccumuloProxy_revokeTablePermission_args::write(::apache::thrift::proto
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_revokeTablePermission_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("user", ::apache::thrift::protocol::T_STRING, 2);
@@ -16411,8 +16155,8 @@ uint32_t AccumuloProxy_revokeTablePermission_pargs::write(::apache::thrift::prot
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_revokeTablePermission_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("user", ::apache::thrift::protocol::T_STRING, 2);
@@ -16608,8 +16352,8 @@ uint32_t AccumuloProxy_grantNamespacePermission_args::read(::apache::thrift::pro
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -16632,9 +16376,9 @@ uint32_t AccumuloProxy_grantNamespacePermission_args::read(::apache::thrift::pro
         break;
       case 4:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast559;
-          xfer += iprot->readI32(ecast559);
-          this->perm = static_cast<NamespacePermission::type>(ecast559);
+          int32_t ecast550;
+          xfer += iprot->readI32(ecast550);
+          this->perm = static_cast<NamespacePermission::type>(ecast550);
           this->__isset.perm = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -16657,8 +16401,8 @@ uint32_t AccumuloProxy_grantNamespacePermission_args::write(::apache::thrift::pr
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_grantNamespacePermission_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("user", ::apache::thrift::protocol::T_STRING, 2);
@@ -16688,8 +16432,8 @@ uint32_t AccumuloProxy_grantNamespacePermission_pargs::write(::apache::thrift::p
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_grantNamespacePermission_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("user", ::apache::thrift::protocol::T_STRING, 2);
@@ -16865,8 +16609,8 @@ uint32_t AccumuloProxy_hasNamespacePermission_args::read(::apache::thrift::proto
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -16889,9 +16633,9 @@ uint32_t AccumuloProxy_hasNamespacePermission_args::read(::apache::thrift::proto
         break;
       case 4:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast560;
-          xfer += iprot->readI32(ecast560);
-          this->perm = static_cast<NamespacePermission::type>(ecast560);
+          int32_t ecast551;
+          xfer += iprot->readI32(ecast551);
+          this->perm = static_cast<NamespacePermission::type>(ecast551);
           this->__isset.perm = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -16914,8 +16658,8 @@ uint32_t AccumuloProxy_hasNamespacePermission_args::write(::apache::thrift::prot
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_hasNamespacePermission_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("user", ::apache::thrift::protocol::T_STRING, 2);
@@ -16945,8 +16689,8 @@ uint32_t AccumuloProxy_hasNamespacePermission_pargs::write(::apache::thrift::pro
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_hasNamespacePermission_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("user", ::apache::thrift::protocol::T_STRING, 2);
@@ -17142,8 +16886,8 @@ uint32_t AccumuloProxy_revokeNamespacePermission_args::read(::apache::thrift::pr
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -17166,9 +16910,9 @@ uint32_t AccumuloProxy_revokeNamespacePermission_args::read(::apache::thrift::pr
         break;
       case 4:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast561;
-          xfer += iprot->readI32(ecast561);
-          this->perm = static_cast<NamespacePermission::type>(ecast561);
+          int32_t ecast552;
+          xfer += iprot->readI32(ecast552);
+          this->perm = static_cast<NamespacePermission::type>(ecast552);
           this->__isset.perm = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -17191,8 +16935,8 @@ uint32_t AccumuloProxy_revokeNamespacePermission_args::write(::apache::thrift::p
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_revokeNamespacePermission_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("user", ::apache::thrift::protocol::T_STRING, 2);
@@ -17222,8 +16966,8 @@ uint32_t AccumuloProxy_revokeNamespacePermission_pargs::write(::apache::thrift::
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_revokeNamespacePermission_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("user", ::apache::thrift::protocol::T_STRING, 2);
@@ -17399,8 +17143,8 @@ uint32_t AccumuloProxy_createBatchScanner_args::read(::apache::thrift::protocol:
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -17438,8 +17182,8 @@ uint32_t AccumuloProxy_createBatchScanner_args::write(::apache::thrift::protocol
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_createBatchScanner_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -17465,8 +17209,8 @@ uint32_t AccumuloProxy_createBatchScanner_pargs::write(::apache::thrift::protoco
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_createBatchScanner_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -17678,8 +17422,8 @@ uint32_t AccumuloProxy_createScanner_args::read(::apache::thrift::protocol::TPro
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -17717,8 +17461,8 @@ uint32_t AccumuloProxy_createScanner_args::write(::apache::thrift::protocol::TPr
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_createScanner_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -17744,8 +17488,8 @@ uint32_t AccumuloProxy_createScanner_pargs::write(::apache::thrift::protocol::TP
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_createScanner_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -18861,8 +18605,8 @@ uint32_t AccumuloProxy_updateAndFlush_args::read(::apache::thrift::protocol::TPr
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -18879,26 +18623,26 @@ uint32_t AccumuloProxy_updateAndFlush_args::read(::apache::thrift::protocol::TPr
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             this->cells.clear();
-            uint32_t _size562;
-            ::apache::thrift::protocol::TType _ktype563;
-            ::apache::thrift::protocol::TType _vtype564;
-            xfer += iprot->readMapBegin(_ktype563, _vtype564, _size562);
-            uint32_t _i566;
-            for (_i566 = 0; _i566 < _size562; ++_i566)
+            uint32_t _size553;
+            ::apache::thrift::protocol::TType _ktype554;
+            ::apache::thrift::protocol::TType _vtype555;
+            xfer += iprot->readMapBegin(_ktype554, _vtype555, _size553);
+            uint32_t _i557;
+            for (_i557 = 0; _i557 < _size553; ++_i557)
             {
-              std::string _key567;
-              xfer += iprot->readBinary(_key567);
-              std::vector<ColumnUpdate> & _val568 = this->cells[_key567];
+              std::string _key558;
+              xfer += iprot->readBinary(_key558);
+              std::vector<ColumnUpdate> & _val559 = this->cells[_key558];
               {
-                _val568.clear();
-                uint32_t _size569;
-                ::apache::thrift::protocol::TType _etype572;
-                xfer += iprot->readListBegin(_etype572, _size569);
-                _val568.resize(_size569);
-                uint32_t _i573;
-                for (_i573 = 0; _i573 < _size569; ++_i573)
+                _val559.clear();
+                uint32_t _size560;
+                ::apache::thrift::protocol::TType _etype563;
+                xfer += iprot->readListBegin(_etype563, _size560);
+                _val559.resize(_size560);
+                uint32_t _i564;
+                for (_i564 = 0; _i564 < _size560; ++_i564)
                 {
-                  xfer += _val568[_i573].read(iprot);
+                  xfer += _val559[_i564].read(iprot);
                 }
                 xfer += iprot->readListEnd();
               }
@@ -18927,8 +18671,8 @@ uint32_t AccumuloProxy_updateAndFlush_args::write(::apache::thrift::protocol::TP
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_updateAndFlush_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -18938,16 +18682,16 @@ uint32_t AccumuloProxy_updateAndFlush_args::write(::apache::thrift::protocol::TP
   xfer += oprot->writeFieldBegin("cells", ::apache::thrift::protocol::T_MAP, 3);
   {
     xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_LIST, static_cast<uint32_t>(this->cells.size()));
-    std::map<std::string, std::vector<ColumnUpdate> > ::const_iterator _iter574;
-    for (_iter574 = this->cells.begin(); _iter574 != this->cells.end(); ++_iter574)
+    std::map<std::string, std::vector<ColumnUpdate> > ::const_iterator _iter565;
+    for (_iter565 = this->cells.begin(); _iter565 != this->cells.end(); ++_iter565)
     {
-      xfer += oprot->writeBinary(_iter574->first);
+      xfer += oprot->writeBinary(_iter565->first);
       {
-        xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(_iter574->second.size()));
-        std::vector<ColumnUpdate> ::const_iterator _iter575;
-        for (_iter575 = _iter574->second.begin(); _iter575 != _iter574->second.end(); ++_iter575)
+        xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(_iter565->second.size()));
+        std::vector<ColumnUpdate> ::const_iterator _iter566;
+        for (_iter566 = _iter565->second.begin(); _iter566 != _iter565->second.end(); ++_iter566)
         {
-          xfer += (*_iter575).write(oprot);
+          xfer += (*_iter566).write(oprot);
         }
         xfer += oprot->writeListEnd();
       }
@@ -18971,8 +18715,8 @@ uint32_t AccumuloProxy_updateAndFlush_pargs::write(::apache::thrift::protocol::T
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_updateAndFlush_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -18982,16 +18726,16 @@ uint32_t AccumuloProxy_updateAndFlush_pargs::write(::apache::thrift::protocol::T
   xfer += oprot->writeFieldBegin("cells", ::apache::thrift::protocol::T_MAP, 3);
   {
     xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_LIST, static_cast<uint32_t>((*(this->cells)).size()));
-    std::map<std::string, std::vector<ColumnUpdate> > ::const_iterator _iter576;
-    for (_iter576 = (*(this->cells)).begin(); _iter576 != (*(this->cells)).end(); ++_iter576)
+    std::map<std::string, std::vector<ColumnUpdate> > ::const_iterator _iter567;
+    for (_iter567 = (*(this->cells)).begin(); _iter567 != (*(this->cells)).end(); ++_iter567)
     {
-      xfer += oprot->writeBinary(_iter576->first);
+      xfer += oprot->writeBinary(_iter567->first);
       {
-        xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(_iter576->second.size()));
-        std::vector<ColumnUpdate> ::const_iterator _iter577;
-        for (_iter577 = _iter576->second.begin(); _iter577 != _iter576->second.end(); ++_iter577)
+        xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(_iter567->second.size()));
+        std::vector<ColumnUpdate> ::const_iterator _iter568;
+        for (_iter568 = _iter567->second.begin(); _iter568 != _iter567->second.end(); ++_iter568)
         {
-          xfer += (*_iter577).write(oprot);
+          xfer += (*_iter568).write(oprot);
         }
         xfer += oprot->writeListEnd();
       }
@@ -19201,8 +18945,8 @@ uint32_t AccumuloProxy_createWriter_args::read(::apache::thrift::protocol::TProt
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -19240,8 +18984,8 @@ uint32_t AccumuloProxy_createWriter_args::write(::apache::thrift::protocol::TPro
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_createWriter_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -19267,8 +19011,8 @@ uint32_t AccumuloProxy_createWriter_pargs::write(::apache::thrift::protocol::TPr
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_createWriter_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -19490,26 +19234,26 @@ uint32_t AccumuloProxy_update_args::read(::apache::thrift::protocol::TProtocol* 
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             this->cells.clear();
-            uint32_t _size578;
-            ::apache::thrift::protocol::TType _ktype579;
-            ::apache::thrift::protocol::TType _vtype580;
-            xfer += iprot->readMapBegin(_ktype579, _vtype580, _size578);
-            uint32_t _i582;
-            for (_i582 = 0; _i582 < _size578; ++_i582)
+            uint32_t _size569;
+            ::apache::thrift::protocol::TType _ktype570;
+            ::apache::thrift::protocol::TType _vtype571;
+            xfer += iprot->readMapBegin(_ktype570, _vtype571, _size569);
+            uint32_t _i573;
+            for (_i573 = 0; _i573 < _size569; ++_i573)
             {
-              std::string _key583;
-              xfer += iprot->readBinary(_key583);
-              std::vector<ColumnUpdate> & _val584 = this->cells[_key583];
+              std::string _key574;
+              xfer += iprot->readBinary(_key574);
+              std::vector<ColumnUpdate> & _val575 = this->cells[_key574];
               {
-                _val584.clear();
-                uint32_t _size585;
-                ::apache::thrift::protocol::TType _etype588;
-                xfer += iprot->readListBegin(_etype588, _size585);
-                _val584.resize(_size585);
-                uint32_t _i589;
-                for (_i589 = 0; _i589 < _size585; ++_i589)
+                _val575.clear();
+                uint32_t _size576;
+                ::apache::thrift::protocol::TType _etype579;
+                xfer += iprot->readListBegin(_etype579, _size576);
+                _val575.resize(_size576);
+                uint32_t _i580;
+                for (_i580 = 0; _i580 < _size576; ++_i580)
                 {
-                  xfer += _val584[_i589].read(iprot);
+                  xfer += _val575[_i580].read(iprot);
                 }
                 xfer += iprot->readListEnd();
               }
@@ -19545,16 +19289,16 @@ uint32_t AccumuloProxy_update_args::write(::apache::thrift::protocol::TProtocol*
   xfer += oprot->writeFieldBegin("cells", ::apache::thrift::protocol::T_MAP, 2);
   {
     xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_LIST, static_cast<uint32_t>(this->cells.size()));
-    std::map<std::string, std::vector<ColumnUpdate> > ::const_iterator _iter590;
-    for (_iter590 = this->cells.begin(); _iter590 != this->cells.end(); ++_iter590)
+    std::map<std::string, std::vector<ColumnUpdate> > ::const_iterator _iter581;
+    for (_iter581 = this->cells.begin(); _iter581 != this->cells.end(); ++_iter581)
     {
-      xfer += oprot->writeBinary(_iter590->first);
+      xfer += oprot->writeBinary(_iter581->first);
       {
-        xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(_iter590->second.size()));
-        std::vector<ColumnUpdate> ::const_iterator _iter591;
-        for (_iter591 = _iter590->second.begin(); _iter591 != _iter590->second.end(); ++_iter591)
+        xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(_iter581->second.size()));
+        std::vector<ColumnUpdate> ::const_iterator _iter582;
+        for (_iter582 = _iter581->second.begin(); _iter582 != _iter581->second.end(); ++_iter582)
         {
-          xfer += (*_iter591).write(oprot);
+          xfer += (*_iter582).write(oprot);
         }
         xfer += oprot->writeListEnd();
       }
@@ -19585,16 +19329,16 @@ uint32_t AccumuloProxy_update_pargs::write(::apache::thrift::protocol::TProtocol
   xfer += oprot->writeFieldBegin("cells", ::apache::thrift::protocol::T_MAP, 2);
   {
     xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_LIST, static_cast<uint32_t>((*(this->cells)).size()));
-    std::map<std::string, std::vector<ColumnUpdate> > ::const_iterator _iter592;
-    for (_iter592 = (*(this->cells)).begin(); _iter592 != (*(this->cells)).end(); ++_iter592)
+    std::map<std::string, std::vector<ColumnUpdate> > ::const_iterator _iter583;
+    for (_iter583 = (*(this->cells)).begin(); _iter583 != (*(this->cells)).end(); ++_iter583)
     {
-      xfer += oprot->writeBinary(_iter592->first);
+      xfer += oprot->writeBinary(_iter583->first);
       {
-        xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(_iter592->second.size()));
-        std::vector<ColumnUpdate> ::const_iterator _iter593;
-        for (_iter593 = _iter592->second.begin(); _iter593 != _iter592->second.end(); ++_iter593)
+        xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(_iter583->second.size()));
+        std::vector<ColumnUpdate> ::const_iterator _iter584;
+        for (_iter584 = _iter583->second.begin(); _iter584 != _iter583->second.end(); ++_iter584)
         {
-          xfer += (*_iter593).write(oprot);
+          xfer += (*_iter584).write(oprot);
         }
         xfer += oprot->writeListEnd();
       }
@@ -20050,8 +19794,8 @@ uint32_t AccumuloProxy_updateRowConditionally_args::read(::apache::thrift::proto
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -20097,8 +19841,8 @@ uint32_t AccumuloProxy_updateRowConditionally_args::write(::apache::thrift::prot
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_updateRowConditionally_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -20128,8 +19872,8 @@ uint32_t AccumuloProxy_updateRowConditionally_pargs::write(::apache::thrift::pro
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_updateRowConditionally_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -20177,9 +19921,9 @@ uint32_t AccumuloProxy_updateRowConditionally_result::read(::apache::thrift::pro
     {
       case 0:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast594;
-          xfer += iprot->readI32(ecast594);
-          this->success = static_cast<ConditionalStatus::type>(ecast594);
+          int32_t ecast585;
+          xfer += iprot->readI32(ecast585);
+          this->success = static_cast<ConditionalStatus::type>(ecast585);
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -20277,9 +20021,9 @@ uint32_t AccumuloProxy_updateRowConditionally_presult::read(::apache::thrift::pr
     {
       case 0:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast595;
-          xfer += iprot->readI32(ecast595);
-          (*(this->success)) = static_cast<ConditionalStatus::type>(ecast595);
+          int32_t ecast586;
+          xfer += iprot->readI32(ecast586);
+          (*(this->success)) = static_cast<ConditionalStatus::type>(ecast586);
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -20349,8 +20093,8 @@ uint32_t AccumuloProxy_createConditionalWriter_args::read(::apache::thrift::prot
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -20388,8 +20132,8 @@ uint32_t AccumuloProxy_createConditionalWriter_args::write(::apache::thrift::pro
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_createConditionalWriter_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -20415,8 +20159,8 @@ uint32_t AccumuloProxy_createConditionalWriter_pargs::write(::apache::thrift::pr
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_createConditionalWriter_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("tableName", ::apache::thrift::protocol::T_STRING, 2);
@@ -20638,17 +20382,17 @@ uint32_t AccumuloProxy_updateRowsConditionally_args::read(::apache::thrift::prot
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             this->updates.clear();
-            uint32_t _size596;
-            ::apache::thrift::protocol::TType _ktype597;
-            ::apache::thrift::protocol::TType _vtype598;
-            xfer += iprot->readMapBegin(_ktype597, _vtype598, _size596);
-            uint32_t _i600;
-            for (_i600 = 0; _i600 < _size596; ++_i600)
+            uint32_t _size587;
+            ::apache::thrift::protocol::TType _ktype588;
+            ::apache::thrift::protocol::TType _vtype589;
+            xfer += iprot->readMapBegin(_ktype588, _vtype589, _size587);
+            uint32_t _i591;
+            for (_i591 = 0; _i591 < _size587; ++_i591)
             {
-              std::string _key601;
-              xfer += iprot->readBinary(_key601);
-              ConditionalUpdates& _val602 = this->updates[_key601];
-              xfer += _val602.read(iprot);
+              std::string _key592;
+              xfer += iprot->readBinary(_key592);
+              ConditionalUpdates& _val593 = this->updates[_key592];
+              xfer += _val593.read(iprot);
             }
             xfer += iprot->readMapEnd();
           }
@@ -20681,11 +20425,11 @@ uint32_t AccumuloProxy_updateRowsConditionally_args::write(::apache::thrift::pro
   xfer += oprot->writeFieldBegin("updates", ::apache::thrift::protocol::T_MAP, 2);
   {
     xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->updates.size()));
-    std::map<std::string, ConditionalUpdates> ::const_iterator _iter603;
-    for (_iter603 = this->updates.begin(); _iter603 != this->updates.end(); ++_iter603)
+    std::map<std::string, ConditionalUpdates> ::const_iterator _iter594;
+    for (_iter594 = this->updates.begin(); _iter594 != this->updates.end(); ++_iter594)
     {
-      xfer += oprot->writeBinary(_iter603->first);
-      xfer += _iter603->second.write(oprot);
+      xfer += oprot->writeBinary(_iter594->first);
+      xfer += _iter594->second.write(oprot);
     }
     xfer += oprot->writeMapEnd();
   }
@@ -20713,11 +20457,11 @@ uint32_t AccumuloProxy_updateRowsConditionally_pargs::write(::apache::thrift::pr
   xfer += oprot->writeFieldBegin("updates", ::apache::thrift::protocol::T_MAP, 2);
   {
     xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>((*(this->updates)).size()));
-    std::map<std::string, ConditionalUpdates> ::const_iterator _iter604;
-    for (_iter604 = (*(this->updates)).begin(); _iter604 != (*(this->updates)).end(); ++_iter604)
+    std::map<std::string, ConditionalUpdates> ::const_iterator _iter595;
+    for (_iter595 = (*(this->updates)).begin(); _iter595 != (*(this->updates)).end(); ++_iter595)
     {
-      xfer += oprot->writeBinary(_iter604->first);
-      xfer += _iter604->second.write(oprot);
+      xfer += oprot->writeBinary(_iter595->first);
+      xfer += _iter595->second.write(oprot);
     }
     xfer += oprot->writeMapEnd();
   }
@@ -20758,19 +20502,19 @@ uint32_t AccumuloProxy_updateRowsConditionally_result::read(::apache::thrift::pr
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             this->success.clear();
-            uint32_t _size605;
-            ::apache::thrift::protocol::TType _ktype606;
-            ::apache::thrift::protocol::TType _vtype607;
-            xfer += iprot->readMapBegin(_ktype606, _vtype607, _size605);
-            uint32_t _i609;
-            for (_i609 = 0; _i609 < _size605; ++_i609)
+            uint32_t _size596;
+            ::apache::thrift::protocol::TType _ktype597;
+            ::apache::thrift::protocol::TType _vtype598;
+            xfer += iprot->readMapBegin(_ktype597, _vtype598, _size596);
+            uint32_t _i600;
+            for (_i600 = 0; _i600 < _size596; ++_i600)
             {
-              std::string _key610;
-              xfer += iprot->readBinary(_key610);
-              ConditionalStatus::type& _val611 = this->success[_key610];
-              int32_t ecast612;
-              xfer += iprot->readI32(ecast612);
-              _val611 = static_cast<ConditionalStatus::type>(ecast612);
+              std::string _key601;
+              xfer += iprot->readBinary(_key601);
+              ConditionalStatus::type& _val602 = this->success[_key601];
+              int32_t ecast603;
+              xfer += iprot->readI32(ecast603);
+              _val602 = static_cast<ConditionalStatus::type>(ecast603);
             }
             xfer += iprot->readMapEnd();
           }
@@ -20825,11 +20569,11 @@ uint32_t AccumuloProxy_updateRowsConditionally_result::write(::apache::thrift::p
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_MAP, 0);
     {
       xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_I32, static_cast<uint32_t>(this->success.size()));
-      std::map<std::string, ConditionalStatus::type> ::const_iterator _iter613;
-      for (_iter613 = this->success.begin(); _iter613 != this->success.end(); ++_iter613)
+      std::map<std::string, ConditionalStatus::type> ::const_iterator _iter604;
+      for (_iter604 = this->success.begin(); _iter604 != this->success.end(); ++_iter604)
       {
-        xfer += oprot->writeBinary(_iter613->first);
-        xfer += oprot->writeI32(static_cast<int32_t>(_iter613->second));
+        xfer += oprot->writeBinary(_iter604->first);
+        xfer += oprot->writeI32(static_cast<int32_t>(_iter604->second));
       }
       xfer += oprot->writeMapEnd();
     }
@@ -20882,19 +20626,19 @@ uint32_t AccumuloProxy_updateRowsConditionally_presult::read(::apache::thrift::p
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             (*(this->success)).clear();
-            uint32_t _size614;
-            ::apache::thrift::protocol::TType _ktype615;
-            ::apache::thrift::protocol::TType _vtype616;
-            xfer += iprot->readMapBegin(_ktype615, _vtype616, _size614);
-            uint32_t _i618;
-            for (_i618 = 0; _i618 < _size614; ++_i618)
+            uint32_t _size605;
+            ::apache::thrift::protocol::TType _ktype606;
+            ::apache::thrift::protocol::TType _vtype607;
+            xfer += iprot->readMapBegin(_ktype606, _vtype607, _size605);
+            uint32_t _i609;
+            for (_i609 = 0; _i609 < _size605; ++_i609)
             {
-              std::string _key619;
-              xfer += iprot->readBinary(_key619);
-              ConditionalStatus::type& _val620 = (*(this->success))[_key619];
-              int32_t ecast621;
-              xfer += iprot->readI32(ecast621);
-              _val620 = static_cast<ConditionalStatus::type>(ecast621);
+              std::string _key610;
+              xfer += iprot->readBinary(_key610);
+              ConditionalStatus::type& _val611 = (*(this->success))[_key610];
+              int32_t ecast612;
+              xfer += iprot->readI32(ecast612);
+              _val611 = static_cast<ConditionalStatus::type>(ecast612);
             }
             xfer += iprot->readMapEnd();
           }
@@ -21318,9 +21062,9 @@ uint32_t AccumuloProxy_getFollowing_args::read(::apache::thrift::protocol::TProt
         break;
       case 2:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast622;
-          xfer += iprot->readI32(ecast622);
-          this->part = static_cast<PartialKey::type>(ecast622);
+          int32_t ecast613;
+          xfer += iprot->readI32(ecast613);
+          this->part = static_cast<PartialKey::type>(ecast613);
           this->__isset.part = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -21847,8 +21591,8 @@ uint32_t AccumuloProxy_listNamespaces_args::read(::apache::thrift::protocol::TPr
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -21870,8 +21614,8 @@ uint32_t AccumuloProxy_listNamespaces_args::write(::apache::thrift::protocol::TP
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_listNamespaces_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -21889,8 +21633,8 @@ uint32_t AccumuloProxy_listNamespaces_pargs::write(::apache::thrift::protocol::T
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_listNamespaces_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -21928,14 +21672,14 @@ uint32_t AccumuloProxy_listNamespaces_result::read(::apache::thrift::protocol::T
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->success.clear();
-            uint32_t _size623;
-            ::apache::thrift::protocol::TType _etype626;
-            xfer += iprot->readListBegin(_etype626, _size623);
-            this->success.resize(_size623);
-            uint32_t _i627;
-            for (_i627 = 0; _i627 < _size623; ++_i627)
+            uint32_t _size614;
+            ::apache::thrift::protocol::TType _etype617;
+            xfer += iprot->readListBegin(_etype617, _size614);
+            this->success.resize(_size614);
+            uint32_t _i618;
+            for (_i618 = 0; _i618 < _size614; ++_i618)
             {
-              xfer += iprot->readString(this->success[_i627]);
+              xfer += iprot->readString(this->success[_i618]);
             }
             xfer += iprot->readListEnd();
           }
@@ -21982,10 +21726,10 @@ uint32_t AccumuloProxy_listNamespaces_result::write(::apache::thrift::protocol::
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_LIST, 0);
     {
       xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->success.size()));
-      std::vector<std::string> ::const_iterator _iter628;
-      for (_iter628 = this->success.begin(); _iter628 != this->success.end(); ++_iter628)
+      std::vector<std::string> ::const_iterator _iter619;
+      for (_iter619 = this->success.begin(); _iter619 != this->success.end(); ++_iter619)
       {
-        xfer += oprot->writeString((*_iter628));
+        xfer += oprot->writeString((*_iter619));
       }
       xfer += oprot->writeListEnd();
     }
@@ -22034,14 +21778,14 @@ uint32_t AccumuloProxy_listNamespaces_presult::read(::apache::thrift::protocol::
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             (*(this->success)).clear();
-            uint32_t _size629;
-            ::apache::thrift::protocol::TType _etype632;
-            xfer += iprot->readListBegin(_etype632, _size629);
-            (*(this->success)).resize(_size629);
-            uint32_t _i633;
-            for (_i633 = 0; _i633 < _size629; ++_i633)
+            uint32_t _size620;
+            ::apache::thrift::protocol::TType _etype623;
+            xfer += iprot->readListBegin(_etype623, _size620);
+            (*(this->success)).resize(_size620);
+            uint32_t _i624;
+            for (_i624 = 0; _i624 < _size620; ++_i624)
             {
-              xfer += iprot->readString((*(this->success))[_i633]);
+              xfer += iprot->readString((*(this->success))[_i624]);
             }
             xfer += iprot->readListEnd();
           }
@@ -22106,8 +21850,8 @@ uint32_t AccumuloProxy_namespaceExists_args::read(::apache::thrift::protocol::TP
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -22137,8 +21881,8 @@ uint32_t AccumuloProxy_namespaceExists_args::write(::apache::thrift::protocol::T
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_namespaceExists_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("namespaceName", ::apache::thrift::protocol::T_STRING, 2);
@@ -22160,8 +21904,8 @@ uint32_t AccumuloProxy_namespaceExists_pargs::write(::apache::thrift::protocol::
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_namespaceExists_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("namespaceName", ::apache::thrift::protocol::T_STRING, 2);
@@ -22349,8 +22093,8 @@ uint32_t AccumuloProxy_createNamespace_args::read(::apache::thrift::protocol::TP
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -22380,8 +22124,8 @@ uint32_t AccumuloProxy_createNamespace_args::write(::apache::thrift::protocol::T
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_createNamespace_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("namespaceName", ::apache::thrift::protocol::T_STRING, 2);
@@ -22403,8 +22147,8 @@ uint32_t AccumuloProxy_createNamespace_pargs::write(::apache::thrift::protocol::
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_createNamespace_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("namespaceName", ::apache::thrift::protocol::T_STRING, 2);
@@ -22592,8 +22336,8 @@ uint32_t AccumuloProxy_deleteNamespace_args::read(::apache::thrift::protocol::TP
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -22623,8 +22367,8 @@ uint32_t AccumuloProxy_deleteNamespace_args::write(::apache::thrift::protocol::T
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_deleteNamespace_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("namespaceName", ::apache::thrift::protocol::T_STRING, 2);
@@ -22646,8 +22390,8 @@ uint32_t AccumuloProxy_deleteNamespace_pargs::write(::apache::thrift::protocol::
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_deleteNamespace_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("namespaceName", ::apache::thrift::protocol::T_STRING, 2);
@@ -22855,8 +22599,8 @@ uint32_t AccumuloProxy_renameNamespace_args::read(::apache::thrift::protocol::TP
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -22894,8 +22638,8 @@ uint32_t AccumuloProxy_renameNamespace_args::write(::apache::thrift::protocol::T
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_renameNamespace_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("oldNamespaceName", ::apache::thrift::protocol::T_STRING, 2);
@@ -22921,8 +22665,8 @@ uint32_t AccumuloProxy_renameNamespace_pargs::write(::apache::thrift::protocol::
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_renameNamespace_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("oldNamespaceName", ::apache::thrift::protocol::T_STRING, 2);
@@ -23134,8 +22878,8 @@ uint32_t AccumuloProxy_setNamespaceProperty_args::read(::apache::thrift::protoco
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -23181,8 +22925,8 @@ uint32_t AccumuloProxy_setNamespaceProperty_args::write(::apache::thrift::protoc
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_setNamespaceProperty_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("namespaceName", ::apache::thrift::protocol::T_STRING, 2);
@@ -23212,8 +22956,8 @@ uint32_t AccumuloProxy_setNamespaceProperty_pargs::write(::apache::thrift::proto
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_setNamespaceProperty_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("namespaceName", ::apache::thrift::protocol::T_STRING, 2);
@@ -23409,8 +23153,8 @@ uint32_t AccumuloProxy_removeNamespaceProperty_args::read(::apache::thrift::prot
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -23448,8 +23192,8 @@ uint32_t AccumuloProxy_removeNamespaceProperty_args::write(::apache::thrift::pro
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_removeNamespaceProperty_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("namespaceName", ::apache::thrift::protocol::T_STRING, 2);
@@ -23475,8 +23219,8 @@ uint32_t AccumuloProxy_removeNamespaceProperty_pargs::write(::apache::thrift::pr
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_removeNamespaceProperty_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("namespaceName", ::apache::thrift::protocol::T_STRING, 2);
@@ -23668,8 +23412,8 @@ uint32_t AccumuloProxy_getNamespaceProperties_args::read(::apache::thrift::proto
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -23699,8 +23443,8 @@ uint32_t AccumuloProxy_getNamespaceProperties_args::write(::apache::thrift::prot
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_getNamespaceProperties_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("namespaceName", ::apache::thrift::protocol::T_STRING, 2);
@@ -23722,8 +23466,8 @@ uint32_t AccumuloProxy_getNamespaceProperties_pargs::write(::apache::thrift::pro
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_getNamespaceProperties_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("namespaceName", ::apache::thrift::protocol::T_STRING, 2);
@@ -23765,17 +23509,17 @@ uint32_t AccumuloProxy_getNamespaceProperties_result::read(::apache::thrift::pro
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             this->success.clear();
-            uint32_t _size634;
-            ::apache::thrift::protocol::TType _ktype635;
-            ::apache::thrift::protocol::TType _vtype636;
-            xfer += iprot->readMapBegin(_ktype635, _vtype636, _size634);
-            uint32_t _i638;
-            for (_i638 = 0; _i638 < _size634; ++_i638)
+            uint32_t _size625;
+            ::apache::thrift::protocol::TType _ktype626;
+            ::apache::thrift::protocol::TType _vtype627;
+            xfer += iprot->readMapBegin(_ktype626, _vtype627, _size625);
+            uint32_t _i629;
+            for (_i629 = 0; _i629 < _size625; ++_i629)
             {
-              std::string _key639;
-              xfer += iprot->readString(_key639);
-              std::string& _val640 = this->success[_key639];
-              xfer += iprot->readString(_val640);
+              std::string _key630;
+              xfer += iprot->readString(_key630);
+              std::string& _val631 = this->success[_key630];
+              xfer += iprot->readString(_val631);
             }
             xfer += iprot->readMapEnd();
           }
@@ -23830,11 +23574,11 @@ uint32_t AccumuloProxy_getNamespaceProperties_result::write(::apache::thrift::pr
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_MAP, 0);
     {
       xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->success.size()));
-      std::map<std::string, std::string> ::const_iterator _iter641;
-      for (_iter641 = this->success.begin(); _iter641 != this->success.end(); ++_iter641)
+      std::map<std::string, std::string> ::const_iterator _iter632;
+      for (_iter632 = this->success.begin(); _iter632 != this->success.end(); ++_iter632)
       {
-        xfer += oprot->writeString(_iter641->first);
-        xfer += oprot->writeString(_iter641->second);
+        xfer += oprot->writeString(_iter632->first);
+        xfer += oprot->writeString(_iter632->second);
       }
       xfer += oprot->writeMapEnd();
     }
@@ -23887,17 +23631,17 @@ uint32_t AccumuloProxy_getNamespaceProperties_presult::read(::apache::thrift::pr
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             (*(this->success)).clear();
-            uint32_t _size642;
-            ::apache::thrift::protocol::TType _ktype643;
-            ::apache::thrift::protocol::TType _vtype644;
-            xfer += iprot->readMapBegin(_ktype643, _vtype644, _size642);
-            uint32_t _i646;
-            for (_i646 = 0; _i646 < _size642; ++_i646)
+            uint32_t _size633;
+            ::apache::thrift::protocol::TType _ktype634;
+            ::apache::thrift::protocol::TType _vtype635;
+            xfer += iprot->readMapBegin(_ktype634, _vtype635, _size633);
+            uint32_t _i637;
+            for (_i637 = 0; _i637 < _size633; ++_i637)
             {
-              std::string _key647;
-              xfer += iprot->readString(_key647);
-              std::string& _val648 = (*(this->success))[_key647];
-              xfer += iprot->readString(_val648);
+              std::string _key638;
+              xfer += iprot->readString(_key638);
+              std::string& _val639 = (*(this->success))[_key638];
+              xfer += iprot->readString(_val639);
             }
             xfer += iprot->readMapEnd();
           }
@@ -23970,8 +23714,8 @@ uint32_t AccumuloProxy_namespaceIdMap_args::read(::apache::thrift::protocol::TPr
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -23993,8 +23737,8 @@ uint32_t AccumuloProxy_namespaceIdMap_args::write(::apache::thrift::protocol::TP
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_namespaceIdMap_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -24012,8 +23756,8 @@ uint32_t AccumuloProxy_namespaceIdMap_pargs::write(::apache::thrift::protocol::T
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_namespaceIdMap_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -24051,17 +23795,17 @@ uint32_t AccumuloProxy_namespaceIdMap_result::read(::apache::thrift::protocol::T
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             this->success.clear();
-            uint32_t _size649;
-            ::apache::thrift::protocol::TType _ktype650;
-            ::apache::thrift::protocol::TType _vtype651;
-            xfer += iprot->readMapBegin(_ktype650, _vtype651, _size649);
-            uint32_t _i653;
-            for (_i653 = 0; _i653 < _size649; ++_i653)
+            uint32_t _size640;
+            ::apache::thrift::protocol::TType _ktype641;
+            ::apache::thrift::protocol::TType _vtype642;
+            xfer += iprot->readMapBegin(_ktype641, _vtype642, _size640);
+            uint32_t _i644;
+            for (_i644 = 0; _i644 < _size640; ++_i644)
             {
-              std::string _key654;
-              xfer += iprot->readString(_key654);
-              std::string& _val655 = this->success[_key654];
-              xfer += iprot->readString(_val655);
+              std::string _key645;
+              xfer += iprot->readString(_key645);
+              std::string& _val646 = this->success[_key645];
+              xfer += iprot->readString(_val646);
             }
             xfer += iprot->readMapEnd();
           }
@@ -24108,11 +23852,11 @@ uint32_t AccumuloProxy_namespaceIdMap_result::write(::apache::thrift::protocol::
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_MAP, 0);
     {
       xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->success.size()));
-      std::map<std::string, std::string> ::const_iterator _iter656;
-      for (_iter656 = this->success.begin(); _iter656 != this->success.end(); ++_iter656)
+      std::map<std::string, std::string> ::const_iterator _iter647;
+      for (_iter647 = this->success.begin(); _iter647 != this->success.end(); ++_iter647)
       {
-        xfer += oprot->writeString(_iter656->first);
-        xfer += oprot->writeString(_iter656->second);
+        xfer += oprot->writeString(_iter647->first);
+        xfer += oprot->writeString(_iter647->second);
       }
       xfer += oprot->writeMapEnd();
     }
@@ -24161,17 +23905,17 @@ uint32_t AccumuloProxy_namespaceIdMap_presult::read(::apache::thrift::protocol::
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             (*(this->success)).clear();
-            uint32_t _size657;
-            ::apache::thrift::protocol::TType _ktype658;
-            ::apache::thrift::protocol::TType _vtype659;
-            xfer += iprot->readMapBegin(_ktype658, _vtype659, _size657);
-            uint32_t _i661;
-            for (_i661 = 0; _i661 < _size657; ++_i661)
+            uint32_t _size648;
+            ::apache::thrift::protocol::TType _ktype649;
+            ::apache::thrift::protocol::TType _vtype650;
+            xfer += iprot->readMapBegin(_ktype649, _vtype650, _size648);
+            uint32_t _i652;
+            for (_i652 = 0; _i652 < _size648; ++_i652)
             {
-              std::string _key662;
-              xfer += iprot->readString(_key662);
-              std::string& _val663 = (*(this->success))[_key662];
-              xfer += iprot->readString(_val663);
+              std::string _key653;
+              xfer += iprot->readString(_key653);
+              std::string& _val654 = (*(this->success))[_key653];
+              xfer += iprot->readString(_val654);
             }
             xfer += iprot->readMapEnd();
           }
@@ -24236,8 +23980,8 @@ uint32_t AccumuloProxy_attachNamespaceIterator_args::read(::apache::thrift::prot
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -24262,17 +24006,17 @@ uint32_t AccumuloProxy_attachNamespaceIterator_args::read(::apache::thrift::prot
         if (ftype == ::apache::thrift::protocol::T_SET) {
           {
             this->scopes.clear();
-            uint32_t _size664;
-            ::apache::thrift::protocol::TType _etype667;
-            xfer += iprot->readSetBegin(_etype667, _size664);
-            uint32_t _i668;
-            for (_i668 = 0; _i668 < _size664; ++_i668)
+            uint32_t _size655;
+            ::apache::thrift::protocol::TType _etype658;
+            xfer += iprot->readSetBegin(_etype658, _size655);
+            uint32_t _i659;
+            for (_i659 = 0; _i659 < _size655; ++_i659)
             {
-              IteratorScope::type _elem669;
-              int32_t ecast670;
-              xfer += iprot->readI32(ecast670);
-              _elem669 = static_cast<IteratorScope::type>(ecast670);
-              this->scopes.insert(_elem669);
+              IteratorScope::type _elem660;
+              int32_t ecast661;
+              xfer += iprot->readI32(ecast661);
+              _elem660 = static_cast<IteratorScope::type>(ecast661);
+              this->scopes.insert(_elem660);
             }
             xfer += iprot->readSetEnd();
           }
@@ -24298,8 +24042,8 @@ uint32_t AccumuloProxy_attachNamespaceIterator_args::write(::apache::thrift::pro
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_attachNamespaceIterator_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("namespaceName", ::apache::thrift::protocol::T_STRING, 2);
@@ -24313,10 +24057,10 @@ uint32_t AccumuloProxy_attachNamespaceIterator_args::write(::apache::thrift::pro
   xfer += oprot->writeFieldBegin("scopes", ::apache::thrift::protocol::T_SET, 4);
   {
     xfer += oprot->writeSetBegin(::apache::thrift::protocol::T_I32, static_cast<uint32_t>(this->scopes.size()));
-    std::set<IteratorScope::type> ::const_iterator _iter671;
-    for (_iter671 = this->scopes.begin(); _iter671 != this->scopes.end(); ++_iter671)
+    std::set<IteratorScope::type> ::const_iterator _iter662;
+    for (_iter662 = this->scopes.begin(); _iter662 != this->scopes.end(); ++_iter662)
     {
-      xfer += oprot->writeI32(static_cast<int32_t>((*_iter671)));
+      xfer += oprot->writeI32(static_cast<int32_t>((*_iter662)));
     }
     xfer += oprot->writeSetEnd();
   }
@@ -24337,8 +24081,8 @@ uint32_t AccumuloProxy_attachNamespaceIterator_pargs::write(::apache::thrift::pr
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_attachNamespaceIterator_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("namespaceName", ::apache::thrift::protocol::T_STRING, 2);
@@ -24352,10 +24096,10 @@ uint32_t AccumuloProxy_attachNamespaceIterator_pargs::write(::apache::thrift::pr
   xfer += oprot->writeFieldBegin("scopes", ::apache::thrift::protocol::T_SET, 4);
   {
     xfer += oprot->writeSetBegin(::apache::thrift::protocol::T_I32, static_cast<uint32_t>((*(this->scopes)).size()));
-    std::set<IteratorScope::type> ::const_iterator _iter672;
-    for (_iter672 = (*(this->scopes)).begin(); _iter672 != (*(this->scopes)).end(); ++_iter672)
+    std::set<IteratorScope::type> ::const_iterator _iter663;
+    for (_iter663 = (*(this->scopes)).begin(); _iter663 != (*(this->scopes)).end(); ++_iter663)
     {
-      xfer += oprot->writeI32(static_cast<int32_t>((*_iter672)));
+      xfer += oprot->writeI32(static_cast<int32_t>((*_iter663)));
     }
     xfer += oprot->writeSetEnd();
   }
@@ -24542,8 +24286,8 @@ uint32_t AccumuloProxy_removeNamespaceIterator_args::read(::apache::thrift::prot
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -24568,17 +24312,17 @@ uint32_t AccumuloProxy_removeNamespaceIterator_args::read(::apache::thrift::prot
         if (ftype == ::apache::thrift::protocol::T_SET) {
           {
             this->scopes.clear();
-            uint32_t _size673;
-            ::apache::thrift::protocol::TType _etype676;
-            xfer += iprot->readSetBegin(_etype676, _size673);
-            uint32_t _i677;
-            for (_i677 = 0; _i677 < _size673; ++_i677)
+            uint32_t _size664;
+            ::apache::thrift::protocol::TType _etype667;
+            xfer += iprot->readSetBegin(_etype667, _size664);
+            uint32_t _i668;
+            for (_i668 = 0; _i668 < _size664; ++_i668)
             {
-              IteratorScope::type _elem678;
-              int32_t ecast679;
-              xfer += iprot->readI32(ecast679);
-              _elem678 = static_cast<IteratorScope::type>(ecast679);
-              this->scopes.insert(_elem678);
+              IteratorScope::type _elem669;
+              int32_t ecast670;
+              xfer += iprot->readI32(ecast670);
+              _elem669 = static_cast<IteratorScope::type>(ecast670);
+              this->scopes.insert(_elem669);
             }
             xfer += iprot->readSetEnd();
           }
@@ -24604,8 +24348,8 @@ uint32_t AccumuloProxy_removeNamespaceIterator_args::write(::apache::thrift::pro
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_removeNamespaceIterator_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("namespaceName", ::apache::thrift::protocol::T_STRING, 2);
@@ -24619,10 +24363,10 @@ uint32_t AccumuloProxy_removeNamespaceIterator_args::write(::apache::thrift::pro
   xfer += oprot->writeFieldBegin("scopes", ::apache::thrift::protocol::T_SET, 4);
   {
     xfer += oprot->writeSetBegin(::apache::thrift::protocol::T_I32, static_cast<uint32_t>(this->scopes.size()));
-    std::set<IteratorScope::type> ::const_iterator _iter680;
-    for (_iter680 = this->scopes.begin(); _iter680 != this->scopes.end(); ++_iter680)
+    std::set<IteratorScope::type> ::const_iterator _iter671;
+    for (_iter671 = this->scopes.begin(); _iter671 != this->scopes.end(); ++_iter671)
     {
-      xfer += oprot->writeI32(static_cast<int32_t>((*_iter680)));
+      xfer += oprot->writeI32(static_cast<int32_t>((*_iter671)));
     }
     xfer += oprot->writeSetEnd();
   }
@@ -24643,8 +24387,8 @@ uint32_t AccumuloProxy_removeNamespaceIterator_pargs::write(::apache::thrift::pr
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_removeNamespaceIterator_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("namespaceName", ::apache::thrift::protocol::T_STRING, 2);
@@ -24658,10 +24402,10 @@ uint32_t AccumuloProxy_removeNamespaceIterator_pargs::write(::apache::thrift::pr
   xfer += oprot->writeFieldBegin("scopes", ::apache::thrift::protocol::T_SET, 4);
   {
     xfer += oprot->writeSetBegin(::apache::thrift::protocol::T_I32, static_cast<uint32_t>((*(this->scopes)).size()));
-    std::set<IteratorScope::type> ::const_iterator _iter681;
-    for (_iter681 = (*(this->scopes)).begin(); _iter681 != (*(this->scopes)).end(); ++_iter681)
+    std::set<IteratorScope::type> ::const_iterator _iter672;
+    for (_iter672 = (*(this->scopes)).begin(); _iter672 != (*(this->scopes)).end(); ++_iter672)
     {
-      xfer += oprot->writeI32(static_cast<int32_t>((*_iter681)));
+      xfer += oprot->writeI32(static_cast<int32_t>((*_iter672)));
     }
     xfer += oprot->writeSetEnd();
   }
@@ -24848,8 +24592,8 @@ uint32_t AccumuloProxy_getNamespaceIteratorSetting_args::read(::apache::thrift::
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -24872,9 +24616,9 @@ uint32_t AccumuloProxy_getNamespaceIteratorSetting_args::read(::apache::thrift::
         break;
       case 4:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast682;
-          xfer += iprot->readI32(ecast682);
-          this->scope = static_cast<IteratorScope::type>(ecast682);
+          int32_t ecast673;
+          xfer += iprot->readI32(ecast673);
+          this->scope = static_cast<IteratorScope::type>(ecast673);
           this->__isset.scope = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -24897,8 +24641,8 @@ uint32_t AccumuloProxy_getNamespaceIteratorSetting_args::write(::apache::thrift:
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_getNamespaceIteratorSetting_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("namespaceName", ::apache::thrift::protocol::T_STRING, 2);
@@ -24928,8 +24672,8 @@ uint32_t AccumuloProxy_getNamespaceIteratorSetting_pargs::write(::apache::thrift
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_getNamespaceIteratorSetting_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("namespaceName", ::apache::thrift::protocol::T_STRING, 2);
@@ -25145,8 +24889,8 @@ uint32_t AccumuloProxy_listNamespaceIterators_args::read(::apache::thrift::proto
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -25176,8 +24920,8 @@ uint32_t AccumuloProxy_listNamespaceIterators_args::write(::apache::thrift::prot
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_listNamespaceIterators_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("namespaceName", ::apache::thrift::protocol::T_STRING, 2);
@@ -25199,8 +24943,8 @@ uint32_t AccumuloProxy_listNamespaceIterators_pargs::write(::apache::thrift::pro
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_listNamespaceIterators_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("namespaceName", ::apache::thrift::protocol::T_STRING, 2);
@@ -25242,29 +24986,29 @@ uint32_t AccumuloProxy_listNamespaceIterators_result::read(::apache::thrift::pro
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             this->success.clear();
-            uint32_t _size683;
-            ::apache::thrift::protocol::TType _ktype684;
-            ::apache::thrift::protocol::TType _vtype685;
-            xfer += iprot->readMapBegin(_ktype684, _vtype685, _size683);
-            uint32_t _i687;
-            for (_i687 = 0; _i687 < _size683; ++_i687)
+            uint32_t _size674;
+            ::apache::thrift::protocol::TType _ktype675;
+            ::apache::thrift::protocol::TType _vtype676;
+            xfer += iprot->readMapBegin(_ktype675, _vtype676, _size674);
+            uint32_t _i678;
+            for (_i678 = 0; _i678 < _size674; ++_i678)
             {
-              std::string _key688;
-              xfer += iprot->readString(_key688);
-              std::set<IteratorScope::type> & _val689 = this->success[_key688];
+              std::string _key679;
+              xfer += iprot->readString(_key679);
+              std::set<IteratorScope::type> & _val680 = this->success[_key679];
               {
-                _val689.clear();
-                uint32_t _size690;
-                ::apache::thrift::protocol::TType _etype693;
-                xfer += iprot->readSetBegin(_etype693, _size690);
-                uint32_t _i694;
-                for (_i694 = 0; _i694 < _size690; ++_i694)
+                _val680.clear();
+                uint32_t _size681;
+                ::apache::thrift::protocol::TType _etype684;
+                xfer += iprot->readSetBegin(_etype684, _size681);
+                uint32_t _i685;
+                for (_i685 = 0; _i685 < _size681; ++_i685)
                 {
-                  IteratorScope::type _elem695;
-                  int32_t ecast696;
-                  xfer += iprot->readI32(ecast696);
-                  _elem695 = static_cast<IteratorScope::type>(ecast696);
-                  _val689.insert(_elem695);
+                  IteratorScope::type _elem686;
+                  int32_t ecast687;
+                  xfer += iprot->readI32(ecast687);
+                  _elem686 = static_cast<IteratorScope::type>(ecast687);
+                  _val680.insert(_elem686);
                 }
                 xfer += iprot->readSetEnd();
               }
@@ -25322,16 +25066,16 @@ uint32_t AccumuloProxy_listNamespaceIterators_result::write(::apache::thrift::pr
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_MAP, 0);
     {
       xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_SET, static_cast<uint32_t>(this->success.size()));
-      std::map<std::string, std::set<IteratorScope::type> > ::const_iterator _iter697;
-      for (_iter697 = this->success.begin(); _iter697 != this->success.end(); ++_iter697)
+      std::map<std::string, std::set<IteratorScope::type> > ::const_iterator _iter688;
+      for (_iter688 = this->success.begin(); _iter688 != this->success.end(); ++_iter688)
       {
-        xfer += oprot->writeString(_iter697->first);
+        xfer += oprot->writeString(_iter688->first);
         {
-          xfer += oprot->writeSetBegin(::apache::thrift::protocol::T_I32, static_cast<uint32_t>(_iter697->second.size()));
-          std::set<IteratorScope::type> ::const_iterator _iter698;
-          for (_iter698 = _iter697->second.begin(); _iter698 != _iter697->second.end(); ++_iter698)
+          xfer += oprot->writeSetBegin(::apache::thrift::protocol::T_I32, static_cast<uint32_t>(_iter688->second.size()));
+          std::set<IteratorScope::type> ::const_iterator _iter689;
+          for (_iter689 = _iter688->second.begin(); _iter689 != _iter688->second.end(); ++_iter689)
           {
-            xfer += oprot->writeI32(static_cast<int32_t>((*_iter698)));
+            xfer += oprot->writeI32(static_cast<int32_t>((*_iter689)));
           }
           xfer += oprot->writeSetEnd();
         }
@@ -25387,29 +25131,29 @@ uint32_t AccumuloProxy_listNamespaceIterators_presult::read(::apache::thrift::pr
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             (*(this->success)).clear();
-            uint32_t _size699;
-            ::apache::thrift::protocol::TType _ktype700;
-            ::apache::thrift::protocol::TType _vtype701;
-            xfer += iprot->readMapBegin(_ktype700, _vtype701, _size699);
-            uint32_t _i703;
-            for (_i703 = 0; _i703 < _size699; ++_i703)
+            uint32_t _size690;
+            ::apache::thrift::protocol::TType _ktype691;
+            ::apache::thrift::protocol::TType _vtype692;
+            xfer += iprot->readMapBegin(_ktype691, _vtype692, _size690);
+            uint32_t _i694;
+            for (_i694 = 0; _i694 < _size690; ++_i694)
             {
-              std::string _key704;
-              xfer += iprot->readString(_key704);
-              std::set<IteratorScope::type> & _val705 = (*(this->success))[_key704];
+              std::string _key695;
+              xfer += iprot->readString(_key695);
+              std::set<IteratorScope::type> & _val696 = (*(this->success))[_key695];
               {
-                _val705.clear();
-                uint32_t _size706;
-                ::apache::thrift::protocol::TType _etype709;
-                xfer += iprot->readSetBegin(_etype709, _size706);
-                uint32_t _i710;
-                for (_i710 = 0; _i710 < _size706; ++_i710)
+                _val696.clear();
+                uint32_t _size697;
+                ::apache::thrift::protocol::TType _etype700;
+                xfer += iprot->readSetBegin(_etype700, _size697);
+                uint32_t _i701;
+                for (_i701 = 0; _i701 < _size697; ++_i701)
                 {
-                  IteratorScope::type _elem711;
-                  int32_t ecast712;
-                  xfer += iprot->readI32(ecast712);
-                  _elem711 = static_cast<IteratorScope::type>(ecast712);
-                  _val705.insert(_elem711);
+                  IteratorScope::type _elem702;
+                  int32_t ecast703;
+                  xfer += iprot->readI32(ecast703);
+                  _elem702 = static_cast<IteratorScope::type>(ecast703);
+                  _val696.insert(_elem702);
                 }
                 xfer += iprot->readSetEnd();
               }
@@ -25485,8 +25229,8 @@ uint32_t AccumuloProxy_checkNamespaceIteratorConflicts_args::read(::apache::thri
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -25511,17 +25255,17 @@ uint32_t AccumuloProxy_checkNamespaceIteratorConflicts_args::read(::apache::thri
         if (ftype == ::apache::thrift::protocol::T_SET) {
           {
             this->scopes.clear();
-            uint32_t _size713;
-            ::apache::thrift::protocol::TType _etype716;
-            xfer += iprot->readSetBegin(_etype716, _size713);
-            uint32_t _i717;
-            for (_i717 = 0; _i717 < _size713; ++_i717)
+            uint32_t _size704;
+            ::apache::thrift::protocol::TType _etype707;
+            xfer += iprot->readSetBegin(_etype707, _size704);
+            uint32_t _i708;
+            for (_i708 = 0; _i708 < _size704; ++_i708)
             {
-              IteratorScope::type _elem718;
-              int32_t ecast719;
-              xfer += iprot->readI32(ecast719);
-              _elem718 = static_cast<IteratorScope::type>(ecast719);
-              this->scopes.insert(_elem718);
+              IteratorScope::type _elem709;
+              int32_t ecast710;
+              xfer += iprot->readI32(ecast710);
+              _elem709 = static_cast<IteratorScope::type>(ecast710);
+              this->scopes.insert(_elem709);
             }
             xfer += iprot->readSetEnd();
           }
@@ -25547,8 +25291,8 @@ uint32_t AccumuloProxy_checkNamespaceIteratorConflicts_args::write(::apache::thr
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_checkNamespaceIteratorConflicts_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("namespaceName", ::apache::thrift::protocol::T_STRING, 2);
@@ -25562,10 +25306,10 @@ uint32_t AccumuloProxy_checkNamespaceIteratorConflicts_args::write(::apache::thr
   xfer += oprot->writeFieldBegin("scopes", ::apache::thrift::protocol::T_SET, 4);
   {
     xfer += oprot->writeSetBegin(::apache::thrift::protocol::T_I32, static_cast<uint32_t>(this->scopes.size()));
-    std::set<IteratorScope::type> ::const_iterator _iter720;
-    for (_iter720 = this->scopes.begin(); _iter720 != this->scopes.end(); ++_iter720)
+    std::set<IteratorScope::type> ::const_iterator _iter711;
+    for (_iter711 = this->scopes.begin(); _iter711 != this->scopes.end(); ++_iter711)
     {
-      xfer += oprot->writeI32(static_cast<int32_t>((*_iter720)));
+      xfer += oprot->writeI32(static_cast<int32_t>((*_iter711)));
     }
     xfer += oprot->writeSetEnd();
   }
@@ -25586,8 +25330,8 @@ uint32_t AccumuloProxy_checkNamespaceIteratorConflicts_pargs::write(::apache::th
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_checkNamespaceIteratorConflicts_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("namespaceName", ::apache::thrift::protocol::T_STRING, 2);
@@ -25601,10 +25345,10 @@ uint32_t AccumuloProxy_checkNamespaceIteratorConflicts_pargs::write(::apache::th
   xfer += oprot->writeFieldBegin("scopes", ::apache::thrift::protocol::T_SET, 4);
   {
     xfer += oprot->writeSetBegin(::apache::thrift::protocol::T_I32, static_cast<uint32_t>((*(this->scopes)).size()));
-    std::set<IteratorScope::type> ::const_iterator _iter721;
-    for (_iter721 = (*(this->scopes)).begin(); _iter721 != (*(this->scopes)).end(); ++_iter721)
+    std::set<IteratorScope::type> ::const_iterator _iter712;
+    for (_iter712 = (*(this->scopes)).begin(); _iter712 != (*(this->scopes)).end(); ++_iter712)
     {
-      xfer += oprot->writeI32(static_cast<int32_t>((*_iter721)));
+      xfer += oprot->writeI32(static_cast<int32_t>((*_iter712)));
     }
     xfer += oprot->writeSetEnd();
   }
@@ -25791,8 +25535,8 @@ uint32_t AccumuloProxy_addNamespaceConstraint_args::read(::apache::thrift::proto
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -25830,8 +25574,8 @@ uint32_t AccumuloProxy_addNamespaceConstraint_args::write(::apache::thrift::prot
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_addNamespaceConstraint_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("namespaceName", ::apache::thrift::protocol::T_STRING, 2);
@@ -25857,8 +25601,8 @@ uint32_t AccumuloProxy_addNamespaceConstraint_pargs::write(::apache::thrift::pro
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_addNamespaceConstraint_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("namespaceName", ::apache::thrift::protocol::T_STRING, 2);
@@ -26070,8 +25814,8 @@ uint32_t AccumuloProxy_removeNamespaceConstraint_args::read(::apache::thrift::pr
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -26109,8 +25853,8 @@ uint32_t AccumuloProxy_removeNamespaceConstraint_args::write(::apache::thrift::p
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_removeNamespaceConstraint_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("namespaceName", ::apache::thrift::protocol::T_STRING, 2);
@@ -26136,8 +25880,8 @@ uint32_t AccumuloProxy_removeNamespaceConstraint_pargs::write(::apache::thrift::
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_removeNamespaceConstraint_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("namespaceName", ::apache::thrift::protocol::T_STRING, 2);
@@ -26329,8 +26073,8 @@ uint32_t AccumuloProxy_listNamespaceConstraints_args::read(::apache::thrift::pro
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -26360,8 +26104,8 @@ uint32_t AccumuloProxy_listNamespaceConstraints_args::write(::apache::thrift::pr
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_listNamespaceConstraints_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("namespaceName", ::apache::thrift::protocol::T_STRING, 2);
@@ -26383,8 +26127,8 @@ uint32_t AccumuloProxy_listNamespaceConstraints_pargs::write(::apache::thrift::p
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_listNamespaceConstraints_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("namespaceName", ::apache::thrift::protocol::T_STRING, 2);
@@ -26426,17 +26170,17 @@ uint32_t AccumuloProxy_listNamespaceConstraints_result::read(::apache::thrift::p
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             this->success.clear();
-            uint32_t _size722;
-            ::apache::thrift::protocol::TType _ktype723;
-            ::apache::thrift::protocol::TType _vtype724;
-            xfer += iprot->readMapBegin(_ktype723, _vtype724, _size722);
-            uint32_t _i726;
-            for (_i726 = 0; _i726 < _size722; ++_i726)
+            uint32_t _size713;
+            ::apache::thrift::protocol::TType _ktype714;
+            ::apache::thrift::protocol::TType _vtype715;
+            xfer += iprot->readMapBegin(_ktype714, _vtype715, _size713);
+            uint32_t _i717;
+            for (_i717 = 0; _i717 < _size713; ++_i717)
             {
-              std::string _key727;
-              xfer += iprot->readString(_key727);
-              int32_t& _val728 = this->success[_key727];
-              xfer += iprot->readI32(_val728);
+              std::string _key718;
+              xfer += iprot->readString(_key718);
+              int32_t& _val719 = this->success[_key718];
+              xfer += iprot->readI32(_val719);
             }
             xfer += iprot->readMapEnd();
           }
@@ -26491,11 +26235,11 @@ uint32_t AccumuloProxy_listNamespaceConstraints_result::write(::apache::thrift::
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_MAP, 0);
     {
       xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_I32, static_cast<uint32_t>(this->success.size()));
-      std::map<std::string, int32_t> ::const_iterator _iter729;
-      for (_iter729 = this->success.begin(); _iter729 != this->success.end(); ++_iter729)
+      std::map<std::string, int32_t> ::const_iterator _iter720;
+      for (_iter720 = this->success.begin(); _iter720 != this->success.end(); ++_iter720)
       {
-        xfer += oprot->writeString(_iter729->first);
-        xfer += oprot->writeI32(_iter729->second);
+        xfer += oprot->writeString(_iter720->first);
+        xfer += oprot->writeI32(_iter720->second);
       }
       xfer += oprot->writeMapEnd();
     }
@@ -26548,17 +26292,17 @@ uint32_t AccumuloProxy_listNamespaceConstraints_presult::read(::apache::thrift::
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             (*(this->success)).clear();
-            uint32_t _size730;
-            ::apache::thrift::protocol::TType _ktype731;
-            ::apache::thrift::protocol::TType _vtype732;
-            xfer += iprot->readMapBegin(_ktype731, _vtype732, _size730);
-            uint32_t _i734;
-            for (_i734 = 0; _i734 < _size730; ++_i734)
+            uint32_t _size721;
+            ::apache::thrift::protocol::TType _ktype722;
+            ::apache::thrift::protocol::TType _vtype723;
+            xfer += iprot->readMapBegin(_ktype722, _vtype723, _size721);
+            uint32_t _i725;
+            for (_i725 = 0; _i725 < _size721; ++_i725)
             {
-              std::string _key735;
-              xfer += iprot->readString(_key735);
-              int32_t& _val736 = (*(this->success))[_key735];
-              xfer += iprot->readI32(_val736);
+              std::string _key726;
+              xfer += iprot->readString(_key726);
+              int32_t& _val727 = (*(this->success))[_key726];
+              xfer += iprot->readI32(_val727);
             }
             xfer += iprot->readMapEnd();
           }
@@ -26631,8 +26375,8 @@ uint32_t AccumuloProxy_testNamespaceClassLoad_args::read(::apache::thrift::proto
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->login);
-          this->__isset.login = true;
+          xfer += iprot->readString(this->sharedSecret);
+          this->__isset.sharedSecret = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -26678,8 +26422,8 @@ uint32_t AccumuloProxy_testNamespaceClassLoad_args::write(::apache::thrift::prot
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_testNamespaceClassLoad_args");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary(this->login);
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->sharedSecret);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("namespaceName", ::apache::thrift::protocol::T_STRING, 2);
@@ -26709,8 +26453,8 @@ uint32_t AccumuloProxy_testNamespaceClassLoad_pargs::write(::apache::thrift::pro
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("AccumuloProxy_testNamespaceClassLoad_pargs");
 
-  xfer += oprot->writeFieldBegin("login", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeBinary((*(this->login)));
+  xfer += oprot->writeFieldBegin("sharedSecret", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->sharedSecret)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("namespaceName", ::apache::thrift::protocol::T_STRING, 2);
@@ -26898,81 +26642,19 @@ uint32_t AccumuloProxy_testNamespaceClassLoad_presult::read(::apache::thrift::pr
   return xfer;
 }
 
-void AccumuloProxyClient::login(std::string& _return, const std::string& principal, const std::map<std::string, std::string> & loginProperties)
+int32_t AccumuloProxyClient::addConstraint(const std::string& sharedSecret, const std::string& tableName, const std::string& constraintClassName)
 {
-  send_login(principal, loginProperties);
-  recv_login(_return);
-}
-
-void AccumuloProxyClient::send_login(const std::string& principal, const std::map<std::string, std::string> & loginProperties)
-{
-  int32_t cseqid = 0;
-  oprot_->writeMessageBegin("login", ::apache::thrift::protocol::T_CALL, cseqid);
-
-  AccumuloProxy_login_pargs args;
-  args.principal = &principal;
-  args.loginProperties = &loginProperties;
-  args.write(oprot_);
-
-  oprot_->writeMessageEnd();
-  oprot_->getTransport()->writeEnd();
-  oprot_->getTransport()->flush();
-}
-
-void AccumuloProxyClient::recv_login(std::string& _return)
-{
-
-  int32_t rseqid = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TMessageType mtype;
-
-  iprot_->readMessageBegin(fname, mtype, rseqid);
-  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
-    ::apache::thrift::TApplicationException x;
-    x.read(iprot_);
-    iprot_->readMessageEnd();
-    iprot_->getTransport()->readEnd();
-    throw x;
-  }
-  if (mtype != ::apache::thrift::protocol::T_REPLY) {
-    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-    iprot_->readMessageEnd();
-    iprot_->getTransport()->readEnd();
-  }
-  if (fname.compare("login") != 0) {
-    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-    iprot_->readMessageEnd();
-    iprot_->getTransport()->readEnd();
-  }
-  AccumuloProxy_login_presult result;
-  result.success = &_return;
-  result.read(iprot_);
-  iprot_->readMessageEnd();
-  iprot_->getTransport()->readEnd();
-
-  if (result.__isset.success) {
-    // _return pointer has now been filled
-    return;
-  }
-  if (result.__isset.ouch2) {
-    throw result.ouch2;
-  }
-  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "login failed: unknown result");
-}
-
-int32_t AccumuloProxyClient::addConstraint(const std::string& login, const std::string& tableName, const std::string& constraintClassName)
-{
-  send_addConstraint(login, tableName, constraintClassName);
+  send_addConstraint(sharedSecret, tableName, constraintClassName);
   return recv_addConstraint();
 }
 
-void AccumuloProxyClient::send_addConstraint(const std::string& login, const std::string& tableName, const std::string& constraintClassName)
+void AccumuloProxyClient::send_addConstraint(const std::string& sharedSecret, const std::string& tableName, const std::string& constraintClassName)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("addConstraint", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_addConstraint_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.constraintClassName = &constraintClassName;
   args.write(oprot_);
@@ -27029,19 +26711,19 @@ int32_t AccumuloProxyClient::recv_addConstraint()
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "addConstraint failed: unknown result");
 }
 
-void AccumuloProxyClient::addSplits(const std::string& login, const std::string& tableName, const std::set<std::string> & splits)
+void AccumuloProxyClient::addSplits(const std::string& sharedSecret, const std::string& tableName, const std::set<std::string> & splits)
 {
-  send_addSplits(login, tableName, splits);
+  send_addSplits(sharedSecret, tableName, splits);
   recv_addSplits();
 }
 
-void AccumuloProxyClient::send_addSplits(const std::string& login, const std::string& tableName, const std::set<std::string> & splits)
+void AccumuloProxyClient::send_addSplits(const std::string& sharedSecret, const std::string& tableName, const std::set<std::string> & splits)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("addSplits", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_addSplits_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.splits = &splits;
   args.write(oprot_);
@@ -27093,19 +26775,19 @@ void AccumuloProxyClient::recv_addSplits()
   return;
 }
 
-void AccumuloProxyClient::attachIterator(const std::string& login, const std::string& tableName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes)
+void AccumuloProxyClient::attachIterator(const std::string& sharedSecret, const std::string& tableName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes)
 {
-  send_attachIterator(login, tableName, setting, scopes);
+  send_attachIterator(sharedSecret, tableName, setting, scopes);
   recv_attachIterator();
 }
 
-void AccumuloProxyClient::send_attachIterator(const std::string& login, const std::string& tableName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes)
+void AccumuloProxyClient::send_attachIterator(const std::string& sharedSecret, const std::string& tableName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("attachIterator", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_attachIterator_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.setting = &setting;
   args.scopes = &scopes;
@@ -27158,19 +26840,19 @@ void AccumuloProxyClient::recv_attachIterator()
   return;
 }
 
-void AccumuloProxyClient::checkIteratorConflicts(const std::string& login, const std::string& tableName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes)
+void AccumuloProxyClient::checkIteratorConflicts(const std::string& sharedSecret, const std::string& tableName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes)
 {
-  send_checkIteratorConflicts(login, tableName, setting, scopes);
+  send_checkIteratorConflicts(sharedSecret, tableName, setting, scopes);
   recv_checkIteratorConflicts();
 }
 
-void AccumuloProxyClient::send_checkIteratorConflicts(const std::string& login, const std::string& tableName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes)
+void AccumuloProxyClient::send_checkIteratorConflicts(const std::string& sharedSecret, const std::string& tableName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("checkIteratorConflicts", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_checkIteratorConflicts_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.setting = &setting;
   args.scopes = &scopes;
@@ -27223,19 +26905,19 @@ void AccumuloProxyClient::recv_checkIteratorConflicts()
   return;
 }
 
-void AccumuloProxyClient::clearLocatorCache(const std::string& login, const std::string& tableName)
+void AccumuloProxyClient::clearLocatorCache(const std::string& sharedSecret, const std::string& tableName)
 {
-  send_clearLocatorCache(login, tableName);
+  send_clearLocatorCache(sharedSecret, tableName);
   recv_clearLocatorCache();
 }
 
-void AccumuloProxyClient::send_clearLocatorCache(const std::string& login, const std::string& tableName)
+void AccumuloProxyClient::send_clearLocatorCache(const std::string& sharedSecret, const std::string& tableName)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("clearLocatorCache", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_clearLocatorCache_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.write(oprot_);
 
@@ -27280,19 +26962,19 @@ void AccumuloProxyClient::recv_clearLocatorCache()
   return;
 }
 
-void AccumuloProxyClient::cloneTable(const std::string& login, const std::string& tableName, const std::string& newTableName, const bool flush, const std::map<std::string, std::string> & propertiesToSet, const std::set<std::string> & propertiesToExclude)
+void AccumuloProxyClient::cloneTable(const std::string& sharedSecret, const std::string& tableName, const std::string& newTableName, const bool flush, const std::map<std::string, std::string> & propertiesToSet, const std::set<std::string> & propertiesToExclude)
 {
-  send_cloneTable(login, tableName, newTableName, flush, propertiesToSet, propertiesToExclude);
+  send_cloneTable(sharedSecret, tableName, newTableName, flush, propertiesToSet, propertiesToExclude);
   recv_cloneTable();
 }
 
-void AccumuloProxyClient::send_cloneTable(const std::string& login, const std::string& tableName, const std::string& newTableName, const bool flush, const std::map<std::string, std::string> & propertiesToSet, const std::set<std::string> & propertiesToExclude)
+void AccumuloProxyClient::send_cloneTable(const std::string& sharedSecret, const std::string& tableName, const std::string& newTableName, const bool flush, const std::map<std::string, std::string> & propertiesToSet, const std::set<std::string> & propertiesToExclude)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("cloneTable", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_cloneTable_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.newTableName = &newTableName;
   args.flush = &flush;
@@ -27350,19 +27032,19 @@ void AccumuloProxyClient::recv_cloneTable()
   return;
 }
 
-void AccumuloProxyClient::compactTable(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow, const std::vector<IteratorSetting> & iterators, const bool flush, const bool wait, const PluginConfig& selectorConfig, const PluginConfig& configurerConfig)
+void AccumuloProxyClient::compactTable(const std::string& sharedSecret, const std::string& tableName, const std::string& startRow, const std::string& endRow, const std::vector<IteratorSetting> & iterators, const bool flush, const bool wait, const PluginConfig& selectorConfig, const PluginConfig& configurerConfig)
 {
-  send_compactTable(login, tableName, startRow, endRow, iterators, flush, wait, selectorConfig, configurerConfig);
+  send_compactTable(sharedSecret, tableName, startRow, endRow, iterators, flush, wait, selectorConfig, configurerConfig);
   recv_compactTable();
 }
 
-void AccumuloProxyClient::send_compactTable(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow, const std::vector<IteratorSetting> & iterators, const bool flush, const bool wait, const PluginConfig& selectorConfig, const PluginConfig& configurerConfig)
+void AccumuloProxyClient::send_compactTable(const std::string& sharedSecret, const std::string& tableName, const std::string& startRow, const std::string& endRow, const std::vector<IteratorSetting> & iterators, const bool flush, const bool wait, const PluginConfig& selectorConfig, const PluginConfig& configurerConfig)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("compactTable", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_compactTable_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.startRow = &startRow;
   args.endRow = &endRow;
@@ -27420,19 +27102,19 @@ void AccumuloProxyClient::recv_compactTable()
   return;
 }
 
-void AccumuloProxyClient::cancelCompaction(const std::string& login, const std::string& tableName)
+void AccumuloProxyClient::cancelCompaction(const std::string& sharedSecret, const std::string& tableName)
 {
-  send_cancelCompaction(login, tableName);
+  send_cancelCompaction(sharedSecret, tableName);
   recv_cancelCompaction();
 }
 
-void AccumuloProxyClient::send_cancelCompaction(const std::string& login, const std::string& tableName)
+void AccumuloProxyClient::send_cancelCompaction(const std::string& sharedSecret, const std::string& tableName)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("cancelCompaction", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_cancelCompaction_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.write(oprot_);
 
@@ -27483,19 +27165,19 @@ void AccumuloProxyClient::recv_cancelCompaction()
   return;
 }
 
-void AccumuloProxyClient::createTable(const std::string& login, const std::string& tableName, const bool versioningIter, const TimeType::type type)
+void AccumuloProxyClient::createTable(const std::string& sharedSecret, const std::string& tableName, const bool versioningIter, const TimeType::type type)
 {
-  send_createTable(login, tableName, versioningIter, type);
+  send_createTable(sharedSecret, tableName, versioningIter, type);
   recv_createTable();
 }
 
-void AccumuloProxyClient::send_createTable(const std::string& login, const std::string& tableName, const bool versioningIter, const TimeType::type type)
+void AccumuloProxyClient::send_createTable(const std::string& sharedSecret, const std::string& tableName, const bool versioningIter, const TimeType::type type)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("createTable", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_createTable_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.versioningIter = &versioningIter;
   args.type = &type;
@@ -27548,19 +27230,19 @@ void AccumuloProxyClient::recv_createTable()
   return;
 }
 
-void AccumuloProxyClient::deleteTable(const std::string& login, const std::string& tableName)
+void AccumuloProxyClient::deleteTable(const std::string& sharedSecret, const std::string& tableName)
 {
-  send_deleteTable(login, tableName);
+  send_deleteTable(sharedSecret, tableName);
   recv_deleteTable();
 }
 
-void AccumuloProxyClient::send_deleteTable(const std::string& login, const std::string& tableName)
+void AccumuloProxyClient::send_deleteTable(const std::string& sharedSecret, const std::string& tableName)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("deleteTable", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_deleteTable_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.write(oprot_);
 
@@ -27611,19 +27293,19 @@ void AccumuloProxyClient::recv_deleteTable()
   return;
 }
 
-void AccumuloProxyClient::deleteRows(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow)
+void AccumuloProxyClient::deleteRows(const std::string& sharedSecret, const std::string& tableName, const std::string& startRow, const std::string& endRow)
 {
-  send_deleteRows(login, tableName, startRow, endRow);
+  send_deleteRows(sharedSecret, tableName, startRow, endRow);
   recv_deleteRows();
 }
 
-void AccumuloProxyClient::send_deleteRows(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow)
+void AccumuloProxyClient::send_deleteRows(const std::string& sharedSecret, const std::string& tableName, const std::string& startRow, const std::string& endRow)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("deleteRows", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_deleteRows_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.startRow = &startRow;
   args.endRow = &endRow;
@@ -27676,19 +27358,19 @@ void AccumuloProxyClient::recv_deleteRows()
   return;
 }
 
-void AccumuloProxyClient::exportTable(const std::string& login, const std::string& tableName, const std::string& exportDir)
+void AccumuloProxyClient::exportTable(const std::string& sharedSecret, const std::string& tableName, const std::string& exportDir)
 {
-  send_exportTable(login, tableName, exportDir);
+  send_exportTable(sharedSecret, tableName, exportDir);
   recv_exportTable();
 }
 
-void AccumuloProxyClient::send_exportTable(const std::string& login, const std::string& tableName, const std::string& exportDir)
+void AccumuloProxyClient::send_exportTable(const std::string& sharedSecret, const std::string& tableName, const std::string& exportDir)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("exportTable", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_exportTable_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.exportDir = &exportDir;
   args.write(oprot_);
@@ -27740,19 +27422,19 @@ void AccumuloProxyClient::recv_exportTable()
   return;
 }
 
-void AccumuloProxyClient::flushTable(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow, const bool wait)
+void AccumuloProxyClient::flushTable(const std::string& sharedSecret, const std::string& tableName, const std::string& startRow, const std::string& endRow, const bool wait)
 {
-  send_flushTable(login, tableName, startRow, endRow, wait);
+  send_flushTable(sharedSecret, tableName, startRow, endRow, wait);
   recv_flushTable();
 }
 
-void AccumuloProxyClient::send_flushTable(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow, const bool wait)
+void AccumuloProxyClient::send_flushTable(const std::string& sharedSecret, const std::string& tableName, const std::string& startRow, const std::string& endRow, const bool wait)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("flushTable", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_flushTable_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.startRow = &startRow;
   args.endRow = &endRow;
@@ -27806,19 +27488,19 @@ void AccumuloProxyClient::recv_flushTable()
   return;
 }
 
-void AccumuloProxyClient::getDiskUsage(std::vector<DiskUsage> & _return, const std::string& login, const std::set<std::string> & tables)
+void AccumuloProxyClient::getDiskUsage(std::vector<DiskUsage> & _return, const std::string& sharedSecret, const std::set<std::string> & tables)
 {
-  send_getDiskUsage(login, tables);
+  send_getDiskUsage(sharedSecret, tables);
   recv_getDiskUsage(_return);
 }
 
-void AccumuloProxyClient::send_getDiskUsage(const std::string& login, const std::set<std::string> & tables)
+void AccumuloProxyClient::send_getDiskUsage(const std::string& sharedSecret, const std::set<std::string> & tables)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("getDiskUsage", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_getDiskUsage_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tables = &tables;
   args.write(oprot_);
 
@@ -27874,19 +27556,19 @@ void AccumuloProxyClient::recv_getDiskUsage(std::vector<DiskUsage> & _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "getDiskUsage failed: unknown result");
 }
 
-void AccumuloProxyClient::getLocalityGroups(std::map<std::string, std::set<std::string> > & _return, const std::string& login, const std::string& tableName)
+void AccumuloProxyClient::getLocalityGroups(std::map<std::string, std::set<std::string> > & _return, const std::string& sharedSecret, const std::string& tableName)
 {
-  send_getLocalityGroups(login, tableName);
+  send_getLocalityGroups(sharedSecret, tableName);
   recv_getLocalityGroups(_return);
 }
 
-void AccumuloProxyClient::send_getLocalityGroups(const std::string& login, const std::string& tableName)
+void AccumuloProxyClient::send_getLocalityGroups(const std::string& sharedSecret, const std::string& tableName)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("getLocalityGroups", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_getLocalityGroups_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.write(oprot_);
 
@@ -27942,19 +27624,19 @@ void AccumuloProxyClient::recv_getLocalityGroups(std::map<std::string, std::set<
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "getLocalityGroups failed: unknown result");
 }
 
-void AccumuloProxyClient::getIteratorSetting(IteratorSetting& _return, const std::string& login, const std::string& tableName, const std::string& iteratorName, const IteratorScope::type scope)
+void AccumuloProxyClient::getIteratorSetting(IteratorSetting& _return, const std::string& sharedSecret, const std::string& tableName, const std::string& iteratorName, const IteratorScope::type scope)
 {
-  send_getIteratorSetting(login, tableName, iteratorName, scope);
+  send_getIteratorSetting(sharedSecret, tableName, iteratorName, scope);
   recv_getIteratorSetting(_return);
 }
 
-void AccumuloProxyClient::send_getIteratorSetting(const std::string& login, const std::string& tableName, const std::string& iteratorName, const IteratorScope::type scope)
+void AccumuloProxyClient::send_getIteratorSetting(const std::string& sharedSecret, const std::string& tableName, const std::string& iteratorName, const IteratorScope::type scope)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("getIteratorSetting", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_getIteratorSetting_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.iteratorName = &iteratorName;
   args.scope = &scope;
@@ -28012,19 +27694,19 @@ void AccumuloProxyClient::recv_getIteratorSetting(IteratorSetting& _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "getIteratorSetting failed: unknown result");
 }
 
-void AccumuloProxyClient::getMaxRow(std::string& _return, const std::string& login, const std::string& tableName, const std::set<std::string> & auths, const std::string& startRow, const bool startInclusive, const std::string& endRow, const bool endInclusive)
+void AccumuloProxyClient::getMaxRow(std::string& _return, const std::string& sharedSecret, const std::string& tableName, const std::set<std::string> & auths, const std::string& startRow, const bool startInclusive, const std::string& endRow, const bool endInclusive)
 {
-  send_getMaxRow(login, tableName, auths, startRow, startInclusive, endRow, endInclusive);
+  send_getMaxRow(sharedSecret, tableName, auths, startRow, startInclusive, endRow, endInclusive);
   recv_getMaxRow(_return);
 }
 
-void AccumuloProxyClient::send_getMaxRow(const std::string& login, const std::string& tableName, const std::set<std::string> & auths, const std::string& startRow, const bool startInclusive, const std::string& endRow, const bool endInclusive)
+void AccumuloProxyClient::send_getMaxRow(const std::string& sharedSecret, const std::string& tableName, const std::set<std::string> & auths, const std::string& startRow, const bool startInclusive, const std::string& endRow, const bool endInclusive)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("getMaxRow", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_getMaxRow_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.auths = &auths;
   args.startRow = &startRow;
@@ -28085,19 +27767,19 @@ void AccumuloProxyClient::recv_getMaxRow(std::string& _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "getMaxRow failed: unknown result");
 }
 
-void AccumuloProxyClient::getTableProperties(std::map<std::string, std::string> & _return, const std::string& login, const std::string& tableName)
+void AccumuloProxyClient::getTableProperties(std::map<std::string, std::string> & _return, const std::string& sharedSecret, const std::string& tableName)
 {
-  send_getTableProperties(login, tableName);
+  send_getTableProperties(sharedSecret, tableName);
   recv_getTableProperties(_return);
 }
 
-void AccumuloProxyClient::send_getTableProperties(const std::string& login, const std::string& tableName)
+void AccumuloProxyClient::send_getTableProperties(const std::string& sharedSecret, const std::string& tableName)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("getTableProperties", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_getTableProperties_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.write(oprot_);
 
@@ -28153,19 +27835,19 @@ void AccumuloProxyClient::recv_getTableProperties(std::map<std::string, std::str
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "getTableProperties failed: unknown result");
 }
 
-void AccumuloProxyClient::importDirectory(const std::string& login, const std::string& tableName, const std::string& importDir, const std::string& failureDir, const bool setTime)
+void AccumuloProxyClient::importDirectory(const std::string& sharedSecret, const std::string& tableName, const std::string& importDir, const std::string& failureDir, const bool setTime)
 {
-  send_importDirectory(login, tableName, importDir, failureDir, setTime);
+  send_importDirectory(sharedSecret, tableName, importDir, failureDir, setTime);
   recv_importDirectory();
 }
 
-void AccumuloProxyClient::send_importDirectory(const std::string& login, const std::string& tableName, const std::string& importDir, const std::string& failureDir, const bool setTime)
+void AccumuloProxyClient::send_importDirectory(const std::string& sharedSecret, const std::string& tableName, const std::string& importDir, const std::string& failureDir, const bool setTime)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("importDirectory", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_importDirectory_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.importDir = &importDir;
   args.failureDir = &failureDir;
@@ -28219,19 +27901,19 @@ void AccumuloProxyClient::recv_importDirectory()
   return;
 }
 
-void AccumuloProxyClient::importTable(const std::string& login, const std::string& tableName, const std::string& importDir)
+void AccumuloProxyClient::importTable(const std::string& sharedSecret, const std::string& tableName, const std::string& importDir)
 {
-  send_importTable(login, tableName, importDir);
+  send_importTable(sharedSecret, tableName, importDir);
   recv_importTable();
 }
 
-void AccumuloProxyClient::send_importTable(const std::string& login, const std::string& tableName, const std::string& importDir)
+void AccumuloProxyClient::send_importTable(const std::string& sharedSecret, const std::string& tableName, const std::string& importDir)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("importTable", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_importTable_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.importDir = &importDir;
   args.write(oprot_);
@@ -28283,19 +27965,19 @@ void AccumuloProxyClient::recv_importTable()
   return;
 }
 
-void AccumuloProxyClient::listSplits(std::vector<std::string> & _return, const std::string& login, const std::string& tableName, const int32_t maxSplits)
+void AccumuloProxyClient::listSplits(std::vector<std::string> & _return, const std::string& sharedSecret, const std::string& tableName, const int32_t maxSplits)
 {
-  send_listSplits(login, tableName, maxSplits);
+  send_listSplits(sharedSecret, tableName, maxSplits);
   recv_listSplits(_return);
 }
 
-void AccumuloProxyClient::send_listSplits(const std::string& login, const std::string& tableName, const int32_t maxSplits)
+void AccumuloProxyClient::send_listSplits(const std::string& sharedSecret, const std::string& tableName, const int32_t maxSplits)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("listSplits", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_listSplits_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.maxSplits = &maxSplits;
   args.write(oprot_);
@@ -28352,19 +28034,19 @@ void AccumuloProxyClient::recv_listSplits(std::vector<std::string> & _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "listSplits failed: unknown result");
 }
 
-void AccumuloProxyClient::listTables(std::set<std::string> & _return, const std::string& login)
+void AccumuloProxyClient::listTables(std::set<std::string> & _return, const std::string& sharedSecret)
 {
-  send_listTables(login);
+  send_listTables(sharedSecret);
   recv_listTables(_return);
 }
 
-void AccumuloProxyClient::send_listTables(const std::string& login)
+void AccumuloProxyClient::send_listTables(const std::string& sharedSecret)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("listTables", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_listTables_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -28410,19 +28092,19 @@ void AccumuloProxyClient::recv_listTables(std::set<std::string> & _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "listTables failed: unknown result");
 }
 
-void AccumuloProxyClient::listIterators(std::map<std::string, std::set<IteratorScope::type> > & _return, const std::string& login, const std::string& tableName)
+void AccumuloProxyClient::listIterators(std::map<std::string, std::set<IteratorScope::type> > & _return, const std::string& sharedSecret, const std::string& tableName)
 {
-  send_listIterators(login, tableName);
+  send_listIterators(sharedSecret, tableName);
   recv_listIterators(_return);
 }
 
-void AccumuloProxyClient::send_listIterators(const std::string& login, const std::string& tableName)
+void AccumuloProxyClient::send_listIterators(const std::string& sharedSecret, const std::string& tableName)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("listIterators", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_listIterators_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.write(oprot_);
 
@@ -28478,19 +28160,19 @@ void AccumuloProxyClient::recv_listIterators(std::map<std::string, std::set<Iter
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "listIterators failed: unknown result");
 }
 
-void AccumuloProxyClient::listConstraints(std::map<std::string, int32_t> & _return, const std::string& login, const std::string& tableName)
+void AccumuloProxyClient::listConstraints(std::map<std::string, int32_t> & _return, const std::string& sharedSecret, const std::string& tableName)
 {
-  send_listConstraints(login, tableName);
+  send_listConstraints(sharedSecret, tableName);
   recv_listConstraints(_return);
 }
 
-void AccumuloProxyClient::send_listConstraints(const std::string& login, const std::string& tableName)
+void AccumuloProxyClient::send_listConstraints(const std::string& sharedSecret, const std::string& tableName)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("listConstraints", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_listConstraints_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.write(oprot_);
 
@@ -28546,19 +28228,19 @@ void AccumuloProxyClient::recv_listConstraints(std::map<std::string, int32_t> & 
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "listConstraints failed: unknown result");
 }
 
-void AccumuloProxyClient::mergeTablets(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow)
+void AccumuloProxyClient::mergeTablets(const std::string& sharedSecret, const std::string& tableName, const std::string& startRow, const std::string& endRow)
 {
-  send_mergeTablets(login, tableName, startRow, endRow);
+  send_mergeTablets(sharedSecret, tableName, startRow, endRow);
   recv_mergeTablets();
 }
 
-void AccumuloProxyClient::send_mergeTablets(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow)
+void AccumuloProxyClient::send_mergeTablets(const std::string& sharedSecret, const std::string& tableName, const std::string& startRow, const std::string& endRow)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("mergeTablets", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_mergeTablets_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.startRow = &startRow;
   args.endRow = &endRow;
@@ -28611,19 +28293,19 @@ void AccumuloProxyClient::recv_mergeTablets()
   return;
 }
 
-void AccumuloProxyClient::offlineTable(const std::string& login, const std::string& tableName, const bool wait)
+void AccumuloProxyClient::offlineTable(const std::string& sharedSecret, const std::string& tableName, const bool wait)
 {
-  send_offlineTable(login, tableName, wait);
+  send_offlineTable(sharedSecret, tableName, wait);
   recv_offlineTable();
 }
 
-void AccumuloProxyClient::send_offlineTable(const std::string& login, const std::string& tableName, const bool wait)
+void AccumuloProxyClient::send_offlineTable(const std::string& sharedSecret, const std::string& tableName, const bool wait)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("offlineTable", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_offlineTable_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.wait = &wait;
   args.write(oprot_);
@@ -28675,19 +28357,19 @@ void AccumuloProxyClient::recv_offlineTable()
   return;
 }
 
-void AccumuloProxyClient::onlineTable(const std::string& login, const std::string& tableName, const bool wait)
+void AccumuloProxyClient::onlineTable(const std::string& sharedSecret, const std::string& tableName, const bool wait)
 {
-  send_onlineTable(login, tableName, wait);
+  send_onlineTable(sharedSecret, tableName, wait);
   recv_onlineTable();
 }
 
-void AccumuloProxyClient::send_onlineTable(const std::string& login, const std::string& tableName, const bool wait)
+void AccumuloProxyClient::send_onlineTable(const std::string& sharedSecret, const std::string& tableName, const bool wait)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("onlineTable", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_onlineTable_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.wait = &wait;
   args.write(oprot_);
@@ -28739,19 +28421,19 @@ void AccumuloProxyClient::recv_onlineTable()
   return;
 }
 
-void AccumuloProxyClient::removeConstraint(const std::string& login, const std::string& tableName, const int32_t constraint)
+void AccumuloProxyClient::removeConstraint(const std::string& sharedSecret, const std::string& tableName, const int32_t constraint)
 {
-  send_removeConstraint(login, tableName, constraint);
+  send_removeConstraint(sharedSecret, tableName, constraint);
   recv_removeConstraint();
 }
 
-void AccumuloProxyClient::send_removeConstraint(const std::string& login, const std::string& tableName, const int32_t constraint)
+void AccumuloProxyClient::send_removeConstraint(const std::string& sharedSecret, const std::string& tableName, const int32_t constraint)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("removeConstraint", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_removeConstraint_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.constraint = &constraint;
   args.write(oprot_);
@@ -28803,19 +28485,19 @@ void AccumuloProxyClient::recv_removeConstraint()
   return;
 }
 
-void AccumuloProxyClient::removeIterator(const std::string& login, const std::string& tableName, const std::string& iterName, const std::set<IteratorScope::type> & scopes)
+void AccumuloProxyClient::removeIterator(const std::string& sharedSecret, const std::string& tableName, const std::string& iterName, const std::set<IteratorScope::type> & scopes)
 {
-  send_removeIterator(login, tableName, iterName, scopes);
+  send_removeIterator(sharedSecret, tableName, iterName, scopes);
   recv_removeIterator();
 }
 
-void AccumuloProxyClient::send_removeIterator(const std::string& login, const std::string& tableName, const std::string& iterName, const std::set<IteratorScope::type> & scopes)
+void AccumuloProxyClient::send_removeIterator(const std::string& sharedSecret, const std::string& tableName, const std::string& iterName, const std::set<IteratorScope::type> & scopes)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("removeIterator", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_removeIterator_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.iterName = &iterName;
   args.scopes = &scopes;
@@ -28868,19 +28550,19 @@ void AccumuloProxyClient::recv_removeIterator()
   return;
 }
 
-void AccumuloProxyClient::removeTableProperty(const std::string& login, const std::string& tableName, const std::string& property)
+void AccumuloProxyClient::removeTableProperty(const std::string& sharedSecret, const std::string& tableName, const std::string& property)
 {
-  send_removeTableProperty(login, tableName, property);
+  send_removeTableProperty(sharedSecret, tableName, property);
   recv_removeTableProperty();
 }
 
-void AccumuloProxyClient::send_removeTableProperty(const std::string& login, const std::string& tableName, const std::string& property)
+void AccumuloProxyClient::send_removeTableProperty(const std::string& sharedSecret, const std::string& tableName, const std::string& property)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("removeTableProperty", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_removeTableProperty_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.property = &property;
   args.write(oprot_);
@@ -28932,19 +28614,19 @@ void AccumuloProxyClient::recv_removeTableProperty()
   return;
 }
 
-void AccumuloProxyClient::renameTable(const std::string& login, const std::string& oldTableName, const std::string& newTableName)
+void AccumuloProxyClient::renameTable(const std::string& sharedSecret, const std::string& oldTableName, const std::string& newTableName)
 {
-  send_renameTable(login, oldTableName, newTableName);
+  send_renameTable(sharedSecret, oldTableName, newTableName);
   recv_renameTable();
 }
 
-void AccumuloProxyClient::send_renameTable(const std::string& login, const std::string& oldTableName, const std::string& newTableName)
+void AccumuloProxyClient::send_renameTable(const std::string& sharedSecret, const std::string& oldTableName, const std::string& newTableName)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("renameTable", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_renameTable_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.oldTableName = &oldTableName;
   args.newTableName = &newTableName;
   args.write(oprot_);
@@ -28999,19 +28681,19 @@ void AccumuloProxyClient::recv_renameTable()
   return;
 }
 
-void AccumuloProxyClient::setLocalityGroups(const std::string& login, const std::string& tableName, const std::map<std::string, std::set<std::string> > & groups)
+void AccumuloProxyClient::setLocalityGroups(const std::string& sharedSecret, const std::string& tableName, const std::map<std::string, std::set<std::string> > & groups)
 {
-  send_setLocalityGroups(login, tableName, groups);
+  send_setLocalityGroups(sharedSecret, tableName, groups);
   recv_setLocalityGroups();
 }
 
-void AccumuloProxyClient::send_setLocalityGroups(const std::string& login, const std::string& tableName, const std::map<std::string, std::set<std::string> > & groups)
+void AccumuloProxyClient::send_setLocalityGroups(const std::string& sharedSecret, const std::string& tableName, const std::map<std::string, std::set<std::string> > & groups)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("setLocalityGroups", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_setLocalityGroups_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.groups = &groups;
   args.write(oprot_);
@@ -29063,19 +28745,19 @@ void AccumuloProxyClient::recv_setLocalityGroups()
   return;
 }
 
-void AccumuloProxyClient::setTableProperty(const std::string& login, const std::string& tableName, const std::string& property, const std::string& value)
+void AccumuloProxyClient::setTableProperty(const std::string& sharedSecret, const std::string& tableName, const std::string& property, const std::string& value)
 {
-  send_setTableProperty(login, tableName, property, value);
+  send_setTableProperty(sharedSecret, tableName, property, value);
   recv_setTableProperty();
 }
 
-void AccumuloProxyClient::send_setTableProperty(const std::string& login, const std::string& tableName, const std::string& property, const std::string& value)
+void AccumuloProxyClient::send_setTableProperty(const std::string& sharedSecret, const std::string& tableName, const std::string& property, const std::string& value)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("setTableProperty", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_setTableProperty_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.property = &property;
   args.value = &value;
@@ -29128,19 +28810,19 @@ void AccumuloProxyClient::recv_setTableProperty()
   return;
 }
 
-void AccumuloProxyClient::splitRangeByTablets(std::set<Range> & _return, const std::string& login, const std::string& tableName, const Range& range, const int32_t maxSplits)
+void AccumuloProxyClient::splitRangeByTablets(std::set<Range> & _return, const std::string& sharedSecret, const std::string& tableName, const Range& range, const int32_t maxSplits)
 {
-  send_splitRangeByTablets(login, tableName, range, maxSplits);
+  send_splitRangeByTablets(sharedSecret, tableName, range, maxSplits);
   recv_splitRangeByTablets(_return);
 }
 
-void AccumuloProxyClient::send_splitRangeByTablets(const std::string& login, const std::string& tableName, const Range& range, const int32_t maxSplits)
+void AccumuloProxyClient::send_splitRangeByTablets(const std::string& sharedSecret, const std::string& tableName, const Range& range, const int32_t maxSplits)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("splitRangeByTablets", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_splitRangeByTablets_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.range = &range;
   args.maxSplits = &maxSplits;
@@ -29198,19 +28880,19 @@ void AccumuloProxyClient::recv_splitRangeByTablets(std::set<Range> & _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "splitRangeByTablets failed: unknown result");
 }
 
-bool AccumuloProxyClient::tableExists(const std::string& login, const std::string& tableName)
+bool AccumuloProxyClient::tableExists(const std::string& sharedSecret, const std::string& tableName)
 {
-  send_tableExists(login, tableName);
+  send_tableExists(sharedSecret, tableName);
   return recv_tableExists();
 }
 
-void AccumuloProxyClient::send_tableExists(const std::string& login, const std::string& tableName)
+void AccumuloProxyClient::send_tableExists(const std::string& sharedSecret, const std::string& tableName)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("tableExists", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_tableExists_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.write(oprot_);
 
@@ -29257,19 +28939,19 @@ bool AccumuloProxyClient::recv_tableExists()
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "tableExists failed: unknown result");
 }
 
-void AccumuloProxyClient::tableIdMap(std::map<std::string, std::string> & _return, const std::string& login)
+void AccumuloProxyClient::tableIdMap(std::map<std::string, std::string> & _return, const std::string& sharedSecret)
 {
-  send_tableIdMap(login);
+  send_tableIdMap(sharedSecret);
   recv_tableIdMap(_return);
 }
 
-void AccumuloProxyClient::send_tableIdMap(const std::string& login)
+void AccumuloProxyClient::send_tableIdMap(const std::string& sharedSecret)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("tableIdMap", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_tableIdMap_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -29315,19 +28997,19 @@ void AccumuloProxyClient::recv_tableIdMap(std::map<std::string, std::string> & _
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "tableIdMap failed: unknown result");
 }
 
-bool AccumuloProxyClient::testTableClassLoad(const std::string& login, const std::string& tableName, const std::string& className, const std::string& asTypeName)
+bool AccumuloProxyClient::testTableClassLoad(const std::string& sharedSecret, const std::string& tableName, const std::string& className, const std::string& asTypeName)
 {
-  send_testTableClassLoad(login, tableName, className, asTypeName);
+  send_testTableClassLoad(sharedSecret, tableName, className, asTypeName);
   return recv_testTableClassLoad();
 }
 
-void AccumuloProxyClient::send_testTableClassLoad(const std::string& login, const std::string& tableName, const std::string& className, const std::string& asTypeName)
+void AccumuloProxyClient::send_testTableClassLoad(const std::string& sharedSecret, const std::string& tableName, const std::string& className, const std::string& asTypeName)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("testTableClassLoad", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_testTableClassLoad_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.className = &className;
   args.asTypeName = &asTypeName;
@@ -29385,19 +29067,19 @@ bool AccumuloProxyClient::recv_testTableClassLoad()
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "testTableClassLoad failed: unknown result");
 }
 
-void AccumuloProxyClient::pingTabletServer(const std::string& login, const std::string& tserver)
+void AccumuloProxyClient::pingTabletServer(const std::string& sharedSecret, const std::string& tserver)
 {
-  send_pingTabletServer(login, tserver);
+  send_pingTabletServer(sharedSecret, tserver);
   recv_pingTabletServer();
 }
 
-void AccumuloProxyClient::send_pingTabletServer(const std::string& login, const std::string& tserver)
+void AccumuloProxyClient::send_pingTabletServer(const std::string& sharedSecret, const std::string& tserver)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("pingTabletServer", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_pingTabletServer_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tserver = &tserver;
   args.write(oprot_);
 
@@ -29445,19 +29127,19 @@ void AccumuloProxyClient::recv_pingTabletServer()
   return;
 }
 
-void AccumuloProxyClient::getActiveScans(std::vector<ActiveScan> & _return, const std::string& login, const std::string& tserver)
+void AccumuloProxyClient::getActiveScans(std::vector<ActiveScan> & _return, const std::string& sharedSecret, const std::string& tserver)
 {
-  send_getActiveScans(login, tserver);
+  send_getActiveScans(sharedSecret, tserver);
   recv_getActiveScans(_return);
 }
 
-void AccumuloProxyClient::send_getActiveScans(const std::string& login, const std::string& tserver)
+void AccumuloProxyClient::send_getActiveScans(const std::string& sharedSecret, const std::string& tserver)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("getActiveScans", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_getActiveScans_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tserver = &tserver;
   args.write(oprot_);
 
@@ -29510,19 +29192,19 @@ void AccumuloProxyClient::recv_getActiveScans(std::vector<ActiveScan> & _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "getActiveScans failed: unknown result");
 }
 
-void AccumuloProxyClient::getActiveCompactions(std::vector<ActiveCompaction> & _return, const std::string& login, const std::string& tserver)
+void AccumuloProxyClient::getActiveCompactions(std::vector<ActiveCompaction> & _return, const std::string& sharedSecret, const std::string& tserver)
 {
-  send_getActiveCompactions(login, tserver);
+  send_getActiveCompactions(sharedSecret, tserver);
   recv_getActiveCompactions(_return);
 }
 
-void AccumuloProxyClient::send_getActiveCompactions(const std::string& login, const std::string& tserver)
+void AccumuloProxyClient::send_getActiveCompactions(const std::string& sharedSecret, const std::string& tserver)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("getActiveCompactions", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_getActiveCompactions_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tserver = &tserver;
   args.write(oprot_);
 
@@ -29575,19 +29257,19 @@ void AccumuloProxyClient::recv_getActiveCompactions(std::vector<ActiveCompaction
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "getActiveCompactions failed: unknown result");
 }
 
-void AccumuloProxyClient::getSiteConfiguration(std::map<std::string, std::string> & _return, const std::string& login)
+void AccumuloProxyClient::getSiteConfiguration(std::map<std::string, std::string> & _return, const std::string& sharedSecret)
 {
-  send_getSiteConfiguration(login);
+  send_getSiteConfiguration(sharedSecret);
   recv_getSiteConfiguration(_return);
 }
 
-void AccumuloProxyClient::send_getSiteConfiguration(const std::string& login)
+void AccumuloProxyClient::send_getSiteConfiguration(const std::string& sharedSecret)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("getSiteConfiguration", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_getSiteConfiguration_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -29639,19 +29321,19 @@ void AccumuloProxyClient::recv_getSiteConfiguration(std::map<std::string, std::s
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "getSiteConfiguration failed: unknown result");
 }
 
-void AccumuloProxyClient::getSystemConfiguration(std::map<std::string, std::string> & _return, const std::string& login)
+void AccumuloProxyClient::getSystemConfiguration(std::map<std::string, std::string> & _return, const std::string& sharedSecret)
 {
-  send_getSystemConfiguration(login);
+  send_getSystemConfiguration(sharedSecret);
   recv_getSystemConfiguration(_return);
 }
 
-void AccumuloProxyClient::send_getSystemConfiguration(const std::string& login)
+void AccumuloProxyClient::send_getSystemConfiguration(const std::string& sharedSecret)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("getSystemConfiguration", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_getSystemConfiguration_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -29703,19 +29385,19 @@ void AccumuloProxyClient::recv_getSystemConfiguration(std::map<std::string, std:
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "getSystemConfiguration failed: unknown result");
 }
 
-void AccumuloProxyClient::getTabletServers(std::vector<std::string> & _return, const std::string& login)
+void AccumuloProxyClient::getTabletServers(std::vector<std::string> & _return, const std::string& sharedSecret)
 {
-  send_getTabletServers(login);
+  send_getTabletServers(sharedSecret);
   recv_getTabletServers(_return);
 }
 
-void AccumuloProxyClient::send_getTabletServers(const std::string& login)
+void AccumuloProxyClient::send_getTabletServers(const std::string& sharedSecret)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("getTabletServers", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_getTabletServers_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -29761,19 +29443,19 @@ void AccumuloProxyClient::recv_getTabletServers(std::vector<std::string> & _retu
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "getTabletServers failed: unknown result");
 }
 
-void AccumuloProxyClient::removeProperty(const std::string& login, const std::string& property)
+void AccumuloProxyClient::removeProperty(const std::string& sharedSecret, const std::string& property)
 {
-  send_removeProperty(login, property);
+  send_removeProperty(sharedSecret, property);
   recv_removeProperty();
 }
 
-void AccumuloProxyClient::send_removeProperty(const std::string& login, const std::string& property)
+void AccumuloProxyClient::send_removeProperty(const std::string& sharedSecret, const std::string& property)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("removeProperty", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_removeProperty_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.property = &property;
   args.write(oprot_);
 
@@ -29821,19 +29503,19 @@ void AccumuloProxyClient::recv_removeProperty()
   return;
 }
 
-void AccumuloProxyClient::setProperty(const std::string& login, const std::string& property, const std::string& value)
+void AccumuloProxyClient::setProperty(const std::string& sharedSecret, const std::string& property, const std::string& value)
 {
-  send_setProperty(login, property, value);
+  send_setProperty(sharedSecret, property, value);
   recv_setProperty();
 }
 
-void AccumuloProxyClient::send_setProperty(const std::string& login, const std::string& property, const std::string& value)
+void AccumuloProxyClient::send_setProperty(const std::string& sharedSecret, const std::string& property, const std::string& value)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("setProperty", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_setProperty_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.property = &property;
   args.value = &value;
   args.write(oprot_);
@@ -29882,19 +29564,19 @@ void AccumuloProxyClient::recv_setProperty()
   return;
 }
 
-bool AccumuloProxyClient::testClassLoad(const std::string& login, const std::string& className, const std::string& asTypeName)
+bool AccumuloProxyClient::testClassLoad(const std::string& sharedSecret, const std::string& className, const std::string& asTypeName)
 {
-  send_testClassLoad(login, className, asTypeName);
+  send_testClassLoad(sharedSecret, className, asTypeName);
   return recv_testClassLoad();
 }
 
-void AccumuloProxyClient::send_testClassLoad(const std::string& login, const std::string& className, const std::string& asTypeName)
+void AccumuloProxyClient::send_testClassLoad(const std::string& sharedSecret, const std::string& className, const std::string& asTypeName)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("testClassLoad", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_testClassLoad_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.className = &className;
   args.asTypeName = &asTypeName;
   args.write(oprot_);
@@ -29948,19 +29630,19 @@ bool AccumuloProxyClient::recv_testClassLoad()
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "testClassLoad failed: unknown result");
 }
 
-bool AccumuloProxyClient::authenticateUser(const std::string& login, const std::string& user, const std::map<std::string, std::string> & properties)
+bool AccumuloProxyClient::authenticateUser(const std::string& sharedSecret, const std::string& user, const std::map<std::string, std::string> & properties)
 {
-  send_authenticateUser(login, user, properties);
+  send_authenticateUser(sharedSecret, user, properties);
   return recv_authenticateUser();
 }
 
-void AccumuloProxyClient::send_authenticateUser(const std::string& login, const std::string& user, const std::map<std::string, std::string> & properties)
+void AccumuloProxyClient::send_authenticateUser(const std::string& sharedSecret, const std::string& user, const std::map<std::string, std::string> & properties)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("authenticateUser", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_authenticateUser_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.user = &user;
   args.properties = &properties;
   args.write(oprot_);
@@ -30014,19 +29696,19 @@ bool AccumuloProxyClient::recv_authenticateUser()
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "authenticateUser failed: unknown result");
 }
 
-void AccumuloProxyClient::changeUserAuthorizations(const std::string& login, const std::string& user, const std::set<std::string> & authorizations)
+void AccumuloProxyClient::changeUserAuthorizations(const std::string& sharedSecret, const std::string& user, const std::set<std::string> & authorizations)
 {
-  send_changeUserAuthorizations(login, user, authorizations);
+  send_changeUserAuthorizations(sharedSecret, user, authorizations);
   recv_changeUserAuthorizations();
 }
 
-void AccumuloProxyClient::send_changeUserAuthorizations(const std::string& login, const std::string& user, const std::set<std::string> & authorizations)
+void AccumuloProxyClient::send_changeUserAuthorizations(const std::string& sharedSecret, const std::string& user, const std::set<std::string> & authorizations)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("changeUserAuthorizations", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_changeUserAuthorizations_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.user = &user;
   args.authorizations = &authorizations;
   args.write(oprot_);
@@ -30075,19 +29757,19 @@ void AccumuloProxyClient::recv_changeUserAuthorizations()
   return;
 }
 
-void AccumuloProxyClient::changeLocalUserPassword(const std::string& login, const std::string& user, const std::string& password)
+void AccumuloProxyClient::changeLocalUserPassword(const std::string& sharedSecret, const std::string& user, const std::string& password)
 {
-  send_changeLocalUserPassword(login, user, password);
+  send_changeLocalUserPassword(sharedSecret, user, password);
   recv_changeLocalUserPassword();
 }
 
-void AccumuloProxyClient::send_changeLocalUserPassword(const std::string& login, const std::string& user, const std::string& password)
+void AccumuloProxyClient::send_changeLocalUserPassword(const std::string& sharedSecret, const std::string& user, const std::string& password)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("changeLocalUserPassword", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_changeLocalUserPassword_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.user = &user;
   args.password = &password;
   args.write(oprot_);
@@ -30136,19 +29818,19 @@ void AccumuloProxyClient::recv_changeLocalUserPassword()
   return;
 }
 
-void AccumuloProxyClient::createLocalUser(const std::string& login, const std::string& user, const std::string& password)
+void AccumuloProxyClient::createLocalUser(const std::string& sharedSecret, const std::string& user, const std::string& password)
 {
-  send_createLocalUser(login, user, password);
+  send_createLocalUser(sharedSecret, user, password);
   recv_createLocalUser();
 }
 
-void AccumuloProxyClient::send_createLocalUser(const std::string& login, const std::string& user, const std::string& password)
+void AccumuloProxyClient::send_createLocalUser(const std::string& sharedSecret, const std::string& user, const std::string& password)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("createLocalUser", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_createLocalUser_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.user = &user;
   args.password = &password;
   args.write(oprot_);
@@ -30197,19 +29879,19 @@ void AccumuloProxyClient::recv_createLocalUser()
   return;
 }
 
-void AccumuloProxyClient::dropLocalUser(const std::string& login, const std::string& user)
+void AccumuloProxyClient::dropLocalUser(const std::string& sharedSecret, const std::string& user)
 {
-  send_dropLocalUser(login, user);
+  send_dropLocalUser(sharedSecret, user);
   recv_dropLocalUser();
 }
 
-void AccumuloProxyClient::send_dropLocalUser(const std::string& login, const std::string& user)
+void AccumuloProxyClient::send_dropLocalUser(const std::string& sharedSecret, const std::string& user)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("dropLocalUser", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_dropLocalUser_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.user = &user;
   args.write(oprot_);
 
@@ -30257,19 +29939,19 @@ void AccumuloProxyClient::recv_dropLocalUser()
   return;
 }
 
-void AccumuloProxyClient::getUserAuthorizations(std::vector<std::string> & _return, const std::string& login, const std::string& user)
+void AccumuloProxyClient::getUserAuthorizations(std::vector<std::string> & _return, const std::string& sharedSecret, const std::string& user)
 {
-  send_getUserAuthorizations(login, user);
+  send_getUserAuthorizations(sharedSecret, user);
   recv_getUserAuthorizations(_return);
 }
 
-void AccumuloProxyClient::send_getUserAuthorizations(const std::string& login, const std::string& user)
+void AccumuloProxyClient::send_getUserAuthorizations(const std::string& sharedSecret, const std::string& user)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("getUserAuthorizations", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_getUserAuthorizations_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.user = &user;
   args.write(oprot_);
 
@@ -30322,19 +30004,19 @@ void AccumuloProxyClient::recv_getUserAuthorizations(std::vector<std::string> & 
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "getUserAuthorizations failed: unknown result");
 }
 
-void AccumuloProxyClient::grantSystemPermission(const std::string& login, const std::string& user, const SystemPermission::type perm)
+void AccumuloProxyClient::grantSystemPermission(const std::string& sharedSecret, const std::string& user, const SystemPermission::type perm)
 {
-  send_grantSystemPermission(login, user, perm);
+  send_grantSystemPermission(sharedSecret, user, perm);
   recv_grantSystemPermission();
 }
 
-void AccumuloProxyClient::send_grantSystemPermission(const std::string& login, const std::string& user, const SystemPermission::type perm)
+void AccumuloProxyClient::send_grantSystemPermission(const std::string& sharedSecret, const std::string& user, const SystemPermission::type perm)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("grantSystemPermission", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_grantSystemPermission_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.user = &user;
   args.perm = &perm;
   args.write(oprot_);
@@ -30383,19 +30065,19 @@ void AccumuloProxyClient::recv_grantSystemPermission()
   return;
 }
 
-void AccumuloProxyClient::grantTablePermission(const std::string& login, const std::string& user, const std::string& table, const TablePermission::type perm)
+void AccumuloProxyClient::grantTablePermission(const std::string& sharedSecret, const std::string& user, const std::string& table, const TablePermission::type perm)
 {
-  send_grantTablePermission(login, user, table, perm);
+  send_grantTablePermission(sharedSecret, user, table, perm);
   recv_grantTablePermission();
 }
 
-void AccumuloProxyClient::send_grantTablePermission(const std::string& login, const std::string& user, const std::string& table, const TablePermission::type perm)
+void AccumuloProxyClient::send_grantTablePermission(const std::string& sharedSecret, const std::string& user, const std::string& table, const TablePermission::type perm)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("grantTablePermission", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_grantTablePermission_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.user = &user;
   args.table = &table;
   args.perm = &perm;
@@ -30448,19 +30130,19 @@ void AccumuloProxyClient::recv_grantTablePermission()
   return;
 }
 
-bool AccumuloProxyClient::hasSystemPermission(const std::string& login, const std::string& user, const SystemPermission::type perm)
+bool AccumuloProxyClient::hasSystemPermission(const std::string& sharedSecret, const std::string& user, const SystemPermission::type perm)
 {
-  send_hasSystemPermission(login, user, perm);
+  send_hasSystemPermission(sharedSecret, user, perm);
   return recv_hasSystemPermission();
 }
 
-void AccumuloProxyClient::send_hasSystemPermission(const std::string& login, const std::string& user, const SystemPermission::type perm)
+void AccumuloProxyClient::send_hasSystemPermission(const std::string& sharedSecret, const std::string& user, const SystemPermission::type perm)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("hasSystemPermission", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_hasSystemPermission_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.user = &user;
   args.perm = &perm;
   args.write(oprot_);
@@ -30514,19 +30196,19 @@ bool AccumuloProxyClient::recv_hasSystemPermission()
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "hasSystemPermission failed: unknown result");
 }
 
-bool AccumuloProxyClient::hasTablePermission(const std::string& login, const std::string& user, const std::string& table, const TablePermission::type perm)
+bool AccumuloProxyClient::hasTablePermission(const std::string& sharedSecret, const std::string& user, const std::string& table, const TablePermission::type perm)
 {
-  send_hasTablePermission(login, user, table, perm);
+  send_hasTablePermission(sharedSecret, user, table, perm);
   return recv_hasTablePermission();
 }
 
-void AccumuloProxyClient::send_hasTablePermission(const std::string& login, const std::string& user, const std::string& table, const TablePermission::type perm)
+void AccumuloProxyClient::send_hasTablePermission(const std::string& sharedSecret, const std::string& user, const std::string& table, const TablePermission::type perm)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("hasTablePermission", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_hasTablePermission_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.user = &user;
   args.table = &table;
   args.perm = &perm;
@@ -30584,19 +30266,19 @@ bool AccumuloProxyClient::recv_hasTablePermission()
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "hasTablePermission failed: unknown result");
 }
 
-void AccumuloProxyClient::listLocalUsers(std::set<std::string> & _return, const std::string& login)
+void AccumuloProxyClient::listLocalUsers(std::set<std::string> & _return, const std::string& sharedSecret)
 {
-  send_listLocalUsers(login);
+  send_listLocalUsers(sharedSecret);
   recv_listLocalUsers(_return);
 }
 
-void AccumuloProxyClient::send_listLocalUsers(const std::string& login)
+void AccumuloProxyClient::send_listLocalUsers(const std::string& sharedSecret)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("listLocalUsers", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_listLocalUsers_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -30651,19 +30333,19 @@ void AccumuloProxyClient::recv_listLocalUsers(std::set<std::string> & _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "listLocalUsers failed: unknown result");
 }
 
-void AccumuloProxyClient::revokeSystemPermission(const std::string& login, const std::string& user, const SystemPermission::type perm)
+void AccumuloProxyClient::revokeSystemPermission(const std::string& sharedSecret, const std::string& user, const SystemPermission::type perm)
 {
-  send_revokeSystemPermission(login, user, perm);
+  send_revokeSystemPermission(sharedSecret, user, perm);
   recv_revokeSystemPermission();
 }
 
-void AccumuloProxyClient::send_revokeSystemPermission(const std::string& login, const std::string& user, const SystemPermission::type perm)
+void AccumuloProxyClient::send_revokeSystemPermission(const std::string& sharedSecret, const std::string& user, const SystemPermission::type perm)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("revokeSystemPermission", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_revokeSystemPermission_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.user = &user;
   args.perm = &perm;
   args.write(oprot_);
@@ -30712,19 +30394,19 @@ void AccumuloProxyClient::recv_revokeSystemPermission()
   return;
 }
 
-void AccumuloProxyClient::revokeTablePermission(const std::string& login, const std::string& user, const std::string& table, const TablePermission::type perm)
+void AccumuloProxyClient::revokeTablePermission(const std::string& sharedSecret, const std::string& user, const std::string& table, const TablePermission::type perm)
 {
-  send_revokeTablePermission(login, user, table, perm);
+  send_revokeTablePermission(sharedSecret, user, table, perm);
   recv_revokeTablePermission();
 }
 
-void AccumuloProxyClient::send_revokeTablePermission(const std::string& login, const std::string& user, const std::string& table, const TablePermission::type perm)
+void AccumuloProxyClient::send_revokeTablePermission(const std::string& sharedSecret, const std::string& user, const std::string& table, const TablePermission::type perm)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("revokeTablePermission", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_revokeTablePermission_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.user = &user;
   args.table = &table;
   args.perm = &perm;
@@ -30777,19 +30459,19 @@ void AccumuloProxyClient::recv_revokeTablePermission()
   return;
 }
 
-void AccumuloProxyClient::grantNamespacePermission(const std::string& login, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm)
+void AccumuloProxyClient::grantNamespacePermission(const std::string& sharedSecret, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm)
 {
-  send_grantNamespacePermission(login, user, namespaceName, perm);
+  send_grantNamespacePermission(sharedSecret, user, namespaceName, perm);
   recv_grantNamespacePermission();
 }
 
-void AccumuloProxyClient::send_grantNamespacePermission(const std::string& login, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm)
+void AccumuloProxyClient::send_grantNamespacePermission(const std::string& sharedSecret, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("grantNamespacePermission", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_grantNamespacePermission_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.user = &user;
   args.namespaceName = &namespaceName;
   args.perm = &perm;
@@ -30839,19 +30521,19 @@ void AccumuloProxyClient::recv_grantNamespacePermission()
   return;
 }
 
-bool AccumuloProxyClient::hasNamespacePermission(const std::string& login, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm)
+bool AccumuloProxyClient::hasNamespacePermission(const std::string& sharedSecret, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm)
 {
-  send_hasNamespacePermission(login, user, namespaceName, perm);
+  send_hasNamespacePermission(sharedSecret, user, namespaceName, perm);
   return recv_hasNamespacePermission();
 }
 
-void AccumuloProxyClient::send_hasNamespacePermission(const std::string& login, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm)
+void AccumuloProxyClient::send_hasNamespacePermission(const std::string& sharedSecret, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("hasNamespacePermission", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_hasNamespacePermission_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.user = &user;
   args.namespaceName = &namespaceName;
   args.perm = &perm;
@@ -30906,19 +30588,19 @@ bool AccumuloProxyClient::recv_hasNamespacePermission()
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "hasNamespacePermission failed: unknown result");
 }
 
-void AccumuloProxyClient::revokeNamespacePermission(const std::string& login, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm)
+void AccumuloProxyClient::revokeNamespacePermission(const std::string& sharedSecret, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm)
 {
-  send_revokeNamespacePermission(login, user, namespaceName, perm);
+  send_revokeNamespacePermission(sharedSecret, user, namespaceName, perm);
   recv_revokeNamespacePermission();
 }
 
-void AccumuloProxyClient::send_revokeNamespacePermission(const std::string& login, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm)
+void AccumuloProxyClient::send_revokeNamespacePermission(const std::string& sharedSecret, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("revokeNamespacePermission", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_revokeNamespacePermission_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.user = &user;
   args.namespaceName = &namespaceName;
   args.perm = &perm;
@@ -30968,19 +30650,19 @@ void AccumuloProxyClient::recv_revokeNamespacePermission()
   return;
 }
 
-void AccumuloProxyClient::createBatchScanner(std::string& _return, const std::string& login, const std::string& tableName, const BatchScanOptions& options)
+void AccumuloProxyClient::createBatchScanner(std::string& _return, const std::string& sharedSecret, const std::string& tableName, const BatchScanOptions& options)
 {
-  send_createBatchScanner(login, tableName, options);
+  send_createBatchScanner(sharedSecret, tableName, options);
   recv_createBatchScanner(_return);
 }
 
-void AccumuloProxyClient::send_createBatchScanner(const std::string& login, const std::string& tableName, const BatchScanOptions& options)
+void AccumuloProxyClient::send_createBatchScanner(const std::string& sharedSecret, const std::string& tableName, const BatchScanOptions& options)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("createBatchScanner", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_createBatchScanner_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.options = &options;
   args.write(oprot_);
@@ -31037,19 +30719,19 @@ void AccumuloProxyClient::recv_createBatchScanner(std::string& _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "createBatchScanner failed: unknown result");
 }
 
-void AccumuloProxyClient::createScanner(std::string& _return, const std::string& login, const std::string& tableName, const ScanOptions& options)
+void AccumuloProxyClient::createScanner(std::string& _return, const std::string& sharedSecret, const std::string& tableName, const ScanOptions& options)
 {
-  send_createScanner(login, tableName, options);
+  send_createScanner(sharedSecret, tableName, options);
   recv_createScanner(_return);
 }
 
-void AccumuloProxyClient::send_createScanner(const std::string& login, const std::string& tableName, const ScanOptions& options)
+void AccumuloProxyClient::send_createScanner(const std::string& sharedSecret, const std::string& tableName, const ScanOptions& options)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("createScanner", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_createScanner_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.options = &options;
   args.write(oprot_);
@@ -31358,19 +31040,19 @@ void AccumuloProxyClient::recv_closeScanner()
   return;
 }
 
-void AccumuloProxyClient::updateAndFlush(const std::string& login, const std::string& tableName, const std::map<std::string, std::vector<ColumnUpdate> > & cells)
+void AccumuloProxyClient::updateAndFlush(const std::string& sharedSecret, const std::string& tableName, const std::map<std::string, std::vector<ColumnUpdate> > & cells)
 {
-  send_updateAndFlush(login, tableName, cells);
+  send_updateAndFlush(sharedSecret, tableName, cells);
   recv_updateAndFlush();
 }
 
-void AccumuloProxyClient::send_updateAndFlush(const std::string& login, const std::string& tableName, const std::map<std::string, std::vector<ColumnUpdate> > & cells)
+void AccumuloProxyClient::send_updateAndFlush(const std::string& sharedSecret, const std::string& tableName, const std::map<std::string, std::vector<ColumnUpdate> > & cells)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("updateAndFlush", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_updateAndFlush_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.cells = &cells;
   args.write(oprot_);
@@ -31425,19 +31107,19 @@ void AccumuloProxyClient::recv_updateAndFlush()
   return;
 }
 
-void AccumuloProxyClient::createWriter(std::string& _return, const std::string& login, const std::string& tableName, const WriterOptions& opts)
+void AccumuloProxyClient::createWriter(std::string& _return, const std::string& sharedSecret, const std::string& tableName, const WriterOptions& opts)
 {
-  send_createWriter(login, tableName, opts);
+  send_createWriter(sharedSecret, tableName, opts);
   recv_createWriter(_return);
 }
 
-void AccumuloProxyClient::send_createWriter(const std::string& login, const std::string& tableName, const WriterOptions& opts)
+void AccumuloProxyClient::send_createWriter(const std::string& sharedSecret, const std::string& tableName, const WriterOptions& opts)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("createWriter", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_createWriter_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.opts = &opts;
   args.write(oprot_);
@@ -31632,19 +31314,19 @@ void AccumuloProxyClient::recv_closeWriter()
   return;
 }
 
-ConditionalStatus::type AccumuloProxyClient::updateRowConditionally(const std::string& login, const std::string& tableName, const std::string& row, const ConditionalUpdates& updates)
+ConditionalStatus::type AccumuloProxyClient::updateRowConditionally(const std::string& sharedSecret, const std::string& tableName, const std::string& row, const ConditionalUpdates& updates)
 {
-  send_updateRowConditionally(login, tableName, row, updates);
+  send_updateRowConditionally(sharedSecret, tableName, row, updates);
   return recv_updateRowConditionally();
 }
 
-void AccumuloProxyClient::send_updateRowConditionally(const std::string& login, const std::string& tableName, const std::string& row, const ConditionalUpdates& updates)
+void AccumuloProxyClient::send_updateRowConditionally(const std::string& sharedSecret, const std::string& tableName, const std::string& row, const ConditionalUpdates& updates)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("updateRowConditionally", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_updateRowConditionally_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.row = &row;
   args.updates = &updates;
@@ -31702,19 +31384,19 @@ ConditionalStatus::type AccumuloProxyClient::recv_updateRowConditionally()
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "updateRowConditionally failed: unknown result");
 }
 
-void AccumuloProxyClient::createConditionalWriter(std::string& _return, const std::string& login, const std::string& tableName, const ConditionalWriterOptions& options)
+void AccumuloProxyClient::createConditionalWriter(std::string& _return, const std::string& sharedSecret, const std::string& tableName, const ConditionalWriterOptions& options)
 {
-  send_createConditionalWriter(login, tableName, options);
+  send_createConditionalWriter(sharedSecret, tableName, options);
   recv_createConditionalWriter(_return);
 }
 
-void AccumuloProxyClient::send_createConditionalWriter(const std::string& login, const std::string& tableName, const ConditionalWriterOptions& options)
+void AccumuloProxyClient::send_createConditionalWriter(const std::string& sharedSecret, const std::string& tableName, const ConditionalWriterOptions& options)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("createConditionalWriter", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_createConditionalWriter_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.options = &options;
   args.write(oprot_);
@@ -32123,19 +31805,19 @@ void AccumuloProxyClient::recv_defaultNamespace(std::string& _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "defaultNamespace failed: unknown result");
 }
 
-void AccumuloProxyClient::listNamespaces(std::vector<std::string> & _return, const std::string& login)
+void AccumuloProxyClient::listNamespaces(std::vector<std::string> & _return, const std::string& sharedSecret)
 {
-  send_listNamespaces(login);
+  send_listNamespaces(sharedSecret);
   recv_listNamespaces(_return);
 }
 
-void AccumuloProxyClient::send_listNamespaces(const std::string& login)
+void AccumuloProxyClient::send_listNamespaces(const std::string& sharedSecret)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("listNamespaces", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_listNamespaces_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -32187,19 +31869,19 @@ void AccumuloProxyClient::recv_listNamespaces(std::vector<std::string> & _return
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "listNamespaces failed: unknown result");
 }
 
-bool AccumuloProxyClient::namespaceExists(const std::string& login, const std::string& namespaceName)
+bool AccumuloProxyClient::namespaceExists(const std::string& sharedSecret, const std::string& namespaceName)
 {
-  send_namespaceExists(login, namespaceName);
+  send_namespaceExists(sharedSecret, namespaceName);
   return recv_namespaceExists();
 }
 
-void AccumuloProxyClient::send_namespaceExists(const std::string& login, const std::string& namespaceName)
+void AccumuloProxyClient::send_namespaceExists(const std::string& sharedSecret, const std::string& namespaceName)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("namespaceExists", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_namespaceExists_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.namespaceName = &namespaceName;
   args.write(oprot_);
 
@@ -32252,19 +31934,19 @@ bool AccumuloProxyClient::recv_namespaceExists()
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "namespaceExists failed: unknown result");
 }
 
-void AccumuloProxyClient::createNamespace(const std::string& login, const std::string& namespaceName)
+void AccumuloProxyClient::createNamespace(const std::string& sharedSecret, const std::string& namespaceName)
 {
-  send_createNamespace(login, namespaceName);
+  send_createNamespace(sharedSecret, namespaceName);
   recv_createNamespace();
 }
 
-void AccumuloProxyClient::send_createNamespace(const std::string& login, const std::string& namespaceName)
+void AccumuloProxyClient::send_createNamespace(const std::string& sharedSecret, const std::string& namespaceName)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("createNamespace", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_createNamespace_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.namespaceName = &namespaceName;
   args.write(oprot_);
 
@@ -32315,19 +31997,19 @@ void AccumuloProxyClient::recv_createNamespace()
   return;
 }
 
-void AccumuloProxyClient::deleteNamespace(const std::string& login, const std::string& namespaceName)
+void AccumuloProxyClient::deleteNamespace(const std::string& sharedSecret, const std::string& namespaceName)
 {
-  send_deleteNamespace(login, namespaceName);
+  send_deleteNamespace(sharedSecret, namespaceName);
   recv_deleteNamespace();
 }
 
-void AccumuloProxyClient::send_deleteNamespace(const std::string& login, const std::string& namespaceName)
+void AccumuloProxyClient::send_deleteNamespace(const std::string& sharedSecret, const std::string& namespaceName)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("deleteNamespace", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_deleteNamespace_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.namespaceName = &namespaceName;
   args.write(oprot_);
 
@@ -32381,19 +32063,19 @@ void AccumuloProxyClient::recv_deleteNamespace()
   return;
 }
 
-void AccumuloProxyClient::renameNamespace(const std::string& login, const std::string& oldNamespaceName, const std::string& newNamespaceName)
+void AccumuloProxyClient::renameNamespace(const std::string& sharedSecret, const std::string& oldNamespaceName, const std::string& newNamespaceName)
 {
-  send_renameNamespace(login, oldNamespaceName, newNamespaceName);
+  send_renameNamespace(sharedSecret, oldNamespaceName, newNamespaceName);
   recv_renameNamespace();
 }
 
-void AccumuloProxyClient::send_renameNamespace(const std::string& login, const std::string& oldNamespaceName, const std::string& newNamespaceName)
+void AccumuloProxyClient::send_renameNamespace(const std::string& sharedSecret, const std::string& oldNamespaceName, const std::string& newNamespaceName)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("renameNamespace", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_renameNamespace_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.oldNamespaceName = &oldNamespaceName;
   args.newNamespaceName = &newNamespaceName;
   args.write(oprot_);
@@ -32448,19 +32130,19 @@ void AccumuloProxyClient::recv_renameNamespace()
   return;
 }
 
-void AccumuloProxyClient::setNamespaceProperty(const std::string& login, const std::string& namespaceName, const std::string& property, const std::string& value)
+void AccumuloProxyClient::setNamespaceProperty(const std::string& sharedSecret, const std::string& namespaceName, const std::string& property, const std::string& value)
 {
-  send_setNamespaceProperty(login, namespaceName, property, value);
+  send_setNamespaceProperty(sharedSecret, namespaceName, property, value);
   recv_setNamespaceProperty();
 }
 
-void AccumuloProxyClient::send_setNamespaceProperty(const std::string& login, const std::string& namespaceName, const std::string& property, const std::string& value)
+void AccumuloProxyClient::send_setNamespaceProperty(const std::string& sharedSecret, const std::string& namespaceName, const std::string& property, const std::string& value)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("setNamespaceProperty", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_setNamespaceProperty_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.namespaceName = &namespaceName;
   args.property = &property;
   args.value = &value;
@@ -32513,19 +32195,19 @@ void AccumuloProxyClient::recv_setNamespaceProperty()
   return;
 }
 
-void AccumuloProxyClient::removeNamespaceProperty(const std::string& login, const std::string& namespaceName, const std::string& property)
+void AccumuloProxyClient::removeNamespaceProperty(const std::string& sharedSecret, const std::string& namespaceName, const std::string& property)
 {
-  send_removeNamespaceProperty(login, namespaceName, property);
+  send_removeNamespaceProperty(sharedSecret, namespaceName, property);
   recv_removeNamespaceProperty();
 }
 
-void AccumuloProxyClient::send_removeNamespaceProperty(const std::string& login, const std::string& namespaceName, const std::string& property)
+void AccumuloProxyClient::send_removeNamespaceProperty(const std::string& sharedSecret, const std::string& namespaceName, const std::string& property)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("removeNamespaceProperty", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_removeNamespaceProperty_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.namespaceName = &namespaceName;
   args.property = &property;
   args.write(oprot_);
@@ -32577,19 +32259,19 @@ void AccumuloProxyClient::recv_removeNamespaceProperty()
   return;
 }
 
-void AccumuloProxyClient::getNamespaceProperties(std::map<std::string, std::string> & _return, const std::string& login, const std::string& namespaceName)
+void AccumuloProxyClient::getNamespaceProperties(std::map<std::string, std::string> & _return, const std::string& sharedSecret, const std::string& namespaceName)
 {
-  send_getNamespaceProperties(login, namespaceName);
+  send_getNamespaceProperties(sharedSecret, namespaceName);
   recv_getNamespaceProperties(_return);
 }
 
-void AccumuloProxyClient::send_getNamespaceProperties(const std::string& login, const std::string& namespaceName)
+void AccumuloProxyClient::send_getNamespaceProperties(const std::string& sharedSecret, const std::string& namespaceName)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("getNamespaceProperties", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_getNamespaceProperties_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.namespaceName = &namespaceName;
   args.write(oprot_);
 
@@ -32645,19 +32327,19 @@ void AccumuloProxyClient::recv_getNamespaceProperties(std::map<std::string, std:
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "getNamespaceProperties failed: unknown result");
 }
 
-void AccumuloProxyClient::namespaceIdMap(std::map<std::string, std::string> & _return, const std::string& login)
+void AccumuloProxyClient::namespaceIdMap(std::map<std::string, std::string> & _return, const std::string& sharedSecret)
 {
-  send_namespaceIdMap(login);
+  send_namespaceIdMap(sharedSecret);
   recv_namespaceIdMap(_return);
 }
 
-void AccumuloProxyClient::send_namespaceIdMap(const std::string& login)
+void AccumuloProxyClient::send_namespaceIdMap(const std::string& sharedSecret)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("namespaceIdMap", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_namespaceIdMap_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -32709,19 +32391,19 @@ void AccumuloProxyClient::recv_namespaceIdMap(std::map<std::string, std::string>
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "namespaceIdMap failed: unknown result");
 }
 
-void AccumuloProxyClient::attachNamespaceIterator(const std::string& login, const std::string& namespaceName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes)
+void AccumuloProxyClient::attachNamespaceIterator(const std::string& sharedSecret, const std::string& namespaceName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes)
 {
-  send_attachNamespaceIterator(login, namespaceName, setting, scopes);
+  send_attachNamespaceIterator(sharedSecret, namespaceName, setting, scopes);
   recv_attachNamespaceIterator();
 }
 
-void AccumuloProxyClient::send_attachNamespaceIterator(const std::string& login, const std::string& namespaceName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes)
+void AccumuloProxyClient::send_attachNamespaceIterator(const std::string& sharedSecret, const std::string& namespaceName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("attachNamespaceIterator", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_attachNamespaceIterator_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.namespaceName = &namespaceName;
   args.setting = &setting;
   args.scopes = &scopes;
@@ -32774,19 +32456,19 @@ void AccumuloProxyClient::recv_attachNamespaceIterator()
   return;
 }
 
-void AccumuloProxyClient::removeNamespaceIterator(const std::string& login, const std::string& namespaceName, const std::string& name, const std::set<IteratorScope::type> & scopes)
+void AccumuloProxyClient::removeNamespaceIterator(const std::string& sharedSecret, const std::string& namespaceName, const std::string& name, const std::set<IteratorScope::type> & scopes)
 {
-  send_removeNamespaceIterator(login, namespaceName, name, scopes);
+  send_removeNamespaceIterator(sharedSecret, namespaceName, name, scopes);
   recv_removeNamespaceIterator();
 }
 
-void AccumuloProxyClient::send_removeNamespaceIterator(const std::string& login, const std::string& namespaceName, const std::string& name, const std::set<IteratorScope::type> & scopes)
+void AccumuloProxyClient::send_removeNamespaceIterator(const std::string& sharedSecret, const std::string& namespaceName, const std::string& name, const std::set<IteratorScope::type> & scopes)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("removeNamespaceIterator", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_removeNamespaceIterator_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.namespaceName = &namespaceName;
   args.name = &name;
   args.scopes = &scopes;
@@ -32839,19 +32521,19 @@ void AccumuloProxyClient::recv_removeNamespaceIterator()
   return;
 }
 
-void AccumuloProxyClient::getNamespaceIteratorSetting(IteratorSetting& _return, const std::string& login, const std::string& namespaceName, const std::string& name, const IteratorScope::type scope)
+void AccumuloProxyClient::getNamespaceIteratorSetting(IteratorSetting& _return, const std::string& sharedSecret, const std::string& namespaceName, const std::string& name, const IteratorScope::type scope)
 {
-  send_getNamespaceIteratorSetting(login, namespaceName, name, scope);
+  send_getNamespaceIteratorSetting(sharedSecret, namespaceName, name, scope);
   recv_getNamespaceIteratorSetting(_return);
 }
 
-void AccumuloProxyClient::send_getNamespaceIteratorSetting(const std::string& login, const std::string& namespaceName, const std::string& name, const IteratorScope::type scope)
+void AccumuloProxyClient::send_getNamespaceIteratorSetting(const std::string& sharedSecret, const std::string& namespaceName, const std::string& name, const IteratorScope::type scope)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("getNamespaceIteratorSetting", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_getNamespaceIteratorSetting_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.namespaceName = &namespaceName;
   args.name = &name;
   args.scope = &scope;
@@ -32909,19 +32591,19 @@ void AccumuloProxyClient::recv_getNamespaceIteratorSetting(IteratorSetting& _ret
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "getNamespaceIteratorSetting failed: unknown result");
 }
 
-void AccumuloProxyClient::listNamespaceIterators(std::map<std::string, std::set<IteratorScope::type> > & _return, const std::string& login, const std::string& namespaceName)
+void AccumuloProxyClient::listNamespaceIterators(std::map<std::string, std::set<IteratorScope::type> > & _return, const std::string& sharedSecret, const std::string& namespaceName)
 {
-  send_listNamespaceIterators(login, namespaceName);
+  send_listNamespaceIterators(sharedSecret, namespaceName);
   recv_listNamespaceIterators(_return);
 }
 
-void AccumuloProxyClient::send_listNamespaceIterators(const std::string& login, const std::string& namespaceName)
+void AccumuloProxyClient::send_listNamespaceIterators(const std::string& sharedSecret, const std::string& namespaceName)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("listNamespaceIterators", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_listNamespaceIterators_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.namespaceName = &namespaceName;
   args.write(oprot_);
 
@@ -32977,19 +32659,19 @@ void AccumuloProxyClient::recv_listNamespaceIterators(std::map<std::string, std:
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "listNamespaceIterators failed: unknown result");
 }
 
-void AccumuloProxyClient::checkNamespaceIteratorConflicts(const std::string& login, const std::string& namespaceName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes)
+void AccumuloProxyClient::checkNamespaceIteratorConflicts(const std::string& sharedSecret, const std::string& namespaceName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes)
 {
-  send_checkNamespaceIteratorConflicts(login, namespaceName, setting, scopes);
+  send_checkNamespaceIteratorConflicts(sharedSecret, namespaceName, setting, scopes);
   recv_checkNamespaceIteratorConflicts();
 }
 
-void AccumuloProxyClient::send_checkNamespaceIteratorConflicts(const std::string& login, const std::string& namespaceName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes)
+void AccumuloProxyClient::send_checkNamespaceIteratorConflicts(const std::string& sharedSecret, const std::string& namespaceName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("checkNamespaceIteratorConflicts", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_checkNamespaceIteratorConflicts_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.namespaceName = &namespaceName;
   args.setting = &setting;
   args.scopes = &scopes;
@@ -33042,19 +32724,19 @@ void AccumuloProxyClient::recv_checkNamespaceIteratorConflicts()
   return;
 }
 
-int32_t AccumuloProxyClient::addNamespaceConstraint(const std::string& login, const std::string& namespaceName, const std::string& constraintClassName)
+int32_t AccumuloProxyClient::addNamespaceConstraint(const std::string& sharedSecret, const std::string& namespaceName, const std::string& constraintClassName)
 {
-  send_addNamespaceConstraint(login, namespaceName, constraintClassName);
+  send_addNamespaceConstraint(sharedSecret, namespaceName, constraintClassName);
   return recv_addNamespaceConstraint();
 }
 
-void AccumuloProxyClient::send_addNamespaceConstraint(const std::string& login, const std::string& namespaceName, const std::string& constraintClassName)
+void AccumuloProxyClient::send_addNamespaceConstraint(const std::string& sharedSecret, const std::string& namespaceName, const std::string& constraintClassName)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("addNamespaceConstraint", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_addNamespaceConstraint_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.namespaceName = &namespaceName;
   args.constraintClassName = &constraintClassName;
   args.write(oprot_);
@@ -33111,19 +32793,19 @@ int32_t AccumuloProxyClient::recv_addNamespaceConstraint()
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "addNamespaceConstraint failed: unknown result");
 }
 
-void AccumuloProxyClient::removeNamespaceConstraint(const std::string& login, const std::string& namespaceName, const int32_t id)
+void AccumuloProxyClient::removeNamespaceConstraint(const std::string& sharedSecret, const std::string& namespaceName, const int32_t id)
 {
-  send_removeNamespaceConstraint(login, namespaceName, id);
+  send_removeNamespaceConstraint(sharedSecret, namespaceName, id);
   recv_removeNamespaceConstraint();
 }
 
-void AccumuloProxyClient::send_removeNamespaceConstraint(const std::string& login, const std::string& namespaceName, const int32_t id)
+void AccumuloProxyClient::send_removeNamespaceConstraint(const std::string& sharedSecret, const std::string& namespaceName, const int32_t id)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("removeNamespaceConstraint", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_removeNamespaceConstraint_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.namespaceName = &namespaceName;
   args.id = &id;
   args.write(oprot_);
@@ -33175,19 +32857,19 @@ void AccumuloProxyClient::recv_removeNamespaceConstraint()
   return;
 }
 
-void AccumuloProxyClient::listNamespaceConstraints(std::map<std::string, int32_t> & _return, const std::string& login, const std::string& namespaceName)
+void AccumuloProxyClient::listNamespaceConstraints(std::map<std::string, int32_t> & _return, const std::string& sharedSecret, const std::string& namespaceName)
 {
-  send_listNamespaceConstraints(login, namespaceName);
+  send_listNamespaceConstraints(sharedSecret, namespaceName);
   recv_listNamespaceConstraints(_return);
 }
 
-void AccumuloProxyClient::send_listNamespaceConstraints(const std::string& login, const std::string& namespaceName)
+void AccumuloProxyClient::send_listNamespaceConstraints(const std::string& sharedSecret, const std::string& namespaceName)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("listNamespaceConstraints", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_listNamespaceConstraints_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.namespaceName = &namespaceName;
   args.write(oprot_);
 
@@ -33243,19 +32925,19 @@ void AccumuloProxyClient::recv_listNamespaceConstraints(std::map<std::string, in
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "listNamespaceConstraints failed: unknown result");
 }
 
-bool AccumuloProxyClient::testNamespaceClassLoad(const std::string& login, const std::string& namespaceName, const std::string& className, const std::string& asTypeName)
+bool AccumuloProxyClient::testNamespaceClassLoad(const std::string& sharedSecret, const std::string& namespaceName, const std::string& className, const std::string& asTypeName)
 {
-  send_testNamespaceClassLoad(login, namespaceName, className, asTypeName);
+  send_testNamespaceClassLoad(sharedSecret, namespaceName, className, asTypeName);
   return recv_testNamespaceClassLoad();
 }
 
-void AccumuloProxyClient::send_testNamespaceClassLoad(const std::string& login, const std::string& namespaceName, const std::string& className, const std::string& asTypeName)
+void AccumuloProxyClient::send_testNamespaceClassLoad(const std::string& sharedSecret, const std::string& namespaceName, const std::string& className, const std::string& asTypeName)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("testNamespaceClassLoad", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_testNamespaceClassLoad_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.namespaceName = &namespaceName;
   args.className = &className;
   args.asTypeName = &asTypeName;
@@ -33332,63 +33014,6 @@ bool AccumuloProxyProcessor::dispatchCall(::apache::thrift::protocol::TProtocol*
   return true;
 }
 
-void AccumuloProxyProcessor::process_login(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
-{
-  void* ctx = nullptr;
-  if (this->eventHandler_.get() != nullptr) {
-    ctx = this->eventHandler_->getContext("AccumuloProxy.login", callContext);
-  }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "AccumuloProxy.login");
-
-  if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->preRead(ctx, "AccumuloProxy.login");
-  }
-
-  AccumuloProxy_login_args args;
-  args.read(iprot);
-  iprot->readMessageEnd();
-  uint32_t bytes = iprot->getTransport()->readEnd();
-
-  if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->postRead(ctx, "AccumuloProxy.login", bytes);
-  }
-
-  AccumuloProxy_login_result result;
-  try {
-    iface_->login(result.success, args.principal, args.loginProperties);
-    result.__isset.success = true;
-  } catch (AccumuloSecurityException &ouch2) {
-    result.ouch2 = std::move(ouch2);
-    result.__isset.ouch2 = true;
-  } catch (const std::exception& e) {
-    if (this->eventHandler_.get() != nullptr) {
-      this->eventHandler_->handlerError(ctx, "AccumuloProxy.login");
-    }
-
-    ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("login", ::apache::thrift::protocol::T_EXCEPTION, seqid);
-    x.write(oprot);
-    oprot->writeMessageEnd();
-    oprot->getTransport()->writeEnd();
-    oprot->getTransport()->flush();
-    return;
-  }
-
-  if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->preWrite(ctx, "AccumuloProxy.login");
-  }
-
-  oprot->writeMessageBegin("login", ::apache::thrift::protocol::T_REPLY, seqid);
-  result.write(oprot);
-  oprot->writeMessageEnd();
-  bytes = oprot->getTransport()->writeEnd();
-  oprot->getTransport()->flush();
-
-  if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->postWrite(ctx, "AccumuloProxy.login", bytes);
-  }
-}
-
 void AccumuloProxyProcessor::process_addConstraint(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = nullptr;
@@ -33412,7 +33037,7 @@ void AccumuloProxyProcessor::process_addConstraint(int32_t seqid, ::apache::thri
 
   AccumuloProxy_addConstraint_result result;
   try {
-    result.success = iface_->addConstraint(args.login, args.tableName, args.constraintClassName);
+    result.success = iface_->addConstraint(args.sharedSecret, args.tableName, args.constraintClassName);
     result.__isset.success = true;
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
@@ -33475,7 +33100,7 @@ void AccumuloProxyProcessor::process_addSplits(int32_t seqid, ::apache::thrift::
 
   AccumuloProxy_addSplits_result result;
   try {
-    iface_->addSplits(args.login, args.tableName, args.splits);
+    iface_->addSplits(args.sharedSecret, args.tableName, args.splits);
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
     result.__isset.ouch1 = true;
@@ -33537,7 +33162,7 @@ void AccumuloProxyProcessor::process_attachIterator(int32_t seqid, ::apache::thr
 
   AccumuloProxy_attachIterator_result result;
   try {
-    iface_->attachIterator(args.login, args.tableName, args.setting, args.scopes);
+    iface_->attachIterator(args.sharedSecret, args.tableName, args.setting, args.scopes);
   } catch (AccumuloSecurityException &ouch1) {
     result.ouch1 = std::move(ouch1);
     result.__isset.ouch1 = true;
@@ -33599,7 +33224,7 @@ void AccumuloProxyProcessor::process_checkIteratorConflicts(int32_t seqid, ::apa
 
   AccumuloProxy_checkIteratorConflicts_result result;
   try {
-    iface_->checkIteratorConflicts(args.login, args.tableName, args.setting, args.scopes);
+    iface_->checkIteratorConflicts(args.sharedSecret, args.tableName, args.setting, args.scopes);
   } catch (AccumuloSecurityException &ouch1) {
     result.ouch1 = std::move(ouch1);
     result.__isset.ouch1 = true;
@@ -33661,7 +33286,7 @@ void AccumuloProxyProcessor::process_clearLocatorCache(int32_t seqid, ::apache::
 
   AccumuloProxy_clearLocatorCache_result result;
   try {
-    iface_->clearLocatorCache(args.login, args.tableName);
+    iface_->clearLocatorCache(args.sharedSecret, args.tableName);
   } catch (TableNotFoundException &ouch1) {
     result.ouch1 = std::move(ouch1);
     result.__isset.ouch1 = true;
@@ -33717,7 +33342,7 @@ void AccumuloProxyProcessor::process_cloneTable(int32_t seqid, ::apache::thrift:
 
   AccumuloProxy_cloneTable_result result;
   try {
-    iface_->cloneTable(args.login, args.tableName, args.newTableName, args.flush, args.propertiesToSet, args.propertiesToExclude);
+    iface_->cloneTable(args.sharedSecret, args.tableName, args.newTableName, args.flush, args.propertiesToSet, args.propertiesToExclude);
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
     result.__isset.ouch1 = true;
@@ -33782,7 +33407,7 @@ void AccumuloProxyProcessor::process_compactTable(int32_t seqid, ::apache::thrif
 
   AccumuloProxy_compactTable_result result;
   try {
-    iface_->compactTable(args.login, args.tableName, args.startRow, args.endRow, args.iterators, args.flush, args.wait, args.selectorConfig, args.configurerConfig);
+    iface_->compactTable(args.sharedSecret, args.tableName, args.startRow, args.endRow, args.iterators, args.flush, args.wait, args.selectorConfig, args.configurerConfig);
   } catch (AccumuloSecurityException &ouch1) {
     result.ouch1 = std::move(ouch1);
     result.__isset.ouch1 = true;
@@ -33844,7 +33469,7 @@ void AccumuloProxyProcessor::process_cancelCompaction(int32_t seqid, ::apache::t
 
   AccumuloProxy_cancelCompaction_result result;
   try {
-    iface_->cancelCompaction(args.login, args.tableName);
+    iface_->cancelCompaction(args.sharedSecret, args.tableName);
   } catch (AccumuloSecurityException &ouch1) {
     result.ouch1 = std::move(ouch1);
     result.__isset.ouch1 = true;
@@ -33906,7 +33531,7 @@ void AccumuloProxyProcessor::process_createTable(int32_t seqid, ::apache::thrift
 
   AccumuloProxy_createTable_result result;
   try {
-    iface_->createTable(args.login, args.tableName, args.versioningIter, args.type);
+    iface_->createTable(args.sharedSecret, args.tableName, args.versioningIter, args.type);
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
     result.__isset.ouch1 = true;
@@ -33968,7 +33593,7 @@ void AccumuloProxyProcessor::process_deleteTable(int32_t seqid, ::apache::thrift
 
   AccumuloProxy_deleteTable_result result;
   try {
-    iface_->deleteTable(args.login, args.tableName);
+    iface_->deleteTable(args.sharedSecret, args.tableName);
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
     result.__isset.ouch1 = true;
@@ -34030,7 +33655,7 @@ void AccumuloProxyProcessor::process_deleteRows(int32_t seqid, ::apache::thrift:
 
   AccumuloProxy_deleteRows_result result;
   try {
-    iface_->deleteRows(args.login, args.tableName, args.startRow, args.endRow);
+    iface_->deleteRows(args.sharedSecret, args.tableName, args.startRow, args.endRow);
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
     result.__isset.ouch1 = true;
@@ -34092,7 +33717,7 @@ void AccumuloProxyProcessor::process_exportTable(int32_t seqid, ::apache::thrift
 
   AccumuloProxy_exportTable_result result;
   try {
-    iface_->exportTable(args.login, args.tableName, args.exportDir);
+    iface_->exportTable(args.sharedSecret, args.tableName, args.exportDir);
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
     result.__isset.ouch1 = true;
@@ -34154,7 +33779,7 @@ void AccumuloProxyProcessor::process_flushTable(int32_t seqid, ::apache::thrift:
 
   AccumuloProxy_flushTable_result result;
   try {
-    iface_->flushTable(args.login, args.tableName, args.startRow, args.endRow, args.wait);
+    iface_->flushTable(args.sharedSecret, args.tableName, args.startRow, args.endRow, args.wait);
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
     result.__isset.ouch1 = true;
@@ -34216,7 +33841,7 @@ void AccumuloProxyProcessor::process_getDiskUsage(int32_t seqid, ::apache::thrif
 
   AccumuloProxy_getDiskUsage_result result;
   try {
-    iface_->getDiskUsage(result.success, args.login, args.tables);
+    iface_->getDiskUsage(result.success, args.sharedSecret, args.tables);
     result.__isset.success = true;
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
@@ -34279,7 +33904,7 @@ void AccumuloProxyProcessor::process_getLocalityGroups(int32_t seqid, ::apache::
 
   AccumuloProxy_getLocalityGroups_result result;
   try {
-    iface_->getLocalityGroups(result.success, args.login, args.tableName);
+    iface_->getLocalityGroups(result.success, args.sharedSecret, args.tableName);
     result.__isset.success = true;
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
@@ -34342,7 +33967,7 @@ void AccumuloProxyProcessor::process_getIteratorSetting(int32_t seqid, ::apache:
 
   AccumuloProxy_getIteratorSetting_result result;
   try {
-    iface_->getIteratorSetting(result.success, args.login, args.tableName, args.iteratorName, args.scope);
+    iface_->getIteratorSetting(result.success, args.sharedSecret, args.tableName, args.iteratorName, args.scope);
     result.__isset.success = true;
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
@@ -34405,7 +34030,7 @@ void AccumuloProxyProcessor::process_getMaxRow(int32_t seqid, ::apache::thrift::
 
   AccumuloProxy_getMaxRow_result result;
   try {
-    iface_->getMaxRow(result.success, args.login, args.tableName, args.auths, args.startRow, args.startInclusive, args.endRow, args.endInclusive);
+    iface_->getMaxRow(result.success, args.sharedSecret, args.tableName, args.auths, args.startRow, args.startInclusive, args.endRow, args.endInclusive);
     result.__isset.success = true;
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
@@ -34468,7 +34093,7 @@ void AccumuloProxyProcessor::process_getTableProperties(int32_t seqid, ::apache:
 
   AccumuloProxy_getTableProperties_result result;
   try {
-    iface_->getTableProperties(result.success, args.login, args.tableName);
+    iface_->getTableProperties(result.success, args.sharedSecret, args.tableName);
     result.__isset.success = true;
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
@@ -34531,7 +34156,7 @@ void AccumuloProxyProcessor::process_importDirectory(int32_t seqid, ::apache::th
 
   AccumuloProxy_importDirectory_result result;
   try {
-    iface_->importDirectory(args.login, args.tableName, args.importDir, args.failureDir, args.setTime);
+    iface_->importDirectory(args.sharedSecret, args.tableName, args.importDir, args.failureDir, args.setTime);
   } catch (TableNotFoundException &ouch1) {
     result.ouch1 = std::move(ouch1);
     result.__isset.ouch1 = true;
@@ -34593,7 +34218,7 @@ void AccumuloProxyProcessor::process_importTable(int32_t seqid, ::apache::thrift
 
   AccumuloProxy_importTable_result result;
   try {
-    iface_->importTable(args.login, args.tableName, args.importDir);
+    iface_->importTable(args.sharedSecret, args.tableName, args.importDir);
   } catch (TableExistsException &ouch1) {
     result.ouch1 = std::move(ouch1);
     result.__isset.ouch1 = true;
@@ -34655,7 +34280,7 @@ void AccumuloProxyProcessor::process_listSplits(int32_t seqid, ::apache::thrift:
 
   AccumuloProxy_listSplits_result result;
   try {
-    iface_->listSplits(result.success, args.login, args.tableName, args.maxSplits);
+    iface_->listSplits(result.success, args.sharedSecret, args.tableName, args.maxSplits);
     result.__isset.success = true;
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
@@ -34718,7 +34343,7 @@ void AccumuloProxyProcessor::process_listTables(int32_t seqid, ::apache::thrift:
 
   AccumuloProxy_listTables_result result;
   try {
-    iface_->listTables(result.success, args.login);
+    iface_->listTables(result.success, args.sharedSecret);
     result.__isset.success = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != nullptr) {
@@ -34772,7 +34397,7 @@ void AccumuloProxyProcessor::process_listIterators(int32_t seqid, ::apache::thri
 
   AccumuloProxy_listIterators_result result;
   try {
-    iface_->listIterators(result.success, args.login, args.tableName);
+    iface_->listIterators(result.success, args.sharedSecret, args.tableName);
     result.__isset.success = true;
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
@@ -34835,7 +34460,7 @@ void AccumuloProxyProcessor::process_listConstraints(int32_t seqid, ::apache::th
 
   AccumuloProxy_listConstraints_result result;
   try {
-    iface_->listConstraints(result.success, args.login, args.tableName);
+    iface_->listConstraints(result.success, args.sharedSecret, args.tableName);
     result.__isset.success = true;
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
@@ -34898,7 +34523,7 @@ void AccumuloProxyProcessor::process_mergeTablets(int32_t seqid, ::apache::thrif
 
   AccumuloProxy_mergeTablets_result result;
   try {
-    iface_->mergeTablets(args.login, args.tableName, args.startRow, args.endRow);
+    iface_->mergeTablets(args.sharedSecret, args.tableName, args.startRow, args.endRow);
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
     result.__isset.ouch1 = true;
@@ -34960,7 +34585,7 @@ void AccumuloProxyProcessor::process_offlineTable(int32_t seqid, ::apache::thrif
 
   AccumuloProxy_offlineTable_result result;
   try {
-    iface_->offlineTable(args.login, args.tableName, args.wait);
+    iface_->offlineTable(args.sharedSecret, args.tableName, args.wait);
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
     result.__isset.ouch1 = true;
@@ -35022,7 +34647,7 @@ void AccumuloProxyProcessor::process_onlineTable(int32_t seqid, ::apache::thrift
 
   AccumuloProxy_onlineTable_result result;
   try {
-    iface_->onlineTable(args.login, args.tableName, args.wait);
+    iface_->onlineTable(args.sharedSecret, args.tableName, args.wait);
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
     result.__isset.ouch1 = true;
@@ -35084,7 +34709,7 @@ void AccumuloProxyProcessor::process_removeConstraint(int32_t seqid, ::apache::t
 
   AccumuloProxy_removeConstraint_result result;
   try {
-    iface_->removeConstraint(args.login, args.tableName, args.constraint);
+    iface_->removeConstraint(args.sharedSecret, args.tableName, args.constraint);
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
     result.__isset.ouch1 = true;
@@ -35146,7 +34771,7 @@ void AccumuloProxyProcessor::process_removeIterator(int32_t seqid, ::apache::thr
 
   AccumuloProxy_removeIterator_result result;
   try {
-    iface_->removeIterator(args.login, args.tableName, args.iterName, args.scopes);
+    iface_->removeIterator(args.sharedSecret, args.tableName, args.iterName, args.scopes);
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
     result.__isset.ouch1 = true;
@@ -35208,7 +34833,7 @@ void AccumuloProxyProcessor::process_removeTableProperty(int32_t seqid, ::apache
 
   AccumuloProxy_removeTableProperty_result result;
   try {
-    iface_->removeTableProperty(args.login, args.tableName, args.property);
+    iface_->removeTableProperty(args.sharedSecret, args.tableName, args.property);
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
     result.__isset.ouch1 = true;
@@ -35270,7 +34895,7 @@ void AccumuloProxyProcessor::process_renameTable(int32_t seqid, ::apache::thrift
 
   AccumuloProxy_renameTable_result result;
   try {
-    iface_->renameTable(args.login, args.oldTableName, args.newTableName);
+    iface_->renameTable(args.sharedSecret, args.oldTableName, args.newTableName);
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
     result.__isset.ouch1 = true;
@@ -35335,7 +34960,7 @@ void AccumuloProxyProcessor::process_setLocalityGroups(int32_t seqid, ::apache::
 
   AccumuloProxy_setLocalityGroups_result result;
   try {
-    iface_->setLocalityGroups(args.login, args.tableName, args.groups);
+    iface_->setLocalityGroups(args.sharedSecret, args.tableName, args.groups);
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
     result.__isset.ouch1 = true;
@@ -35397,7 +35022,7 @@ void AccumuloProxyProcessor::process_setTableProperty(int32_t seqid, ::apache::t
 
   AccumuloProxy_setTableProperty_result result;
   try {
-    iface_->setTableProperty(args.login, args.tableName, args.property, args.value);
+    iface_->setTableProperty(args.sharedSecret, args.tableName, args.property, args.value);
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
     result.__isset.ouch1 = true;
@@ -35459,7 +35084,7 @@ void AccumuloProxyProcessor::process_splitRangeByTablets(int32_t seqid, ::apache
 
   AccumuloProxy_splitRangeByTablets_result result;
   try {
-    iface_->splitRangeByTablets(result.success, args.login, args.tableName, args.range, args.maxSplits);
+    iface_->splitRangeByTablets(result.success, args.sharedSecret, args.tableName, args.range, args.maxSplits);
     result.__isset.success = true;
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
@@ -35522,7 +35147,7 @@ void AccumuloProxyProcessor::process_tableExists(int32_t seqid, ::apache::thrift
 
   AccumuloProxy_tableExists_result result;
   try {
-    result.success = iface_->tableExists(args.login, args.tableName);
+    result.success = iface_->tableExists(args.sharedSecret, args.tableName);
     result.__isset.success = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != nullptr) {
@@ -35576,7 +35201,7 @@ void AccumuloProxyProcessor::process_tableIdMap(int32_t seqid, ::apache::thrift:
 
   AccumuloProxy_tableIdMap_result result;
   try {
-    iface_->tableIdMap(result.success, args.login);
+    iface_->tableIdMap(result.success, args.sharedSecret);
     result.__isset.success = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != nullptr) {
@@ -35630,7 +35255,7 @@ void AccumuloProxyProcessor::process_testTableClassLoad(int32_t seqid, ::apache:
 
   AccumuloProxy_testTableClassLoad_result result;
   try {
-    result.success = iface_->testTableClassLoad(args.login, args.tableName, args.className, args.asTypeName);
+    result.success = iface_->testTableClassLoad(args.sharedSecret, args.tableName, args.className, args.asTypeName);
     result.__isset.success = true;
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
@@ -35693,7 +35318,7 @@ void AccumuloProxyProcessor::process_pingTabletServer(int32_t seqid, ::apache::t
 
   AccumuloProxy_pingTabletServer_result result;
   try {
-    iface_->pingTabletServer(args.login, args.tserver);
+    iface_->pingTabletServer(args.sharedSecret, args.tserver);
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
     result.__isset.ouch1 = true;
@@ -35752,7 +35377,7 @@ void AccumuloProxyProcessor::process_getActiveScans(int32_t seqid, ::apache::thr
 
   AccumuloProxy_getActiveScans_result result;
   try {
-    iface_->getActiveScans(result.success, args.login, args.tserver);
+    iface_->getActiveScans(result.success, args.sharedSecret, args.tserver);
     result.__isset.success = true;
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
@@ -35812,7 +35437,7 @@ void AccumuloProxyProcessor::process_getActiveCompactions(int32_t seqid, ::apach
 
   AccumuloProxy_getActiveCompactions_result result;
   try {
-    iface_->getActiveCompactions(result.success, args.login, args.tserver);
+    iface_->getActiveCompactions(result.success, args.sharedSecret, args.tserver);
     result.__isset.success = true;
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
@@ -35872,7 +35497,7 @@ void AccumuloProxyProcessor::process_getSiteConfiguration(int32_t seqid, ::apach
 
   AccumuloProxy_getSiteConfiguration_result result;
   try {
-    iface_->getSiteConfiguration(result.success, args.login);
+    iface_->getSiteConfiguration(result.success, args.sharedSecret);
     result.__isset.success = true;
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
@@ -35932,7 +35557,7 @@ void AccumuloProxyProcessor::process_getSystemConfiguration(int32_t seqid, ::apa
 
   AccumuloProxy_getSystemConfiguration_result result;
   try {
-    iface_->getSystemConfiguration(result.success, args.login);
+    iface_->getSystemConfiguration(result.success, args.sharedSecret);
     result.__isset.success = true;
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
@@ -35992,7 +35617,7 @@ void AccumuloProxyProcessor::process_getTabletServers(int32_t seqid, ::apache::t
 
   AccumuloProxy_getTabletServers_result result;
   try {
-    iface_->getTabletServers(result.success, args.login);
+    iface_->getTabletServers(result.success, args.sharedSecret);
     result.__isset.success = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != nullptr) {
@@ -36046,7 +35671,7 @@ void AccumuloProxyProcessor::process_removeProperty(int32_t seqid, ::apache::thr
 
   AccumuloProxy_removeProperty_result result;
   try {
-    iface_->removeProperty(args.login, args.property);
+    iface_->removeProperty(args.sharedSecret, args.property);
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
     result.__isset.ouch1 = true;
@@ -36105,7 +35730,7 @@ void AccumuloProxyProcessor::process_setProperty(int32_t seqid, ::apache::thrift
 
   AccumuloProxy_setProperty_result result;
   try {
-    iface_->setProperty(args.login, args.property, args.value);
+    iface_->setProperty(args.sharedSecret, args.property, args.value);
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
     result.__isset.ouch1 = true;
@@ -36164,7 +35789,7 @@ void AccumuloProxyProcessor::process_testClassLoad(int32_t seqid, ::apache::thri
 
   AccumuloProxy_testClassLoad_result result;
   try {
-    result.success = iface_->testClassLoad(args.login, args.className, args.asTypeName);
+    result.success = iface_->testClassLoad(args.sharedSecret, args.className, args.asTypeName);
     result.__isset.success = true;
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
@@ -36224,7 +35849,7 @@ void AccumuloProxyProcessor::process_authenticateUser(int32_t seqid, ::apache::t
 
   AccumuloProxy_authenticateUser_result result;
   try {
-    result.success = iface_->authenticateUser(args.login, args.user, args.properties);
+    result.success = iface_->authenticateUser(args.sharedSecret, args.user, args.properties);
     result.__isset.success = true;
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
@@ -36284,7 +35909,7 @@ void AccumuloProxyProcessor::process_changeUserAuthorizations(int32_t seqid, ::a
 
   AccumuloProxy_changeUserAuthorizations_result result;
   try {
-    iface_->changeUserAuthorizations(args.login, args.user, args.authorizations);
+    iface_->changeUserAuthorizations(args.sharedSecret, args.user, args.authorizations);
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
     result.__isset.ouch1 = true;
@@ -36343,7 +35968,7 @@ void AccumuloProxyProcessor::process_changeLocalUserPassword(int32_t seqid, ::ap
 
   AccumuloProxy_changeLocalUserPassword_result result;
   try {
-    iface_->changeLocalUserPassword(args.login, args.user, args.password);
+    iface_->changeLocalUserPassword(args.sharedSecret, args.user, args.password);
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
     result.__isset.ouch1 = true;
@@ -36402,7 +36027,7 @@ void AccumuloProxyProcessor::process_createLocalUser(int32_t seqid, ::apache::th
 
   AccumuloProxy_createLocalUser_result result;
   try {
-    iface_->createLocalUser(args.login, args.user, args.password);
+    iface_->createLocalUser(args.sharedSecret, args.user, args.password);
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
     result.__isset.ouch1 = true;
@@ -36461,7 +36086,7 @@ void AccumuloProxyProcessor::process_dropLocalUser(int32_t seqid, ::apache::thri
 
   AccumuloProxy_dropLocalUser_result result;
   try {
-    iface_->dropLocalUser(args.login, args.user);
+    iface_->dropLocalUser(args.sharedSecret, args.user);
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
     result.__isset.ouch1 = true;
@@ -36520,7 +36145,7 @@ void AccumuloProxyProcessor::process_getUserAuthorizations(int32_t seqid, ::apac
 
   AccumuloProxy_getUserAuthorizations_result result;
   try {
-    iface_->getUserAuthorizations(result.success, args.login, args.user);
+    iface_->getUserAuthorizations(result.success, args.sharedSecret, args.user);
     result.__isset.success = true;
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
@@ -36580,7 +36205,7 @@ void AccumuloProxyProcessor::process_grantSystemPermission(int32_t seqid, ::apac
 
   AccumuloProxy_grantSystemPermission_result result;
   try {
-    iface_->grantSystemPermission(args.login, args.user, args.perm);
+    iface_->grantSystemPermission(args.sharedSecret, args.user, args.perm);
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
     result.__isset.ouch1 = true;
@@ -36639,7 +36264,7 @@ void AccumuloProxyProcessor::process_grantTablePermission(int32_t seqid, ::apach
 
   AccumuloProxy_grantTablePermission_result result;
   try {
-    iface_->grantTablePermission(args.login, args.user, args.table, args.perm);
+    iface_->grantTablePermission(args.sharedSecret, args.user, args.table, args.perm);
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
     result.__isset.ouch1 = true;
@@ -36701,7 +36326,7 @@ void AccumuloProxyProcessor::process_hasSystemPermission(int32_t seqid, ::apache
 
   AccumuloProxy_hasSystemPermission_result result;
   try {
-    result.success = iface_->hasSystemPermission(args.login, args.user, args.perm);
+    result.success = iface_->hasSystemPermission(args.sharedSecret, args.user, args.perm);
     result.__isset.success = true;
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
@@ -36761,7 +36386,7 @@ void AccumuloProxyProcessor::process_hasTablePermission(int32_t seqid, ::apache:
 
   AccumuloProxy_hasTablePermission_result result;
   try {
-    result.success = iface_->hasTablePermission(args.login, args.user, args.table, args.perm);
+    result.success = iface_->hasTablePermission(args.sharedSecret, args.user, args.table, args.perm);
     result.__isset.success = true;
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
@@ -36824,7 +36449,7 @@ void AccumuloProxyProcessor::process_listLocalUsers(int32_t seqid, ::apache::thr
 
   AccumuloProxy_listLocalUsers_result result;
   try {
-    iface_->listLocalUsers(result.success, args.login);
+    iface_->listLocalUsers(result.success, args.sharedSecret);
     result.__isset.success = true;
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
@@ -36887,7 +36512,7 @@ void AccumuloProxyProcessor::process_revokeSystemPermission(int32_t seqid, ::apa
 
   AccumuloProxy_revokeSystemPermission_result result;
   try {
-    iface_->revokeSystemPermission(args.login, args.user, args.perm);
+    iface_->revokeSystemPermission(args.sharedSecret, args.user, args.perm);
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
     result.__isset.ouch1 = true;
@@ -36946,7 +36571,7 @@ void AccumuloProxyProcessor::process_revokeTablePermission(int32_t seqid, ::apac
 
   AccumuloProxy_revokeTablePermission_result result;
   try {
-    iface_->revokeTablePermission(args.login, args.user, args.table, args.perm);
+    iface_->revokeTablePermission(args.sharedSecret, args.user, args.table, args.perm);
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
     result.__isset.ouch1 = true;
@@ -37008,7 +36633,7 @@ void AccumuloProxyProcessor::process_grantNamespacePermission(int32_t seqid, ::a
 
   AccumuloProxy_grantNamespacePermission_result result;
   try {
-    iface_->grantNamespacePermission(args.login, args.user, args.namespaceName, args.perm);
+    iface_->grantNamespacePermission(args.sharedSecret, args.user, args.namespaceName, args.perm);
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
     result.__isset.ouch1 = true;
@@ -37067,7 +36692,7 @@ void AccumuloProxyProcessor::process_hasNamespacePermission(int32_t seqid, ::apa
 
   AccumuloProxy_hasNamespacePermission_result result;
   try {
-    result.success = iface_->hasNamespacePermission(args.login, args.user, args.namespaceName, args.perm);
+    result.success = iface_->hasNamespacePermission(args.sharedSecret, args.user, args.namespaceName, args.perm);
     result.__isset.success = true;
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
@@ -37127,7 +36752,7 @@ void AccumuloProxyProcessor::process_revokeNamespacePermission(int32_t seqid, ::
 
   AccumuloProxy_revokeNamespacePermission_result result;
   try {
-    iface_->revokeNamespacePermission(args.login, args.user, args.namespaceName, args.perm);
+    iface_->revokeNamespacePermission(args.sharedSecret, args.user, args.namespaceName, args.perm);
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
     result.__isset.ouch1 = true;
@@ -37186,7 +36811,7 @@ void AccumuloProxyProcessor::process_createBatchScanner(int32_t seqid, ::apache:
 
   AccumuloProxy_createBatchScanner_result result;
   try {
-    iface_->createBatchScanner(result.success, args.login, args.tableName, args.options);
+    iface_->createBatchScanner(result.success, args.sharedSecret, args.tableName, args.options);
     result.__isset.success = true;
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
@@ -37249,7 +36874,7 @@ void AccumuloProxyProcessor::process_createScanner(int32_t seqid, ::apache::thri
 
   AccumuloProxy_createScanner_result result;
   try {
-    iface_->createScanner(result.success, args.login, args.tableName, args.options);
+    iface_->createScanner(result.success, args.sharedSecret, args.tableName, args.options);
     result.__isset.success = true;
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
@@ -37551,7 +37176,7 @@ void AccumuloProxyProcessor::process_updateAndFlush(int32_t seqid, ::apache::thr
 
   AccumuloProxy_updateAndFlush_result result;
   try {
-    iface_->updateAndFlush(args.login, args.tableName, args.cells);
+    iface_->updateAndFlush(args.sharedSecret, args.tableName, args.cells);
   } catch (AccumuloException &outch1) {
     result.outch1 = std::move(outch1);
     result.__isset.outch1 = true;
@@ -37616,7 +37241,7 @@ void AccumuloProxyProcessor::process_createWriter(int32_t seqid, ::apache::thrif
 
   AccumuloProxy_createWriter_result result;
   try {
-    iface_->createWriter(result.success, args.login, args.tableName, args.opts);
+    iface_->createWriter(result.success, args.sharedSecret, args.tableName, args.opts);
     result.__isset.success = true;
   } catch (AccumuloException &outch1) {
     result.outch1 = std::move(outch1);
@@ -37834,7 +37459,7 @@ void AccumuloProxyProcessor::process_updateRowConditionally(int32_t seqid, ::apa
 
   AccumuloProxy_updateRowConditionally_result result;
   try {
-    result.success = iface_->updateRowConditionally(args.login, args.tableName, args.row, args.updates);
+    result.success = iface_->updateRowConditionally(args.sharedSecret, args.tableName, args.row, args.updates);
     result.__isset.success = true;
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
@@ -37897,7 +37522,7 @@ void AccumuloProxyProcessor::process_createConditionalWriter(int32_t seqid, ::ap
 
   AccumuloProxy_createConditionalWriter_result result;
   try {
-    iface_->createConditionalWriter(result.success, args.login, args.tableName, args.options);
+    iface_->createConditionalWriter(result.success, args.sharedSecret, args.tableName, args.options);
     result.__isset.success = true;
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
@@ -38292,7 +37917,7 @@ void AccumuloProxyProcessor::process_listNamespaces(int32_t seqid, ::apache::thr
 
   AccumuloProxy_listNamespaces_result result;
   try {
-    iface_->listNamespaces(result.success, args.login);
+    iface_->listNamespaces(result.success, args.sharedSecret);
     result.__isset.success = true;
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
@@ -38352,7 +37977,7 @@ void AccumuloProxyProcessor::process_namespaceExists(int32_t seqid, ::apache::th
 
   AccumuloProxy_namespaceExists_result result;
   try {
-    result.success = iface_->namespaceExists(args.login, args.namespaceName);
+    result.success = iface_->namespaceExists(args.sharedSecret, args.namespaceName);
     result.__isset.success = true;
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
@@ -38412,7 +38037,7 @@ void AccumuloProxyProcessor::process_createNamespace(int32_t seqid, ::apache::th
 
   AccumuloProxy_createNamespace_result result;
   try {
-    iface_->createNamespace(args.login, args.namespaceName);
+    iface_->createNamespace(args.sharedSecret, args.namespaceName);
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
     result.__isset.ouch1 = true;
@@ -38474,7 +38099,7 @@ void AccumuloProxyProcessor::process_deleteNamespace(int32_t seqid, ::apache::th
 
   AccumuloProxy_deleteNamespace_result result;
   try {
-    iface_->deleteNamespace(args.login, args.namespaceName);
+    iface_->deleteNamespace(args.sharedSecret, args.namespaceName);
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
     result.__isset.ouch1 = true;
@@ -38539,7 +38164,7 @@ void AccumuloProxyProcessor::process_renameNamespace(int32_t seqid, ::apache::th
 
   AccumuloProxy_renameNamespace_result result;
   try {
-    iface_->renameNamespace(args.login, args.oldNamespaceName, args.newNamespaceName);
+    iface_->renameNamespace(args.sharedSecret, args.oldNamespaceName, args.newNamespaceName);
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
     result.__isset.ouch1 = true;
@@ -38604,7 +38229,7 @@ void AccumuloProxyProcessor::process_setNamespaceProperty(int32_t seqid, ::apach
 
   AccumuloProxy_setNamespaceProperty_result result;
   try {
-    iface_->setNamespaceProperty(args.login, args.namespaceName, args.property, args.value);
+    iface_->setNamespaceProperty(args.sharedSecret, args.namespaceName, args.property, args.value);
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
     result.__isset.ouch1 = true;
@@ -38666,7 +38291,7 @@ void AccumuloProxyProcessor::process_removeNamespaceProperty(int32_t seqid, ::ap
 
   AccumuloProxy_removeNamespaceProperty_result result;
   try {
-    iface_->removeNamespaceProperty(args.login, args.namespaceName, args.property);
+    iface_->removeNamespaceProperty(args.sharedSecret, args.namespaceName, args.property);
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
     result.__isset.ouch1 = true;
@@ -38728,7 +38353,7 @@ void AccumuloProxyProcessor::process_getNamespaceProperties(int32_t seqid, ::apa
 
   AccumuloProxy_getNamespaceProperties_result result;
   try {
-    iface_->getNamespaceProperties(result.success, args.login, args.namespaceName);
+    iface_->getNamespaceProperties(result.success, args.sharedSecret, args.namespaceName);
     result.__isset.success = true;
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
@@ -38791,7 +38416,7 @@ void AccumuloProxyProcessor::process_namespaceIdMap(int32_t seqid, ::apache::thr
 
   AccumuloProxy_namespaceIdMap_result result;
   try {
-    iface_->namespaceIdMap(result.success, args.login);
+    iface_->namespaceIdMap(result.success, args.sharedSecret);
     result.__isset.success = true;
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
@@ -38851,7 +38476,7 @@ void AccumuloProxyProcessor::process_attachNamespaceIterator(int32_t seqid, ::ap
 
   AccumuloProxy_attachNamespaceIterator_result result;
   try {
-    iface_->attachNamespaceIterator(args.login, args.namespaceName, args.setting, args.scopes);
+    iface_->attachNamespaceIterator(args.sharedSecret, args.namespaceName, args.setting, args.scopes);
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
     result.__isset.ouch1 = true;
@@ -38913,7 +38538,7 @@ void AccumuloProxyProcessor::process_removeNamespaceIterator(int32_t seqid, ::ap
 
   AccumuloProxy_removeNamespaceIterator_result result;
   try {
-    iface_->removeNamespaceIterator(args.login, args.namespaceName, args.name, args.scopes);
+    iface_->removeNamespaceIterator(args.sharedSecret, args.namespaceName, args.name, args.scopes);
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
     result.__isset.ouch1 = true;
@@ -38975,7 +38600,7 @@ void AccumuloProxyProcessor::process_getNamespaceIteratorSetting(int32_t seqid, 
 
   AccumuloProxy_getNamespaceIteratorSetting_result result;
   try {
-    iface_->getNamespaceIteratorSetting(result.success, args.login, args.namespaceName, args.name, args.scope);
+    iface_->getNamespaceIteratorSetting(result.success, args.sharedSecret, args.namespaceName, args.name, args.scope);
     result.__isset.success = true;
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
@@ -39038,7 +38663,7 @@ void AccumuloProxyProcessor::process_listNamespaceIterators(int32_t seqid, ::apa
 
   AccumuloProxy_listNamespaceIterators_result result;
   try {
-    iface_->listNamespaceIterators(result.success, args.login, args.namespaceName);
+    iface_->listNamespaceIterators(result.success, args.sharedSecret, args.namespaceName);
     result.__isset.success = true;
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
@@ -39101,7 +38726,7 @@ void AccumuloProxyProcessor::process_checkNamespaceIteratorConflicts(int32_t seq
 
   AccumuloProxy_checkNamespaceIteratorConflicts_result result;
   try {
-    iface_->checkNamespaceIteratorConflicts(args.login, args.namespaceName, args.setting, args.scopes);
+    iface_->checkNamespaceIteratorConflicts(args.sharedSecret, args.namespaceName, args.setting, args.scopes);
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
     result.__isset.ouch1 = true;
@@ -39163,7 +38788,7 @@ void AccumuloProxyProcessor::process_addNamespaceConstraint(int32_t seqid, ::apa
 
   AccumuloProxy_addNamespaceConstraint_result result;
   try {
-    result.success = iface_->addNamespaceConstraint(args.login, args.namespaceName, args.constraintClassName);
+    result.success = iface_->addNamespaceConstraint(args.sharedSecret, args.namespaceName, args.constraintClassName);
     result.__isset.success = true;
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
@@ -39226,7 +38851,7 @@ void AccumuloProxyProcessor::process_removeNamespaceConstraint(int32_t seqid, ::
 
   AccumuloProxy_removeNamespaceConstraint_result result;
   try {
-    iface_->removeNamespaceConstraint(args.login, args.namespaceName, args.id);
+    iface_->removeNamespaceConstraint(args.sharedSecret, args.namespaceName, args.id);
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
     result.__isset.ouch1 = true;
@@ -39288,7 +38913,7 @@ void AccumuloProxyProcessor::process_listNamespaceConstraints(int32_t seqid, ::a
 
   AccumuloProxy_listNamespaceConstraints_result result;
   try {
-    iface_->listNamespaceConstraints(result.success, args.login, args.namespaceName);
+    iface_->listNamespaceConstraints(result.success, args.sharedSecret, args.namespaceName);
     result.__isset.success = true;
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
@@ -39351,7 +38976,7 @@ void AccumuloProxyProcessor::process_testNamespaceClassLoad(int32_t seqid, ::apa
 
   AccumuloProxy_testNamespaceClassLoad_result result;
   try {
-    result.success = iface_->testNamespaceClassLoad(args.login, args.namespaceName, args.className, args.asTypeName);
+    result.success = iface_->testNamespaceClassLoad(args.sharedSecret, args.namespaceName, args.className, args.asTypeName);
     result.__isset.success = true;
   } catch (AccumuloException &ouch1) {
     result.ouch1 = std::move(ouch1);
@@ -39398,109 +39023,20 @@ void AccumuloProxyProcessor::process_testNamespaceClassLoad(int32_t seqid, ::apa
   return processor;
 }
 
-void AccumuloProxyConcurrentClient::login(std::string& _return, const std::string& principal, const std::map<std::string, std::string> & loginProperties)
+int32_t AccumuloProxyConcurrentClient::addConstraint(const std::string& sharedSecret, const std::string& tableName, const std::string& constraintClassName)
 {
-  int32_t seqid = send_login(principal, loginProperties);
-  recv_login(_return, seqid);
-}
-
-int32_t AccumuloProxyConcurrentClient::send_login(const std::string& principal, const std::map<std::string, std::string> & loginProperties)
-{
-  int32_t cseqid = this->sync_->generateSeqId();
-  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
-  oprot_->writeMessageBegin("login", ::apache::thrift::protocol::T_CALL, cseqid);
-
-  AccumuloProxy_login_pargs args;
-  args.principal = &principal;
-  args.loginProperties = &loginProperties;
-  args.write(oprot_);
-
-  oprot_->writeMessageEnd();
-  oprot_->getTransport()->writeEnd();
-  oprot_->getTransport()->flush();
-
-  sentry.commit();
-  return cseqid;
-}
-
-void AccumuloProxyConcurrentClient::recv_login(std::string& _return, const int32_t seqid)
-{
-
-  int32_t rseqid = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TMessageType mtype;
-
-  // the read mutex gets dropped and reacquired as part of waitForWork()
-  // The destructor of this sentry wakes up other clients
-  ::apache::thrift::async::TConcurrentRecvSentry sentry(this->sync_.get(), seqid);
-
-  while(true) {
-    if(!this->sync_->getPending(fname, mtype, rseqid)) {
-      iprot_->readMessageBegin(fname, mtype, rseqid);
-    }
-    if(seqid == rseqid) {
-      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
-        ::apache::thrift::TApplicationException x;
-        x.read(iprot_);
-        iprot_->readMessageEnd();
-        iprot_->getTransport()->readEnd();
-        sentry.commit();
-        throw x;
-      }
-      if (mtype != ::apache::thrift::protocol::T_REPLY) {
-        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-        iprot_->readMessageEnd();
-        iprot_->getTransport()->readEnd();
-      }
-      if (fname.compare("login") != 0) {
-        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-        iprot_->readMessageEnd();
-        iprot_->getTransport()->readEnd();
-
-        // in a bad state, don't commit
-        using ::apache::thrift::protocol::TProtocolException;
-        throw TProtocolException(TProtocolException::INVALID_DATA);
-      }
-      AccumuloProxy_login_presult result;
-      result.success = &_return;
-      result.read(iprot_);
-      iprot_->readMessageEnd();
-      iprot_->getTransport()->readEnd();
-
-      if (result.__isset.success) {
-        // _return pointer has now been filled
-        sentry.commit();
-        return;
-      }
-      if (result.__isset.ouch2) {
-        sentry.commit();
-        throw result.ouch2;
-      }
-      // in a bad state, don't commit
-      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "login failed: unknown result");
-    }
-    // seqid != rseqid
-    this->sync_->updatePending(fname, mtype, rseqid);
-
-    // this will temporarily unlock the readMutex, and let other clients get work done
-    this->sync_->waitForWork(seqid);
-  } // end while(true)
-}
-
-int32_t AccumuloProxyConcurrentClient::addConstraint(const std::string& login, const std::string& tableName, const std::string& constraintClassName)
-{
-  int32_t seqid = send_addConstraint(login, tableName, constraintClassName);
+  int32_t seqid = send_addConstraint(sharedSecret, tableName, constraintClassName);
   return recv_addConstraint(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_addConstraint(const std::string& login, const std::string& tableName, const std::string& constraintClassName)
+int32_t AccumuloProxyConcurrentClient::send_addConstraint(const std::string& sharedSecret, const std::string& tableName, const std::string& constraintClassName)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("addConstraint", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_addConstraint_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.constraintClassName = &constraintClassName;
   args.write(oprot_);
@@ -39585,20 +39121,20 @@ int32_t AccumuloProxyConcurrentClient::recv_addConstraint(const int32_t seqid)
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::addSplits(const std::string& login, const std::string& tableName, const std::set<std::string> & splits)
+void AccumuloProxyConcurrentClient::addSplits(const std::string& sharedSecret, const std::string& tableName, const std::set<std::string> & splits)
 {
-  int32_t seqid = send_addSplits(login, tableName, splits);
+  int32_t seqid = send_addSplits(sharedSecret, tableName, splits);
   recv_addSplits(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_addSplits(const std::string& login, const std::string& tableName, const std::set<std::string> & splits)
+int32_t AccumuloProxyConcurrentClient::send_addSplits(const std::string& sharedSecret, const std::string& tableName, const std::set<std::string> & splits)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("addSplits", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_addSplits_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.splits = &splits;
   args.write(oprot_);
@@ -39677,20 +39213,20 @@ void AccumuloProxyConcurrentClient::recv_addSplits(const int32_t seqid)
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::attachIterator(const std::string& login, const std::string& tableName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes)
+void AccumuloProxyConcurrentClient::attachIterator(const std::string& sharedSecret, const std::string& tableName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes)
 {
-  int32_t seqid = send_attachIterator(login, tableName, setting, scopes);
+  int32_t seqid = send_attachIterator(sharedSecret, tableName, setting, scopes);
   recv_attachIterator(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_attachIterator(const std::string& login, const std::string& tableName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes)
+int32_t AccumuloProxyConcurrentClient::send_attachIterator(const std::string& sharedSecret, const std::string& tableName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("attachIterator", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_attachIterator_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.setting = &setting;
   args.scopes = &scopes;
@@ -39770,20 +39306,20 @@ void AccumuloProxyConcurrentClient::recv_attachIterator(const int32_t seqid)
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::checkIteratorConflicts(const std::string& login, const std::string& tableName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes)
+void AccumuloProxyConcurrentClient::checkIteratorConflicts(const std::string& sharedSecret, const std::string& tableName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes)
 {
-  int32_t seqid = send_checkIteratorConflicts(login, tableName, setting, scopes);
+  int32_t seqid = send_checkIteratorConflicts(sharedSecret, tableName, setting, scopes);
   recv_checkIteratorConflicts(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_checkIteratorConflicts(const std::string& login, const std::string& tableName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes)
+int32_t AccumuloProxyConcurrentClient::send_checkIteratorConflicts(const std::string& sharedSecret, const std::string& tableName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("checkIteratorConflicts", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_checkIteratorConflicts_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.setting = &setting;
   args.scopes = &scopes;
@@ -39863,20 +39399,20 @@ void AccumuloProxyConcurrentClient::recv_checkIteratorConflicts(const int32_t se
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::clearLocatorCache(const std::string& login, const std::string& tableName)
+void AccumuloProxyConcurrentClient::clearLocatorCache(const std::string& sharedSecret, const std::string& tableName)
 {
-  int32_t seqid = send_clearLocatorCache(login, tableName);
+  int32_t seqid = send_clearLocatorCache(sharedSecret, tableName);
   recv_clearLocatorCache(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_clearLocatorCache(const std::string& login, const std::string& tableName)
+int32_t AccumuloProxyConcurrentClient::send_clearLocatorCache(const std::string& sharedSecret, const std::string& tableName)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("clearLocatorCache", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_clearLocatorCache_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.write(oprot_);
 
@@ -39946,20 +39482,20 @@ void AccumuloProxyConcurrentClient::recv_clearLocatorCache(const int32_t seqid)
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::cloneTable(const std::string& login, const std::string& tableName, const std::string& newTableName, const bool flush, const std::map<std::string, std::string> & propertiesToSet, const std::set<std::string> & propertiesToExclude)
+void AccumuloProxyConcurrentClient::cloneTable(const std::string& sharedSecret, const std::string& tableName, const std::string& newTableName, const bool flush, const std::map<std::string, std::string> & propertiesToSet, const std::set<std::string> & propertiesToExclude)
 {
-  int32_t seqid = send_cloneTable(login, tableName, newTableName, flush, propertiesToSet, propertiesToExclude);
+  int32_t seqid = send_cloneTable(sharedSecret, tableName, newTableName, flush, propertiesToSet, propertiesToExclude);
   recv_cloneTable(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_cloneTable(const std::string& login, const std::string& tableName, const std::string& newTableName, const bool flush, const std::map<std::string, std::string> & propertiesToSet, const std::set<std::string> & propertiesToExclude)
+int32_t AccumuloProxyConcurrentClient::send_cloneTable(const std::string& sharedSecret, const std::string& tableName, const std::string& newTableName, const bool flush, const std::map<std::string, std::string> & propertiesToSet, const std::set<std::string> & propertiesToExclude)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("cloneTable", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_cloneTable_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.newTableName = &newTableName;
   args.flush = &flush;
@@ -40045,20 +39581,20 @@ void AccumuloProxyConcurrentClient::recv_cloneTable(const int32_t seqid)
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::compactTable(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow, const std::vector<IteratorSetting> & iterators, const bool flush, const bool wait, const PluginConfig& selectorConfig, const PluginConfig& configurerConfig)
+void AccumuloProxyConcurrentClient::compactTable(const std::string& sharedSecret, const std::string& tableName, const std::string& startRow, const std::string& endRow, const std::vector<IteratorSetting> & iterators, const bool flush, const bool wait, const PluginConfig& selectorConfig, const PluginConfig& configurerConfig)
 {
-  int32_t seqid = send_compactTable(login, tableName, startRow, endRow, iterators, flush, wait, selectorConfig, configurerConfig);
+  int32_t seqid = send_compactTable(sharedSecret, tableName, startRow, endRow, iterators, flush, wait, selectorConfig, configurerConfig);
   recv_compactTable(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_compactTable(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow, const std::vector<IteratorSetting> & iterators, const bool flush, const bool wait, const PluginConfig& selectorConfig, const PluginConfig& configurerConfig)
+int32_t AccumuloProxyConcurrentClient::send_compactTable(const std::string& sharedSecret, const std::string& tableName, const std::string& startRow, const std::string& endRow, const std::vector<IteratorSetting> & iterators, const bool flush, const bool wait, const PluginConfig& selectorConfig, const PluginConfig& configurerConfig)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("compactTable", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_compactTable_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.startRow = &startRow;
   args.endRow = &endRow;
@@ -40143,20 +39679,20 @@ void AccumuloProxyConcurrentClient::recv_compactTable(const int32_t seqid)
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::cancelCompaction(const std::string& login, const std::string& tableName)
+void AccumuloProxyConcurrentClient::cancelCompaction(const std::string& sharedSecret, const std::string& tableName)
 {
-  int32_t seqid = send_cancelCompaction(login, tableName);
+  int32_t seqid = send_cancelCompaction(sharedSecret, tableName);
   recv_cancelCompaction(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_cancelCompaction(const std::string& login, const std::string& tableName)
+int32_t AccumuloProxyConcurrentClient::send_cancelCompaction(const std::string& sharedSecret, const std::string& tableName)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("cancelCompaction", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_cancelCompaction_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.write(oprot_);
 
@@ -40234,20 +39770,20 @@ void AccumuloProxyConcurrentClient::recv_cancelCompaction(const int32_t seqid)
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::createTable(const std::string& login, const std::string& tableName, const bool versioningIter, const TimeType::type type)
+void AccumuloProxyConcurrentClient::createTable(const std::string& sharedSecret, const std::string& tableName, const bool versioningIter, const TimeType::type type)
 {
-  int32_t seqid = send_createTable(login, tableName, versioningIter, type);
+  int32_t seqid = send_createTable(sharedSecret, tableName, versioningIter, type);
   recv_createTable(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_createTable(const std::string& login, const std::string& tableName, const bool versioningIter, const TimeType::type type)
+int32_t AccumuloProxyConcurrentClient::send_createTable(const std::string& sharedSecret, const std::string& tableName, const bool versioningIter, const TimeType::type type)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("createTable", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_createTable_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.versioningIter = &versioningIter;
   args.type = &type;
@@ -40327,20 +39863,20 @@ void AccumuloProxyConcurrentClient::recv_createTable(const int32_t seqid)
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::deleteTable(const std::string& login, const std::string& tableName)
+void AccumuloProxyConcurrentClient::deleteTable(const std::string& sharedSecret, const std::string& tableName)
 {
-  int32_t seqid = send_deleteTable(login, tableName);
+  int32_t seqid = send_deleteTable(sharedSecret, tableName);
   recv_deleteTable(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_deleteTable(const std::string& login, const std::string& tableName)
+int32_t AccumuloProxyConcurrentClient::send_deleteTable(const std::string& sharedSecret, const std::string& tableName)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("deleteTable", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_deleteTable_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.write(oprot_);
 
@@ -40418,20 +39954,20 @@ void AccumuloProxyConcurrentClient::recv_deleteTable(const int32_t seqid)
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::deleteRows(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow)
+void AccumuloProxyConcurrentClient::deleteRows(const std::string& sharedSecret, const std::string& tableName, const std::string& startRow, const std::string& endRow)
 {
-  int32_t seqid = send_deleteRows(login, tableName, startRow, endRow);
+  int32_t seqid = send_deleteRows(sharedSecret, tableName, startRow, endRow);
   recv_deleteRows(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_deleteRows(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow)
+int32_t AccumuloProxyConcurrentClient::send_deleteRows(const std::string& sharedSecret, const std::string& tableName, const std::string& startRow, const std::string& endRow)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("deleteRows", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_deleteRows_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.startRow = &startRow;
   args.endRow = &endRow;
@@ -40511,20 +40047,20 @@ void AccumuloProxyConcurrentClient::recv_deleteRows(const int32_t seqid)
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::exportTable(const std::string& login, const std::string& tableName, const std::string& exportDir)
+void AccumuloProxyConcurrentClient::exportTable(const std::string& sharedSecret, const std::string& tableName, const std::string& exportDir)
 {
-  int32_t seqid = send_exportTable(login, tableName, exportDir);
+  int32_t seqid = send_exportTable(sharedSecret, tableName, exportDir);
   recv_exportTable(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_exportTable(const std::string& login, const std::string& tableName, const std::string& exportDir)
+int32_t AccumuloProxyConcurrentClient::send_exportTable(const std::string& sharedSecret, const std::string& tableName, const std::string& exportDir)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("exportTable", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_exportTable_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.exportDir = &exportDir;
   args.write(oprot_);
@@ -40603,20 +40139,20 @@ void AccumuloProxyConcurrentClient::recv_exportTable(const int32_t seqid)
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::flushTable(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow, const bool wait)
+void AccumuloProxyConcurrentClient::flushTable(const std::string& sharedSecret, const std::string& tableName, const std::string& startRow, const std::string& endRow, const bool wait)
 {
-  int32_t seqid = send_flushTable(login, tableName, startRow, endRow, wait);
+  int32_t seqid = send_flushTable(sharedSecret, tableName, startRow, endRow, wait);
   recv_flushTable(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_flushTable(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow, const bool wait)
+int32_t AccumuloProxyConcurrentClient::send_flushTable(const std::string& sharedSecret, const std::string& tableName, const std::string& startRow, const std::string& endRow, const bool wait)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("flushTable", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_flushTable_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.startRow = &startRow;
   args.endRow = &endRow;
@@ -40697,20 +40233,20 @@ void AccumuloProxyConcurrentClient::recv_flushTable(const int32_t seqid)
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::getDiskUsage(std::vector<DiskUsage> & _return, const std::string& login, const std::set<std::string> & tables)
+void AccumuloProxyConcurrentClient::getDiskUsage(std::vector<DiskUsage> & _return, const std::string& sharedSecret, const std::set<std::string> & tables)
 {
-  int32_t seqid = send_getDiskUsage(login, tables);
+  int32_t seqid = send_getDiskUsage(sharedSecret, tables);
   recv_getDiskUsage(_return, seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_getDiskUsage(const std::string& login, const std::set<std::string> & tables)
+int32_t AccumuloProxyConcurrentClient::send_getDiskUsage(const std::string& sharedSecret, const std::set<std::string> & tables)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("getDiskUsage", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_getDiskUsage_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tables = &tables;
   args.write(oprot_);
 
@@ -40794,20 +40330,20 @@ void AccumuloProxyConcurrentClient::recv_getDiskUsage(std::vector<DiskUsage> & _
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::getLocalityGroups(std::map<std::string, std::set<std::string> > & _return, const std::string& login, const std::string& tableName)
+void AccumuloProxyConcurrentClient::getLocalityGroups(std::map<std::string, std::set<std::string> > & _return, const std::string& sharedSecret, const std::string& tableName)
 {
-  int32_t seqid = send_getLocalityGroups(login, tableName);
+  int32_t seqid = send_getLocalityGroups(sharedSecret, tableName);
   recv_getLocalityGroups(_return, seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_getLocalityGroups(const std::string& login, const std::string& tableName)
+int32_t AccumuloProxyConcurrentClient::send_getLocalityGroups(const std::string& sharedSecret, const std::string& tableName)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("getLocalityGroups", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_getLocalityGroups_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.write(oprot_);
 
@@ -40891,20 +40427,20 @@ void AccumuloProxyConcurrentClient::recv_getLocalityGroups(std::map<std::string,
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::getIteratorSetting(IteratorSetting& _return, const std::string& login, const std::string& tableName, const std::string& iteratorName, const IteratorScope::type scope)
+void AccumuloProxyConcurrentClient::getIteratorSetting(IteratorSetting& _return, const std::string& sharedSecret, const std::string& tableName, const std::string& iteratorName, const IteratorScope::type scope)
 {
-  int32_t seqid = send_getIteratorSetting(login, tableName, iteratorName, scope);
+  int32_t seqid = send_getIteratorSetting(sharedSecret, tableName, iteratorName, scope);
   recv_getIteratorSetting(_return, seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_getIteratorSetting(const std::string& login, const std::string& tableName, const std::string& iteratorName, const IteratorScope::type scope)
+int32_t AccumuloProxyConcurrentClient::send_getIteratorSetting(const std::string& sharedSecret, const std::string& tableName, const std::string& iteratorName, const IteratorScope::type scope)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("getIteratorSetting", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_getIteratorSetting_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.iteratorName = &iteratorName;
   args.scope = &scope;
@@ -40990,20 +40526,20 @@ void AccumuloProxyConcurrentClient::recv_getIteratorSetting(IteratorSetting& _re
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::getMaxRow(std::string& _return, const std::string& login, const std::string& tableName, const std::set<std::string> & auths, const std::string& startRow, const bool startInclusive, const std::string& endRow, const bool endInclusive)
+void AccumuloProxyConcurrentClient::getMaxRow(std::string& _return, const std::string& sharedSecret, const std::string& tableName, const std::set<std::string> & auths, const std::string& startRow, const bool startInclusive, const std::string& endRow, const bool endInclusive)
 {
-  int32_t seqid = send_getMaxRow(login, tableName, auths, startRow, startInclusive, endRow, endInclusive);
+  int32_t seqid = send_getMaxRow(sharedSecret, tableName, auths, startRow, startInclusive, endRow, endInclusive);
   recv_getMaxRow(_return, seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_getMaxRow(const std::string& login, const std::string& tableName, const std::set<std::string> & auths, const std::string& startRow, const bool startInclusive, const std::string& endRow, const bool endInclusive)
+int32_t AccumuloProxyConcurrentClient::send_getMaxRow(const std::string& sharedSecret, const std::string& tableName, const std::set<std::string> & auths, const std::string& startRow, const bool startInclusive, const std::string& endRow, const bool endInclusive)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("getMaxRow", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_getMaxRow_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.auths = &auths;
   args.startRow = &startRow;
@@ -41092,20 +40628,20 @@ void AccumuloProxyConcurrentClient::recv_getMaxRow(std::string& _return, const i
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::getTableProperties(std::map<std::string, std::string> & _return, const std::string& login, const std::string& tableName)
+void AccumuloProxyConcurrentClient::getTableProperties(std::map<std::string, std::string> & _return, const std::string& sharedSecret, const std::string& tableName)
 {
-  int32_t seqid = send_getTableProperties(login, tableName);
+  int32_t seqid = send_getTableProperties(sharedSecret, tableName);
   recv_getTableProperties(_return, seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_getTableProperties(const std::string& login, const std::string& tableName)
+int32_t AccumuloProxyConcurrentClient::send_getTableProperties(const std::string& sharedSecret, const std::string& tableName)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("getTableProperties", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_getTableProperties_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.write(oprot_);
 
@@ -41189,20 +40725,20 @@ void AccumuloProxyConcurrentClient::recv_getTableProperties(std::map<std::string
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::importDirectory(const std::string& login, const std::string& tableName, const std::string& importDir, const std::string& failureDir, const bool setTime)
+void AccumuloProxyConcurrentClient::importDirectory(const std::string& sharedSecret, const std::string& tableName, const std::string& importDir, const std::string& failureDir, const bool setTime)
 {
-  int32_t seqid = send_importDirectory(login, tableName, importDir, failureDir, setTime);
+  int32_t seqid = send_importDirectory(sharedSecret, tableName, importDir, failureDir, setTime);
   recv_importDirectory(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_importDirectory(const std::string& login, const std::string& tableName, const std::string& importDir, const std::string& failureDir, const bool setTime)
+int32_t AccumuloProxyConcurrentClient::send_importDirectory(const std::string& sharedSecret, const std::string& tableName, const std::string& importDir, const std::string& failureDir, const bool setTime)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("importDirectory", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_importDirectory_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.importDir = &importDir;
   args.failureDir = &failureDir;
@@ -41283,20 +40819,20 @@ void AccumuloProxyConcurrentClient::recv_importDirectory(const int32_t seqid)
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::importTable(const std::string& login, const std::string& tableName, const std::string& importDir)
+void AccumuloProxyConcurrentClient::importTable(const std::string& sharedSecret, const std::string& tableName, const std::string& importDir)
 {
-  int32_t seqid = send_importTable(login, tableName, importDir);
+  int32_t seqid = send_importTable(sharedSecret, tableName, importDir);
   recv_importTable(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_importTable(const std::string& login, const std::string& tableName, const std::string& importDir)
+int32_t AccumuloProxyConcurrentClient::send_importTable(const std::string& sharedSecret, const std::string& tableName, const std::string& importDir)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("importTable", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_importTable_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.importDir = &importDir;
   args.write(oprot_);
@@ -41375,20 +40911,20 @@ void AccumuloProxyConcurrentClient::recv_importTable(const int32_t seqid)
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::listSplits(std::vector<std::string> & _return, const std::string& login, const std::string& tableName, const int32_t maxSplits)
+void AccumuloProxyConcurrentClient::listSplits(std::vector<std::string> & _return, const std::string& sharedSecret, const std::string& tableName, const int32_t maxSplits)
 {
-  int32_t seqid = send_listSplits(login, tableName, maxSplits);
+  int32_t seqid = send_listSplits(sharedSecret, tableName, maxSplits);
   recv_listSplits(_return, seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_listSplits(const std::string& login, const std::string& tableName, const int32_t maxSplits)
+int32_t AccumuloProxyConcurrentClient::send_listSplits(const std::string& sharedSecret, const std::string& tableName, const int32_t maxSplits)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("listSplits", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_listSplits_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.maxSplits = &maxSplits;
   args.write(oprot_);
@@ -41473,20 +41009,20 @@ void AccumuloProxyConcurrentClient::recv_listSplits(std::vector<std::string> & _
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::listTables(std::set<std::string> & _return, const std::string& login)
+void AccumuloProxyConcurrentClient::listTables(std::set<std::string> & _return, const std::string& sharedSecret)
 {
-  int32_t seqid = send_listTables(login);
+  int32_t seqid = send_listTables(sharedSecret);
   recv_listTables(_return, seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_listTables(const std::string& login)
+int32_t AccumuloProxyConcurrentClient::send_listTables(const std::string& sharedSecret)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("listTables", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_listTables_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -41557,20 +41093,20 @@ void AccumuloProxyConcurrentClient::recv_listTables(std::set<std::string> & _ret
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::listIterators(std::map<std::string, std::set<IteratorScope::type> > & _return, const std::string& login, const std::string& tableName)
+void AccumuloProxyConcurrentClient::listIterators(std::map<std::string, std::set<IteratorScope::type> > & _return, const std::string& sharedSecret, const std::string& tableName)
 {
-  int32_t seqid = send_listIterators(login, tableName);
+  int32_t seqid = send_listIterators(sharedSecret, tableName);
   recv_listIterators(_return, seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_listIterators(const std::string& login, const std::string& tableName)
+int32_t AccumuloProxyConcurrentClient::send_listIterators(const std::string& sharedSecret, const std::string& tableName)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("listIterators", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_listIterators_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.write(oprot_);
 
@@ -41654,20 +41190,20 @@ void AccumuloProxyConcurrentClient::recv_listIterators(std::map<std::string, std
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::listConstraints(std::map<std::string, int32_t> & _return, const std::string& login, const std::string& tableName)
+void AccumuloProxyConcurrentClient::listConstraints(std::map<std::string, int32_t> & _return, const std::string& sharedSecret, const std::string& tableName)
 {
-  int32_t seqid = send_listConstraints(login, tableName);
+  int32_t seqid = send_listConstraints(sharedSecret, tableName);
   recv_listConstraints(_return, seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_listConstraints(const std::string& login, const std::string& tableName)
+int32_t AccumuloProxyConcurrentClient::send_listConstraints(const std::string& sharedSecret, const std::string& tableName)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("listConstraints", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_listConstraints_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.write(oprot_);
 
@@ -41751,20 +41287,20 @@ void AccumuloProxyConcurrentClient::recv_listConstraints(std::map<std::string, i
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::mergeTablets(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow)
+void AccumuloProxyConcurrentClient::mergeTablets(const std::string& sharedSecret, const std::string& tableName, const std::string& startRow, const std::string& endRow)
 {
-  int32_t seqid = send_mergeTablets(login, tableName, startRow, endRow);
+  int32_t seqid = send_mergeTablets(sharedSecret, tableName, startRow, endRow);
   recv_mergeTablets(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_mergeTablets(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow)
+int32_t AccumuloProxyConcurrentClient::send_mergeTablets(const std::string& sharedSecret, const std::string& tableName, const std::string& startRow, const std::string& endRow)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("mergeTablets", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_mergeTablets_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.startRow = &startRow;
   args.endRow = &endRow;
@@ -41844,20 +41380,20 @@ void AccumuloProxyConcurrentClient::recv_mergeTablets(const int32_t seqid)
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::offlineTable(const std::string& login, const std::string& tableName, const bool wait)
+void AccumuloProxyConcurrentClient::offlineTable(const std::string& sharedSecret, const std::string& tableName, const bool wait)
 {
-  int32_t seqid = send_offlineTable(login, tableName, wait);
+  int32_t seqid = send_offlineTable(sharedSecret, tableName, wait);
   recv_offlineTable(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_offlineTable(const std::string& login, const std::string& tableName, const bool wait)
+int32_t AccumuloProxyConcurrentClient::send_offlineTable(const std::string& sharedSecret, const std::string& tableName, const bool wait)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("offlineTable", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_offlineTable_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.wait = &wait;
   args.write(oprot_);
@@ -41936,20 +41472,20 @@ void AccumuloProxyConcurrentClient::recv_offlineTable(const int32_t seqid)
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::onlineTable(const std::string& login, const std::string& tableName, const bool wait)
+void AccumuloProxyConcurrentClient::onlineTable(const std::string& sharedSecret, const std::string& tableName, const bool wait)
 {
-  int32_t seqid = send_onlineTable(login, tableName, wait);
+  int32_t seqid = send_onlineTable(sharedSecret, tableName, wait);
   recv_onlineTable(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_onlineTable(const std::string& login, const std::string& tableName, const bool wait)
+int32_t AccumuloProxyConcurrentClient::send_onlineTable(const std::string& sharedSecret, const std::string& tableName, const bool wait)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("onlineTable", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_onlineTable_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.wait = &wait;
   args.write(oprot_);
@@ -42028,20 +41564,20 @@ void AccumuloProxyConcurrentClient::recv_onlineTable(const int32_t seqid)
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::removeConstraint(const std::string& login, const std::string& tableName, const int32_t constraint)
+void AccumuloProxyConcurrentClient::removeConstraint(const std::string& sharedSecret, const std::string& tableName, const int32_t constraint)
 {
-  int32_t seqid = send_removeConstraint(login, tableName, constraint);
+  int32_t seqid = send_removeConstraint(sharedSecret, tableName, constraint);
   recv_removeConstraint(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_removeConstraint(const std::string& login, const std::string& tableName, const int32_t constraint)
+int32_t AccumuloProxyConcurrentClient::send_removeConstraint(const std::string& sharedSecret, const std::string& tableName, const int32_t constraint)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("removeConstraint", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_removeConstraint_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.constraint = &constraint;
   args.write(oprot_);
@@ -42120,20 +41656,20 @@ void AccumuloProxyConcurrentClient::recv_removeConstraint(const int32_t seqid)
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::removeIterator(const std::string& login, const std::string& tableName, const std::string& iterName, const std::set<IteratorScope::type> & scopes)
+void AccumuloProxyConcurrentClient::removeIterator(const std::string& sharedSecret, const std::string& tableName, const std::string& iterName, const std::set<IteratorScope::type> & scopes)
 {
-  int32_t seqid = send_removeIterator(login, tableName, iterName, scopes);
+  int32_t seqid = send_removeIterator(sharedSecret, tableName, iterName, scopes);
   recv_removeIterator(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_removeIterator(const std::string& login, const std::string& tableName, const std::string& iterName, const std::set<IteratorScope::type> & scopes)
+int32_t AccumuloProxyConcurrentClient::send_removeIterator(const std::string& sharedSecret, const std::string& tableName, const std::string& iterName, const std::set<IteratorScope::type> & scopes)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("removeIterator", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_removeIterator_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.iterName = &iterName;
   args.scopes = &scopes;
@@ -42213,20 +41749,20 @@ void AccumuloProxyConcurrentClient::recv_removeIterator(const int32_t seqid)
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::removeTableProperty(const std::string& login, const std::string& tableName, const std::string& property)
+void AccumuloProxyConcurrentClient::removeTableProperty(const std::string& sharedSecret, const std::string& tableName, const std::string& property)
 {
-  int32_t seqid = send_removeTableProperty(login, tableName, property);
+  int32_t seqid = send_removeTableProperty(sharedSecret, tableName, property);
   recv_removeTableProperty(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_removeTableProperty(const std::string& login, const std::string& tableName, const std::string& property)
+int32_t AccumuloProxyConcurrentClient::send_removeTableProperty(const std::string& sharedSecret, const std::string& tableName, const std::string& property)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("removeTableProperty", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_removeTableProperty_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.property = &property;
   args.write(oprot_);
@@ -42305,20 +41841,20 @@ void AccumuloProxyConcurrentClient::recv_removeTableProperty(const int32_t seqid
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::renameTable(const std::string& login, const std::string& oldTableName, const std::string& newTableName)
+void AccumuloProxyConcurrentClient::renameTable(const std::string& sharedSecret, const std::string& oldTableName, const std::string& newTableName)
 {
-  int32_t seqid = send_renameTable(login, oldTableName, newTableName);
+  int32_t seqid = send_renameTable(sharedSecret, oldTableName, newTableName);
   recv_renameTable(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_renameTable(const std::string& login, const std::string& oldTableName, const std::string& newTableName)
+int32_t AccumuloProxyConcurrentClient::send_renameTable(const std::string& sharedSecret, const std::string& oldTableName, const std::string& newTableName)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("renameTable", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_renameTable_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.oldTableName = &oldTableName;
   args.newTableName = &newTableName;
   args.write(oprot_);
@@ -42401,20 +41937,20 @@ void AccumuloProxyConcurrentClient::recv_renameTable(const int32_t seqid)
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::setLocalityGroups(const std::string& login, const std::string& tableName, const std::map<std::string, std::set<std::string> > & groups)
+void AccumuloProxyConcurrentClient::setLocalityGroups(const std::string& sharedSecret, const std::string& tableName, const std::map<std::string, std::set<std::string> > & groups)
 {
-  int32_t seqid = send_setLocalityGroups(login, tableName, groups);
+  int32_t seqid = send_setLocalityGroups(sharedSecret, tableName, groups);
   recv_setLocalityGroups(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_setLocalityGroups(const std::string& login, const std::string& tableName, const std::map<std::string, std::set<std::string> > & groups)
+int32_t AccumuloProxyConcurrentClient::send_setLocalityGroups(const std::string& sharedSecret, const std::string& tableName, const std::map<std::string, std::set<std::string> > & groups)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("setLocalityGroups", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_setLocalityGroups_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.groups = &groups;
   args.write(oprot_);
@@ -42493,20 +42029,20 @@ void AccumuloProxyConcurrentClient::recv_setLocalityGroups(const int32_t seqid)
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::setTableProperty(const std::string& login, const std::string& tableName, const std::string& property, const std::string& value)
+void AccumuloProxyConcurrentClient::setTableProperty(const std::string& sharedSecret, const std::string& tableName, const std::string& property, const std::string& value)
 {
-  int32_t seqid = send_setTableProperty(login, tableName, property, value);
+  int32_t seqid = send_setTableProperty(sharedSecret, tableName, property, value);
   recv_setTableProperty(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_setTableProperty(const std::string& login, const std::string& tableName, const std::string& property, const std::string& value)
+int32_t AccumuloProxyConcurrentClient::send_setTableProperty(const std::string& sharedSecret, const std::string& tableName, const std::string& property, const std::string& value)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("setTableProperty", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_setTableProperty_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.property = &property;
   args.value = &value;
@@ -42586,20 +42122,20 @@ void AccumuloProxyConcurrentClient::recv_setTableProperty(const int32_t seqid)
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::splitRangeByTablets(std::set<Range> & _return, const std::string& login, const std::string& tableName, const Range& range, const int32_t maxSplits)
+void AccumuloProxyConcurrentClient::splitRangeByTablets(std::set<Range> & _return, const std::string& sharedSecret, const std::string& tableName, const Range& range, const int32_t maxSplits)
 {
-  int32_t seqid = send_splitRangeByTablets(login, tableName, range, maxSplits);
+  int32_t seqid = send_splitRangeByTablets(sharedSecret, tableName, range, maxSplits);
   recv_splitRangeByTablets(_return, seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_splitRangeByTablets(const std::string& login, const std::string& tableName, const Range& range, const int32_t maxSplits)
+int32_t AccumuloProxyConcurrentClient::send_splitRangeByTablets(const std::string& sharedSecret, const std::string& tableName, const Range& range, const int32_t maxSplits)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("splitRangeByTablets", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_splitRangeByTablets_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.range = &range;
   args.maxSplits = &maxSplits;
@@ -42685,20 +42221,20 @@ void AccumuloProxyConcurrentClient::recv_splitRangeByTablets(std::set<Range> & _
   } // end while(true)
 }
 
-bool AccumuloProxyConcurrentClient::tableExists(const std::string& login, const std::string& tableName)
+bool AccumuloProxyConcurrentClient::tableExists(const std::string& sharedSecret, const std::string& tableName)
 {
-  int32_t seqid = send_tableExists(login, tableName);
+  int32_t seqid = send_tableExists(sharedSecret, tableName);
   return recv_tableExists(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_tableExists(const std::string& login, const std::string& tableName)
+int32_t AccumuloProxyConcurrentClient::send_tableExists(const std::string& sharedSecret, const std::string& tableName)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("tableExists", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_tableExists_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.write(oprot_);
 
@@ -42770,20 +42306,20 @@ bool AccumuloProxyConcurrentClient::recv_tableExists(const int32_t seqid)
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::tableIdMap(std::map<std::string, std::string> & _return, const std::string& login)
+void AccumuloProxyConcurrentClient::tableIdMap(std::map<std::string, std::string> & _return, const std::string& sharedSecret)
 {
-  int32_t seqid = send_tableIdMap(login);
+  int32_t seqid = send_tableIdMap(sharedSecret);
   recv_tableIdMap(_return, seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_tableIdMap(const std::string& login)
+int32_t AccumuloProxyConcurrentClient::send_tableIdMap(const std::string& sharedSecret)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("tableIdMap", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_tableIdMap_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -42854,20 +42390,20 @@ void AccumuloProxyConcurrentClient::recv_tableIdMap(std::map<std::string, std::s
   } // end while(true)
 }
 
-bool AccumuloProxyConcurrentClient::testTableClassLoad(const std::string& login, const std::string& tableName, const std::string& className, const std::string& asTypeName)
+bool AccumuloProxyConcurrentClient::testTableClassLoad(const std::string& sharedSecret, const std::string& tableName, const std::string& className, const std::string& asTypeName)
 {
-  int32_t seqid = send_testTableClassLoad(login, tableName, className, asTypeName);
+  int32_t seqid = send_testTableClassLoad(sharedSecret, tableName, className, asTypeName);
   return recv_testTableClassLoad(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_testTableClassLoad(const std::string& login, const std::string& tableName, const std::string& className, const std::string& asTypeName)
+int32_t AccumuloProxyConcurrentClient::send_testTableClassLoad(const std::string& sharedSecret, const std::string& tableName, const std::string& className, const std::string& asTypeName)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("testTableClassLoad", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_testTableClassLoad_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.className = &className;
   args.asTypeName = &asTypeName;
@@ -42953,20 +42489,20 @@ bool AccumuloProxyConcurrentClient::recv_testTableClassLoad(const int32_t seqid)
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::pingTabletServer(const std::string& login, const std::string& tserver)
+void AccumuloProxyConcurrentClient::pingTabletServer(const std::string& sharedSecret, const std::string& tserver)
 {
-  int32_t seqid = send_pingTabletServer(login, tserver);
+  int32_t seqid = send_pingTabletServer(sharedSecret, tserver);
   recv_pingTabletServer(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_pingTabletServer(const std::string& login, const std::string& tserver)
+int32_t AccumuloProxyConcurrentClient::send_pingTabletServer(const std::string& sharedSecret, const std::string& tserver)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("pingTabletServer", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_pingTabletServer_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tserver = &tserver;
   args.write(oprot_);
 
@@ -43040,20 +42576,20 @@ void AccumuloProxyConcurrentClient::recv_pingTabletServer(const int32_t seqid)
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::getActiveScans(std::vector<ActiveScan> & _return, const std::string& login, const std::string& tserver)
+void AccumuloProxyConcurrentClient::getActiveScans(std::vector<ActiveScan> & _return, const std::string& sharedSecret, const std::string& tserver)
 {
-  int32_t seqid = send_getActiveScans(login, tserver);
+  int32_t seqid = send_getActiveScans(sharedSecret, tserver);
   recv_getActiveScans(_return, seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_getActiveScans(const std::string& login, const std::string& tserver)
+int32_t AccumuloProxyConcurrentClient::send_getActiveScans(const std::string& sharedSecret, const std::string& tserver)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("getActiveScans", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_getActiveScans_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tserver = &tserver;
   args.write(oprot_);
 
@@ -43133,20 +42669,20 @@ void AccumuloProxyConcurrentClient::recv_getActiveScans(std::vector<ActiveScan> 
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::getActiveCompactions(std::vector<ActiveCompaction> & _return, const std::string& login, const std::string& tserver)
+void AccumuloProxyConcurrentClient::getActiveCompactions(std::vector<ActiveCompaction> & _return, const std::string& sharedSecret, const std::string& tserver)
 {
-  int32_t seqid = send_getActiveCompactions(login, tserver);
+  int32_t seqid = send_getActiveCompactions(sharedSecret, tserver);
   recv_getActiveCompactions(_return, seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_getActiveCompactions(const std::string& login, const std::string& tserver)
+int32_t AccumuloProxyConcurrentClient::send_getActiveCompactions(const std::string& sharedSecret, const std::string& tserver)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("getActiveCompactions", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_getActiveCompactions_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tserver = &tserver;
   args.write(oprot_);
 
@@ -43226,20 +42762,20 @@ void AccumuloProxyConcurrentClient::recv_getActiveCompactions(std::vector<Active
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::getSiteConfiguration(std::map<std::string, std::string> & _return, const std::string& login)
+void AccumuloProxyConcurrentClient::getSiteConfiguration(std::map<std::string, std::string> & _return, const std::string& sharedSecret)
 {
-  int32_t seqid = send_getSiteConfiguration(login);
+  int32_t seqid = send_getSiteConfiguration(sharedSecret);
   recv_getSiteConfiguration(_return, seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_getSiteConfiguration(const std::string& login)
+int32_t AccumuloProxyConcurrentClient::send_getSiteConfiguration(const std::string& sharedSecret)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("getSiteConfiguration", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_getSiteConfiguration_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -43318,20 +42854,20 @@ void AccumuloProxyConcurrentClient::recv_getSiteConfiguration(std::map<std::stri
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::getSystemConfiguration(std::map<std::string, std::string> & _return, const std::string& login)
+void AccumuloProxyConcurrentClient::getSystemConfiguration(std::map<std::string, std::string> & _return, const std::string& sharedSecret)
 {
-  int32_t seqid = send_getSystemConfiguration(login);
+  int32_t seqid = send_getSystemConfiguration(sharedSecret);
   recv_getSystemConfiguration(_return, seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_getSystemConfiguration(const std::string& login)
+int32_t AccumuloProxyConcurrentClient::send_getSystemConfiguration(const std::string& sharedSecret)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("getSystemConfiguration", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_getSystemConfiguration_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -43410,20 +42946,20 @@ void AccumuloProxyConcurrentClient::recv_getSystemConfiguration(std::map<std::st
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::getTabletServers(std::vector<std::string> & _return, const std::string& login)
+void AccumuloProxyConcurrentClient::getTabletServers(std::vector<std::string> & _return, const std::string& sharedSecret)
 {
-  int32_t seqid = send_getTabletServers(login);
+  int32_t seqid = send_getTabletServers(sharedSecret);
   recv_getTabletServers(_return, seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_getTabletServers(const std::string& login)
+int32_t AccumuloProxyConcurrentClient::send_getTabletServers(const std::string& sharedSecret)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("getTabletServers", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_getTabletServers_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -43494,20 +43030,20 @@ void AccumuloProxyConcurrentClient::recv_getTabletServers(std::vector<std::strin
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::removeProperty(const std::string& login, const std::string& property)
+void AccumuloProxyConcurrentClient::removeProperty(const std::string& sharedSecret, const std::string& property)
 {
-  int32_t seqid = send_removeProperty(login, property);
+  int32_t seqid = send_removeProperty(sharedSecret, property);
   recv_removeProperty(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_removeProperty(const std::string& login, const std::string& property)
+int32_t AccumuloProxyConcurrentClient::send_removeProperty(const std::string& sharedSecret, const std::string& property)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("removeProperty", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_removeProperty_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.property = &property;
   args.write(oprot_);
 
@@ -43581,20 +43117,20 @@ void AccumuloProxyConcurrentClient::recv_removeProperty(const int32_t seqid)
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::setProperty(const std::string& login, const std::string& property, const std::string& value)
+void AccumuloProxyConcurrentClient::setProperty(const std::string& sharedSecret, const std::string& property, const std::string& value)
 {
-  int32_t seqid = send_setProperty(login, property, value);
+  int32_t seqid = send_setProperty(sharedSecret, property, value);
   recv_setProperty(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_setProperty(const std::string& login, const std::string& property, const std::string& value)
+int32_t AccumuloProxyConcurrentClient::send_setProperty(const std::string& sharedSecret, const std::string& property, const std::string& value)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("setProperty", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_setProperty_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.property = &property;
   args.value = &value;
   args.write(oprot_);
@@ -43669,20 +43205,20 @@ void AccumuloProxyConcurrentClient::recv_setProperty(const int32_t seqid)
   } // end while(true)
 }
 
-bool AccumuloProxyConcurrentClient::testClassLoad(const std::string& login, const std::string& className, const std::string& asTypeName)
+bool AccumuloProxyConcurrentClient::testClassLoad(const std::string& sharedSecret, const std::string& className, const std::string& asTypeName)
 {
-  int32_t seqid = send_testClassLoad(login, className, asTypeName);
+  int32_t seqid = send_testClassLoad(sharedSecret, className, asTypeName);
   return recv_testClassLoad(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_testClassLoad(const std::string& login, const std::string& className, const std::string& asTypeName)
+int32_t AccumuloProxyConcurrentClient::send_testClassLoad(const std::string& sharedSecret, const std::string& className, const std::string& asTypeName)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("testClassLoad", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_testClassLoad_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.className = &className;
   args.asTypeName = &asTypeName;
   args.write(oprot_);
@@ -43763,20 +43299,20 @@ bool AccumuloProxyConcurrentClient::recv_testClassLoad(const int32_t seqid)
   } // end while(true)
 }
 
-bool AccumuloProxyConcurrentClient::authenticateUser(const std::string& login, const std::string& user, const std::map<std::string, std::string> & properties)
+bool AccumuloProxyConcurrentClient::authenticateUser(const std::string& sharedSecret, const std::string& user, const std::map<std::string, std::string> & properties)
 {
-  int32_t seqid = send_authenticateUser(login, user, properties);
+  int32_t seqid = send_authenticateUser(sharedSecret, user, properties);
   return recv_authenticateUser(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_authenticateUser(const std::string& login, const std::string& user, const std::map<std::string, std::string> & properties)
+int32_t AccumuloProxyConcurrentClient::send_authenticateUser(const std::string& sharedSecret, const std::string& user, const std::map<std::string, std::string> & properties)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("authenticateUser", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_authenticateUser_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.user = &user;
   args.properties = &properties;
   args.write(oprot_);
@@ -43857,20 +43393,20 @@ bool AccumuloProxyConcurrentClient::recv_authenticateUser(const int32_t seqid)
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::changeUserAuthorizations(const std::string& login, const std::string& user, const std::set<std::string> & authorizations)
+void AccumuloProxyConcurrentClient::changeUserAuthorizations(const std::string& sharedSecret, const std::string& user, const std::set<std::string> & authorizations)
 {
-  int32_t seqid = send_changeUserAuthorizations(login, user, authorizations);
+  int32_t seqid = send_changeUserAuthorizations(sharedSecret, user, authorizations);
   recv_changeUserAuthorizations(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_changeUserAuthorizations(const std::string& login, const std::string& user, const std::set<std::string> & authorizations)
+int32_t AccumuloProxyConcurrentClient::send_changeUserAuthorizations(const std::string& sharedSecret, const std::string& user, const std::set<std::string> & authorizations)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("changeUserAuthorizations", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_changeUserAuthorizations_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.user = &user;
   args.authorizations = &authorizations;
   args.write(oprot_);
@@ -43945,20 +43481,20 @@ void AccumuloProxyConcurrentClient::recv_changeUserAuthorizations(const int32_t 
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::changeLocalUserPassword(const std::string& login, const std::string& user, const std::string& password)
+void AccumuloProxyConcurrentClient::changeLocalUserPassword(const std::string& sharedSecret, const std::string& user, const std::string& password)
 {
-  int32_t seqid = send_changeLocalUserPassword(login, user, password);
+  int32_t seqid = send_changeLocalUserPassword(sharedSecret, user, password);
   recv_changeLocalUserPassword(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_changeLocalUserPassword(const std::string& login, const std::string& user, const std::string& password)
+int32_t AccumuloProxyConcurrentClient::send_changeLocalUserPassword(const std::string& sharedSecret, const std::string& user, const std::string& password)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("changeLocalUserPassword", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_changeLocalUserPassword_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.user = &user;
   args.password = &password;
   args.write(oprot_);
@@ -44033,20 +43569,20 @@ void AccumuloProxyConcurrentClient::recv_changeLocalUserPassword(const int32_t s
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::createLocalUser(const std::string& login, const std::string& user, const std::string& password)
+void AccumuloProxyConcurrentClient::createLocalUser(const std::string& sharedSecret, const std::string& user, const std::string& password)
 {
-  int32_t seqid = send_createLocalUser(login, user, password);
+  int32_t seqid = send_createLocalUser(sharedSecret, user, password);
   recv_createLocalUser(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_createLocalUser(const std::string& login, const std::string& user, const std::string& password)
+int32_t AccumuloProxyConcurrentClient::send_createLocalUser(const std::string& sharedSecret, const std::string& user, const std::string& password)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("createLocalUser", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_createLocalUser_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.user = &user;
   args.password = &password;
   args.write(oprot_);
@@ -44121,20 +43657,20 @@ void AccumuloProxyConcurrentClient::recv_createLocalUser(const int32_t seqid)
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::dropLocalUser(const std::string& login, const std::string& user)
+void AccumuloProxyConcurrentClient::dropLocalUser(const std::string& sharedSecret, const std::string& user)
 {
-  int32_t seqid = send_dropLocalUser(login, user);
+  int32_t seqid = send_dropLocalUser(sharedSecret, user);
   recv_dropLocalUser(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_dropLocalUser(const std::string& login, const std::string& user)
+int32_t AccumuloProxyConcurrentClient::send_dropLocalUser(const std::string& sharedSecret, const std::string& user)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("dropLocalUser", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_dropLocalUser_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.user = &user;
   args.write(oprot_);
 
@@ -44208,20 +43744,20 @@ void AccumuloProxyConcurrentClient::recv_dropLocalUser(const int32_t seqid)
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::getUserAuthorizations(std::vector<std::string> & _return, const std::string& login, const std::string& user)
+void AccumuloProxyConcurrentClient::getUserAuthorizations(std::vector<std::string> & _return, const std::string& sharedSecret, const std::string& user)
 {
-  int32_t seqid = send_getUserAuthorizations(login, user);
+  int32_t seqid = send_getUserAuthorizations(sharedSecret, user);
   recv_getUserAuthorizations(_return, seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_getUserAuthorizations(const std::string& login, const std::string& user)
+int32_t AccumuloProxyConcurrentClient::send_getUserAuthorizations(const std::string& sharedSecret, const std::string& user)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("getUserAuthorizations", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_getUserAuthorizations_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.user = &user;
   args.write(oprot_);
 
@@ -44301,20 +43837,20 @@ void AccumuloProxyConcurrentClient::recv_getUserAuthorizations(std::vector<std::
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::grantSystemPermission(const std::string& login, const std::string& user, const SystemPermission::type perm)
+void AccumuloProxyConcurrentClient::grantSystemPermission(const std::string& sharedSecret, const std::string& user, const SystemPermission::type perm)
 {
-  int32_t seqid = send_grantSystemPermission(login, user, perm);
+  int32_t seqid = send_grantSystemPermission(sharedSecret, user, perm);
   recv_grantSystemPermission(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_grantSystemPermission(const std::string& login, const std::string& user, const SystemPermission::type perm)
+int32_t AccumuloProxyConcurrentClient::send_grantSystemPermission(const std::string& sharedSecret, const std::string& user, const SystemPermission::type perm)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("grantSystemPermission", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_grantSystemPermission_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.user = &user;
   args.perm = &perm;
   args.write(oprot_);
@@ -44389,20 +43925,20 @@ void AccumuloProxyConcurrentClient::recv_grantSystemPermission(const int32_t seq
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::grantTablePermission(const std::string& login, const std::string& user, const std::string& table, const TablePermission::type perm)
+void AccumuloProxyConcurrentClient::grantTablePermission(const std::string& sharedSecret, const std::string& user, const std::string& table, const TablePermission::type perm)
 {
-  int32_t seqid = send_grantTablePermission(login, user, table, perm);
+  int32_t seqid = send_grantTablePermission(sharedSecret, user, table, perm);
   recv_grantTablePermission(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_grantTablePermission(const std::string& login, const std::string& user, const std::string& table, const TablePermission::type perm)
+int32_t AccumuloProxyConcurrentClient::send_grantTablePermission(const std::string& sharedSecret, const std::string& user, const std::string& table, const TablePermission::type perm)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("grantTablePermission", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_grantTablePermission_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.user = &user;
   args.table = &table;
   args.perm = &perm;
@@ -44482,20 +44018,20 @@ void AccumuloProxyConcurrentClient::recv_grantTablePermission(const int32_t seqi
   } // end while(true)
 }
 
-bool AccumuloProxyConcurrentClient::hasSystemPermission(const std::string& login, const std::string& user, const SystemPermission::type perm)
+bool AccumuloProxyConcurrentClient::hasSystemPermission(const std::string& sharedSecret, const std::string& user, const SystemPermission::type perm)
 {
-  int32_t seqid = send_hasSystemPermission(login, user, perm);
+  int32_t seqid = send_hasSystemPermission(sharedSecret, user, perm);
   return recv_hasSystemPermission(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_hasSystemPermission(const std::string& login, const std::string& user, const SystemPermission::type perm)
+int32_t AccumuloProxyConcurrentClient::send_hasSystemPermission(const std::string& sharedSecret, const std::string& user, const SystemPermission::type perm)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("hasSystemPermission", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_hasSystemPermission_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.user = &user;
   args.perm = &perm;
   args.write(oprot_);
@@ -44576,20 +44112,20 @@ bool AccumuloProxyConcurrentClient::recv_hasSystemPermission(const int32_t seqid
   } // end while(true)
 }
 
-bool AccumuloProxyConcurrentClient::hasTablePermission(const std::string& login, const std::string& user, const std::string& table, const TablePermission::type perm)
+bool AccumuloProxyConcurrentClient::hasTablePermission(const std::string& sharedSecret, const std::string& user, const std::string& table, const TablePermission::type perm)
 {
-  int32_t seqid = send_hasTablePermission(login, user, table, perm);
+  int32_t seqid = send_hasTablePermission(sharedSecret, user, table, perm);
   return recv_hasTablePermission(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_hasTablePermission(const std::string& login, const std::string& user, const std::string& table, const TablePermission::type perm)
+int32_t AccumuloProxyConcurrentClient::send_hasTablePermission(const std::string& sharedSecret, const std::string& user, const std::string& table, const TablePermission::type perm)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("hasTablePermission", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_hasTablePermission_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.user = &user;
   args.table = &table;
   args.perm = &perm;
@@ -44675,20 +44211,20 @@ bool AccumuloProxyConcurrentClient::recv_hasTablePermission(const int32_t seqid)
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::listLocalUsers(std::set<std::string> & _return, const std::string& login)
+void AccumuloProxyConcurrentClient::listLocalUsers(std::set<std::string> & _return, const std::string& sharedSecret)
 {
-  int32_t seqid = send_listLocalUsers(login);
+  int32_t seqid = send_listLocalUsers(sharedSecret);
   recv_listLocalUsers(_return, seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_listLocalUsers(const std::string& login)
+int32_t AccumuloProxyConcurrentClient::send_listLocalUsers(const std::string& sharedSecret)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("listLocalUsers", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_listLocalUsers_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -44771,20 +44307,20 @@ void AccumuloProxyConcurrentClient::recv_listLocalUsers(std::set<std::string> & 
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::revokeSystemPermission(const std::string& login, const std::string& user, const SystemPermission::type perm)
+void AccumuloProxyConcurrentClient::revokeSystemPermission(const std::string& sharedSecret, const std::string& user, const SystemPermission::type perm)
 {
-  int32_t seqid = send_revokeSystemPermission(login, user, perm);
+  int32_t seqid = send_revokeSystemPermission(sharedSecret, user, perm);
   recv_revokeSystemPermission(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_revokeSystemPermission(const std::string& login, const std::string& user, const SystemPermission::type perm)
+int32_t AccumuloProxyConcurrentClient::send_revokeSystemPermission(const std::string& sharedSecret, const std::string& user, const SystemPermission::type perm)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("revokeSystemPermission", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_revokeSystemPermission_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.user = &user;
   args.perm = &perm;
   args.write(oprot_);
@@ -44859,20 +44395,20 @@ void AccumuloProxyConcurrentClient::recv_revokeSystemPermission(const int32_t se
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::revokeTablePermission(const std::string& login, const std::string& user, const std::string& table, const TablePermission::type perm)
+void AccumuloProxyConcurrentClient::revokeTablePermission(const std::string& sharedSecret, const std::string& user, const std::string& table, const TablePermission::type perm)
 {
-  int32_t seqid = send_revokeTablePermission(login, user, table, perm);
+  int32_t seqid = send_revokeTablePermission(sharedSecret, user, table, perm);
   recv_revokeTablePermission(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_revokeTablePermission(const std::string& login, const std::string& user, const std::string& table, const TablePermission::type perm)
+int32_t AccumuloProxyConcurrentClient::send_revokeTablePermission(const std::string& sharedSecret, const std::string& user, const std::string& table, const TablePermission::type perm)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("revokeTablePermission", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_revokeTablePermission_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.user = &user;
   args.table = &table;
   args.perm = &perm;
@@ -44952,20 +44488,20 @@ void AccumuloProxyConcurrentClient::recv_revokeTablePermission(const int32_t seq
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::grantNamespacePermission(const std::string& login, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm)
+void AccumuloProxyConcurrentClient::grantNamespacePermission(const std::string& sharedSecret, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm)
 {
-  int32_t seqid = send_grantNamespacePermission(login, user, namespaceName, perm);
+  int32_t seqid = send_grantNamespacePermission(sharedSecret, user, namespaceName, perm);
   recv_grantNamespacePermission(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_grantNamespacePermission(const std::string& login, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm)
+int32_t AccumuloProxyConcurrentClient::send_grantNamespacePermission(const std::string& sharedSecret, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("grantNamespacePermission", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_grantNamespacePermission_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.user = &user;
   args.namespaceName = &namespaceName;
   args.perm = &perm;
@@ -45041,20 +44577,20 @@ void AccumuloProxyConcurrentClient::recv_grantNamespacePermission(const int32_t 
   } // end while(true)
 }
 
-bool AccumuloProxyConcurrentClient::hasNamespacePermission(const std::string& login, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm)
+bool AccumuloProxyConcurrentClient::hasNamespacePermission(const std::string& sharedSecret, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm)
 {
-  int32_t seqid = send_hasNamespacePermission(login, user, namespaceName, perm);
+  int32_t seqid = send_hasNamespacePermission(sharedSecret, user, namespaceName, perm);
   return recv_hasNamespacePermission(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_hasNamespacePermission(const std::string& login, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm)
+int32_t AccumuloProxyConcurrentClient::send_hasNamespacePermission(const std::string& sharedSecret, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("hasNamespacePermission", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_hasNamespacePermission_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.user = &user;
   args.namespaceName = &namespaceName;
   args.perm = &perm;
@@ -45136,20 +44672,20 @@ bool AccumuloProxyConcurrentClient::recv_hasNamespacePermission(const int32_t se
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::revokeNamespacePermission(const std::string& login, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm)
+void AccumuloProxyConcurrentClient::revokeNamespacePermission(const std::string& sharedSecret, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm)
 {
-  int32_t seqid = send_revokeNamespacePermission(login, user, namespaceName, perm);
+  int32_t seqid = send_revokeNamespacePermission(sharedSecret, user, namespaceName, perm);
   recv_revokeNamespacePermission(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_revokeNamespacePermission(const std::string& login, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm)
+int32_t AccumuloProxyConcurrentClient::send_revokeNamespacePermission(const std::string& sharedSecret, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("revokeNamespacePermission", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_revokeNamespacePermission_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.user = &user;
   args.namespaceName = &namespaceName;
   args.perm = &perm;
@@ -45225,20 +44761,20 @@ void AccumuloProxyConcurrentClient::recv_revokeNamespacePermission(const int32_t
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::createBatchScanner(std::string& _return, const std::string& login, const std::string& tableName, const BatchScanOptions& options)
+void AccumuloProxyConcurrentClient::createBatchScanner(std::string& _return, const std::string& sharedSecret, const std::string& tableName, const BatchScanOptions& options)
 {
-  int32_t seqid = send_createBatchScanner(login, tableName, options);
+  int32_t seqid = send_createBatchScanner(sharedSecret, tableName, options);
   recv_createBatchScanner(_return, seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_createBatchScanner(const std::string& login, const std::string& tableName, const BatchScanOptions& options)
+int32_t AccumuloProxyConcurrentClient::send_createBatchScanner(const std::string& sharedSecret, const std::string& tableName, const BatchScanOptions& options)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("createBatchScanner", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_createBatchScanner_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.options = &options;
   args.write(oprot_);
@@ -45323,20 +44859,20 @@ void AccumuloProxyConcurrentClient::recv_createBatchScanner(std::string& _return
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::createScanner(std::string& _return, const std::string& login, const std::string& tableName, const ScanOptions& options)
+void AccumuloProxyConcurrentClient::createScanner(std::string& _return, const std::string& sharedSecret, const std::string& tableName, const ScanOptions& options)
 {
-  int32_t seqid = send_createScanner(login, tableName, options);
+  int32_t seqid = send_createScanner(sharedSecret, tableName, options);
   recv_createScanner(_return, seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_createScanner(const std::string& login, const std::string& tableName, const ScanOptions& options)
+int32_t AccumuloProxyConcurrentClient::send_createScanner(const std::string& sharedSecret, const std::string& tableName, const ScanOptions& options)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("createScanner", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_createScanner_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.options = &options;
   args.write(oprot_);
@@ -45784,20 +45320,20 @@ void AccumuloProxyConcurrentClient::recv_closeScanner(const int32_t seqid)
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::updateAndFlush(const std::string& login, const std::string& tableName, const std::map<std::string, std::vector<ColumnUpdate> > & cells)
+void AccumuloProxyConcurrentClient::updateAndFlush(const std::string& sharedSecret, const std::string& tableName, const std::map<std::string, std::vector<ColumnUpdate> > & cells)
 {
-  int32_t seqid = send_updateAndFlush(login, tableName, cells);
+  int32_t seqid = send_updateAndFlush(sharedSecret, tableName, cells);
   recv_updateAndFlush(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_updateAndFlush(const std::string& login, const std::string& tableName, const std::map<std::string, std::vector<ColumnUpdate> > & cells)
+int32_t AccumuloProxyConcurrentClient::send_updateAndFlush(const std::string& sharedSecret, const std::string& tableName, const std::map<std::string, std::vector<ColumnUpdate> > & cells)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("updateAndFlush", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_updateAndFlush_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.cells = &cells;
   args.write(oprot_);
@@ -45880,20 +45416,20 @@ void AccumuloProxyConcurrentClient::recv_updateAndFlush(const int32_t seqid)
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::createWriter(std::string& _return, const std::string& login, const std::string& tableName, const WriterOptions& opts)
+void AccumuloProxyConcurrentClient::createWriter(std::string& _return, const std::string& sharedSecret, const std::string& tableName, const WriterOptions& opts)
 {
-  int32_t seqid = send_createWriter(login, tableName, opts);
+  int32_t seqid = send_createWriter(sharedSecret, tableName, opts);
   recv_createWriter(_return, seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_createWriter(const std::string& login, const std::string& tableName, const WriterOptions& opts)
+int32_t AccumuloProxyConcurrentClient::send_createWriter(const std::string& sharedSecret, const std::string& tableName, const WriterOptions& opts)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("createWriter", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_createWriter_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.opts = &opts;
   args.write(oprot_);
@@ -46173,20 +45709,20 @@ void AccumuloProxyConcurrentClient::recv_closeWriter(const int32_t seqid)
   } // end while(true)
 }
 
-ConditionalStatus::type AccumuloProxyConcurrentClient::updateRowConditionally(const std::string& login, const std::string& tableName, const std::string& row, const ConditionalUpdates& updates)
+ConditionalStatus::type AccumuloProxyConcurrentClient::updateRowConditionally(const std::string& sharedSecret, const std::string& tableName, const std::string& row, const ConditionalUpdates& updates)
 {
-  int32_t seqid = send_updateRowConditionally(login, tableName, row, updates);
+  int32_t seqid = send_updateRowConditionally(sharedSecret, tableName, row, updates);
   return recv_updateRowConditionally(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_updateRowConditionally(const std::string& login, const std::string& tableName, const std::string& row, const ConditionalUpdates& updates)
+int32_t AccumuloProxyConcurrentClient::send_updateRowConditionally(const std::string& sharedSecret, const std::string& tableName, const std::string& row, const ConditionalUpdates& updates)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("updateRowConditionally", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_updateRowConditionally_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.row = &row;
   args.updates = &updates;
@@ -46272,20 +45808,20 @@ ConditionalStatus::type AccumuloProxyConcurrentClient::recv_updateRowConditional
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::createConditionalWriter(std::string& _return, const std::string& login, const std::string& tableName, const ConditionalWriterOptions& options)
+void AccumuloProxyConcurrentClient::createConditionalWriter(std::string& _return, const std::string& sharedSecret, const std::string& tableName, const ConditionalWriterOptions& options)
 {
-  int32_t seqid = send_createConditionalWriter(login, tableName, options);
+  int32_t seqid = send_createConditionalWriter(sharedSecret, tableName, options);
   recv_createConditionalWriter(_return, seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_createConditionalWriter(const std::string& login, const std::string& tableName, const ConditionalWriterOptions& options)
+int32_t AccumuloProxyConcurrentClient::send_createConditionalWriter(const std::string& sharedSecret, const std::string& tableName, const ConditionalWriterOptions& options)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("createConditionalWriter", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_createConditionalWriter_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.tableName = &tableName;
   args.options = &options;
   args.write(oprot_);
@@ -46880,20 +46416,20 @@ void AccumuloProxyConcurrentClient::recv_defaultNamespace(std::string& _return, 
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::listNamespaces(std::vector<std::string> & _return, const std::string& login)
+void AccumuloProxyConcurrentClient::listNamespaces(std::vector<std::string> & _return, const std::string& sharedSecret)
 {
-  int32_t seqid = send_listNamespaces(login);
+  int32_t seqid = send_listNamespaces(sharedSecret);
   recv_listNamespaces(_return, seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_listNamespaces(const std::string& login)
+int32_t AccumuloProxyConcurrentClient::send_listNamespaces(const std::string& sharedSecret)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("listNamespaces", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_listNamespaces_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -46972,20 +46508,20 @@ void AccumuloProxyConcurrentClient::recv_listNamespaces(std::vector<std::string>
   } // end while(true)
 }
 
-bool AccumuloProxyConcurrentClient::namespaceExists(const std::string& login, const std::string& namespaceName)
+bool AccumuloProxyConcurrentClient::namespaceExists(const std::string& sharedSecret, const std::string& namespaceName)
 {
-  int32_t seqid = send_namespaceExists(login, namespaceName);
+  int32_t seqid = send_namespaceExists(sharedSecret, namespaceName);
   return recv_namespaceExists(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_namespaceExists(const std::string& login, const std::string& namespaceName)
+int32_t AccumuloProxyConcurrentClient::send_namespaceExists(const std::string& sharedSecret, const std::string& namespaceName)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("namespaceExists", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_namespaceExists_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.namespaceName = &namespaceName;
   args.write(oprot_);
 
@@ -47065,20 +46601,20 @@ bool AccumuloProxyConcurrentClient::recv_namespaceExists(const int32_t seqid)
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::createNamespace(const std::string& login, const std::string& namespaceName)
+void AccumuloProxyConcurrentClient::createNamespace(const std::string& sharedSecret, const std::string& namespaceName)
 {
-  int32_t seqid = send_createNamespace(login, namespaceName);
+  int32_t seqid = send_createNamespace(sharedSecret, namespaceName);
   recv_createNamespace(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_createNamespace(const std::string& login, const std::string& namespaceName)
+int32_t AccumuloProxyConcurrentClient::send_createNamespace(const std::string& sharedSecret, const std::string& namespaceName)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("createNamespace", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_createNamespace_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.namespaceName = &namespaceName;
   args.write(oprot_);
 
@@ -47156,20 +46692,20 @@ void AccumuloProxyConcurrentClient::recv_createNamespace(const int32_t seqid)
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::deleteNamespace(const std::string& login, const std::string& namespaceName)
+void AccumuloProxyConcurrentClient::deleteNamespace(const std::string& sharedSecret, const std::string& namespaceName)
 {
-  int32_t seqid = send_deleteNamespace(login, namespaceName);
+  int32_t seqid = send_deleteNamespace(sharedSecret, namespaceName);
   recv_deleteNamespace(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_deleteNamespace(const std::string& login, const std::string& namespaceName)
+int32_t AccumuloProxyConcurrentClient::send_deleteNamespace(const std::string& sharedSecret, const std::string& namespaceName)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("deleteNamespace", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_deleteNamespace_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.namespaceName = &namespaceName;
   args.write(oprot_);
 
@@ -47251,20 +46787,20 @@ void AccumuloProxyConcurrentClient::recv_deleteNamespace(const int32_t seqid)
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::renameNamespace(const std::string& login, const std::string& oldNamespaceName, const std::string& newNamespaceName)
+void AccumuloProxyConcurrentClient::renameNamespace(const std::string& sharedSecret, const std::string& oldNamespaceName, const std::string& newNamespaceName)
 {
-  int32_t seqid = send_renameNamespace(login, oldNamespaceName, newNamespaceName);
+  int32_t seqid = send_renameNamespace(sharedSecret, oldNamespaceName, newNamespaceName);
   recv_renameNamespace(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_renameNamespace(const std::string& login, const std::string& oldNamespaceName, const std::string& newNamespaceName)
+int32_t AccumuloProxyConcurrentClient::send_renameNamespace(const std::string& sharedSecret, const std::string& oldNamespaceName, const std::string& newNamespaceName)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("renameNamespace", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_renameNamespace_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.oldNamespaceName = &oldNamespaceName;
   args.newNamespaceName = &newNamespaceName;
   args.write(oprot_);
@@ -47347,20 +46883,20 @@ void AccumuloProxyConcurrentClient::recv_renameNamespace(const int32_t seqid)
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::setNamespaceProperty(const std::string& login, const std::string& namespaceName, const std::string& property, const std::string& value)
+void AccumuloProxyConcurrentClient::setNamespaceProperty(const std::string& sharedSecret, const std::string& namespaceName, const std::string& property, const std::string& value)
 {
-  int32_t seqid = send_setNamespaceProperty(login, namespaceName, property, value);
+  int32_t seqid = send_setNamespaceProperty(sharedSecret, namespaceName, property, value);
   recv_setNamespaceProperty(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_setNamespaceProperty(const std::string& login, const std::string& namespaceName, const std::string& property, const std::string& value)
+int32_t AccumuloProxyConcurrentClient::send_setNamespaceProperty(const std::string& sharedSecret, const std::string& namespaceName, const std::string& property, const std::string& value)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("setNamespaceProperty", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_setNamespaceProperty_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.namespaceName = &namespaceName;
   args.property = &property;
   args.value = &value;
@@ -47440,20 +46976,20 @@ void AccumuloProxyConcurrentClient::recv_setNamespaceProperty(const int32_t seqi
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::removeNamespaceProperty(const std::string& login, const std::string& namespaceName, const std::string& property)
+void AccumuloProxyConcurrentClient::removeNamespaceProperty(const std::string& sharedSecret, const std::string& namespaceName, const std::string& property)
 {
-  int32_t seqid = send_removeNamespaceProperty(login, namespaceName, property);
+  int32_t seqid = send_removeNamespaceProperty(sharedSecret, namespaceName, property);
   recv_removeNamespaceProperty(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_removeNamespaceProperty(const std::string& login, const std::string& namespaceName, const std::string& property)
+int32_t AccumuloProxyConcurrentClient::send_removeNamespaceProperty(const std::string& sharedSecret, const std::string& namespaceName, const std::string& property)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("removeNamespaceProperty", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_removeNamespaceProperty_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.namespaceName = &namespaceName;
   args.property = &property;
   args.write(oprot_);
@@ -47532,20 +47068,20 @@ void AccumuloProxyConcurrentClient::recv_removeNamespaceProperty(const int32_t s
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::getNamespaceProperties(std::map<std::string, std::string> & _return, const std::string& login, const std::string& namespaceName)
+void AccumuloProxyConcurrentClient::getNamespaceProperties(std::map<std::string, std::string> & _return, const std::string& sharedSecret, const std::string& namespaceName)
 {
-  int32_t seqid = send_getNamespaceProperties(login, namespaceName);
+  int32_t seqid = send_getNamespaceProperties(sharedSecret, namespaceName);
   recv_getNamespaceProperties(_return, seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_getNamespaceProperties(const std::string& login, const std::string& namespaceName)
+int32_t AccumuloProxyConcurrentClient::send_getNamespaceProperties(const std::string& sharedSecret, const std::string& namespaceName)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("getNamespaceProperties", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_getNamespaceProperties_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.namespaceName = &namespaceName;
   args.write(oprot_);
 
@@ -47629,20 +47165,20 @@ void AccumuloProxyConcurrentClient::recv_getNamespaceProperties(std::map<std::st
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::namespaceIdMap(std::map<std::string, std::string> & _return, const std::string& login)
+void AccumuloProxyConcurrentClient::namespaceIdMap(std::map<std::string, std::string> & _return, const std::string& sharedSecret)
 {
-  int32_t seqid = send_namespaceIdMap(login);
+  int32_t seqid = send_namespaceIdMap(sharedSecret);
   recv_namespaceIdMap(_return, seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_namespaceIdMap(const std::string& login)
+int32_t AccumuloProxyConcurrentClient::send_namespaceIdMap(const std::string& sharedSecret)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("namespaceIdMap", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_namespaceIdMap_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -47721,20 +47257,20 @@ void AccumuloProxyConcurrentClient::recv_namespaceIdMap(std::map<std::string, st
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::attachNamespaceIterator(const std::string& login, const std::string& namespaceName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes)
+void AccumuloProxyConcurrentClient::attachNamespaceIterator(const std::string& sharedSecret, const std::string& namespaceName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes)
 {
-  int32_t seqid = send_attachNamespaceIterator(login, namespaceName, setting, scopes);
+  int32_t seqid = send_attachNamespaceIterator(sharedSecret, namespaceName, setting, scopes);
   recv_attachNamespaceIterator(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_attachNamespaceIterator(const std::string& login, const std::string& namespaceName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes)
+int32_t AccumuloProxyConcurrentClient::send_attachNamespaceIterator(const std::string& sharedSecret, const std::string& namespaceName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("attachNamespaceIterator", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_attachNamespaceIterator_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.namespaceName = &namespaceName;
   args.setting = &setting;
   args.scopes = &scopes;
@@ -47814,20 +47350,20 @@ void AccumuloProxyConcurrentClient::recv_attachNamespaceIterator(const int32_t s
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::removeNamespaceIterator(const std::string& login, const std::string& namespaceName, const std::string& name, const std::set<IteratorScope::type> & scopes)
+void AccumuloProxyConcurrentClient::removeNamespaceIterator(const std::string& sharedSecret, const std::string& namespaceName, const std::string& name, const std::set<IteratorScope::type> & scopes)
 {
-  int32_t seqid = send_removeNamespaceIterator(login, namespaceName, name, scopes);
+  int32_t seqid = send_removeNamespaceIterator(sharedSecret, namespaceName, name, scopes);
   recv_removeNamespaceIterator(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_removeNamespaceIterator(const std::string& login, const std::string& namespaceName, const std::string& name, const std::set<IteratorScope::type> & scopes)
+int32_t AccumuloProxyConcurrentClient::send_removeNamespaceIterator(const std::string& sharedSecret, const std::string& namespaceName, const std::string& name, const std::set<IteratorScope::type> & scopes)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("removeNamespaceIterator", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_removeNamespaceIterator_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.namespaceName = &namespaceName;
   args.name = &name;
   args.scopes = &scopes;
@@ -47907,20 +47443,20 @@ void AccumuloProxyConcurrentClient::recv_removeNamespaceIterator(const int32_t s
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::getNamespaceIteratorSetting(IteratorSetting& _return, const std::string& login, const std::string& namespaceName, const std::string& name, const IteratorScope::type scope)
+void AccumuloProxyConcurrentClient::getNamespaceIteratorSetting(IteratorSetting& _return, const std::string& sharedSecret, const std::string& namespaceName, const std::string& name, const IteratorScope::type scope)
 {
-  int32_t seqid = send_getNamespaceIteratorSetting(login, namespaceName, name, scope);
+  int32_t seqid = send_getNamespaceIteratorSetting(sharedSecret, namespaceName, name, scope);
   recv_getNamespaceIteratorSetting(_return, seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_getNamespaceIteratorSetting(const std::string& login, const std::string& namespaceName, const std::string& name, const IteratorScope::type scope)
+int32_t AccumuloProxyConcurrentClient::send_getNamespaceIteratorSetting(const std::string& sharedSecret, const std::string& namespaceName, const std::string& name, const IteratorScope::type scope)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("getNamespaceIteratorSetting", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_getNamespaceIteratorSetting_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.namespaceName = &namespaceName;
   args.name = &name;
   args.scope = &scope;
@@ -48006,20 +47542,20 @@ void AccumuloProxyConcurrentClient::recv_getNamespaceIteratorSetting(IteratorSet
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::listNamespaceIterators(std::map<std::string, std::set<IteratorScope::type> > & _return, const std::string& login, const std::string& namespaceName)
+void AccumuloProxyConcurrentClient::listNamespaceIterators(std::map<std::string, std::set<IteratorScope::type> > & _return, const std::string& sharedSecret, const std::string& namespaceName)
 {
-  int32_t seqid = send_listNamespaceIterators(login, namespaceName);
+  int32_t seqid = send_listNamespaceIterators(sharedSecret, namespaceName);
   recv_listNamespaceIterators(_return, seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_listNamespaceIterators(const std::string& login, const std::string& namespaceName)
+int32_t AccumuloProxyConcurrentClient::send_listNamespaceIterators(const std::string& sharedSecret, const std::string& namespaceName)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("listNamespaceIterators", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_listNamespaceIterators_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.namespaceName = &namespaceName;
   args.write(oprot_);
 
@@ -48103,20 +47639,20 @@ void AccumuloProxyConcurrentClient::recv_listNamespaceIterators(std::map<std::st
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::checkNamespaceIteratorConflicts(const std::string& login, const std::string& namespaceName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes)
+void AccumuloProxyConcurrentClient::checkNamespaceIteratorConflicts(const std::string& sharedSecret, const std::string& namespaceName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes)
 {
-  int32_t seqid = send_checkNamespaceIteratorConflicts(login, namespaceName, setting, scopes);
+  int32_t seqid = send_checkNamespaceIteratorConflicts(sharedSecret, namespaceName, setting, scopes);
   recv_checkNamespaceIteratorConflicts(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_checkNamespaceIteratorConflicts(const std::string& login, const std::string& namespaceName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes)
+int32_t AccumuloProxyConcurrentClient::send_checkNamespaceIteratorConflicts(const std::string& sharedSecret, const std::string& namespaceName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("checkNamespaceIteratorConflicts", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_checkNamespaceIteratorConflicts_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.namespaceName = &namespaceName;
   args.setting = &setting;
   args.scopes = &scopes;
@@ -48196,20 +47732,20 @@ void AccumuloProxyConcurrentClient::recv_checkNamespaceIteratorConflicts(const i
   } // end while(true)
 }
 
-int32_t AccumuloProxyConcurrentClient::addNamespaceConstraint(const std::string& login, const std::string& namespaceName, const std::string& constraintClassName)
+int32_t AccumuloProxyConcurrentClient::addNamespaceConstraint(const std::string& sharedSecret, const std::string& namespaceName, const std::string& constraintClassName)
 {
-  int32_t seqid = send_addNamespaceConstraint(login, namespaceName, constraintClassName);
+  int32_t seqid = send_addNamespaceConstraint(sharedSecret, namespaceName, constraintClassName);
   return recv_addNamespaceConstraint(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_addNamespaceConstraint(const std::string& login, const std::string& namespaceName, const std::string& constraintClassName)
+int32_t AccumuloProxyConcurrentClient::send_addNamespaceConstraint(const std::string& sharedSecret, const std::string& namespaceName, const std::string& constraintClassName)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("addNamespaceConstraint", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_addNamespaceConstraint_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.namespaceName = &namespaceName;
   args.constraintClassName = &constraintClassName;
   args.write(oprot_);
@@ -48294,20 +47830,20 @@ int32_t AccumuloProxyConcurrentClient::recv_addNamespaceConstraint(const int32_t
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::removeNamespaceConstraint(const std::string& login, const std::string& namespaceName, const int32_t id)
+void AccumuloProxyConcurrentClient::removeNamespaceConstraint(const std::string& sharedSecret, const std::string& namespaceName, const int32_t id)
 {
-  int32_t seqid = send_removeNamespaceConstraint(login, namespaceName, id);
+  int32_t seqid = send_removeNamespaceConstraint(sharedSecret, namespaceName, id);
   recv_removeNamespaceConstraint(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_removeNamespaceConstraint(const std::string& login, const std::string& namespaceName, const int32_t id)
+int32_t AccumuloProxyConcurrentClient::send_removeNamespaceConstraint(const std::string& sharedSecret, const std::string& namespaceName, const int32_t id)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("removeNamespaceConstraint", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_removeNamespaceConstraint_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.namespaceName = &namespaceName;
   args.id = &id;
   args.write(oprot_);
@@ -48386,20 +47922,20 @@ void AccumuloProxyConcurrentClient::recv_removeNamespaceConstraint(const int32_t
   } // end while(true)
 }
 
-void AccumuloProxyConcurrentClient::listNamespaceConstraints(std::map<std::string, int32_t> & _return, const std::string& login, const std::string& namespaceName)
+void AccumuloProxyConcurrentClient::listNamespaceConstraints(std::map<std::string, int32_t> & _return, const std::string& sharedSecret, const std::string& namespaceName)
 {
-  int32_t seqid = send_listNamespaceConstraints(login, namespaceName);
+  int32_t seqid = send_listNamespaceConstraints(sharedSecret, namespaceName);
   recv_listNamespaceConstraints(_return, seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_listNamespaceConstraints(const std::string& login, const std::string& namespaceName)
+int32_t AccumuloProxyConcurrentClient::send_listNamespaceConstraints(const std::string& sharedSecret, const std::string& namespaceName)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("listNamespaceConstraints", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_listNamespaceConstraints_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.namespaceName = &namespaceName;
   args.write(oprot_);
 
@@ -48483,20 +48019,20 @@ void AccumuloProxyConcurrentClient::recv_listNamespaceConstraints(std::map<std::
   } // end while(true)
 }
 
-bool AccumuloProxyConcurrentClient::testNamespaceClassLoad(const std::string& login, const std::string& namespaceName, const std::string& className, const std::string& asTypeName)
+bool AccumuloProxyConcurrentClient::testNamespaceClassLoad(const std::string& sharedSecret, const std::string& namespaceName, const std::string& className, const std::string& asTypeName)
 {
-  int32_t seqid = send_testNamespaceClassLoad(login, namespaceName, className, asTypeName);
+  int32_t seqid = send_testNamespaceClassLoad(sharedSecret, namespaceName, className, asTypeName);
   return recv_testNamespaceClassLoad(seqid);
 }
 
-int32_t AccumuloProxyConcurrentClient::send_testNamespaceClassLoad(const std::string& login, const std::string& namespaceName, const std::string& className, const std::string& asTypeName)
+int32_t AccumuloProxyConcurrentClient::send_testNamespaceClassLoad(const std::string& sharedSecret, const std::string& namespaceName, const std::string& className, const std::string& asTypeName)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("testNamespaceClassLoad", ::apache::thrift::protocol::T_CALL, cseqid);
 
   AccumuloProxy_testNamespaceClassLoad_pargs args;
-  args.login = &login;
+  args.sharedSecret = &sharedSecret;
   args.namespaceName = &namespaceName;
   args.className = &className;
   args.asTypeName = &asTypeName;

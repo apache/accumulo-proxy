@@ -28,29 +28,13 @@ module Accumulo
     class Client
       include ::Thrift::Client
 
-      def login(principal, loginProperties)
-        send_login(principal, loginProperties)
-        return recv_login()
-      end
-
-      def send_login(principal, loginProperties)
-        send_message('login', Login_args, :principal => principal, :loginProperties => loginProperties)
-      end
-
-      def recv_login()
-        result = receive_message(Login_result)
-        return result.success unless result.success.nil?
-        raise result.ouch2 unless result.ouch2.nil?
-        raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'login failed: unknown result')
-      end
-
-      def addConstraint(login, tableName, constraintClassName)
-        send_addConstraint(login, tableName, constraintClassName)
+      def addConstraint(sharedSecret, tableName, constraintClassName)
+        send_addConstraint(sharedSecret, tableName, constraintClassName)
         return recv_addConstraint()
       end
 
-      def send_addConstraint(login, tableName, constraintClassName)
-        send_message('addConstraint', AddConstraint_args, :login => login, :tableName => tableName, :constraintClassName => constraintClassName)
+      def send_addConstraint(sharedSecret, tableName, constraintClassName)
+        send_message('addConstraint', AddConstraint_args, :sharedSecret => sharedSecret, :tableName => tableName, :constraintClassName => constraintClassName)
       end
 
       def recv_addConstraint()
@@ -62,13 +46,13 @@ module Accumulo
         raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'addConstraint failed: unknown result')
       end
 
-      def addSplits(login, tableName, splits)
-        send_addSplits(login, tableName, splits)
+      def addSplits(sharedSecret, tableName, splits)
+        send_addSplits(sharedSecret, tableName, splits)
         recv_addSplits()
       end
 
-      def send_addSplits(login, tableName, splits)
-        send_message('addSplits', AddSplits_args, :login => login, :tableName => tableName, :splits => splits)
+      def send_addSplits(sharedSecret, tableName, splits)
+        send_message('addSplits', AddSplits_args, :sharedSecret => sharedSecret, :tableName => tableName, :splits => splits)
       end
 
       def recv_addSplits()
@@ -79,13 +63,13 @@ module Accumulo
         return
       end
 
-      def attachIterator(login, tableName, setting, scopes)
-        send_attachIterator(login, tableName, setting, scopes)
+      def attachIterator(sharedSecret, tableName, setting, scopes)
+        send_attachIterator(sharedSecret, tableName, setting, scopes)
         recv_attachIterator()
       end
 
-      def send_attachIterator(login, tableName, setting, scopes)
-        send_message('attachIterator', AttachIterator_args, :login => login, :tableName => tableName, :setting => setting, :scopes => scopes)
+      def send_attachIterator(sharedSecret, tableName, setting, scopes)
+        send_message('attachIterator', AttachIterator_args, :sharedSecret => sharedSecret, :tableName => tableName, :setting => setting, :scopes => scopes)
       end
 
       def recv_attachIterator()
@@ -96,13 +80,13 @@ module Accumulo
         return
       end
 
-      def checkIteratorConflicts(login, tableName, setting, scopes)
-        send_checkIteratorConflicts(login, tableName, setting, scopes)
+      def checkIteratorConflicts(sharedSecret, tableName, setting, scopes)
+        send_checkIteratorConflicts(sharedSecret, tableName, setting, scopes)
         recv_checkIteratorConflicts()
       end
 
-      def send_checkIteratorConflicts(login, tableName, setting, scopes)
-        send_message('checkIteratorConflicts', CheckIteratorConflicts_args, :login => login, :tableName => tableName, :setting => setting, :scopes => scopes)
+      def send_checkIteratorConflicts(sharedSecret, tableName, setting, scopes)
+        send_message('checkIteratorConflicts', CheckIteratorConflicts_args, :sharedSecret => sharedSecret, :tableName => tableName, :setting => setting, :scopes => scopes)
       end
 
       def recv_checkIteratorConflicts()
@@ -113,13 +97,13 @@ module Accumulo
         return
       end
 
-      def clearLocatorCache(login, tableName)
-        send_clearLocatorCache(login, tableName)
+      def clearLocatorCache(sharedSecret, tableName)
+        send_clearLocatorCache(sharedSecret, tableName)
         recv_clearLocatorCache()
       end
 
-      def send_clearLocatorCache(login, tableName)
-        send_message('clearLocatorCache', ClearLocatorCache_args, :login => login, :tableName => tableName)
+      def send_clearLocatorCache(sharedSecret, tableName)
+        send_message('clearLocatorCache', ClearLocatorCache_args, :sharedSecret => sharedSecret, :tableName => tableName)
       end
 
       def recv_clearLocatorCache()
@@ -128,13 +112,13 @@ module Accumulo
         return
       end
 
-      def cloneTable(login, tableName, newTableName, flush, propertiesToSet, propertiesToExclude)
-        send_cloneTable(login, tableName, newTableName, flush, propertiesToSet, propertiesToExclude)
+      def cloneTable(sharedSecret, tableName, newTableName, flush, propertiesToSet, propertiesToExclude)
+        send_cloneTable(sharedSecret, tableName, newTableName, flush, propertiesToSet, propertiesToExclude)
         recv_cloneTable()
       end
 
-      def send_cloneTable(login, tableName, newTableName, flush, propertiesToSet, propertiesToExclude)
-        send_message('cloneTable', CloneTable_args, :login => login, :tableName => tableName, :newTableName => newTableName, :flush => flush, :propertiesToSet => propertiesToSet, :propertiesToExclude => propertiesToExclude)
+      def send_cloneTable(sharedSecret, tableName, newTableName, flush, propertiesToSet, propertiesToExclude)
+        send_message('cloneTable', CloneTable_args, :sharedSecret => sharedSecret, :tableName => tableName, :newTableName => newTableName, :flush => flush, :propertiesToSet => propertiesToSet, :propertiesToExclude => propertiesToExclude)
       end
 
       def recv_cloneTable()
@@ -146,13 +130,13 @@ module Accumulo
         return
       end
 
-      def compactTable(login, tableName, startRow, endRow, iterators, flush, wait, selectorConfig, configurerConfig)
-        send_compactTable(login, tableName, startRow, endRow, iterators, flush, wait, selectorConfig, configurerConfig)
+      def compactTable(sharedSecret, tableName, startRow, endRow, iterators, flush, wait, selectorConfig, configurerConfig)
+        send_compactTable(sharedSecret, tableName, startRow, endRow, iterators, flush, wait, selectorConfig, configurerConfig)
         recv_compactTable()
       end
 
-      def send_compactTable(login, tableName, startRow, endRow, iterators, flush, wait, selectorConfig, configurerConfig)
-        send_message('compactTable', CompactTable_args, :login => login, :tableName => tableName, :startRow => startRow, :endRow => endRow, :iterators => iterators, :flush => flush, :wait => wait, :selectorConfig => selectorConfig, :configurerConfig => configurerConfig)
+      def send_compactTable(sharedSecret, tableName, startRow, endRow, iterators, flush, wait, selectorConfig, configurerConfig)
+        send_message('compactTable', CompactTable_args, :sharedSecret => sharedSecret, :tableName => tableName, :startRow => startRow, :endRow => endRow, :iterators => iterators, :flush => flush, :wait => wait, :selectorConfig => selectorConfig, :configurerConfig => configurerConfig)
       end
 
       def recv_compactTable()
@@ -163,13 +147,13 @@ module Accumulo
         return
       end
 
-      def cancelCompaction(login, tableName)
-        send_cancelCompaction(login, tableName)
+      def cancelCompaction(sharedSecret, tableName)
+        send_cancelCompaction(sharedSecret, tableName)
         recv_cancelCompaction()
       end
 
-      def send_cancelCompaction(login, tableName)
-        send_message('cancelCompaction', CancelCompaction_args, :login => login, :tableName => tableName)
+      def send_cancelCompaction(sharedSecret, tableName)
+        send_message('cancelCompaction', CancelCompaction_args, :sharedSecret => sharedSecret, :tableName => tableName)
       end
 
       def recv_cancelCompaction()
@@ -180,13 +164,13 @@ module Accumulo
         return
       end
 
-      def createTable(login, tableName, versioningIter, type)
-        send_createTable(login, tableName, versioningIter, type)
+      def createTable(sharedSecret, tableName, versioningIter, type)
+        send_createTable(sharedSecret, tableName, versioningIter, type)
         recv_createTable()
       end
 
-      def send_createTable(login, tableName, versioningIter, type)
-        send_message('createTable', CreateTable_args, :login => login, :tableName => tableName, :versioningIter => versioningIter, :type => type)
+      def send_createTable(sharedSecret, tableName, versioningIter, type)
+        send_message('createTable', CreateTable_args, :sharedSecret => sharedSecret, :tableName => tableName, :versioningIter => versioningIter, :type => type)
       end
 
       def recv_createTable()
@@ -197,13 +181,13 @@ module Accumulo
         return
       end
 
-      def deleteTable(login, tableName)
-        send_deleteTable(login, tableName)
+      def deleteTable(sharedSecret, tableName)
+        send_deleteTable(sharedSecret, tableName)
         recv_deleteTable()
       end
 
-      def send_deleteTable(login, tableName)
-        send_message('deleteTable', DeleteTable_args, :login => login, :tableName => tableName)
+      def send_deleteTable(sharedSecret, tableName)
+        send_message('deleteTable', DeleteTable_args, :sharedSecret => sharedSecret, :tableName => tableName)
       end
 
       def recv_deleteTable()
@@ -214,13 +198,13 @@ module Accumulo
         return
       end
 
-      def deleteRows(login, tableName, startRow, endRow)
-        send_deleteRows(login, tableName, startRow, endRow)
+      def deleteRows(sharedSecret, tableName, startRow, endRow)
+        send_deleteRows(sharedSecret, tableName, startRow, endRow)
         recv_deleteRows()
       end
 
-      def send_deleteRows(login, tableName, startRow, endRow)
-        send_message('deleteRows', DeleteRows_args, :login => login, :tableName => tableName, :startRow => startRow, :endRow => endRow)
+      def send_deleteRows(sharedSecret, tableName, startRow, endRow)
+        send_message('deleteRows', DeleteRows_args, :sharedSecret => sharedSecret, :tableName => tableName, :startRow => startRow, :endRow => endRow)
       end
 
       def recv_deleteRows()
@@ -231,13 +215,13 @@ module Accumulo
         return
       end
 
-      def exportTable(login, tableName, exportDir)
-        send_exportTable(login, tableName, exportDir)
+      def exportTable(sharedSecret, tableName, exportDir)
+        send_exportTable(sharedSecret, tableName, exportDir)
         recv_exportTable()
       end
 
-      def send_exportTable(login, tableName, exportDir)
-        send_message('exportTable', ExportTable_args, :login => login, :tableName => tableName, :exportDir => exportDir)
+      def send_exportTable(sharedSecret, tableName, exportDir)
+        send_message('exportTable', ExportTable_args, :sharedSecret => sharedSecret, :tableName => tableName, :exportDir => exportDir)
       end
 
       def recv_exportTable()
@@ -248,13 +232,13 @@ module Accumulo
         return
       end
 
-      def flushTable(login, tableName, startRow, endRow, wait)
-        send_flushTable(login, tableName, startRow, endRow, wait)
+      def flushTable(sharedSecret, tableName, startRow, endRow, wait)
+        send_flushTable(sharedSecret, tableName, startRow, endRow, wait)
         recv_flushTable()
       end
 
-      def send_flushTable(login, tableName, startRow, endRow, wait)
-        send_message('flushTable', FlushTable_args, :login => login, :tableName => tableName, :startRow => startRow, :endRow => endRow, :wait => wait)
+      def send_flushTable(sharedSecret, tableName, startRow, endRow, wait)
+        send_message('flushTable', FlushTable_args, :sharedSecret => sharedSecret, :tableName => tableName, :startRow => startRow, :endRow => endRow, :wait => wait)
       end
 
       def recv_flushTable()
@@ -265,13 +249,13 @@ module Accumulo
         return
       end
 
-      def getDiskUsage(login, tables)
-        send_getDiskUsage(login, tables)
+      def getDiskUsage(sharedSecret, tables)
+        send_getDiskUsage(sharedSecret, tables)
         return recv_getDiskUsage()
       end
 
-      def send_getDiskUsage(login, tables)
-        send_message('getDiskUsage', GetDiskUsage_args, :login => login, :tables => tables)
+      def send_getDiskUsage(sharedSecret, tables)
+        send_message('getDiskUsage', GetDiskUsage_args, :sharedSecret => sharedSecret, :tables => tables)
       end
 
       def recv_getDiskUsage()
@@ -283,13 +267,13 @@ module Accumulo
         raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'getDiskUsage failed: unknown result')
       end
 
-      def getLocalityGroups(login, tableName)
-        send_getLocalityGroups(login, tableName)
+      def getLocalityGroups(sharedSecret, tableName)
+        send_getLocalityGroups(sharedSecret, tableName)
         return recv_getLocalityGroups()
       end
 
-      def send_getLocalityGroups(login, tableName)
-        send_message('getLocalityGroups', GetLocalityGroups_args, :login => login, :tableName => tableName)
+      def send_getLocalityGroups(sharedSecret, tableName)
+        send_message('getLocalityGroups', GetLocalityGroups_args, :sharedSecret => sharedSecret, :tableName => tableName)
       end
 
       def recv_getLocalityGroups()
@@ -301,13 +285,13 @@ module Accumulo
         raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'getLocalityGroups failed: unknown result')
       end
 
-      def getIteratorSetting(login, tableName, iteratorName, scope)
-        send_getIteratorSetting(login, tableName, iteratorName, scope)
+      def getIteratorSetting(sharedSecret, tableName, iteratorName, scope)
+        send_getIteratorSetting(sharedSecret, tableName, iteratorName, scope)
         return recv_getIteratorSetting()
       end
 
-      def send_getIteratorSetting(login, tableName, iteratorName, scope)
-        send_message('getIteratorSetting', GetIteratorSetting_args, :login => login, :tableName => tableName, :iteratorName => iteratorName, :scope => scope)
+      def send_getIteratorSetting(sharedSecret, tableName, iteratorName, scope)
+        send_message('getIteratorSetting', GetIteratorSetting_args, :sharedSecret => sharedSecret, :tableName => tableName, :iteratorName => iteratorName, :scope => scope)
       end
 
       def recv_getIteratorSetting()
@@ -319,13 +303,13 @@ module Accumulo
         raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'getIteratorSetting failed: unknown result')
       end
 
-      def getMaxRow(login, tableName, auths, startRow, startInclusive, endRow, endInclusive)
-        send_getMaxRow(login, tableName, auths, startRow, startInclusive, endRow, endInclusive)
+      def getMaxRow(sharedSecret, tableName, auths, startRow, startInclusive, endRow, endInclusive)
+        send_getMaxRow(sharedSecret, tableName, auths, startRow, startInclusive, endRow, endInclusive)
         return recv_getMaxRow()
       end
 
-      def send_getMaxRow(login, tableName, auths, startRow, startInclusive, endRow, endInclusive)
-        send_message('getMaxRow', GetMaxRow_args, :login => login, :tableName => tableName, :auths => auths, :startRow => startRow, :startInclusive => startInclusive, :endRow => endRow, :endInclusive => endInclusive)
+      def send_getMaxRow(sharedSecret, tableName, auths, startRow, startInclusive, endRow, endInclusive)
+        send_message('getMaxRow', GetMaxRow_args, :sharedSecret => sharedSecret, :tableName => tableName, :auths => auths, :startRow => startRow, :startInclusive => startInclusive, :endRow => endRow, :endInclusive => endInclusive)
       end
 
       def recv_getMaxRow()
@@ -337,13 +321,13 @@ module Accumulo
         raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'getMaxRow failed: unknown result')
       end
 
-      def getTableProperties(login, tableName)
-        send_getTableProperties(login, tableName)
+      def getTableProperties(sharedSecret, tableName)
+        send_getTableProperties(sharedSecret, tableName)
         return recv_getTableProperties()
       end
 
-      def send_getTableProperties(login, tableName)
-        send_message('getTableProperties', GetTableProperties_args, :login => login, :tableName => tableName)
+      def send_getTableProperties(sharedSecret, tableName)
+        send_message('getTableProperties', GetTableProperties_args, :sharedSecret => sharedSecret, :tableName => tableName)
       end
 
       def recv_getTableProperties()
@@ -355,13 +339,13 @@ module Accumulo
         raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'getTableProperties failed: unknown result')
       end
 
-      def importDirectory(login, tableName, importDir, failureDir, setTime)
-        send_importDirectory(login, tableName, importDir, failureDir, setTime)
+      def importDirectory(sharedSecret, tableName, importDir, failureDir, setTime)
+        send_importDirectory(sharedSecret, tableName, importDir, failureDir, setTime)
         recv_importDirectory()
       end
 
-      def send_importDirectory(login, tableName, importDir, failureDir, setTime)
-        send_message('importDirectory', ImportDirectory_args, :login => login, :tableName => tableName, :importDir => importDir, :failureDir => failureDir, :setTime => setTime)
+      def send_importDirectory(sharedSecret, tableName, importDir, failureDir, setTime)
+        send_message('importDirectory', ImportDirectory_args, :sharedSecret => sharedSecret, :tableName => tableName, :importDir => importDir, :failureDir => failureDir, :setTime => setTime)
       end
 
       def recv_importDirectory()
@@ -372,13 +356,13 @@ module Accumulo
         return
       end
 
-      def importTable(login, tableName, importDir)
-        send_importTable(login, tableName, importDir)
+      def importTable(sharedSecret, tableName, importDir)
+        send_importTable(sharedSecret, tableName, importDir)
         recv_importTable()
       end
 
-      def send_importTable(login, tableName, importDir)
-        send_message('importTable', ImportTable_args, :login => login, :tableName => tableName, :importDir => importDir)
+      def send_importTable(sharedSecret, tableName, importDir)
+        send_message('importTable', ImportTable_args, :sharedSecret => sharedSecret, :tableName => tableName, :importDir => importDir)
       end
 
       def recv_importTable()
@@ -389,13 +373,13 @@ module Accumulo
         return
       end
 
-      def listSplits(login, tableName, maxSplits)
-        send_listSplits(login, tableName, maxSplits)
+      def listSplits(sharedSecret, tableName, maxSplits)
+        send_listSplits(sharedSecret, tableName, maxSplits)
         return recv_listSplits()
       end
 
-      def send_listSplits(login, tableName, maxSplits)
-        send_message('listSplits', ListSplits_args, :login => login, :tableName => tableName, :maxSplits => maxSplits)
+      def send_listSplits(sharedSecret, tableName, maxSplits)
+        send_message('listSplits', ListSplits_args, :sharedSecret => sharedSecret, :tableName => tableName, :maxSplits => maxSplits)
       end
 
       def recv_listSplits()
@@ -407,13 +391,13 @@ module Accumulo
         raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'listSplits failed: unknown result')
       end
 
-      def listTables(login)
-        send_listTables(login)
+      def listTables(sharedSecret)
+        send_listTables(sharedSecret)
         return recv_listTables()
       end
 
-      def send_listTables(login)
-        send_message('listTables', ListTables_args, :login => login)
+      def send_listTables(sharedSecret)
+        send_message('listTables', ListTables_args, :sharedSecret => sharedSecret)
       end
 
       def recv_listTables()
@@ -422,13 +406,13 @@ module Accumulo
         raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'listTables failed: unknown result')
       end
 
-      def listIterators(login, tableName)
-        send_listIterators(login, tableName)
+      def listIterators(sharedSecret, tableName)
+        send_listIterators(sharedSecret, tableName)
         return recv_listIterators()
       end
 
-      def send_listIterators(login, tableName)
-        send_message('listIterators', ListIterators_args, :login => login, :tableName => tableName)
+      def send_listIterators(sharedSecret, tableName)
+        send_message('listIterators', ListIterators_args, :sharedSecret => sharedSecret, :tableName => tableName)
       end
 
       def recv_listIterators()
@@ -440,13 +424,13 @@ module Accumulo
         raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'listIterators failed: unknown result')
       end
 
-      def listConstraints(login, tableName)
-        send_listConstraints(login, tableName)
+      def listConstraints(sharedSecret, tableName)
+        send_listConstraints(sharedSecret, tableName)
         return recv_listConstraints()
       end
 
-      def send_listConstraints(login, tableName)
-        send_message('listConstraints', ListConstraints_args, :login => login, :tableName => tableName)
+      def send_listConstraints(sharedSecret, tableName)
+        send_message('listConstraints', ListConstraints_args, :sharedSecret => sharedSecret, :tableName => tableName)
       end
 
       def recv_listConstraints()
@@ -458,13 +442,13 @@ module Accumulo
         raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'listConstraints failed: unknown result')
       end
 
-      def mergeTablets(login, tableName, startRow, endRow)
-        send_mergeTablets(login, tableName, startRow, endRow)
+      def mergeTablets(sharedSecret, tableName, startRow, endRow)
+        send_mergeTablets(sharedSecret, tableName, startRow, endRow)
         recv_mergeTablets()
       end
 
-      def send_mergeTablets(login, tableName, startRow, endRow)
-        send_message('mergeTablets', MergeTablets_args, :login => login, :tableName => tableName, :startRow => startRow, :endRow => endRow)
+      def send_mergeTablets(sharedSecret, tableName, startRow, endRow)
+        send_message('mergeTablets', MergeTablets_args, :sharedSecret => sharedSecret, :tableName => tableName, :startRow => startRow, :endRow => endRow)
       end
 
       def recv_mergeTablets()
@@ -475,13 +459,13 @@ module Accumulo
         return
       end
 
-      def offlineTable(login, tableName, wait)
-        send_offlineTable(login, tableName, wait)
+      def offlineTable(sharedSecret, tableName, wait)
+        send_offlineTable(sharedSecret, tableName, wait)
         recv_offlineTable()
       end
 
-      def send_offlineTable(login, tableName, wait)
-        send_message('offlineTable', OfflineTable_args, :login => login, :tableName => tableName, :wait => wait)
+      def send_offlineTable(sharedSecret, tableName, wait)
+        send_message('offlineTable', OfflineTable_args, :sharedSecret => sharedSecret, :tableName => tableName, :wait => wait)
       end
 
       def recv_offlineTable()
@@ -492,13 +476,13 @@ module Accumulo
         return
       end
 
-      def onlineTable(login, tableName, wait)
-        send_onlineTable(login, tableName, wait)
+      def onlineTable(sharedSecret, tableName, wait)
+        send_onlineTable(sharedSecret, tableName, wait)
         recv_onlineTable()
       end
 
-      def send_onlineTable(login, tableName, wait)
-        send_message('onlineTable', OnlineTable_args, :login => login, :tableName => tableName, :wait => wait)
+      def send_onlineTable(sharedSecret, tableName, wait)
+        send_message('onlineTable', OnlineTable_args, :sharedSecret => sharedSecret, :tableName => tableName, :wait => wait)
       end
 
       def recv_onlineTable()
@@ -509,13 +493,13 @@ module Accumulo
         return
       end
 
-      def removeConstraint(login, tableName, constraint)
-        send_removeConstraint(login, tableName, constraint)
+      def removeConstraint(sharedSecret, tableName, constraint)
+        send_removeConstraint(sharedSecret, tableName, constraint)
         recv_removeConstraint()
       end
 
-      def send_removeConstraint(login, tableName, constraint)
-        send_message('removeConstraint', RemoveConstraint_args, :login => login, :tableName => tableName, :constraint => constraint)
+      def send_removeConstraint(sharedSecret, tableName, constraint)
+        send_message('removeConstraint', RemoveConstraint_args, :sharedSecret => sharedSecret, :tableName => tableName, :constraint => constraint)
       end
 
       def recv_removeConstraint()
@@ -526,13 +510,13 @@ module Accumulo
         return
       end
 
-      def removeIterator(login, tableName, iterName, scopes)
-        send_removeIterator(login, tableName, iterName, scopes)
+      def removeIterator(sharedSecret, tableName, iterName, scopes)
+        send_removeIterator(sharedSecret, tableName, iterName, scopes)
         recv_removeIterator()
       end
 
-      def send_removeIterator(login, tableName, iterName, scopes)
-        send_message('removeIterator', RemoveIterator_args, :login => login, :tableName => tableName, :iterName => iterName, :scopes => scopes)
+      def send_removeIterator(sharedSecret, tableName, iterName, scopes)
+        send_message('removeIterator', RemoveIterator_args, :sharedSecret => sharedSecret, :tableName => tableName, :iterName => iterName, :scopes => scopes)
       end
 
       def recv_removeIterator()
@@ -543,13 +527,13 @@ module Accumulo
         return
       end
 
-      def removeTableProperty(login, tableName, property)
-        send_removeTableProperty(login, tableName, property)
+      def removeTableProperty(sharedSecret, tableName, property)
+        send_removeTableProperty(sharedSecret, tableName, property)
         recv_removeTableProperty()
       end
 
-      def send_removeTableProperty(login, tableName, property)
-        send_message('removeTableProperty', RemoveTableProperty_args, :login => login, :tableName => tableName, :property => property)
+      def send_removeTableProperty(sharedSecret, tableName, property)
+        send_message('removeTableProperty', RemoveTableProperty_args, :sharedSecret => sharedSecret, :tableName => tableName, :property => property)
       end
 
       def recv_removeTableProperty()
@@ -560,13 +544,13 @@ module Accumulo
         return
       end
 
-      def renameTable(login, oldTableName, newTableName)
-        send_renameTable(login, oldTableName, newTableName)
+      def renameTable(sharedSecret, oldTableName, newTableName)
+        send_renameTable(sharedSecret, oldTableName, newTableName)
         recv_renameTable()
       end
 
-      def send_renameTable(login, oldTableName, newTableName)
-        send_message('renameTable', RenameTable_args, :login => login, :oldTableName => oldTableName, :newTableName => newTableName)
+      def send_renameTable(sharedSecret, oldTableName, newTableName)
+        send_message('renameTable', RenameTable_args, :sharedSecret => sharedSecret, :oldTableName => oldTableName, :newTableName => newTableName)
       end
 
       def recv_renameTable()
@@ -578,13 +562,13 @@ module Accumulo
         return
       end
 
-      def setLocalityGroups(login, tableName, groups)
-        send_setLocalityGroups(login, tableName, groups)
+      def setLocalityGroups(sharedSecret, tableName, groups)
+        send_setLocalityGroups(sharedSecret, tableName, groups)
         recv_setLocalityGroups()
       end
 
-      def send_setLocalityGroups(login, tableName, groups)
-        send_message('setLocalityGroups', SetLocalityGroups_args, :login => login, :tableName => tableName, :groups => groups)
+      def send_setLocalityGroups(sharedSecret, tableName, groups)
+        send_message('setLocalityGroups', SetLocalityGroups_args, :sharedSecret => sharedSecret, :tableName => tableName, :groups => groups)
       end
 
       def recv_setLocalityGroups()
@@ -595,13 +579,13 @@ module Accumulo
         return
       end
 
-      def setTableProperty(login, tableName, property, value)
-        send_setTableProperty(login, tableName, property, value)
+      def setTableProperty(sharedSecret, tableName, property, value)
+        send_setTableProperty(sharedSecret, tableName, property, value)
         recv_setTableProperty()
       end
 
-      def send_setTableProperty(login, tableName, property, value)
-        send_message('setTableProperty', SetTableProperty_args, :login => login, :tableName => tableName, :property => property, :value => value)
+      def send_setTableProperty(sharedSecret, tableName, property, value)
+        send_message('setTableProperty', SetTableProperty_args, :sharedSecret => sharedSecret, :tableName => tableName, :property => property, :value => value)
       end
 
       def recv_setTableProperty()
@@ -612,13 +596,13 @@ module Accumulo
         return
       end
 
-      def splitRangeByTablets(login, tableName, range, maxSplits)
-        send_splitRangeByTablets(login, tableName, range, maxSplits)
+      def splitRangeByTablets(sharedSecret, tableName, range, maxSplits)
+        send_splitRangeByTablets(sharedSecret, tableName, range, maxSplits)
         return recv_splitRangeByTablets()
       end
 
-      def send_splitRangeByTablets(login, tableName, range, maxSplits)
-        send_message('splitRangeByTablets', SplitRangeByTablets_args, :login => login, :tableName => tableName, :range => range, :maxSplits => maxSplits)
+      def send_splitRangeByTablets(sharedSecret, tableName, range, maxSplits)
+        send_message('splitRangeByTablets', SplitRangeByTablets_args, :sharedSecret => sharedSecret, :tableName => tableName, :range => range, :maxSplits => maxSplits)
       end
 
       def recv_splitRangeByTablets()
@@ -630,13 +614,13 @@ module Accumulo
         raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'splitRangeByTablets failed: unknown result')
       end
 
-      def tableExists(login, tableName)
-        send_tableExists(login, tableName)
+      def tableExists(sharedSecret, tableName)
+        send_tableExists(sharedSecret, tableName)
         return recv_tableExists()
       end
 
-      def send_tableExists(login, tableName)
-        send_message('tableExists', TableExists_args, :login => login, :tableName => tableName)
+      def send_tableExists(sharedSecret, tableName)
+        send_message('tableExists', TableExists_args, :sharedSecret => sharedSecret, :tableName => tableName)
       end
 
       def recv_tableExists()
@@ -645,13 +629,13 @@ module Accumulo
         raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'tableExists failed: unknown result')
       end
 
-      def tableIdMap(login)
-        send_tableIdMap(login)
+      def tableIdMap(sharedSecret)
+        send_tableIdMap(sharedSecret)
         return recv_tableIdMap()
       end
 
-      def send_tableIdMap(login)
-        send_message('tableIdMap', TableIdMap_args, :login => login)
+      def send_tableIdMap(sharedSecret)
+        send_message('tableIdMap', TableIdMap_args, :sharedSecret => sharedSecret)
       end
 
       def recv_tableIdMap()
@@ -660,13 +644,13 @@ module Accumulo
         raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'tableIdMap failed: unknown result')
       end
 
-      def testTableClassLoad(login, tableName, className, asTypeName)
-        send_testTableClassLoad(login, tableName, className, asTypeName)
+      def testTableClassLoad(sharedSecret, tableName, className, asTypeName)
+        send_testTableClassLoad(sharedSecret, tableName, className, asTypeName)
         return recv_testTableClassLoad()
       end
 
-      def send_testTableClassLoad(login, tableName, className, asTypeName)
-        send_message('testTableClassLoad', TestTableClassLoad_args, :login => login, :tableName => tableName, :className => className, :asTypeName => asTypeName)
+      def send_testTableClassLoad(sharedSecret, tableName, className, asTypeName)
+        send_message('testTableClassLoad', TestTableClassLoad_args, :sharedSecret => sharedSecret, :tableName => tableName, :className => className, :asTypeName => asTypeName)
       end
 
       def recv_testTableClassLoad()
@@ -678,13 +662,13 @@ module Accumulo
         raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'testTableClassLoad failed: unknown result')
       end
 
-      def pingTabletServer(login, tserver)
-        send_pingTabletServer(login, tserver)
+      def pingTabletServer(sharedSecret, tserver)
+        send_pingTabletServer(sharedSecret, tserver)
         recv_pingTabletServer()
       end
 
-      def send_pingTabletServer(login, tserver)
-        send_message('pingTabletServer', PingTabletServer_args, :login => login, :tserver => tserver)
+      def send_pingTabletServer(sharedSecret, tserver)
+        send_message('pingTabletServer', PingTabletServer_args, :sharedSecret => sharedSecret, :tserver => tserver)
       end
 
       def recv_pingTabletServer()
@@ -694,13 +678,13 @@ module Accumulo
         return
       end
 
-      def getActiveScans(login, tserver)
-        send_getActiveScans(login, tserver)
+      def getActiveScans(sharedSecret, tserver)
+        send_getActiveScans(sharedSecret, tserver)
         return recv_getActiveScans()
       end
 
-      def send_getActiveScans(login, tserver)
-        send_message('getActiveScans', GetActiveScans_args, :login => login, :tserver => tserver)
+      def send_getActiveScans(sharedSecret, tserver)
+        send_message('getActiveScans', GetActiveScans_args, :sharedSecret => sharedSecret, :tserver => tserver)
       end
 
       def recv_getActiveScans()
@@ -711,13 +695,13 @@ module Accumulo
         raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'getActiveScans failed: unknown result')
       end
 
-      def getActiveCompactions(login, tserver)
-        send_getActiveCompactions(login, tserver)
+      def getActiveCompactions(sharedSecret, tserver)
+        send_getActiveCompactions(sharedSecret, tserver)
         return recv_getActiveCompactions()
       end
 
-      def send_getActiveCompactions(login, tserver)
-        send_message('getActiveCompactions', GetActiveCompactions_args, :login => login, :tserver => tserver)
+      def send_getActiveCompactions(sharedSecret, tserver)
+        send_message('getActiveCompactions', GetActiveCompactions_args, :sharedSecret => sharedSecret, :tserver => tserver)
       end
 
       def recv_getActiveCompactions()
@@ -728,13 +712,13 @@ module Accumulo
         raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'getActiveCompactions failed: unknown result')
       end
 
-      def getSiteConfiguration(login)
-        send_getSiteConfiguration(login)
+      def getSiteConfiguration(sharedSecret)
+        send_getSiteConfiguration(sharedSecret)
         return recv_getSiteConfiguration()
       end
 
-      def send_getSiteConfiguration(login)
-        send_message('getSiteConfiguration', GetSiteConfiguration_args, :login => login)
+      def send_getSiteConfiguration(sharedSecret)
+        send_message('getSiteConfiguration', GetSiteConfiguration_args, :sharedSecret => sharedSecret)
       end
 
       def recv_getSiteConfiguration()
@@ -745,13 +729,13 @@ module Accumulo
         raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'getSiteConfiguration failed: unknown result')
       end
 
-      def getSystemConfiguration(login)
-        send_getSystemConfiguration(login)
+      def getSystemConfiguration(sharedSecret)
+        send_getSystemConfiguration(sharedSecret)
         return recv_getSystemConfiguration()
       end
 
-      def send_getSystemConfiguration(login)
-        send_message('getSystemConfiguration', GetSystemConfiguration_args, :login => login)
+      def send_getSystemConfiguration(sharedSecret)
+        send_message('getSystemConfiguration', GetSystemConfiguration_args, :sharedSecret => sharedSecret)
       end
 
       def recv_getSystemConfiguration()
@@ -762,13 +746,13 @@ module Accumulo
         raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'getSystemConfiguration failed: unknown result')
       end
 
-      def getTabletServers(login)
-        send_getTabletServers(login)
+      def getTabletServers(sharedSecret)
+        send_getTabletServers(sharedSecret)
         return recv_getTabletServers()
       end
 
-      def send_getTabletServers(login)
-        send_message('getTabletServers', GetTabletServers_args, :login => login)
+      def send_getTabletServers(sharedSecret)
+        send_message('getTabletServers', GetTabletServers_args, :sharedSecret => sharedSecret)
       end
 
       def recv_getTabletServers()
@@ -777,13 +761,13 @@ module Accumulo
         raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'getTabletServers failed: unknown result')
       end
 
-      def removeProperty(login, property)
-        send_removeProperty(login, property)
+      def removeProperty(sharedSecret, property)
+        send_removeProperty(sharedSecret, property)
         recv_removeProperty()
       end
 
-      def send_removeProperty(login, property)
-        send_message('removeProperty', RemoveProperty_args, :login => login, :property => property)
+      def send_removeProperty(sharedSecret, property)
+        send_message('removeProperty', RemoveProperty_args, :sharedSecret => sharedSecret, :property => property)
       end
 
       def recv_removeProperty()
@@ -793,13 +777,13 @@ module Accumulo
         return
       end
 
-      def setProperty(login, property, value)
-        send_setProperty(login, property, value)
+      def setProperty(sharedSecret, property, value)
+        send_setProperty(sharedSecret, property, value)
         recv_setProperty()
       end
 
-      def send_setProperty(login, property, value)
-        send_message('setProperty', SetProperty_args, :login => login, :property => property, :value => value)
+      def send_setProperty(sharedSecret, property, value)
+        send_message('setProperty', SetProperty_args, :sharedSecret => sharedSecret, :property => property, :value => value)
       end
 
       def recv_setProperty()
@@ -809,13 +793,13 @@ module Accumulo
         return
       end
 
-      def testClassLoad(login, className, asTypeName)
-        send_testClassLoad(login, className, asTypeName)
+      def testClassLoad(sharedSecret, className, asTypeName)
+        send_testClassLoad(sharedSecret, className, asTypeName)
         return recv_testClassLoad()
       end
 
-      def send_testClassLoad(login, className, asTypeName)
-        send_message('testClassLoad', TestClassLoad_args, :login => login, :className => className, :asTypeName => asTypeName)
+      def send_testClassLoad(sharedSecret, className, asTypeName)
+        send_message('testClassLoad', TestClassLoad_args, :sharedSecret => sharedSecret, :className => className, :asTypeName => asTypeName)
       end
 
       def recv_testClassLoad()
@@ -826,13 +810,13 @@ module Accumulo
         raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'testClassLoad failed: unknown result')
       end
 
-      def authenticateUser(login, user, properties)
-        send_authenticateUser(login, user, properties)
+      def authenticateUser(sharedSecret, user, properties)
+        send_authenticateUser(sharedSecret, user, properties)
         return recv_authenticateUser()
       end
 
-      def send_authenticateUser(login, user, properties)
-        send_message('authenticateUser', AuthenticateUser_args, :login => login, :user => user, :properties => properties)
+      def send_authenticateUser(sharedSecret, user, properties)
+        send_message('authenticateUser', AuthenticateUser_args, :sharedSecret => sharedSecret, :user => user, :properties => properties)
       end
 
       def recv_authenticateUser()
@@ -843,13 +827,13 @@ module Accumulo
         raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'authenticateUser failed: unknown result')
       end
 
-      def changeUserAuthorizations(login, user, authorizations)
-        send_changeUserAuthorizations(login, user, authorizations)
+      def changeUserAuthorizations(sharedSecret, user, authorizations)
+        send_changeUserAuthorizations(sharedSecret, user, authorizations)
         recv_changeUserAuthorizations()
       end
 
-      def send_changeUserAuthorizations(login, user, authorizations)
-        send_message('changeUserAuthorizations', ChangeUserAuthorizations_args, :login => login, :user => user, :authorizations => authorizations)
+      def send_changeUserAuthorizations(sharedSecret, user, authorizations)
+        send_message('changeUserAuthorizations', ChangeUserAuthorizations_args, :sharedSecret => sharedSecret, :user => user, :authorizations => authorizations)
       end
 
       def recv_changeUserAuthorizations()
@@ -859,13 +843,13 @@ module Accumulo
         return
       end
 
-      def changeLocalUserPassword(login, user, password)
-        send_changeLocalUserPassword(login, user, password)
+      def changeLocalUserPassword(sharedSecret, user, password)
+        send_changeLocalUserPassword(sharedSecret, user, password)
         recv_changeLocalUserPassword()
       end
 
-      def send_changeLocalUserPassword(login, user, password)
-        send_message('changeLocalUserPassword', ChangeLocalUserPassword_args, :login => login, :user => user, :password => password)
+      def send_changeLocalUserPassword(sharedSecret, user, password)
+        send_message('changeLocalUserPassword', ChangeLocalUserPassword_args, :sharedSecret => sharedSecret, :user => user, :password => password)
       end
 
       def recv_changeLocalUserPassword()
@@ -875,13 +859,13 @@ module Accumulo
         return
       end
 
-      def createLocalUser(login, user, password)
-        send_createLocalUser(login, user, password)
+      def createLocalUser(sharedSecret, user, password)
+        send_createLocalUser(sharedSecret, user, password)
         recv_createLocalUser()
       end
 
-      def send_createLocalUser(login, user, password)
-        send_message('createLocalUser', CreateLocalUser_args, :login => login, :user => user, :password => password)
+      def send_createLocalUser(sharedSecret, user, password)
+        send_message('createLocalUser', CreateLocalUser_args, :sharedSecret => sharedSecret, :user => user, :password => password)
       end
 
       def recv_createLocalUser()
@@ -891,13 +875,13 @@ module Accumulo
         return
       end
 
-      def dropLocalUser(login, user)
-        send_dropLocalUser(login, user)
+      def dropLocalUser(sharedSecret, user)
+        send_dropLocalUser(sharedSecret, user)
         recv_dropLocalUser()
       end
 
-      def send_dropLocalUser(login, user)
-        send_message('dropLocalUser', DropLocalUser_args, :login => login, :user => user)
+      def send_dropLocalUser(sharedSecret, user)
+        send_message('dropLocalUser', DropLocalUser_args, :sharedSecret => sharedSecret, :user => user)
       end
 
       def recv_dropLocalUser()
@@ -907,13 +891,13 @@ module Accumulo
         return
       end
 
-      def getUserAuthorizations(login, user)
-        send_getUserAuthorizations(login, user)
+      def getUserAuthorizations(sharedSecret, user)
+        send_getUserAuthorizations(sharedSecret, user)
         return recv_getUserAuthorizations()
       end
 
-      def send_getUserAuthorizations(login, user)
-        send_message('getUserAuthorizations', GetUserAuthorizations_args, :login => login, :user => user)
+      def send_getUserAuthorizations(sharedSecret, user)
+        send_message('getUserAuthorizations', GetUserAuthorizations_args, :sharedSecret => sharedSecret, :user => user)
       end
 
       def recv_getUserAuthorizations()
@@ -924,13 +908,13 @@ module Accumulo
         raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'getUserAuthorizations failed: unknown result')
       end
 
-      def grantSystemPermission(login, user, perm)
-        send_grantSystemPermission(login, user, perm)
+      def grantSystemPermission(sharedSecret, user, perm)
+        send_grantSystemPermission(sharedSecret, user, perm)
         recv_grantSystemPermission()
       end
 
-      def send_grantSystemPermission(login, user, perm)
-        send_message('grantSystemPermission', GrantSystemPermission_args, :login => login, :user => user, :perm => perm)
+      def send_grantSystemPermission(sharedSecret, user, perm)
+        send_message('grantSystemPermission', GrantSystemPermission_args, :sharedSecret => sharedSecret, :user => user, :perm => perm)
       end
 
       def recv_grantSystemPermission()
@@ -940,13 +924,13 @@ module Accumulo
         return
       end
 
-      def grantTablePermission(login, user, table, perm)
-        send_grantTablePermission(login, user, table, perm)
+      def grantTablePermission(sharedSecret, user, table, perm)
+        send_grantTablePermission(sharedSecret, user, table, perm)
         recv_grantTablePermission()
       end
 
-      def send_grantTablePermission(login, user, table, perm)
-        send_message('grantTablePermission', GrantTablePermission_args, :login => login, :user => user, :table => table, :perm => perm)
+      def send_grantTablePermission(sharedSecret, user, table, perm)
+        send_message('grantTablePermission', GrantTablePermission_args, :sharedSecret => sharedSecret, :user => user, :table => table, :perm => perm)
       end
 
       def recv_grantTablePermission()
@@ -957,13 +941,13 @@ module Accumulo
         return
       end
 
-      def hasSystemPermission(login, user, perm)
-        send_hasSystemPermission(login, user, perm)
+      def hasSystemPermission(sharedSecret, user, perm)
+        send_hasSystemPermission(sharedSecret, user, perm)
         return recv_hasSystemPermission()
       end
 
-      def send_hasSystemPermission(login, user, perm)
-        send_message('hasSystemPermission', HasSystemPermission_args, :login => login, :user => user, :perm => perm)
+      def send_hasSystemPermission(sharedSecret, user, perm)
+        send_message('hasSystemPermission', HasSystemPermission_args, :sharedSecret => sharedSecret, :user => user, :perm => perm)
       end
 
       def recv_hasSystemPermission()
@@ -974,13 +958,13 @@ module Accumulo
         raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'hasSystemPermission failed: unknown result')
       end
 
-      def hasTablePermission(login, user, table, perm)
-        send_hasTablePermission(login, user, table, perm)
+      def hasTablePermission(sharedSecret, user, table, perm)
+        send_hasTablePermission(sharedSecret, user, table, perm)
         return recv_hasTablePermission()
       end
 
-      def send_hasTablePermission(login, user, table, perm)
-        send_message('hasTablePermission', HasTablePermission_args, :login => login, :user => user, :table => table, :perm => perm)
+      def send_hasTablePermission(sharedSecret, user, table, perm)
+        send_message('hasTablePermission', HasTablePermission_args, :sharedSecret => sharedSecret, :user => user, :table => table, :perm => perm)
       end
 
       def recv_hasTablePermission()
@@ -992,13 +976,13 @@ module Accumulo
         raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'hasTablePermission failed: unknown result')
       end
 
-      def listLocalUsers(login)
-        send_listLocalUsers(login)
+      def listLocalUsers(sharedSecret)
+        send_listLocalUsers(sharedSecret)
         return recv_listLocalUsers()
       end
 
-      def send_listLocalUsers(login)
-        send_message('listLocalUsers', ListLocalUsers_args, :login => login)
+      def send_listLocalUsers(sharedSecret)
+        send_message('listLocalUsers', ListLocalUsers_args, :sharedSecret => sharedSecret)
       end
 
       def recv_listLocalUsers()
@@ -1010,13 +994,13 @@ module Accumulo
         raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'listLocalUsers failed: unknown result')
       end
 
-      def revokeSystemPermission(login, user, perm)
-        send_revokeSystemPermission(login, user, perm)
+      def revokeSystemPermission(sharedSecret, user, perm)
+        send_revokeSystemPermission(sharedSecret, user, perm)
         recv_revokeSystemPermission()
       end
 
-      def send_revokeSystemPermission(login, user, perm)
-        send_message('revokeSystemPermission', RevokeSystemPermission_args, :login => login, :user => user, :perm => perm)
+      def send_revokeSystemPermission(sharedSecret, user, perm)
+        send_message('revokeSystemPermission', RevokeSystemPermission_args, :sharedSecret => sharedSecret, :user => user, :perm => perm)
       end
 
       def recv_revokeSystemPermission()
@@ -1026,13 +1010,13 @@ module Accumulo
         return
       end
 
-      def revokeTablePermission(login, user, table, perm)
-        send_revokeTablePermission(login, user, table, perm)
+      def revokeTablePermission(sharedSecret, user, table, perm)
+        send_revokeTablePermission(sharedSecret, user, table, perm)
         recv_revokeTablePermission()
       end
 
-      def send_revokeTablePermission(login, user, table, perm)
-        send_message('revokeTablePermission', RevokeTablePermission_args, :login => login, :user => user, :table => table, :perm => perm)
+      def send_revokeTablePermission(sharedSecret, user, table, perm)
+        send_message('revokeTablePermission', RevokeTablePermission_args, :sharedSecret => sharedSecret, :user => user, :table => table, :perm => perm)
       end
 
       def recv_revokeTablePermission()
@@ -1043,13 +1027,13 @@ module Accumulo
         return
       end
 
-      def grantNamespacePermission(login, user, namespaceName, perm)
-        send_grantNamespacePermission(login, user, namespaceName, perm)
+      def grantNamespacePermission(sharedSecret, user, namespaceName, perm)
+        send_grantNamespacePermission(sharedSecret, user, namespaceName, perm)
         recv_grantNamespacePermission()
       end
 
-      def send_grantNamespacePermission(login, user, namespaceName, perm)
-        send_message('grantNamespacePermission', GrantNamespacePermission_args, :login => login, :user => user, :namespaceName => namespaceName, :perm => perm)
+      def send_grantNamespacePermission(sharedSecret, user, namespaceName, perm)
+        send_message('grantNamespacePermission', GrantNamespacePermission_args, :sharedSecret => sharedSecret, :user => user, :namespaceName => namespaceName, :perm => perm)
       end
 
       def recv_grantNamespacePermission()
@@ -1059,13 +1043,13 @@ module Accumulo
         return
       end
 
-      def hasNamespacePermission(login, user, namespaceName, perm)
-        send_hasNamespacePermission(login, user, namespaceName, perm)
+      def hasNamespacePermission(sharedSecret, user, namespaceName, perm)
+        send_hasNamespacePermission(sharedSecret, user, namespaceName, perm)
         return recv_hasNamespacePermission()
       end
 
-      def send_hasNamespacePermission(login, user, namespaceName, perm)
-        send_message('hasNamespacePermission', HasNamespacePermission_args, :login => login, :user => user, :namespaceName => namespaceName, :perm => perm)
+      def send_hasNamespacePermission(sharedSecret, user, namespaceName, perm)
+        send_message('hasNamespacePermission', HasNamespacePermission_args, :sharedSecret => sharedSecret, :user => user, :namespaceName => namespaceName, :perm => perm)
       end
 
       def recv_hasNamespacePermission()
@@ -1076,13 +1060,13 @@ module Accumulo
         raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'hasNamespacePermission failed: unknown result')
       end
 
-      def revokeNamespacePermission(login, user, namespaceName, perm)
-        send_revokeNamespacePermission(login, user, namespaceName, perm)
+      def revokeNamespacePermission(sharedSecret, user, namespaceName, perm)
+        send_revokeNamespacePermission(sharedSecret, user, namespaceName, perm)
         recv_revokeNamespacePermission()
       end
 
-      def send_revokeNamespacePermission(login, user, namespaceName, perm)
-        send_message('revokeNamespacePermission', RevokeNamespacePermission_args, :login => login, :user => user, :namespaceName => namespaceName, :perm => perm)
+      def send_revokeNamespacePermission(sharedSecret, user, namespaceName, perm)
+        send_message('revokeNamespacePermission', RevokeNamespacePermission_args, :sharedSecret => sharedSecret, :user => user, :namespaceName => namespaceName, :perm => perm)
       end
 
       def recv_revokeNamespacePermission()
@@ -1092,13 +1076,13 @@ module Accumulo
         return
       end
 
-      def createBatchScanner(login, tableName, options)
-        send_createBatchScanner(login, tableName, options)
+      def createBatchScanner(sharedSecret, tableName, options)
+        send_createBatchScanner(sharedSecret, tableName, options)
         return recv_createBatchScanner()
       end
 
-      def send_createBatchScanner(login, tableName, options)
-        send_message('createBatchScanner', CreateBatchScanner_args, :login => login, :tableName => tableName, :options => options)
+      def send_createBatchScanner(sharedSecret, tableName, options)
+        send_message('createBatchScanner', CreateBatchScanner_args, :sharedSecret => sharedSecret, :tableName => tableName, :options => options)
       end
 
       def recv_createBatchScanner()
@@ -1110,13 +1094,13 @@ module Accumulo
         raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'createBatchScanner failed: unknown result')
       end
 
-      def createScanner(login, tableName, options)
-        send_createScanner(login, tableName, options)
+      def createScanner(sharedSecret, tableName, options)
+        send_createScanner(sharedSecret, tableName, options)
         return recv_createScanner()
       end
 
-      def send_createScanner(login, tableName, options)
-        send_message('createScanner', CreateScanner_args, :login => login, :tableName => tableName, :options => options)
+      def send_createScanner(sharedSecret, tableName, options)
+        send_message('createScanner', CreateScanner_args, :sharedSecret => sharedSecret, :tableName => tableName, :options => options)
       end
 
       def recv_createScanner()
@@ -1195,13 +1179,13 @@ module Accumulo
         return
       end
 
-      def updateAndFlush(login, tableName, cells)
-        send_updateAndFlush(login, tableName, cells)
+      def updateAndFlush(sharedSecret, tableName, cells)
+        send_updateAndFlush(sharedSecret, tableName, cells)
         recv_updateAndFlush()
       end
 
-      def send_updateAndFlush(login, tableName, cells)
-        send_message('updateAndFlush', UpdateAndFlush_args, :login => login, :tableName => tableName, :cells => cells)
+      def send_updateAndFlush(sharedSecret, tableName, cells)
+        send_message('updateAndFlush', UpdateAndFlush_args, :sharedSecret => sharedSecret, :tableName => tableName, :cells => cells)
       end
 
       def recv_updateAndFlush()
@@ -1213,13 +1197,13 @@ module Accumulo
         return
       end
 
-      def createWriter(login, tableName, opts)
-        send_createWriter(login, tableName, opts)
+      def createWriter(sharedSecret, tableName, opts)
+        send_createWriter(sharedSecret, tableName, opts)
         return recv_createWriter()
       end
 
-      def send_createWriter(login, tableName, opts)
-        send_message('createWriter', CreateWriter_args, :login => login, :tableName => tableName, :opts => opts)
+      def send_createWriter(sharedSecret, tableName, opts)
+        send_message('createWriter', CreateWriter_args, :sharedSecret => sharedSecret, :tableName => tableName, :opts => opts)
       end
 
       def recv_createWriter()
@@ -1270,13 +1254,13 @@ module Accumulo
         return
       end
 
-      def updateRowConditionally(login, tableName, row, updates)
-        send_updateRowConditionally(login, tableName, row, updates)
+      def updateRowConditionally(sharedSecret, tableName, row, updates)
+        send_updateRowConditionally(sharedSecret, tableName, row, updates)
         return recv_updateRowConditionally()
       end
 
-      def send_updateRowConditionally(login, tableName, row, updates)
-        send_message('updateRowConditionally', UpdateRowConditionally_args, :login => login, :tableName => tableName, :row => row, :updates => updates)
+      def send_updateRowConditionally(sharedSecret, tableName, row, updates)
+        send_message('updateRowConditionally', UpdateRowConditionally_args, :sharedSecret => sharedSecret, :tableName => tableName, :row => row, :updates => updates)
       end
 
       def recv_updateRowConditionally()
@@ -1288,13 +1272,13 @@ module Accumulo
         raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'updateRowConditionally failed: unknown result')
       end
 
-      def createConditionalWriter(login, tableName, options)
-        send_createConditionalWriter(login, tableName, options)
+      def createConditionalWriter(sharedSecret, tableName, options)
+        send_createConditionalWriter(sharedSecret, tableName, options)
         return recv_createConditionalWriter()
       end
 
-      def send_createConditionalWriter(login, tableName, options)
-        send_message('createConditionalWriter', CreateConditionalWriter_args, :login => login, :tableName => tableName, :options => options)
+      def send_createConditionalWriter(sharedSecret, tableName, options)
+        send_message('createConditionalWriter', CreateConditionalWriter_args, :sharedSecret => sharedSecret, :tableName => tableName, :options => options)
       end
 
       def recv_createConditionalWriter()
@@ -1398,13 +1382,13 @@ module Accumulo
         raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'defaultNamespace failed: unknown result')
       end
 
-      def listNamespaces(login)
-        send_listNamespaces(login)
+      def listNamespaces(sharedSecret)
+        send_listNamespaces(sharedSecret)
         return recv_listNamespaces()
       end
 
-      def send_listNamespaces(login)
-        send_message('listNamespaces', ListNamespaces_args, :login => login)
+      def send_listNamespaces(sharedSecret)
+        send_message('listNamespaces', ListNamespaces_args, :sharedSecret => sharedSecret)
       end
 
       def recv_listNamespaces()
@@ -1415,13 +1399,13 @@ module Accumulo
         raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'listNamespaces failed: unknown result')
       end
 
-      def namespaceExists(login, namespaceName)
-        send_namespaceExists(login, namespaceName)
+      def namespaceExists(sharedSecret, namespaceName)
+        send_namespaceExists(sharedSecret, namespaceName)
         return recv_namespaceExists()
       end
 
-      def send_namespaceExists(login, namespaceName)
-        send_message('namespaceExists', NamespaceExists_args, :login => login, :namespaceName => namespaceName)
+      def send_namespaceExists(sharedSecret, namespaceName)
+        send_message('namespaceExists', NamespaceExists_args, :sharedSecret => sharedSecret, :namespaceName => namespaceName)
       end
 
       def recv_namespaceExists()
@@ -1432,13 +1416,13 @@ module Accumulo
         raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'namespaceExists failed: unknown result')
       end
 
-      def createNamespace(login, namespaceName)
-        send_createNamespace(login, namespaceName)
+      def createNamespace(sharedSecret, namespaceName)
+        send_createNamespace(sharedSecret, namespaceName)
         recv_createNamespace()
       end
 
-      def send_createNamespace(login, namespaceName)
-        send_message('createNamespace', CreateNamespace_args, :login => login, :namespaceName => namespaceName)
+      def send_createNamespace(sharedSecret, namespaceName)
+        send_message('createNamespace', CreateNamespace_args, :sharedSecret => sharedSecret, :namespaceName => namespaceName)
       end
 
       def recv_createNamespace()
@@ -1449,13 +1433,13 @@ module Accumulo
         return
       end
 
-      def deleteNamespace(login, namespaceName)
-        send_deleteNamespace(login, namespaceName)
+      def deleteNamespace(sharedSecret, namespaceName)
+        send_deleteNamespace(sharedSecret, namespaceName)
         recv_deleteNamespace()
       end
 
-      def send_deleteNamespace(login, namespaceName)
-        send_message('deleteNamespace', DeleteNamespace_args, :login => login, :namespaceName => namespaceName)
+      def send_deleteNamespace(sharedSecret, namespaceName)
+        send_message('deleteNamespace', DeleteNamespace_args, :sharedSecret => sharedSecret, :namespaceName => namespaceName)
       end
 
       def recv_deleteNamespace()
@@ -1467,13 +1451,13 @@ module Accumulo
         return
       end
 
-      def renameNamespace(login, oldNamespaceName, newNamespaceName)
-        send_renameNamespace(login, oldNamespaceName, newNamespaceName)
+      def renameNamespace(sharedSecret, oldNamespaceName, newNamespaceName)
+        send_renameNamespace(sharedSecret, oldNamespaceName, newNamespaceName)
         recv_renameNamespace()
       end
 
-      def send_renameNamespace(login, oldNamespaceName, newNamespaceName)
-        send_message('renameNamespace', RenameNamespace_args, :login => login, :oldNamespaceName => oldNamespaceName, :newNamespaceName => newNamespaceName)
+      def send_renameNamespace(sharedSecret, oldNamespaceName, newNamespaceName)
+        send_message('renameNamespace', RenameNamespace_args, :sharedSecret => sharedSecret, :oldNamespaceName => oldNamespaceName, :newNamespaceName => newNamespaceName)
       end
 
       def recv_renameNamespace()
@@ -1485,13 +1469,13 @@ module Accumulo
         return
       end
 
-      def setNamespaceProperty(login, namespaceName, property, value)
-        send_setNamespaceProperty(login, namespaceName, property, value)
+      def setNamespaceProperty(sharedSecret, namespaceName, property, value)
+        send_setNamespaceProperty(sharedSecret, namespaceName, property, value)
         recv_setNamespaceProperty()
       end
 
-      def send_setNamespaceProperty(login, namespaceName, property, value)
-        send_message('setNamespaceProperty', SetNamespaceProperty_args, :login => login, :namespaceName => namespaceName, :property => property, :value => value)
+      def send_setNamespaceProperty(sharedSecret, namespaceName, property, value)
+        send_message('setNamespaceProperty', SetNamespaceProperty_args, :sharedSecret => sharedSecret, :namespaceName => namespaceName, :property => property, :value => value)
       end
 
       def recv_setNamespaceProperty()
@@ -1502,13 +1486,13 @@ module Accumulo
         return
       end
 
-      def removeNamespaceProperty(login, namespaceName, property)
-        send_removeNamespaceProperty(login, namespaceName, property)
+      def removeNamespaceProperty(sharedSecret, namespaceName, property)
+        send_removeNamespaceProperty(sharedSecret, namespaceName, property)
         recv_removeNamespaceProperty()
       end
 
-      def send_removeNamespaceProperty(login, namespaceName, property)
-        send_message('removeNamespaceProperty', RemoveNamespaceProperty_args, :login => login, :namespaceName => namespaceName, :property => property)
+      def send_removeNamespaceProperty(sharedSecret, namespaceName, property)
+        send_message('removeNamespaceProperty', RemoveNamespaceProperty_args, :sharedSecret => sharedSecret, :namespaceName => namespaceName, :property => property)
       end
 
       def recv_removeNamespaceProperty()
@@ -1519,13 +1503,13 @@ module Accumulo
         return
       end
 
-      def getNamespaceProperties(login, namespaceName)
-        send_getNamespaceProperties(login, namespaceName)
+      def getNamespaceProperties(sharedSecret, namespaceName)
+        send_getNamespaceProperties(sharedSecret, namespaceName)
         return recv_getNamespaceProperties()
       end
 
-      def send_getNamespaceProperties(login, namespaceName)
-        send_message('getNamespaceProperties', GetNamespaceProperties_args, :login => login, :namespaceName => namespaceName)
+      def send_getNamespaceProperties(sharedSecret, namespaceName)
+        send_message('getNamespaceProperties', GetNamespaceProperties_args, :sharedSecret => sharedSecret, :namespaceName => namespaceName)
       end
 
       def recv_getNamespaceProperties()
@@ -1537,13 +1521,13 @@ module Accumulo
         raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'getNamespaceProperties failed: unknown result')
       end
 
-      def namespaceIdMap(login)
-        send_namespaceIdMap(login)
+      def namespaceIdMap(sharedSecret)
+        send_namespaceIdMap(sharedSecret)
         return recv_namespaceIdMap()
       end
 
-      def send_namespaceIdMap(login)
-        send_message('namespaceIdMap', NamespaceIdMap_args, :login => login)
+      def send_namespaceIdMap(sharedSecret)
+        send_message('namespaceIdMap', NamespaceIdMap_args, :sharedSecret => sharedSecret)
       end
 
       def recv_namespaceIdMap()
@@ -1554,13 +1538,13 @@ module Accumulo
         raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'namespaceIdMap failed: unknown result')
       end
 
-      def attachNamespaceIterator(login, namespaceName, setting, scopes)
-        send_attachNamespaceIterator(login, namespaceName, setting, scopes)
+      def attachNamespaceIterator(sharedSecret, namespaceName, setting, scopes)
+        send_attachNamespaceIterator(sharedSecret, namespaceName, setting, scopes)
         recv_attachNamespaceIterator()
       end
 
-      def send_attachNamespaceIterator(login, namespaceName, setting, scopes)
-        send_message('attachNamespaceIterator', AttachNamespaceIterator_args, :login => login, :namespaceName => namespaceName, :setting => setting, :scopes => scopes)
+      def send_attachNamespaceIterator(sharedSecret, namespaceName, setting, scopes)
+        send_message('attachNamespaceIterator', AttachNamespaceIterator_args, :sharedSecret => sharedSecret, :namespaceName => namespaceName, :setting => setting, :scopes => scopes)
       end
 
       def recv_attachNamespaceIterator()
@@ -1571,13 +1555,13 @@ module Accumulo
         return
       end
 
-      def removeNamespaceIterator(login, namespaceName, name, scopes)
-        send_removeNamespaceIterator(login, namespaceName, name, scopes)
+      def removeNamespaceIterator(sharedSecret, namespaceName, name, scopes)
+        send_removeNamespaceIterator(sharedSecret, namespaceName, name, scopes)
         recv_removeNamespaceIterator()
       end
 
-      def send_removeNamespaceIterator(login, namespaceName, name, scopes)
-        send_message('removeNamespaceIterator', RemoveNamespaceIterator_args, :login => login, :namespaceName => namespaceName, :name => name, :scopes => scopes)
+      def send_removeNamespaceIterator(sharedSecret, namespaceName, name, scopes)
+        send_message('removeNamespaceIterator', RemoveNamespaceIterator_args, :sharedSecret => sharedSecret, :namespaceName => namespaceName, :name => name, :scopes => scopes)
       end
 
       def recv_removeNamespaceIterator()
@@ -1588,13 +1572,13 @@ module Accumulo
         return
       end
 
-      def getNamespaceIteratorSetting(login, namespaceName, name, scope)
-        send_getNamespaceIteratorSetting(login, namespaceName, name, scope)
+      def getNamespaceIteratorSetting(sharedSecret, namespaceName, name, scope)
+        send_getNamespaceIteratorSetting(sharedSecret, namespaceName, name, scope)
         return recv_getNamespaceIteratorSetting()
       end
 
-      def send_getNamespaceIteratorSetting(login, namespaceName, name, scope)
-        send_message('getNamespaceIteratorSetting', GetNamespaceIteratorSetting_args, :login => login, :namespaceName => namespaceName, :name => name, :scope => scope)
+      def send_getNamespaceIteratorSetting(sharedSecret, namespaceName, name, scope)
+        send_message('getNamespaceIteratorSetting', GetNamespaceIteratorSetting_args, :sharedSecret => sharedSecret, :namespaceName => namespaceName, :name => name, :scope => scope)
       end
 
       def recv_getNamespaceIteratorSetting()
@@ -1606,13 +1590,13 @@ module Accumulo
         raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'getNamespaceIteratorSetting failed: unknown result')
       end
 
-      def listNamespaceIterators(login, namespaceName)
-        send_listNamespaceIterators(login, namespaceName)
+      def listNamespaceIterators(sharedSecret, namespaceName)
+        send_listNamespaceIterators(sharedSecret, namespaceName)
         return recv_listNamespaceIterators()
       end
 
-      def send_listNamespaceIterators(login, namespaceName)
-        send_message('listNamespaceIterators', ListNamespaceIterators_args, :login => login, :namespaceName => namespaceName)
+      def send_listNamespaceIterators(sharedSecret, namespaceName)
+        send_message('listNamespaceIterators', ListNamespaceIterators_args, :sharedSecret => sharedSecret, :namespaceName => namespaceName)
       end
 
       def recv_listNamespaceIterators()
@@ -1624,13 +1608,13 @@ module Accumulo
         raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'listNamespaceIterators failed: unknown result')
       end
 
-      def checkNamespaceIteratorConflicts(login, namespaceName, setting, scopes)
-        send_checkNamespaceIteratorConflicts(login, namespaceName, setting, scopes)
+      def checkNamespaceIteratorConflicts(sharedSecret, namespaceName, setting, scopes)
+        send_checkNamespaceIteratorConflicts(sharedSecret, namespaceName, setting, scopes)
         recv_checkNamespaceIteratorConflicts()
       end
 
-      def send_checkNamespaceIteratorConflicts(login, namespaceName, setting, scopes)
-        send_message('checkNamespaceIteratorConflicts', CheckNamespaceIteratorConflicts_args, :login => login, :namespaceName => namespaceName, :setting => setting, :scopes => scopes)
+      def send_checkNamespaceIteratorConflicts(sharedSecret, namespaceName, setting, scopes)
+        send_message('checkNamespaceIteratorConflicts', CheckNamespaceIteratorConflicts_args, :sharedSecret => sharedSecret, :namespaceName => namespaceName, :setting => setting, :scopes => scopes)
       end
 
       def recv_checkNamespaceIteratorConflicts()
@@ -1641,13 +1625,13 @@ module Accumulo
         return
       end
 
-      def addNamespaceConstraint(login, namespaceName, constraintClassName)
-        send_addNamespaceConstraint(login, namespaceName, constraintClassName)
+      def addNamespaceConstraint(sharedSecret, namespaceName, constraintClassName)
+        send_addNamespaceConstraint(sharedSecret, namespaceName, constraintClassName)
         return recv_addNamespaceConstraint()
       end
 
-      def send_addNamespaceConstraint(login, namespaceName, constraintClassName)
-        send_message('addNamespaceConstraint', AddNamespaceConstraint_args, :login => login, :namespaceName => namespaceName, :constraintClassName => constraintClassName)
+      def send_addNamespaceConstraint(sharedSecret, namespaceName, constraintClassName)
+        send_message('addNamespaceConstraint', AddNamespaceConstraint_args, :sharedSecret => sharedSecret, :namespaceName => namespaceName, :constraintClassName => constraintClassName)
       end
 
       def recv_addNamespaceConstraint()
@@ -1659,13 +1643,13 @@ module Accumulo
         raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'addNamespaceConstraint failed: unknown result')
       end
 
-      def removeNamespaceConstraint(login, namespaceName, id)
-        send_removeNamespaceConstraint(login, namespaceName, id)
+      def removeNamespaceConstraint(sharedSecret, namespaceName, id)
+        send_removeNamespaceConstraint(sharedSecret, namespaceName, id)
         recv_removeNamespaceConstraint()
       end
 
-      def send_removeNamespaceConstraint(login, namespaceName, id)
-        send_message('removeNamespaceConstraint', RemoveNamespaceConstraint_args, :login => login, :namespaceName => namespaceName, :id => id)
+      def send_removeNamespaceConstraint(sharedSecret, namespaceName, id)
+        send_message('removeNamespaceConstraint', RemoveNamespaceConstraint_args, :sharedSecret => sharedSecret, :namespaceName => namespaceName, :id => id)
       end
 
       def recv_removeNamespaceConstraint()
@@ -1676,13 +1660,13 @@ module Accumulo
         return
       end
 
-      def listNamespaceConstraints(login, namespaceName)
-        send_listNamespaceConstraints(login, namespaceName)
+      def listNamespaceConstraints(sharedSecret, namespaceName)
+        send_listNamespaceConstraints(sharedSecret, namespaceName)
         return recv_listNamespaceConstraints()
       end
 
-      def send_listNamespaceConstraints(login, namespaceName)
-        send_message('listNamespaceConstraints', ListNamespaceConstraints_args, :login => login, :namespaceName => namespaceName)
+      def send_listNamespaceConstraints(sharedSecret, namespaceName)
+        send_message('listNamespaceConstraints', ListNamespaceConstraints_args, :sharedSecret => sharedSecret, :namespaceName => namespaceName)
       end
 
       def recv_listNamespaceConstraints()
@@ -1694,13 +1678,13 @@ module Accumulo
         raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'listNamespaceConstraints failed: unknown result')
       end
 
-      def testNamespaceClassLoad(login, namespaceName, className, asTypeName)
-        send_testNamespaceClassLoad(login, namespaceName, className, asTypeName)
+      def testNamespaceClassLoad(sharedSecret, namespaceName, className, asTypeName)
+        send_testNamespaceClassLoad(sharedSecret, namespaceName, className, asTypeName)
         return recv_testNamespaceClassLoad()
       end
 
-      def send_testNamespaceClassLoad(login, namespaceName, className, asTypeName)
-        send_message('testNamespaceClassLoad', TestNamespaceClassLoad_args, :login => login, :namespaceName => namespaceName, :className => className, :asTypeName => asTypeName)
+      def send_testNamespaceClassLoad(sharedSecret, namespaceName, className, asTypeName)
+        send_message('testNamespaceClassLoad', TestNamespaceClassLoad_args, :sharedSecret => sharedSecret, :namespaceName => namespaceName, :className => className, :asTypeName => asTypeName)
       end
 
       def recv_testNamespaceClassLoad()
@@ -1717,22 +1701,11 @@ module Accumulo
     class Processor
       include ::Thrift::Processor
 
-      def process_login(seqid, iprot, oprot)
-        args = read_args(iprot, Login_args)
-        result = Login_result.new()
-        begin
-          result.success = @handler.login(args.principal, args.loginProperties)
-        rescue ::Accumulo::AccumuloSecurityException => ouch2
-          result.ouch2 = ouch2
-        end
-        write_result(result, oprot, 'login', seqid)
-      end
-
       def process_addConstraint(seqid, iprot, oprot)
         args = read_args(iprot, AddConstraint_args)
         result = AddConstraint_result.new()
         begin
-          result.success = @handler.addConstraint(args.login, args.tableName, args.constraintClassName)
+          result.success = @handler.addConstraint(args.sharedSecret, args.tableName, args.constraintClassName)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -1747,7 +1720,7 @@ module Accumulo
         args = read_args(iprot, AddSplits_args)
         result = AddSplits_result.new()
         begin
-          @handler.addSplits(args.login, args.tableName, args.splits)
+          @handler.addSplits(args.sharedSecret, args.tableName, args.splits)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -1762,7 +1735,7 @@ module Accumulo
         args = read_args(iprot, AttachIterator_args)
         result = AttachIterator_result.new()
         begin
-          @handler.attachIterator(args.login, args.tableName, args.setting, args.scopes)
+          @handler.attachIterator(args.sharedSecret, args.tableName, args.setting, args.scopes)
         rescue ::Accumulo::AccumuloSecurityException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloException => ouch2
@@ -1777,7 +1750,7 @@ module Accumulo
         args = read_args(iprot, CheckIteratorConflicts_args)
         result = CheckIteratorConflicts_result.new()
         begin
-          @handler.checkIteratorConflicts(args.login, args.tableName, args.setting, args.scopes)
+          @handler.checkIteratorConflicts(args.sharedSecret, args.tableName, args.setting, args.scopes)
         rescue ::Accumulo::AccumuloSecurityException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloException => ouch2
@@ -1792,7 +1765,7 @@ module Accumulo
         args = read_args(iprot, ClearLocatorCache_args)
         result = ClearLocatorCache_result.new()
         begin
-          @handler.clearLocatorCache(args.login, args.tableName)
+          @handler.clearLocatorCache(args.sharedSecret, args.tableName)
         rescue ::Accumulo::TableNotFoundException => ouch1
           result.ouch1 = ouch1
         end
@@ -1803,7 +1776,7 @@ module Accumulo
         args = read_args(iprot, CloneTable_args)
         result = CloneTable_result.new()
         begin
-          @handler.cloneTable(args.login, args.tableName, args.newTableName, args.flush, args.propertiesToSet, args.propertiesToExclude)
+          @handler.cloneTable(args.sharedSecret, args.tableName, args.newTableName, args.flush, args.propertiesToSet, args.propertiesToExclude)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -1820,7 +1793,7 @@ module Accumulo
         args = read_args(iprot, CompactTable_args)
         result = CompactTable_result.new()
         begin
-          @handler.compactTable(args.login, args.tableName, args.startRow, args.endRow, args.iterators, args.flush, args.wait, args.selectorConfig, args.configurerConfig)
+          @handler.compactTable(args.sharedSecret, args.tableName, args.startRow, args.endRow, args.iterators, args.flush, args.wait, args.selectorConfig, args.configurerConfig)
         rescue ::Accumulo::AccumuloSecurityException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::TableNotFoundException => ouch2
@@ -1835,7 +1808,7 @@ module Accumulo
         args = read_args(iprot, CancelCompaction_args)
         result = CancelCompaction_result.new()
         begin
-          @handler.cancelCompaction(args.login, args.tableName)
+          @handler.cancelCompaction(args.sharedSecret, args.tableName)
         rescue ::Accumulo::AccumuloSecurityException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::TableNotFoundException => ouch2
@@ -1850,7 +1823,7 @@ module Accumulo
         args = read_args(iprot, CreateTable_args)
         result = CreateTable_result.new()
         begin
-          @handler.createTable(args.login, args.tableName, args.versioningIter, args.type)
+          @handler.createTable(args.sharedSecret, args.tableName, args.versioningIter, args.type)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -1865,7 +1838,7 @@ module Accumulo
         args = read_args(iprot, DeleteTable_args)
         result = DeleteTable_result.new()
         begin
-          @handler.deleteTable(args.login, args.tableName)
+          @handler.deleteTable(args.sharedSecret, args.tableName)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -1880,7 +1853,7 @@ module Accumulo
         args = read_args(iprot, DeleteRows_args)
         result = DeleteRows_result.new()
         begin
-          @handler.deleteRows(args.login, args.tableName, args.startRow, args.endRow)
+          @handler.deleteRows(args.sharedSecret, args.tableName, args.startRow, args.endRow)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -1895,7 +1868,7 @@ module Accumulo
         args = read_args(iprot, ExportTable_args)
         result = ExportTable_result.new()
         begin
-          @handler.exportTable(args.login, args.tableName, args.exportDir)
+          @handler.exportTable(args.sharedSecret, args.tableName, args.exportDir)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -1910,7 +1883,7 @@ module Accumulo
         args = read_args(iprot, FlushTable_args)
         result = FlushTable_result.new()
         begin
-          @handler.flushTable(args.login, args.tableName, args.startRow, args.endRow, args.wait)
+          @handler.flushTable(args.sharedSecret, args.tableName, args.startRow, args.endRow, args.wait)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -1925,7 +1898,7 @@ module Accumulo
         args = read_args(iprot, GetDiskUsage_args)
         result = GetDiskUsage_result.new()
         begin
-          result.success = @handler.getDiskUsage(args.login, args.tables)
+          result.success = @handler.getDiskUsage(args.sharedSecret, args.tables)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -1940,7 +1913,7 @@ module Accumulo
         args = read_args(iprot, GetLocalityGroups_args)
         result = GetLocalityGroups_result.new()
         begin
-          result.success = @handler.getLocalityGroups(args.login, args.tableName)
+          result.success = @handler.getLocalityGroups(args.sharedSecret, args.tableName)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -1955,7 +1928,7 @@ module Accumulo
         args = read_args(iprot, GetIteratorSetting_args)
         result = GetIteratorSetting_result.new()
         begin
-          result.success = @handler.getIteratorSetting(args.login, args.tableName, args.iteratorName, args.scope)
+          result.success = @handler.getIteratorSetting(args.sharedSecret, args.tableName, args.iteratorName, args.scope)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -1970,7 +1943,7 @@ module Accumulo
         args = read_args(iprot, GetMaxRow_args)
         result = GetMaxRow_result.new()
         begin
-          result.success = @handler.getMaxRow(args.login, args.tableName, args.auths, args.startRow, args.startInclusive, args.endRow, args.endInclusive)
+          result.success = @handler.getMaxRow(args.sharedSecret, args.tableName, args.auths, args.startRow, args.startInclusive, args.endRow, args.endInclusive)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -1985,7 +1958,7 @@ module Accumulo
         args = read_args(iprot, GetTableProperties_args)
         result = GetTableProperties_result.new()
         begin
-          result.success = @handler.getTableProperties(args.login, args.tableName)
+          result.success = @handler.getTableProperties(args.sharedSecret, args.tableName)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2000,7 +1973,7 @@ module Accumulo
         args = read_args(iprot, ImportDirectory_args)
         result = ImportDirectory_result.new()
         begin
-          @handler.importDirectory(args.login, args.tableName, args.importDir, args.failureDir, args.setTime)
+          @handler.importDirectory(args.sharedSecret, args.tableName, args.importDir, args.failureDir, args.setTime)
         rescue ::Accumulo::TableNotFoundException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloException => ouch3
@@ -2015,7 +1988,7 @@ module Accumulo
         args = read_args(iprot, ImportTable_args)
         result = ImportTable_result.new()
         begin
-          @handler.importTable(args.login, args.tableName, args.importDir)
+          @handler.importTable(args.sharedSecret, args.tableName, args.importDir)
         rescue ::Accumulo::TableExistsException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloException => ouch2
@@ -2030,7 +2003,7 @@ module Accumulo
         args = read_args(iprot, ListSplits_args)
         result = ListSplits_result.new()
         begin
-          result.success = @handler.listSplits(args.login, args.tableName, args.maxSplits)
+          result.success = @handler.listSplits(args.sharedSecret, args.tableName, args.maxSplits)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2044,7 +2017,7 @@ module Accumulo
       def process_listTables(seqid, iprot, oprot)
         args = read_args(iprot, ListTables_args)
         result = ListTables_result.new()
-        result.success = @handler.listTables(args.login)
+        result.success = @handler.listTables(args.sharedSecret)
         write_result(result, oprot, 'listTables', seqid)
       end
 
@@ -2052,7 +2025,7 @@ module Accumulo
         args = read_args(iprot, ListIterators_args)
         result = ListIterators_result.new()
         begin
-          result.success = @handler.listIterators(args.login, args.tableName)
+          result.success = @handler.listIterators(args.sharedSecret, args.tableName)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2067,7 +2040,7 @@ module Accumulo
         args = read_args(iprot, ListConstraints_args)
         result = ListConstraints_result.new()
         begin
-          result.success = @handler.listConstraints(args.login, args.tableName)
+          result.success = @handler.listConstraints(args.sharedSecret, args.tableName)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2082,7 +2055,7 @@ module Accumulo
         args = read_args(iprot, MergeTablets_args)
         result = MergeTablets_result.new()
         begin
-          @handler.mergeTablets(args.login, args.tableName, args.startRow, args.endRow)
+          @handler.mergeTablets(args.sharedSecret, args.tableName, args.startRow, args.endRow)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2097,7 +2070,7 @@ module Accumulo
         args = read_args(iprot, OfflineTable_args)
         result = OfflineTable_result.new()
         begin
-          @handler.offlineTable(args.login, args.tableName, args.wait)
+          @handler.offlineTable(args.sharedSecret, args.tableName, args.wait)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2112,7 +2085,7 @@ module Accumulo
         args = read_args(iprot, OnlineTable_args)
         result = OnlineTable_result.new()
         begin
-          @handler.onlineTable(args.login, args.tableName, args.wait)
+          @handler.onlineTable(args.sharedSecret, args.tableName, args.wait)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2127,7 +2100,7 @@ module Accumulo
         args = read_args(iprot, RemoveConstraint_args)
         result = RemoveConstraint_result.new()
         begin
-          @handler.removeConstraint(args.login, args.tableName, args.constraint)
+          @handler.removeConstraint(args.sharedSecret, args.tableName, args.constraint)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2142,7 +2115,7 @@ module Accumulo
         args = read_args(iprot, RemoveIterator_args)
         result = RemoveIterator_result.new()
         begin
-          @handler.removeIterator(args.login, args.tableName, args.iterName, args.scopes)
+          @handler.removeIterator(args.sharedSecret, args.tableName, args.iterName, args.scopes)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2157,7 +2130,7 @@ module Accumulo
         args = read_args(iprot, RemoveTableProperty_args)
         result = RemoveTableProperty_result.new()
         begin
-          @handler.removeTableProperty(args.login, args.tableName, args.property)
+          @handler.removeTableProperty(args.sharedSecret, args.tableName, args.property)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2172,7 +2145,7 @@ module Accumulo
         args = read_args(iprot, RenameTable_args)
         result = RenameTable_result.new()
         begin
-          @handler.renameTable(args.login, args.oldTableName, args.newTableName)
+          @handler.renameTable(args.sharedSecret, args.oldTableName, args.newTableName)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2189,7 +2162,7 @@ module Accumulo
         args = read_args(iprot, SetLocalityGroups_args)
         result = SetLocalityGroups_result.new()
         begin
-          @handler.setLocalityGroups(args.login, args.tableName, args.groups)
+          @handler.setLocalityGroups(args.sharedSecret, args.tableName, args.groups)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2204,7 +2177,7 @@ module Accumulo
         args = read_args(iprot, SetTableProperty_args)
         result = SetTableProperty_result.new()
         begin
-          @handler.setTableProperty(args.login, args.tableName, args.property, args.value)
+          @handler.setTableProperty(args.sharedSecret, args.tableName, args.property, args.value)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2219,7 +2192,7 @@ module Accumulo
         args = read_args(iprot, SplitRangeByTablets_args)
         result = SplitRangeByTablets_result.new()
         begin
-          result.success = @handler.splitRangeByTablets(args.login, args.tableName, args.range, args.maxSplits)
+          result.success = @handler.splitRangeByTablets(args.sharedSecret, args.tableName, args.range, args.maxSplits)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2233,14 +2206,14 @@ module Accumulo
       def process_tableExists(seqid, iprot, oprot)
         args = read_args(iprot, TableExists_args)
         result = TableExists_result.new()
-        result.success = @handler.tableExists(args.login, args.tableName)
+        result.success = @handler.tableExists(args.sharedSecret, args.tableName)
         write_result(result, oprot, 'tableExists', seqid)
       end
 
       def process_tableIdMap(seqid, iprot, oprot)
         args = read_args(iprot, TableIdMap_args)
         result = TableIdMap_result.new()
-        result.success = @handler.tableIdMap(args.login)
+        result.success = @handler.tableIdMap(args.sharedSecret)
         write_result(result, oprot, 'tableIdMap', seqid)
       end
 
@@ -2248,7 +2221,7 @@ module Accumulo
         args = read_args(iprot, TestTableClassLoad_args)
         result = TestTableClassLoad_result.new()
         begin
-          result.success = @handler.testTableClassLoad(args.login, args.tableName, args.className, args.asTypeName)
+          result.success = @handler.testTableClassLoad(args.sharedSecret, args.tableName, args.className, args.asTypeName)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2263,7 +2236,7 @@ module Accumulo
         args = read_args(iprot, PingTabletServer_args)
         result = PingTabletServer_result.new()
         begin
-          @handler.pingTabletServer(args.login, args.tserver)
+          @handler.pingTabletServer(args.sharedSecret, args.tserver)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2276,7 +2249,7 @@ module Accumulo
         args = read_args(iprot, GetActiveScans_args)
         result = GetActiveScans_result.new()
         begin
-          result.success = @handler.getActiveScans(args.login, args.tserver)
+          result.success = @handler.getActiveScans(args.sharedSecret, args.tserver)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2289,7 +2262,7 @@ module Accumulo
         args = read_args(iprot, GetActiveCompactions_args)
         result = GetActiveCompactions_result.new()
         begin
-          result.success = @handler.getActiveCompactions(args.login, args.tserver)
+          result.success = @handler.getActiveCompactions(args.sharedSecret, args.tserver)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2302,7 +2275,7 @@ module Accumulo
         args = read_args(iprot, GetSiteConfiguration_args)
         result = GetSiteConfiguration_result.new()
         begin
-          result.success = @handler.getSiteConfiguration(args.login)
+          result.success = @handler.getSiteConfiguration(args.sharedSecret)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2315,7 +2288,7 @@ module Accumulo
         args = read_args(iprot, GetSystemConfiguration_args)
         result = GetSystemConfiguration_result.new()
         begin
-          result.success = @handler.getSystemConfiguration(args.login)
+          result.success = @handler.getSystemConfiguration(args.sharedSecret)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2327,7 +2300,7 @@ module Accumulo
       def process_getTabletServers(seqid, iprot, oprot)
         args = read_args(iprot, GetTabletServers_args)
         result = GetTabletServers_result.new()
-        result.success = @handler.getTabletServers(args.login)
+        result.success = @handler.getTabletServers(args.sharedSecret)
         write_result(result, oprot, 'getTabletServers', seqid)
       end
 
@@ -2335,7 +2308,7 @@ module Accumulo
         args = read_args(iprot, RemoveProperty_args)
         result = RemoveProperty_result.new()
         begin
-          @handler.removeProperty(args.login, args.property)
+          @handler.removeProperty(args.sharedSecret, args.property)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2348,7 +2321,7 @@ module Accumulo
         args = read_args(iprot, SetProperty_args)
         result = SetProperty_result.new()
         begin
-          @handler.setProperty(args.login, args.property, args.value)
+          @handler.setProperty(args.sharedSecret, args.property, args.value)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2361,7 +2334,7 @@ module Accumulo
         args = read_args(iprot, TestClassLoad_args)
         result = TestClassLoad_result.new()
         begin
-          result.success = @handler.testClassLoad(args.login, args.className, args.asTypeName)
+          result.success = @handler.testClassLoad(args.sharedSecret, args.className, args.asTypeName)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2374,7 +2347,7 @@ module Accumulo
         args = read_args(iprot, AuthenticateUser_args)
         result = AuthenticateUser_result.new()
         begin
-          result.success = @handler.authenticateUser(args.login, args.user, args.properties)
+          result.success = @handler.authenticateUser(args.sharedSecret, args.user, args.properties)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2387,7 +2360,7 @@ module Accumulo
         args = read_args(iprot, ChangeUserAuthorizations_args)
         result = ChangeUserAuthorizations_result.new()
         begin
-          @handler.changeUserAuthorizations(args.login, args.user, args.authorizations)
+          @handler.changeUserAuthorizations(args.sharedSecret, args.user, args.authorizations)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2400,7 +2373,7 @@ module Accumulo
         args = read_args(iprot, ChangeLocalUserPassword_args)
         result = ChangeLocalUserPassword_result.new()
         begin
-          @handler.changeLocalUserPassword(args.login, args.user, args.password)
+          @handler.changeLocalUserPassword(args.sharedSecret, args.user, args.password)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2413,7 +2386,7 @@ module Accumulo
         args = read_args(iprot, CreateLocalUser_args)
         result = CreateLocalUser_result.new()
         begin
-          @handler.createLocalUser(args.login, args.user, args.password)
+          @handler.createLocalUser(args.sharedSecret, args.user, args.password)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2426,7 +2399,7 @@ module Accumulo
         args = read_args(iprot, DropLocalUser_args)
         result = DropLocalUser_result.new()
         begin
-          @handler.dropLocalUser(args.login, args.user)
+          @handler.dropLocalUser(args.sharedSecret, args.user)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2439,7 +2412,7 @@ module Accumulo
         args = read_args(iprot, GetUserAuthorizations_args)
         result = GetUserAuthorizations_result.new()
         begin
-          result.success = @handler.getUserAuthorizations(args.login, args.user)
+          result.success = @handler.getUserAuthorizations(args.sharedSecret, args.user)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2452,7 +2425,7 @@ module Accumulo
         args = read_args(iprot, GrantSystemPermission_args)
         result = GrantSystemPermission_result.new()
         begin
-          @handler.grantSystemPermission(args.login, args.user, args.perm)
+          @handler.grantSystemPermission(args.sharedSecret, args.user, args.perm)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2465,7 +2438,7 @@ module Accumulo
         args = read_args(iprot, GrantTablePermission_args)
         result = GrantTablePermission_result.new()
         begin
-          @handler.grantTablePermission(args.login, args.user, args.table, args.perm)
+          @handler.grantTablePermission(args.sharedSecret, args.user, args.table, args.perm)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2480,7 +2453,7 @@ module Accumulo
         args = read_args(iprot, HasSystemPermission_args)
         result = HasSystemPermission_result.new()
         begin
-          result.success = @handler.hasSystemPermission(args.login, args.user, args.perm)
+          result.success = @handler.hasSystemPermission(args.sharedSecret, args.user, args.perm)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2493,7 +2466,7 @@ module Accumulo
         args = read_args(iprot, HasTablePermission_args)
         result = HasTablePermission_result.new()
         begin
-          result.success = @handler.hasTablePermission(args.login, args.user, args.table, args.perm)
+          result.success = @handler.hasTablePermission(args.sharedSecret, args.user, args.table, args.perm)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2508,7 +2481,7 @@ module Accumulo
         args = read_args(iprot, ListLocalUsers_args)
         result = ListLocalUsers_result.new()
         begin
-          result.success = @handler.listLocalUsers(args.login)
+          result.success = @handler.listLocalUsers(args.sharedSecret)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2523,7 +2496,7 @@ module Accumulo
         args = read_args(iprot, RevokeSystemPermission_args)
         result = RevokeSystemPermission_result.new()
         begin
-          @handler.revokeSystemPermission(args.login, args.user, args.perm)
+          @handler.revokeSystemPermission(args.sharedSecret, args.user, args.perm)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2536,7 +2509,7 @@ module Accumulo
         args = read_args(iprot, RevokeTablePermission_args)
         result = RevokeTablePermission_result.new()
         begin
-          @handler.revokeTablePermission(args.login, args.user, args.table, args.perm)
+          @handler.revokeTablePermission(args.sharedSecret, args.user, args.table, args.perm)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2551,7 +2524,7 @@ module Accumulo
         args = read_args(iprot, GrantNamespacePermission_args)
         result = GrantNamespacePermission_result.new()
         begin
-          @handler.grantNamespacePermission(args.login, args.user, args.namespaceName, args.perm)
+          @handler.grantNamespacePermission(args.sharedSecret, args.user, args.namespaceName, args.perm)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2564,7 +2537,7 @@ module Accumulo
         args = read_args(iprot, HasNamespacePermission_args)
         result = HasNamespacePermission_result.new()
         begin
-          result.success = @handler.hasNamespacePermission(args.login, args.user, args.namespaceName, args.perm)
+          result.success = @handler.hasNamespacePermission(args.sharedSecret, args.user, args.namespaceName, args.perm)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2577,7 +2550,7 @@ module Accumulo
         args = read_args(iprot, RevokeNamespacePermission_args)
         result = RevokeNamespacePermission_result.new()
         begin
-          @handler.revokeNamespacePermission(args.login, args.user, args.namespaceName, args.perm)
+          @handler.revokeNamespacePermission(args.sharedSecret, args.user, args.namespaceName, args.perm)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2590,7 +2563,7 @@ module Accumulo
         args = read_args(iprot, CreateBatchScanner_args)
         result = CreateBatchScanner_result.new()
         begin
-          result.success = @handler.createBatchScanner(args.login, args.tableName, args.options)
+          result.success = @handler.createBatchScanner(args.sharedSecret, args.tableName, args.options)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2605,7 +2578,7 @@ module Accumulo
         args = read_args(iprot, CreateScanner_args)
         result = CreateScanner_result.new()
         begin
-          result.success = @handler.createScanner(args.login, args.tableName, args.options)
+          result.success = @handler.createScanner(args.sharedSecret, args.tableName, args.options)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2672,7 +2645,7 @@ module Accumulo
         args = read_args(iprot, UpdateAndFlush_args)
         result = UpdateAndFlush_result.new()
         begin
-          @handler.updateAndFlush(args.login, args.tableName, args.cells)
+          @handler.updateAndFlush(args.sharedSecret, args.tableName, args.cells)
         rescue ::Accumulo::AccumuloException => outch1
           result.outch1 = outch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2689,7 +2662,7 @@ module Accumulo
         args = read_args(iprot, CreateWriter_args)
         result = CreateWriter_result.new()
         begin
-          result.success = @handler.createWriter(args.login, args.tableName, args.opts)
+          result.success = @handler.createWriter(args.sharedSecret, args.tableName, args.opts)
         rescue ::Accumulo::AccumuloException => outch1
           result.outch1 = outch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2736,7 +2709,7 @@ module Accumulo
         args = read_args(iprot, UpdateRowConditionally_args)
         result = UpdateRowConditionally_result.new()
         begin
-          result.success = @handler.updateRowConditionally(args.login, args.tableName, args.row, args.updates)
+          result.success = @handler.updateRowConditionally(args.sharedSecret, args.tableName, args.row, args.updates)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2751,7 +2724,7 @@ module Accumulo
         args = read_args(iprot, CreateConditionalWriter_args)
         result = CreateConditionalWriter_result.new()
         begin
-          result.success = @handler.createConditionalWriter(args.login, args.tableName, args.options)
+          result.success = @handler.createConditionalWriter(args.sharedSecret, args.tableName, args.options)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2816,7 +2789,7 @@ module Accumulo
         args = read_args(iprot, ListNamespaces_args)
         result = ListNamespaces_result.new()
         begin
-          result.success = @handler.listNamespaces(args.login)
+          result.success = @handler.listNamespaces(args.sharedSecret)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2829,7 +2802,7 @@ module Accumulo
         args = read_args(iprot, NamespaceExists_args)
         result = NamespaceExists_result.new()
         begin
-          result.success = @handler.namespaceExists(args.login, args.namespaceName)
+          result.success = @handler.namespaceExists(args.sharedSecret, args.namespaceName)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2842,7 +2815,7 @@ module Accumulo
         args = read_args(iprot, CreateNamespace_args)
         result = CreateNamespace_result.new()
         begin
-          @handler.createNamespace(args.login, args.namespaceName)
+          @handler.createNamespace(args.sharedSecret, args.namespaceName)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2857,7 +2830,7 @@ module Accumulo
         args = read_args(iprot, DeleteNamespace_args)
         result = DeleteNamespace_result.new()
         begin
-          @handler.deleteNamespace(args.login, args.namespaceName)
+          @handler.deleteNamespace(args.sharedSecret, args.namespaceName)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2874,7 +2847,7 @@ module Accumulo
         args = read_args(iprot, RenameNamespace_args)
         result = RenameNamespace_result.new()
         begin
-          @handler.renameNamespace(args.login, args.oldNamespaceName, args.newNamespaceName)
+          @handler.renameNamespace(args.sharedSecret, args.oldNamespaceName, args.newNamespaceName)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2891,7 +2864,7 @@ module Accumulo
         args = read_args(iprot, SetNamespaceProperty_args)
         result = SetNamespaceProperty_result.new()
         begin
-          @handler.setNamespaceProperty(args.login, args.namespaceName, args.property, args.value)
+          @handler.setNamespaceProperty(args.sharedSecret, args.namespaceName, args.property, args.value)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2906,7 +2879,7 @@ module Accumulo
         args = read_args(iprot, RemoveNamespaceProperty_args)
         result = RemoveNamespaceProperty_result.new()
         begin
-          @handler.removeNamespaceProperty(args.login, args.namespaceName, args.property)
+          @handler.removeNamespaceProperty(args.sharedSecret, args.namespaceName, args.property)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2921,7 +2894,7 @@ module Accumulo
         args = read_args(iprot, GetNamespaceProperties_args)
         result = GetNamespaceProperties_result.new()
         begin
-          result.success = @handler.getNamespaceProperties(args.login, args.namespaceName)
+          result.success = @handler.getNamespaceProperties(args.sharedSecret, args.namespaceName)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2936,7 +2909,7 @@ module Accumulo
         args = read_args(iprot, NamespaceIdMap_args)
         result = NamespaceIdMap_result.new()
         begin
-          result.success = @handler.namespaceIdMap(args.login)
+          result.success = @handler.namespaceIdMap(args.sharedSecret)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2949,7 +2922,7 @@ module Accumulo
         args = read_args(iprot, AttachNamespaceIterator_args)
         result = AttachNamespaceIterator_result.new()
         begin
-          @handler.attachNamespaceIterator(args.login, args.namespaceName, args.setting, args.scopes)
+          @handler.attachNamespaceIterator(args.sharedSecret, args.namespaceName, args.setting, args.scopes)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2964,7 +2937,7 @@ module Accumulo
         args = read_args(iprot, RemoveNamespaceIterator_args)
         result = RemoveNamespaceIterator_result.new()
         begin
-          @handler.removeNamespaceIterator(args.login, args.namespaceName, args.name, args.scopes)
+          @handler.removeNamespaceIterator(args.sharedSecret, args.namespaceName, args.name, args.scopes)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2979,7 +2952,7 @@ module Accumulo
         args = read_args(iprot, GetNamespaceIteratorSetting_args)
         result = GetNamespaceIteratorSetting_result.new()
         begin
-          result.success = @handler.getNamespaceIteratorSetting(args.login, args.namespaceName, args.name, args.scope)
+          result.success = @handler.getNamespaceIteratorSetting(args.sharedSecret, args.namespaceName, args.name, args.scope)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -2994,7 +2967,7 @@ module Accumulo
         args = read_args(iprot, ListNamespaceIterators_args)
         result = ListNamespaceIterators_result.new()
         begin
-          result.success = @handler.listNamespaceIterators(args.login, args.namespaceName)
+          result.success = @handler.listNamespaceIterators(args.sharedSecret, args.namespaceName)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -3009,7 +2982,7 @@ module Accumulo
         args = read_args(iprot, CheckNamespaceIteratorConflicts_args)
         result = CheckNamespaceIteratorConflicts_result.new()
         begin
-          @handler.checkNamespaceIteratorConflicts(args.login, args.namespaceName, args.setting, args.scopes)
+          @handler.checkNamespaceIteratorConflicts(args.sharedSecret, args.namespaceName, args.setting, args.scopes)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -3024,7 +2997,7 @@ module Accumulo
         args = read_args(iprot, AddNamespaceConstraint_args)
         result = AddNamespaceConstraint_result.new()
         begin
-          result.success = @handler.addNamespaceConstraint(args.login, args.namespaceName, args.constraintClassName)
+          result.success = @handler.addNamespaceConstraint(args.sharedSecret, args.namespaceName, args.constraintClassName)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -3039,7 +3012,7 @@ module Accumulo
         args = read_args(iprot, RemoveNamespaceConstraint_args)
         result = RemoveNamespaceConstraint_result.new()
         begin
-          @handler.removeNamespaceConstraint(args.login, args.namespaceName, args.id)
+          @handler.removeNamespaceConstraint(args.sharedSecret, args.namespaceName, args.id)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -3054,7 +3027,7 @@ module Accumulo
         args = read_args(iprot, ListNamespaceConstraints_args)
         result = ListNamespaceConstraints_result.new()
         begin
-          result.success = @handler.listNamespaceConstraints(args.login, args.namespaceName)
+          result.success = @handler.listNamespaceConstraints(args.sharedSecret, args.namespaceName)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -3069,7 +3042,7 @@ module Accumulo
         args = read_args(iprot, TestNamespaceClassLoad_args)
         result = TestNamespaceClassLoad_result.new()
         begin
-          result.success = @handler.testNamespaceClassLoad(args.login, args.namespaceName, args.className, args.asTypeName)
+          result.success = @handler.testNamespaceClassLoad(args.sharedSecret, args.namespaceName, args.className, args.asTypeName)
         rescue ::Accumulo::AccumuloException => ouch1
           result.ouch1 = ouch1
         rescue ::Accumulo::AccumuloSecurityException => ouch2
@@ -3084,50 +3057,14 @@ module Accumulo
 
     # HELPER FUNCTIONS AND STRUCTURES
 
-    class Login_args
-      include ::Thrift::Struct, ::Thrift::Struct_Union
-      PRINCIPAL = 1
-      LOGINPROPERTIES = 2
-
-      FIELDS = {
-        PRINCIPAL => {:type => ::Thrift::Types::STRING, :name => 'principal'},
-        LOGINPROPERTIES => {:type => ::Thrift::Types::MAP, :name => 'loginProperties', :key => {:type => ::Thrift::Types::STRING}, :value => {:type => ::Thrift::Types::STRING}}
-      }
-
-      def struct_fields; FIELDS; end
-
-      def validate
-      end
-
-      ::Thrift::Struct.generate_accessors self
-    end
-
-    class Login_result
-      include ::Thrift::Struct, ::Thrift::Struct_Union
-      SUCCESS = 0
-      OUCH2 = 1
-
-      FIELDS = {
-        SUCCESS => {:type => ::Thrift::Types::STRING, :name => 'success', :binary => true},
-        OUCH2 => {:type => ::Thrift::Types::STRUCT, :name => 'ouch2', :class => ::Accumulo::AccumuloSecurityException}
-      }
-
-      def struct_fields; FIELDS; end
-
-      def validate
-      end
-
-      ::Thrift::Struct.generate_accessors self
-    end
-
     class AddConstraint_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       TABLENAME = 2
       CONSTRAINTCLASSNAME = 3
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         TABLENAME => {:type => ::Thrift::Types::STRING, :name => 'tableName'},
         CONSTRAINTCLASSNAME => {:type => ::Thrift::Types::STRING, :name => 'constraintClassName'}
       }
@@ -3164,12 +3101,12 @@ module Accumulo
 
     class AddSplits_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       TABLENAME = 2
       SPLITS = 3
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         TABLENAME => {:type => ::Thrift::Types::STRING, :name => 'tableName'},
         SPLITS => {:type => ::Thrift::Types::SET, :name => 'splits', :element => {:type => ::Thrift::Types::STRING, :binary => true}}
       }
@@ -3204,13 +3141,13 @@ module Accumulo
 
     class AttachIterator_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       TABLENAME = 2
       SETTING = 3
       SCOPES = 4
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         TABLENAME => {:type => ::Thrift::Types::STRING, :name => 'tableName'},
         SETTING => {:type => ::Thrift::Types::STRUCT, :name => 'setting', :class => ::Accumulo::IteratorSetting},
         SCOPES => {:type => ::Thrift::Types::SET, :name => 'scopes', :element => {:type => ::Thrift::Types::I32, :enum_class => ::Accumulo::IteratorScope}}
@@ -3246,13 +3183,13 @@ module Accumulo
 
     class CheckIteratorConflicts_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       TABLENAME = 2
       SETTING = 3
       SCOPES = 4
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         TABLENAME => {:type => ::Thrift::Types::STRING, :name => 'tableName'},
         SETTING => {:type => ::Thrift::Types::STRUCT, :name => 'setting', :class => ::Accumulo::IteratorSetting},
         SCOPES => {:type => ::Thrift::Types::SET, :name => 'scopes', :element => {:type => ::Thrift::Types::I32, :enum_class => ::Accumulo::IteratorScope}}
@@ -3288,11 +3225,11 @@ module Accumulo
 
     class ClearLocatorCache_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       TABLENAME = 2
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         TABLENAME => {:type => ::Thrift::Types::STRING, :name => 'tableName'}
       }
 
@@ -3322,7 +3259,7 @@ module Accumulo
 
     class CloneTable_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       TABLENAME = 2
       NEWTABLENAME = 3
       FLUSH = 4
@@ -3330,7 +3267,7 @@ module Accumulo
       PROPERTIESTOEXCLUDE = 6
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         TABLENAME => {:type => ::Thrift::Types::STRING, :name => 'tableName'},
         NEWTABLENAME => {:type => ::Thrift::Types::STRING, :name => 'newTableName'},
         FLUSH => {:type => ::Thrift::Types::BOOL, :name => 'flush'},
@@ -3370,7 +3307,7 @@ module Accumulo
 
     class CompactTable_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       TABLENAME = 2
       STARTROW = 3
       ENDROW = 4
@@ -3381,7 +3318,7 @@ module Accumulo
       CONFIGURERCONFIG = 9
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         TABLENAME => {:type => ::Thrift::Types::STRING, :name => 'tableName'},
         STARTROW => {:type => ::Thrift::Types::STRING, :name => 'startRow', :binary => true},
         ENDROW => {:type => ::Thrift::Types::STRING, :name => 'endRow', :binary => true},
@@ -3422,11 +3359,11 @@ module Accumulo
 
     class CancelCompaction_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       TABLENAME = 2
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         TABLENAME => {:type => ::Thrift::Types::STRING, :name => 'tableName'}
       }
 
@@ -3460,13 +3397,13 @@ module Accumulo
 
     class CreateTable_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       TABLENAME = 2
       VERSIONINGITER = 3
       TYPE = 4
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         TABLENAME => {:type => ::Thrift::Types::STRING, :name => 'tableName'},
         VERSIONINGITER => {:type => ::Thrift::Types::BOOL, :name => 'versioningIter'},
         TYPE => {:type => ::Thrift::Types::I32, :name => 'type', :enum_class => ::Accumulo::TimeType}
@@ -3505,11 +3442,11 @@ module Accumulo
 
     class DeleteTable_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       TABLENAME = 2
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         TABLENAME => {:type => ::Thrift::Types::STRING, :name => 'tableName'}
       }
 
@@ -3543,13 +3480,13 @@ module Accumulo
 
     class DeleteRows_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       TABLENAME = 2
       STARTROW = 3
       ENDROW = 4
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         TABLENAME => {:type => ::Thrift::Types::STRING, :name => 'tableName'},
         STARTROW => {:type => ::Thrift::Types::STRING, :name => 'startRow', :binary => true},
         ENDROW => {:type => ::Thrift::Types::STRING, :name => 'endRow', :binary => true}
@@ -3585,12 +3522,12 @@ module Accumulo
 
     class ExportTable_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       TABLENAME = 2
       EXPORTDIR = 3
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         TABLENAME => {:type => ::Thrift::Types::STRING, :name => 'tableName'},
         EXPORTDIR => {:type => ::Thrift::Types::STRING, :name => 'exportDir'}
       }
@@ -3625,14 +3562,14 @@ module Accumulo
 
     class FlushTable_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       TABLENAME = 2
       STARTROW = 3
       ENDROW = 4
       WAIT = 5
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         TABLENAME => {:type => ::Thrift::Types::STRING, :name => 'tableName'},
         STARTROW => {:type => ::Thrift::Types::STRING, :name => 'startRow', :binary => true},
         ENDROW => {:type => ::Thrift::Types::STRING, :name => 'endRow', :binary => true},
@@ -3669,11 +3606,11 @@ module Accumulo
 
     class GetDiskUsage_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       TABLES = 2
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         TABLES => {:type => ::Thrift::Types::SET, :name => 'tables', :element => {:type => ::Thrift::Types::STRING}}
       }
 
@@ -3709,11 +3646,11 @@ module Accumulo
 
     class GetLocalityGroups_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       TABLENAME = 2
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         TABLENAME => {:type => ::Thrift::Types::STRING, :name => 'tableName'}
       }
 
@@ -3749,13 +3686,13 @@ module Accumulo
 
     class GetIteratorSetting_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       TABLENAME = 2
       ITERATORNAME = 3
       SCOPE = 4
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         TABLENAME => {:type => ::Thrift::Types::STRING, :name => 'tableName'},
         ITERATORNAME => {:type => ::Thrift::Types::STRING, :name => 'iteratorName'},
         SCOPE => {:type => ::Thrift::Types::I32, :name => 'scope', :enum_class => ::Accumulo::IteratorScope}
@@ -3796,7 +3733,7 @@ module Accumulo
 
     class GetMaxRow_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       TABLENAME = 2
       AUTHS = 3
       STARTROW = 4
@@ -3805,7 +3742,7 @@ module Accumulo
       ENDINCLUSIVE = 7
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         TABLENAME => {:type => ::Thrift::Types::STRING, :name => 'tableName'},
         AUTHS => {:type => ::Thrift::Types::SET, :name => 'auths', :element => {:type => ::Thrift::Types::STRING, :binary => true}},
         STARTROW => {:type => ::Thrift::Types::STRING, :name => 'startRow', :binary => true},
@@ -3846,11 +3783,11 @@ module Accumulo
 
     class GetTableProperties_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       TABLENAME = 2
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         TABLENAME => {:type => ::Thrift::Types::STRING, :name => 'tableName'}
       }
 
@@ -3886,14 +3823,14 @@ module Accumulo
 
     class ImportDirectory_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       TABLENAME = 2
       IMPORTDIR = 3
       FAILUREDIR = 4
       SETTIME = 5
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         TABLENAME => {:type => ::Thrift::Types::STRING, :name => 'tableName'},
         IMPORTDIR => {:type => ::Thrift::Types::STRING, :name => 'importDir'},
         FAILUREDIR => {:type => ::Thrift::Types::STRING, :name => 'failureDir'},
@@ -3930,12 +3867,12 @@ module Accumulo
 
     class ImportTable_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       TABLENAME = 2
       IMPORTDIR = 3
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         TABLENAME => {:type => ::Thrift::Types::STRING, :name => 'tableName'},
         IMPORTDIR => {:type => ::Thrift::Types::STRING, :name => 'importDir'}
       }
@@ -3970,12 +3907,12 @@ module Accumulo
 
     class ListSplits_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       TABLENAME = 2
       MAXSPLITS = 3
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         TABLENAME => {:type => ::Thrift::Types::STRING, :name => 'tableName'},
         MAXSPLITS => {:type => ::Thrift::Types::I32, :name => 'maxSplits'}
       }
@@ -4012,10 +3949,10 @@ module Accumulo
 
     class ListTables_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true}
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'}
       }
 
       def struct_fields; FIELDS; end
@@ -4044,11 +3981,11 @@ module Accumulo
 
     class ListIterators_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       TABLENAME = 2
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         TABLENAME => {:type => ::Thrift::Types::STRING, :name => 'tableName'}
       }
 
@@ -4084,11 +4021,11 @@ module Accumulo
 
     class ListConstraints_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       TABLENAME = 2
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         TABLENAME => {:type => ::Thrift::Types::STRING, :name => 'tableName'}
       }
 
@@ -4124,13 +4061,13 @@ module Accumulo
 
     class MergeTablets_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       TABLENAME = 2
       STARTROW = 3
       ENDROW = 4
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         TABLENAME => {:type => ::Thrift::Types::STRING, :name => 'tableName'},
         STARTROW => {:type => ::Thrift::Types::STRING, :name => 'startRow', :binary => true},
         ENDROW => {:type => ::Thrift::Types::STRING, :name => 'endRow', :binary => true}
@@ -4166,12 +4103,12 @@ module Accumulo
 
     class OfflineTable_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       TABLENAME = 2
       WAIT = 3
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         TABLENAME => {:type => ::Thrift::Types::STRING, :name => 'tableName'},
         WAIT => {:type => ::Thrift::Types::BOOL, :name => 'wait', :default => false}
       }
@@ -4206,12 +4143,12 @@ module Accumulo
 
     class OnlineTable_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       TABLENAME = 2
       WAIT = 3
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         TABLENAME => {:type => ::Thrift::Types::STRING, :name => 'tableName'},
         WAIT => {:type => ::Thrift::Types::BOOL, :name => 'wait', :default => false}
       }
@@ -4246,12 +4183,12 @@ module Accumulo
 
     class RemoveConstraint_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       TABLENAME = 2
       CONSTRAINT = 3
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         TABLENAME => {:type => ::Thrift::Types::STRING, :name => 'tableName'},
         CONSTRAINT => {:type => ::Thrift::Types::I32, :name => 'constraint'}
       }
@@ -4286,13 +4223,13 @@ module Accumulo
 
     class RemoveIterator_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       TABLENAME = 2
       ITERNAME = 3
       SCOPES = 4
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         TABLENAME => {:type => ::Thrift::Types::STRING, :name => 'tableName'},
         ITERNAME => {:type => ::Thrift::Types::STRING, :name => 'iterName'},
         SCOPES => {:type => ::Thrift::Types::SET, :name => 'scopes', :element => {:type => ::Thrift::Types::I32, :enum_class => ::Accumulo::IteratorScope}}
@@ -4328,12 +4265,12 @@ module Accumulo
 
     class RemoveTableProperty_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       TABLENAME = 2
       PROPERTY = 3
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         TABLENAME => {:type => ::Thrift::Types::STRING, :name => 'tableName'},
         PROPERTY => {:type => ::Thrift::Types::STRING, :name => 'property'}
       }
@@ -4368,12 +4305,12 @@ module Accumulo
 
     class RenameTable_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       OLDTABLENAME = 2
       NEWTABLENAME = 3
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         OLDTABLENAME => {:type => ::Thrift::Types::STRING, :name => 'oldTableName'},
         NEWTABLENAME => {:type => ::Thrift::Types::STRING, :name => 'newTableName'}
       }
@@ -4410,12 +4347,12 @@ module Accumulo
 
     class SetLocalityGroups_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       TABLENAME = 2
       GROUPS = 3
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         TABLENAME => {:type => ::Thrift::Types::STRING, :name => 'tableName'},
         GROUPS => {:type => ::Thrift::Types::MAP, :name => 'groups', :key => {:type => ::Thrift::Types::STRING}, :value => {:type => ::Thrift::Types::SET, :element => {:type => ::Thrift::Types::STRING}}}
       }
@@ -4450,13 +4387,13 @@ module Accumulo
 
     class SetTableProperty_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       TABLENAME = 2
       PROPERTY = 3
       VALUE = 4
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         TABLENAME => {:type => ::Thrift::Types::STRING, :name => 'tableName'},
         PROPERTY => {:type => ::Thrift::Types::STRING, :name => 'property'},
         VALUE => {:type => ::Thrift::Types::STRING, :name => 'value'}
@@ -4492,13 +4429,13 @@ module Accumulo
 
     class SplitRangeByTablets_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       TABLENAME = 2
       RANGE = 3
       MAXSPLITS = 4
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         TABLENAME => {:type => ::Thrift::Types::STRING, :name => 'tableName'},
         RANGE => {:type => ::Thrift::Types::STRUCT, :name => 'range', :class => ::Accumulo::Range},
         MAXSPLITS => {:type => ::Thrift::Types::I32, :name => 'maxSplits'}
@@ -4536,11 +4473,11 @@ module Accumulo
 
     class TableExists_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       TABLENAME = 2
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         TABLENAME => {:type => ::Thrift::Types::STRING, :name => 'tableName'}
       }
 
@@ -4570,10 +4507,10 @@ module Accumulo
 
     class TableIdMap_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true}
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'}
       }
 
       def struct_fields; FIELDS; end
@@ -4602,13 +4539,13 @@ module Accumulo
 
     class TestTableClassLoad_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       TABLENAME = 2
       CLASSNAME = 3
       ASTYPENAME = 4
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         TABLENAME => {:type => ::Thrift::Types::STRING, :name => 'tableName'},
         CLASSNAME => {:type => ::Thrift::Types::STRING, :name => 'className'},
         ASTYPENAME => {:type => ::Thrift::Types::STRING, :name => 'asTypeName'}
@@ -4646,11 +4583,11 @@ module Accumulo
 
     class PingTabletServer_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       TSERVER = 2
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         TSERVER => {:type => ::Thrift::Types::STRING, :name => 'tserver'}
       }
 
@@ -4682,11 +4619,11 @@ module Accumulo
 
     class GetActiveScans_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       TSERVER = 2
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         TSERVER => {:type => ::Thrift::Types::STRING, :name => 'tserver'}
       }
 
@@ -4720,11 +4657,11 @@ module Accumulo
 
     class GetActiveCompactions_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       TSERVER = 2
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         TSERVER => {:type => ::Thrift::Types::STRING, :name => 'tserver'}
       }
 
@@ -4758,10 +4695,10 @@ module Accumulo
 
     class GetSiteConfiguration_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true}
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'}
       }
 
       def struct_fields; FIELDS; end
@@ -4794,10 +4731,10 @@ module Accumulo
 
     class GetSystemConfiguration_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true}
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'}
       }
 
       def struct_fields; FIELDS; end
@@ -4830,10 +4767,10 @@ module Accumulo
 
     class GetTabletServers_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true}
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'}
       }
 
       def struct_fields; FIELDS; end
@@ -4862,11 +4799,11 @@ module Accumulo
 
     class RemoveProperty_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       PROPERTY = 2
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         PROPERTY => {:type => ::Thrift::Types::STRING, :name => 'property'}
       }
 
@@ -4898,12 +4835,12 @@ module Accumulo
 
     class SetProperty_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       PROPERTY = 2
       VALUE = 3
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         PROPERTY => {:type => ::Thrift::Types::STRING, :name => 'property'},
         VALUE => {:type => ::Thrift::Types::STRING, :name => 'value'}
       }
@@ -4936,12 +4873,12 @@ module Accumulo
 
     class TestClassLoad_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       CLASSNAME = 2
       ASTYPENAME = 3
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         CLASSNAME => {:type => ::Thrift::Types::STRING, :name => 'className'},
         ASTYPENAME => {:type => ::Thrift::Types::STRING, :name => 'asTypeName'}
       }
@@ -4976,12 +4913,12 @@ module Accumulo
 
     class AuthenticateUser_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       USER = 2
       PROPERTIES = 3
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         USER => {:type => ::Thrift::Types::STRING, :name => 'user'},
         PROPERTIES => {:type => ::Thrift::Types::MAP, :name => 'properties', :key => {:type => ::Thrift::Types::STRING}, :value => {:type => ::Thrift::Types::STRING}}
       }
@@ -5016,12 +4953,12 @@ module Accumulo
 
     class ChangeUserAuthorizations_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       USER = 2
       AUTHORIZATIONS = 3
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         USER => {:type => ::Thrift::Types::STRING, :name => 'user'},
         AUTHORIZATIONS => {:type => ::Thrift::Types::SET, :name => 'authorizations', :element => {:type => ::Thrift::Types::STRING, :binary => true}}
       }
@@ -5054,12 +4991,12 @@ module Accumulo
 
     class ChangeLocalUserPassword_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       USER = 2
       PASSWORD = 3
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         USER => {:type => ::Thrift::Types::STRING, :name => 'user'},
         PASSWORD => {:type => ::Thrift::Types::STRING, :name => 'password', :binary => true}
       }
@@ -5092,12 +5029,12 @@ module Accumulo
 
     class CreateLocalUser_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       USER = 2
       PASSWORD = 3
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         USER => {:type => ::Thrift::Types::STRING, :name => 'user'},
         PASSWORD => {:type => ::Thrift::Types::STRING, :name => 'password', :binary => true}
       }
@@ -5130,11 +5067,11 @@ module Accumulo
 
     class DropLocalUser_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       USER = 2
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         USER => {:type => ::Thrift::Types::STRING, :name => 'user'}
       }
 
@@ -5166,11 +5103,11 @@ module Accumulo
 
     class GetUserAuthorizations_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       USER = 2
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         USER => {:type => ::Thrift::Types::STRING, :name => 'user'}
       }
 
@@ -5204,12 +5141,12 @@ module Accumulo
 
     class GrantSystemPermission_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       USER = 2
       PERM = 3
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         USER => {:type => ::Thrift::Types::STRING, :name => 'user'},
         PERM => {:type => ::Thrift::Types::I32, :name => 'perm', :enum_class => ::Accumulo::SystemPermission}
       }
@@ -5245,13 +5182,13 @@ module Accumulo
 
     class GrantTablePermission_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       USER = 2
       TABLE = 3
       PERM = 4
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         USER => {:type => ::Thrift::Types::STRING, :name => 'user'},
         TABLE => {:type => ::Thrift::Types::STRING, :name => 'table'},
         PERM => {:type => ::Thrift::Types::I32, :name => 'perm', :enum_class => ::Accumulo::TablePermission}
@@ -5290,12 +5227,12 @@ module Accumulo
 
     class HasSystemPermission_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       USER = 2
       PERM = 3
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         USER => {:type => ::Thrift::Types::STRING, :name => 'user'},
         PERM => {:type => ::Thrift::Types::I32, :name => 'perm', :enum_class => ::Accumulo::SystemPermission}
       }
@@ -5333,13 +5270,13 @@ module Accumulo
 
     class HasTablePermission_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       USER = 2
       TABLE = 3
       PERM = 4
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         USER => {:type => ::Thrift::Types::STRING, :name => 'user'},
         TABLE => {:type => ::Thrift::Types::STRING, :name => 'table'},
         PERM => {:type => ::Thrift::Types::I32, :name => 'perm', :enum_class => ::Accumulo::TablePermission}
@@ -5380,10 +5317,10 @@ module Accumulo
 
     class ListLocalUsers_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true}
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'}
       }
 
       def struct_fields; FIELDS; end
@@ -5418,12 +5355,12 @@ module Accumulo
 
     class RevokeSystemPermission_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       USER = 2
       PERM = 3
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         USER => {:type => ::Thrift::Types::STRING, :name => 'user'},
         PERM => {:type => ::Thrift::Types::I32, :name => 'perm', :enum_class => ::Accumulo::SystemPermission}
       }
@@ -5459,13 +5396,13 @@ module Accumulo
 
     class RevokeTablePermission_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       USER = 2
       TABLE = 3
       PERM = 4
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         USER => {:type => ::Thrift::Types::STRING, :name => 'user'},
         TABLE => {:type => ::Thrift::Types::STRING, :name => 'table'},
         PERM => {:type => ::Thrift::Types::I32, :name => 'perm', :enum_class => ::Accumulo::TablePermission}
@@ -5504,13 +5441,13 @@ module Accumulo
 
     class GrantNamespacePermission_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       USER = 2
       NAMESPACENAME = 3
       PERM = 4
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         USER => {:type => ::Thrift::Types::STRING, :name => 'user'},
         NAMESPACENAME => {:type => ::Thrift::Types::STRING, :name => 'namespaceName'},
         PERM => {:type => ::Thrift::Types::I32, :name => 'perm', :enum_class => ::Accumulo::NamespacePermission}
@@ -5547,13 +5484,13 @@ module Accumulo
 
     class HasNamespacePermission_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       USER = 2
       NAMESPACENAME = 3
       PERM = 4
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         USER => {:type => ::Thrift::Types::STRING, :name => 'user'},
         NAMESPACENAME => {:type => ::Thrift::Types::STRING, :name => 'namespaceName'},
         PERM => {:type => ::Thrift::Types::I32, :name => 'perm', :enum_class => ::Accumulo::NamespacePermission}
@@ -5592,13 +5529,13 @@ module Accumulo
 
     class RevokeNamespacePermission_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       USER = 2
       NAMESPACENAME = 3
       PERM = 4
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         USER => {:type => ::Thrift::Types::STRING, :name => 'user'},
         NAMESPACENAME => {:type => ::Thrift::Types::STRING, :name => 'namespaceName'},
         PERM => {:type => ::Thrift::Types::I32, :name => 'perm', :enum_class => ::Accumulo::NamespacePermission}
@@ -5635,12 +5572,12 @@ module Accumulo
 
     class CreateBatchScanner_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       TABLENAME = 2
       OPTIONS = 3
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         TABLENAME => {:type => ::Thrift::Types::STRING, :name => 'tableName'},
         OPTIONS => {:type => ::Thrift::Types::STRUCT, :name => 'options', :class => ::Accumulo::BatchScanOptions}
       }
@@ -5677,12 +5614,12 @@ module Accumulo
 
     class CreateScanner_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       TABLENAME = 2
       OPTIONS = 3
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         TABLENAME => {:type => ::Thrift::Types::STRING, :name => 'tableName'},
         OPTIONS => {:type => ::Thrift::Types::STRUCT, :name => 'options', :class => ::Accumulo::ScanOptions}
       }
@@ -5863,12 +5800,12 @@ module Accumulo
 
     class UpdateAndFlush_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       TABLENAME = 2
       CELLS = 3
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         TABLENAME => {:type => ::Thrift::Types::STRING, :name => 'tableName'},
         CELLS => {:type => ::Thrift::Types::MAP, :name => 'cells', :key => {:type => ::Thrift::Types::STRING, :binary => true}, :value => {:type => ::Thrift::Types::LIST, :element => {:type => ::Thrift::Types::STRUCT, :class => ::Accumulo::ColumnUpdate}}}
       }
@@ -5905,12 +5842,12 @@ module Accumulo
 
     class CreateWriter_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       TABLENAME = 2
       OPTS = 3
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         TABLENAME => {:type => ::Thrift::Types::STRING, :name => 'tableName'},
         OPTS => {:type => ::Thrift::Types::STRUCT, :name => 'opts', :class => ::Accumulo::WriterOptions}
       }
@@ -6048,13 +5985,13 @@ module Accumulo
 
     class UpdateRowConditionally_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       TABLENAME = 2
       ROW = 3
       UPDATES = 4
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         TABLENAME => {:type => ::Thrift::Types::STRING, :name => 'tableName'},
         ROW => {:type => ::Thrift::Types::STRING, :name => 'row', :binary => true},
         UPDATES => {:type => ::Thrift::Types::STRUCT, :name => 'updates', :class => ::Accumulo::ConditionalUpdates}
@@ -6095,12 +6032,12 @@ module Accumulo
 
     class CreateConditionalWriter_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       TABLENAME = 2
       OPTIONS = 3
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         TABLENAME => {:type => ::Thrift::Types::STRING, :name => 'tableName'},
         OPTIONS => {:type => ::Thrift::Types::STRUCT, :name => 'options', :class => ::Accumulo::ConditionalWriterOptions}
       }
@@ -6339,10 +6276,10 @@ module Accumulo
 
     class ListNamespaces_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true}
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'}
       }
 
       def struct_fields; FIELDS; end
@@ -6375,11 +6312,11 @@ module Accumulo
 
     class NamespaceExists_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       NAMESPACENAME = 2
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         NAMESPACENAME => {:type => ::Thrift::Types::STRING, :name => 'namespaceName'}
       }
 
@@ -6413,11 +6350,11 @@ module Accumulo
 
     class CreateNamespace_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       NAMESPACENAME = 2
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         NAMESPACENAME => {:type => ::Thrift::Types::STRING, :name => 'namespaceName'}
       }
 
@@ -6451,11 +6388,11 @@ module Accumulo
 
     class DeleteNamespace_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       NAMESPACENAME = 2
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         NAMESPACENAME => {:type => ::Thrift::Types::STRING, :name => 'namespaceName'}
       }
 
@@ -6491,12 +6428,12 @@ module Accumulo
 
     class RenameNamespace_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       OLDNAMESPACENAME = 2
       NEWNAMESPACENAME = 3
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         OLDNAMESPACENAME => {:type => ::Thrift::Types::STRING, :name => 'oldNamespaceName'},
         NEWNAMESPACENAME => {:type => ::Thrift::Types::STRING, :name => 'newNamespaceName'}
       }
@@ -6533,13 +6470,13 @@ module Accumulo
 
     class SetNamespaceProperty_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       NAMESPACENAME = 2
       PROPERTY = 3
       VALUE = 4
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         NAMESPACENAME => {:type => ::Thrift::Types::STRING, :name => 'namespaceName'},
         PROPERTY => {:type => ::Thrift::Types::STRING, :name => 'property'},
         VALUE => {:type => ::Thrift::Types::STRING, :name => 'value'}
@@ -6575,12 +6512,12 @@ module Accumulo
 
     class RemoveNamespaceProperty_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       NAMESPACENAME = 2
       PROPERTY = 3
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         NAMESPACENAME => {:type => ::Thrift::Types::STRING, :name => 'namespaceName'},
         PROPERTY => {:type => ::Thrift::Types::STRING, :name => 'property'}
       }
@@ -6615,11 +6552,11 @@ module Accumulo
 
     class GetNamespaceProperties_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       NAMESPACENAME = 2
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         NAMESPACENAME => {:type => ::Thrift::Types::STRING, :name => 'namespaceName'}
       }
 
@@ -6655,10 +6592,10 @@ module Accumulo
 
     class NamespaceIdMap_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true}
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'}
       }
 
       def struct_fields; FIELDS; end
@@ -6691,13 +6628,13 @@ module Accumulo
 
     class AttachNamespaceIterator_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       NAMESPACENAME = 2
       SETTING = 3
       SCOPES = 4
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         NAMESPACENAME => {:type => ::Thrift::Types::STRING, :name => 'namespaceName'},
         SETTING => {:type => ::Thrift::Types::STRUCT, :name => 'setting', :class => ::Accumulo::IteratorSetting},
         SCOPES => {:type => ::Thrift::Types::SET, :name => 'scopes', :element => {:type => ::Thrift::Types::I32, :enum_class => ::Accumulo::IteratorScope}}
@@ -6733,13 +6670,13 @@ module Accumulo
 
     class RemoveNamespaceIterator_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       NAMESPACENAME = 2
       NAME = 3
       SCOPES = 4
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         NAMESPACENAME => {:type => ::Thrift::Types::STRING, :name => 'namespaceName'},
         NAME => {:type => ::Thrift::Types::STRING, :name => 'name'},
         SCOPES => {:type => ::Thrift::Types::SET, :name => 'scopes', :element => {:type => ::Thrift::Types::I32, :enum_class => ::Accumulo::IteratorScope}}
@@ -6775,13 +6712,13 @@ module Accumulo
 
     class GetNamespaceIteratorSetting_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       NAMESPACENAME = 2
       NAME = 3
       SCOPE = 4
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         NAMESPACENAME => {:type => ::Thrift::Types::STRING, :name => 'namespaceName'},
         NAME => {:type => ::Thrift::Types::STRING, :name => 'name'},
         SCOPE => {:type => ::Thrift::Types::I32, :name => 'scope', :enum_class => ::Accumulo::IteratorScope}
@@ -6822,11 +6759,11 @@ module Accumulo
 
     class ListNamespaceIterators_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       NAMESPACENAME = 2
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         NAMESPACENAME => {:type => ::Thrift::Types::STRING, :name => 'namespaceName'}
       }
 
@@ -6862,13 +6799,13 @@ module Accumulo
 
     class CheckNamespaceIteratorConflicts_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       NAMESPACENAME = 2
       SETTING = 3
       SCOPES = 4
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         NAMESPACENAME => {:type => ::Thrift::Types::STRING, :name => 'namespaceName'},
         SETTING => {:type => ::Thrift::Types::STRUCT, :name => 'setting', :class => ::Accumulo::IteratorSetting},
         SCOPES => {:type => ::Thrift::Types::SET, :name => 'scopes', :element => {:type => ::Thrift::Types::I32, :enum_class => ::Accumulo::IteratorScope}}
@@ -6904,12 +6841,12 @@ module Accumulo
 
     class AddNamespaceConstraint_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       NAMESPACENAME = 2
       CONSTRAINTCLASSNAME = 3
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         NAMESPACENAME => {:type => ::Thrift::Types::STRING, :name => 'namespaceName'},
         CONSTRAINTCLASSNAME => {:type => ::Thrift::Types::STRING, :name => 'constraintClassName'}
       }
@@ -6946,12 +6883,12 @@ module Accumulo
 
     class RemoveNamespaceConstraint_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       NAMESPACENAME = 2
       ID = 3
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         NAMESPACENAME => {:type => ::Thrift::Types::STRING, :name => 'namespaceName'},
         ID => {:type => ::Thrift::Types::I32, :name => 'id'}
       }
@@ -6986,11 +6923,11 @@ module Accumulo
 
     class ListNamespaceConstraints_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       NAMESPACENAME = 2
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         NAMESPACENAME => {:type => ::Thrift::Types::STRING, :name => 'namespaceName'}
       }
 
@@ -7026,13 +6963,13 @@ module Accumulo
 
     class TestNamespaceClassLoad_args
       include ::Thrift::Struct, ::Thrift::Struct_Union
-      LOGIN = 1
+      SHAREDSECRET = 1
       NAMESPACENAME = 2
       CLASSNAME = 3
       ASTYPENAME = 4
 
       FIELDS = {
-        LOGIN => {:type => ::Thrift::Types::STRING, :name => 'login', :binary => true},
+        SHAREDSECRET => {:type => ::Thrift::Types::STRING, :name => 'sharedSecret'},
         NAMESPACENAME => {:type => ::Thrift::Types::STRING, :name => 'namespaceName'},
         CLASSNAME => {:type => ::Thrift::Types::STRING, :name => 'className'},
         ASTYPENAME => {:type => ::Thrift::Types::STRING, :name => 'asTypeName'}

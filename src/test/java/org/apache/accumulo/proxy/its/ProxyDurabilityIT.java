@@ -98,6 +98,10 @@ public class ProxyDurabilityIT extends ConfigurableMacBase {
       proxyProps.put("tokenClass", PasswordToken.class.getName());
       proxyProps.putAll(getClientProperties());
 
+      String sharedSecret = "sharedSecret";
+
+      proxyProps.put("sharedSecret", sharedSecret);
+
       TJSONProtocol.Factory protocol = new TJSONProtocol.Factory();
 
       int proxyPort = PortUtils.getRandomFreePort();
@@ -108,17 +112,14 @@ public class ProxyDurabilityIT extends ConfigurableMacBase {
         sleepUninterruptibly(100, TimeUnit.MILLISECONDS);
       }
       Client client = new TestProxyClient("localhost", proxyPort, protocol).proxy();
-      Map<String,String> properties = new TreeMap<>();
-      properties.put("password", ROOT_PASSWORD);
-      ByteBuffer login = client.login("root", properties);
 
       String tableName = getUniqueNames(1)[0];
-      client.createTable(login, tableName, true, TimeType.MILLIS);
+      client.createTable(sharedSecret, tableName, true, TimeType.MILLIS);
       assertTrue(c.tableOperations().exists(tableName));
 
       WriterOptions options = new WriterOptions();
       options.setDurability(Durability.NONE);
-      String writer = client.createWriter(login, tableName, options);
+      String writer = client.createWriter(sharedSecret, tableName, options);
       Map<ByteBuffer,List<ColumnUpdate>> cells = new TreeMap<>();
       ColumnUpdate column = new ColumnUpdate(bytes("cf"), bytes("cq"));
       column.setValue("value".getBytes());
@@ -131,7 +132,7 @@ public class ProxyDurabilityIT extends ConfigurableMacBase {
 
       ConditionalWriterOptions cfg = new ConditionalWriterOptions();
       cfg.setDurability(Durability.SYNC);
-      String cwriter = client.createConditionalWriter(login, tableName, cfg);
+      String cwriter = client.createConditionalWriter(sharedSecret, tableName, cfg);
       ConditionalUpdates updates = new ConditionalUpdates();
       updates.addToConditions(new Condition(new Column(bytes("cf"), bytes("cq"), bytes(""))));
       updates.addToUpdates(column);

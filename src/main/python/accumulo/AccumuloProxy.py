@@ -35,39 +35,30 @@ all_structs = []
 
 
 class Iface(object):
-    def login(self, principal, loginProperties):
+    def addConstraint(self, sharedSecret, tableName, constraintClassName):
         """
         Parameters:
-         - principal
-         - loginProperties
-
-        """
-        pass
-
-    def addConstraint(self, login, tableName, constraintClassName):
-        """
-        Parameters:
-         - login
+         - sharedSecret
          - tableName
          - constraintClassName
 
         """
         pass
 
-    def addSplits(self, login, tableName, splits):
+    def addSplits(self, sharedSecret, tableName, splits):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - splits
 
         """
         pass
 
-    def attachIterator(self, login, tableName, setting, scopes):
+    def attachIterator(self, sharedSecret, tableName, setting, scopes):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - setting
          - scopes
@@ -75,10 +66,10 @@ class Iface(object):
         """
         pass
 
-    def checkIteratorConflicts(self, login, tableName, setting, scopes):
+    def checkIteratorConflicts(self, sharedSecret, tableName, setting, scopes):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - setting
          - scopes
@@ -86,19 +77,19 @@ class Iface(object):
         """
         pass
 
-    def clearLocatorCache(self, login, tableName):
+    def clearLocatorCache(self, sharedSecret, tableName):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
 
         """
         pass
 
-    def cloneTable(self, login, tableName, newTableName, flush, propertiesToSet, propertiesToExclude):
+    def cloneTable(self, sharedSecret, tableName, newTableName, flush, propertiesToSet, propertiesToExclude):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - newTableName
          - flush
@@ -108,10 +99,10 @@ class Iface(object):
         """
         pass
 
-    def compactTable(self, login, tableName, startRow, endRow, iterators, flush, wait, selectorConfig, configurerConfig):
+    def compactTable(self, sharedSecret, tableName, startRow, endRow, iterators, flush, wait, selectorConfig, configurerConfig):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - startRow
          - endRow
@@ -124,19 +115,19 @@ class Iface(object):
         """
         pass
 
-    def cancelCompaction(self, login, tableName):
+    def cancelCompaction(self, sharedSecret, tableName):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
 
         """
         pass
 
-    def createTable(self, login, tableName, versioningIter, type):
+    def createTable(self, sharedSecret, tableName, versioningIter, type):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - versioningIter
          - type
@@ -144,19 +135,19 @@ class Iface(object):
         """
         pass
 
-    def deleteTable(self, login, tableName):
+    def deleteTable(self, sharedSecret, tableName):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
 
         """
         pass
 
-    def deleteRows(self, login, tableName, startRow, endRow):
+    def deleteRows(self, sharedSecret, tableName, startRow, endRow):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - startRow
          - endRow
@@ -164,20 +155,20 @@ class Iface(object):
         """
         pass
 
-    def exportTable(self, login, tableName, exportDir):
+    def exportTable(self, sharedSecret, tableName, exportDir):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - exportDir
 
         """
         pass
 
-    def flushTable(self, login, tableName, startRow, endRow, wait):
+    def flushTable(self, sharedSecret, tableName, startRow, endRow, wait):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - startRow
          - endRow
@@ -186,28 +177,28 @@ class Iface(object):
         """
         pass
 
-    def getDiskUsage(self, login, tables):
+    def getDiskUsage(self, sharedSecret, tables):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tables
 
         """
         pass
 
-    def getLocalityGroups(self, login, tableName):
+    def getLocalityGroups(self, sharedSecret, tableName):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
 
         """
         pass
 
-    def getIteratorSetting(self, login, tableName, iteratorName, scope):
+    def getIteratorSetting(self, sharedSecret, tableName, iteratorName, scope):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - iteratorName
          - scope
@@ -215,10 +206,10 @@ class Iface(object):
         """
         pass
 
-    def getMaxRow(self, login, tableName, auths, startRow, startInclusive, endRow, endInclusive):
+    def getMaxRow(self, sharedSecret, tableName, auths, startRow, startInclusive, endRow, endInclusive):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - auths
          - startRow
@@ -229,19 +220,19 @@ class Iface(object):
         """
         pass
 
-    def getTableProperties(self, login, tableName):
+    def getTableProperties(self, sharedSecret, tableName):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
 
         """
         pass
 
-    def importDirectory(self, login, tableName, importDir, failureDir, setTime):
+    def importDirectory(self, sharedSecret, tableName, importDir, failureDir, setTime):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - importDir
          - failureDir
@@ -250,56 +241,56 @@ class Iface(object):
         """
         pass
 
-    def importTable(self, login, tableName, importDir):
+    def importTable(self, sharedSecret, tableName, importDir):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - importDir
 
         """
         pass
 
-    def listSplits(self, login, tableName, maxSplits):
+    def listSplits(self, sharedSecret, tableName, maxSplits):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - maxSplits
 
         """
         pass
 
-    def listTables(self, login):
+    def listTables(self, sharedSecret):
         """
         Parameters:
-         - login
+         - sharedSecret
 
         """
         pass
 
-    def listIterators(self, login, tableName):
+    def listIterators(self, sharedSecret, tableName):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
 
         """
         pass
 
-    def listConstraints(self, login, tableName):
+    def listConstraints(self, sharedSecret, tableName):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
 
         """
         pass
 
-    def mergeTablets(self, login, tableName, startRow, endRow):
+    def mergeTablets(self, sharedSecret, tableName, startRow, endRow):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - startRow
          - endRow
@@ -307,40 +298,40 @@ class Iface(object):
         """
         pass
 
-    def offlineTable(self, login, tableName, wait):
+    def offlineTable(self, sharedSecret, tableName, wait):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - wait
 
         """
         pass
 
-    def onlineTable(self, login, tableName, wait):
+    def onlineTable(self, sharedSecret, tableName, wait):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - wait
 
         """
         pass
 
-    def removeConstraint(self, login, tableName, constraint):
+    def removeConstraint(self, sharedSecret, tableName, constraint):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - constraint
 
         """
         pass
 
-    def removeIterator(self, login, tableName, iterName, scopes):
+    def removeIterator(self, sharedSecret, tableName, iterName, scopes):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - iterName
          - scopes
@@ -348,40 +339,40 @@ class Iface(object):
         """
         pass
 
-    def removeTableProperty(self, login, tableName, property):
+    def removeTableProperty(self, sharedSecret, tableName, property):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - property
 
         """
         pass
 
-    def renameTable(self, login, oldTableName, newTableName):
+    def renameTable(self, sharedSecret, oldTableName, newTableName):
         """
         Parameters:
-         - login
+         - sharedSecret
          - oldTableName
          - newTableName
 
         """
         pass
 
-    def setLocalityGroups(self, login, tableName, groups):
+    def setLocalityGroups(self, sharedSecret, tableName, groups):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - groups
 
         """
         pass
 
-    def setTableProperty(self, login, tableName, property, value):
+    def setTableProperty(self, sharedSecret, tableName, property, value):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - property
          - value
@@ -389,10 +380,10 @@ class Iface(object):
         """
         pass
 
-    def splitRangeByTablets(self, login, tableName, range, maxSplits):
+    def splitRangeByTablets(self, sharedSecret, tableName, range, maxSplits):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - range
          - maxSplits
@@ -400,27 +391,27 @@ class Iface(object):
         """
         pass
 
-    def tableExists(self, login, tableName):
+    def tableExists(self, sharedSecret, tableName):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
 
         """
         pass
 
-    def tableIdMap(self, login):
+    def tableIdMap(self, sharedSecret):
         """
         Parameters:
-         - login
+         - sharedSecret
 
         """
         pass
 
-    def testTableClassLoad(self, login, tableName, className, asTypeName):
+    def testTableClassLoad(self, sharedSecret, tableName, className, asTypeName):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - className
          - asTypeName
@@ -428,158 +419,158 @@ class Iface(object):
         """
         pass
 
-    def pingTabletServer(self, login, tserver):
+    def pingTabletServer(self, sharedSecret, tserver):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tserver
 
         """
         pass
 
-    def getActiveScans(self, login, tserver):
+    def getActiveScans(self, sharedSecret, tserver):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tserver
 
         """
         pass
 
-    def getActiveCompactions(self, login, tserver):
+    def getActiveCompactions(self, sharedSecret, tserver):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tserver
 
         """
         pass
 
-    def getSiteConfiguration(self, login):
+    def getSiteConfiguration(self, sharedSecret):
         """
         Parameters:
-         - login
+         - sharedSecret
 
         """
         pass
 
-    def getSystemConfiguration(self, login):
+    def getSystemConfiguration(self, sharedSecret):
         """
         Parameters:
-         - login
+         - sharedSecret
 
         """
         pass
 
-    def getTabletServers(self, login):
+    def getTabletServers(self, sharedSecret):
         """
         Parameters:
-         - login
+         - sharedSecret
 
         """
         pass
 
-    def removeProperty(self, login, property):
+    def removeProperty(self, sharedSecret, property):
         """
         Parameters:
-         - login
+         - sharedSecret
          - property
 
         """
         pass
 
-    def setProperty(self, login, property, value):
+    def setProperty(self, sharedSecret, property, value):
         """
         Parameters:
-         - login
+         - sharedSecret
          - property
          - value
 
         """
         pass
 
-    def testClassLoad(self, login, className, asTypeName):
+    def testClassLoad(self, sharedSecret, className, asTypeName):
         """
         Parameters:
-         - login
+         - sharedSecret
          - className
          - asTypeName
 
         """
         pass
 
-    def authenticateUser(self, login, user, properties):
+    def authenticateUser(self, sharedSecret, user, properties):
         """
         Parameters:
-         - login
+         - sharedSecret
          - user
          - properties
 
         """
         pass
 
-    def changeUserAuthorizations(self, login, user, authorizations):
+    def changeUserAuthorizations(self, sharedSecret, user, authorizations):
         """
         Parameters:
-         - login
+         - sharedSecret
          - user
          - authorizations
 
         """
         pass
 
-    def changeLocalUserPassword(self, login, user, password):
+    def changeLocalUserPassword(self, sharedSecret, user, password):
         """
         Parameters:
-         - login
+         - sharedSecret
          - user
          - password
 
         """
         pass
 
-    def createLocalUser(self, login, user, password):
+    def createLocalUser(self, sharedSecret, user, password):
         """
         Parameters:
-         - login
+         - sharedSecret
          - user
          - password
 
         """
         pass
 
-    def dropLocalUser(self, login, user):
+    def dropLocalUser(self, sharedSecret, user):
         """
         Parameters:
-         - login
+         - sharedSecret
          - user
 
         """
         pass
 
-    def getUserAuthorizations(self, login, user):
+    def getUserAuthorizations(self, sharedSecret, user):
         """
         Parameters:
-         - login
+         - sharedSecret
          - user
 
         """
         pass
 
-    def grantSystemPermission(self, login, user, perm):
+    def grantSystemPermission(self, sharedSecret, user, perm):
         """
         Parameters:
-         - login
+         - sharedSecret
          - user
          - perm
 
         """
         pass
 
-    def grantTablePermission(self, login, user, table, perm):
+    def grantTablePermission(self, sharedSecret, user, table, perm):
         """
         Parameters:
-         - login
+         - sharedSecret
          - user
          - table
          - perm
@@ -587,49 +578,20 @@ class Iface(object):
         """
         pass
 
-    def hasSystemPermission(self, login, user, perm):
+    def hasSystemPermission(self, sharedSecret, user, perm):
         """
         Parameters:
-         - login
+         - sharedSecret
          - user
          - perm
 
         """
         pass
 
-    def hasTablePermission(self, login, user, table, perm):
+    def hasTablePermission(self, sharedSecret, user, table, perm):
         """
         Parameters:
-         - login
-         - user
-         - table
-         - perm
-
-        """
-        pass
-
-    def listLocalUsers(self, login):
-        """
-        Parameters:
-         - login
-
-        """
-        pass
-
-    def revokeSystemPermission(self, login, user, perm):
-        """
-        Parameters:
-         - login
-         - user
-         - perm
-
-        """
-        pass
-
-    def revokeTablePermission(self, login, user, table, perm):
-        """
-        Parameters:
-         - login
+         - sharedSecret
          - user
          - table
          - perm
@@ -637,10 +599,39 @@ class Iface(object):
         """
         pass
 
-    def grantNamespacePermission(self, login, user, namespaceName, perm):
+    def listLocalUsers(self, sharedSecret):
         """
         Parameters:
-         - login
+         - sharedSecret
+
+        """
+        pass
+
+    def revokeSystemPermission(self, sharedSecret, user, perm):
+        """
+        Parameters:
+         - sharedSecret
+         - user
+         - perm
+
+        """
+        pass
+
+    def revokeTablePermission(self, sharedSecret, user, table, perm):
+        """
+        Parameters:
+         - sharedSecret
+         - user
+         - table
+         - perm
+
+        """
+        pass
+
+    def grantNamespacePermission(self, sharedSecret, user, namespaceName, perm):
+        """
+        Parameters:
+         - sharedSecret
          - user
          - namespaceName
          - perm
@@ -648,10 +639,10 @@ class Iface(object):
         """
         pass
 
-    def hasNamespacePermission(self, login, user, namespaceName, perm):
+    def hasNamespacePermission(self, sharedSecret, user, namespaceName, perm):
         """
         Parameters:
-         - login
+         - sharedSecret
          - user
          - namespaceName
          - perm
@@ -659,10 +650,10 @@ class Iface(object):
         """
         pass
 
-    def revokeNamespacePermission(self, login, user, namespaceName, perm):
+    def revokeNamespacePermission(self, sharedSecret, user, namespaceName, perm):
         """
         Parameters:
-         - login
+         - sharedSecret
          - user
          - namespaceName
          - perm
@@ -670,20 +661,20 @@ class Iface(object):
         """
         pass
 
-    def createBatchScanner(self, login, tableName, options):
+    def createBatchScanner(self, sharedSecret, tableName, options):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - options
 
         """
         pass
 
-    def createScanner(self, login, tableName, options):
+    def createScanner(self, sharedSecret, tableName, options):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - options
 
@@ -723,20 +714,20 @@ class Iface(object):
         """
         pass
 
-    def updateAndFlush(self, login, tableName, cells):
+    def updateAndFlush(self, sharedSecret, tableName, cells):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - cells
 
         """
         pass
 
-    def createWriter(self, login, tableName, opts):
+    def createWriter(self, sharedSecret, tableName, opts):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - opts
 
@@ -768,10 +759,10 @@ class Iface(object):
         """
         pass
 
-    def updateRowConditionally(self, login, tableName, row, updates):
+    def updateRowConditionally(self, sharedSecret, tableName, row, updates):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - row
          - updates
@@ -779,10 +770,10 @@ class Iface(object):
         """
         pass
 
-    def createConditionalWriter(self, login, tableName, options):
+    def createConditionalWriter(self, sharedSecret, tableName, options):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - options
 
@@ -829,55 +820,55 @@ class Iface(object):
     def defaultNamespace(self):
         pass
 
-    def listNamespaces(self, login):
+    def listNamespaces(self, sharedSecret):
         """
         Parameters:
-         - login
+         - sharedSecret
 
         """
         pass
 
-    def namespaceExists(self, login, namespaceName):
+    def namespaceExists(self, sharedSecret, namespaceName):
         """
         Parameters:
-         - login
+         - sharedSecret
          - namespaceName
 
         """
         pass
 
-    def createNamespace(self, login, namespaceName):
+    def createNamespace(self, sharedSecret, namespaceName):
         """
         Parameters:
-         - login
+         - sharedSecret
          - namespaceName
 
         """
         pass
 
-    def deleteNamespace(self, login, namespaceName):
+    def deleteNamespace(self, sharedSecret, namespaceName):
         """
         Parameters:
-         - login
+         - sharedSecret
          - namespaceName
 
         """
         pass
 
-    def renameNamespace(self, login, oldNamespaceName, newNamespaceName):
+    def renameNamespace(self, sharedSecret, oldNamespaceName, newNamespaceName):
         """
         Parameters:
-         - login
+         - sharedSecret
          - oldNamespaceName
          - newNamespaceName
 
         """
         pass
 
-    def setNamespaceProperty(self, login, namespaceName, property, value):
+    def setNamespaceProperty(self, sharedSecret, namespaceName, property, value):
         """
         Parameters:
-         - login
+         - sharedSecret
          - namespaceName
          - property
          - value
@@ -885,37 +876,37 @@ class Iface(object):
         """
         pass
 
-    def removeNamespaceProperty(self, login, namespaceName, property):
+    def removeNamespaceProperty(self, sharedSecret, namespaceName, property):
         """
         Parameters:
-         - login
+         - sharedSecret
          - namespaceName
          - property
 
         """
         pass
 
-    def getNamespaceProperties(self, login, namespaceName):
+    def getNamespaceProperties(self, sharedSecret, namespaceName):
         """
         Parameters:
-         - login
+         - sharedSecret
          - namespaceName
 
         """
         pass
 
-    def namespaceIdMap(self, login):
+    def namespaceIdMap(self, sharedSecret):
         """
         Parameters:
-         - login
+         - sharedSecret
 
         """
         pass
 
-    def attachNamespaceIterator(self, login, namespaceName, setting, scopes):
+    def attachNamespaceIterator(self, sharedSecret, namespaceName, setting, scopes):
         """
         Parameters:
-         - login
+         - sharedSecret
          - namespaceName
          - setting
          - scopes
@@ -923,10 +914,10 @@ class Iface(object):
         """
         pass
 
-    def removeNamespaceIterator(self, login, namespaceName, name, scopes):
+    def removeNamespaceIterator(self, sharedSecret, namespaceName, name, scopes):
         """
         Parameters:
-         - login
+         - sharedSecret
          - namespaceName
          - name
          - scopes
@@ -934,10 +925,10 @@ class Iface(object):
         """
         pass
 
-    def getNamespaceIteratorSetting(self, login, namespaceName, name, scope):
+    def getNamespaceIteratorSetting(self, sharedSecret, namespaceName, name, scope):
         """
         Parameters:
-         - login
+         - sharedSecret
          - namespaceName
          - name
          - scope
@@ -945,19 +936,19 @@ class Iface(object):
         """
         pass
 
-    def listNamespaceIterators(self, login, namespaceName):
+    def listNamespaceIterators(self, sharedSecret, namespaceName):
         """
         Parameters:
-         - login
+         - sharedSecret
          - namespaceName
 
         """
         pass
 
-    def checkNamespaceIteratorConflicts(self, login, namespaceName, setting, scopes):
+    def checkNamespaceIteratorConflicts(self, sharedSecret, namespaceName, setting, scopes):
         """
         Parameters:
-         - login
+         - sharedSecret
          - namespaceName
          - setting
          - scopes
@@ -965,39 +956,39 @@ class Iface(object):
         """
         pass
 
-    def addNamespaceConstraint(self, login, namespaceName, constraintClassName):
+    def addNamespaceConstraint(self, sharedSecret, namespaceName, constraintClassName):
         """
         Parameters:
-         - login
+         - sharedSecret
          - namespaceName
          - constraintClassName
 
         """
         pass
 
-    def removeNamespaceConstraint(self, login, namespaceName, id):
+    def removeNamespaceConstraint(self, sharedSecret, namespaceName, id):
         """
         Parameters:
-         - login
+         - sharedSecret
          - namespaceName
          - id
 
         """
         pass
 
-    def listNamespaceConstraints(self, login, namespaceName):
+    def listNamespaceConstraints(self, sharedSecret, namespaceName):
         """
         Parameters:
-         - login
+         - sharedSecret
          - namespaceName
 
         """
         pass
 
-    def testNamespaceClassLoad(self, login, namespaceName, className, asTypeName):
+    def testNamespaceClassLoad(self, sharedSecret, namespaceName, className, asTypeName):
         """
         Parameters:
-         - login
+         - sharedSecret
          - namespaceName
          - className
          - asTypeName
@@ -1013,57 +1004,21 @@ class Client(Iface):
             self._oprot = oprot
         self._seqid = 0
 
-    def login(self, principal, loginProperties):
+    def addConstraint(self, sharedSecret, tableName, constraintClassName):
         """
         Parameters:
-         - principal
-         - loginProperties
-
-        """
-        self.send_login(principal, loginProperties)
-        return self.recv_login()
-
-    def send_login(self, principal, loginProperties):
-        self._oprot.writeMessageBegin('login', TMessageType.CALL, self._seqid)
-        args = login_args()
-        args.principal = principal
-        args.loginProperties = loginProperties
-        args.write(self._oprot)
-        self._oprot.writeMessageEnd()
-        self._oprot.trans.flush()
-
-    def recv_login(self):
-        iprot = self._iprot
-        (fname, mtype, rseqid) = iprot.readMessageBegin()
-        if mtype == TMessageType.EXCEPTION:
-            x = TApplicationException()
-            x.read(iprot)
-            iprot.readMessageEnd()
-            raise x
-        result = login_result()
-        result.read(iprot)
-        iprot.readMessageEnd()
-        if result.success is not None:
-            return result.success
-        if result.ouch2 is not None:
-            raise result.ouch2
-        raise TApplicationException(TApplicationException.MISSING_RESULT, "login failed: unknown result")
-
-    def addConstraint(self, login, tableName, constraintClassName):
-        """
-        Parameters:
-         - login
+         - sharedSecret
          - tableName
          - constraintClassName
 
         """
-        self.send_addConstraint(login, tableName, constraintClassName)
+        self.send_addConstraint(sharedSecret, tableName, constraintClassName)
         return self.recv_addConstraint()
 
-    def send_addConstraint(self, login, tableName, constraintClassName):
+    def send_addConstraint(self, sharedSecret, tableName, constraintClassName):
         self._oprot.writeMessageBegin('addConstraint', TMessageType.CALL, self._seqid)
         args = addConstraint_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.tableName = tableName
         args.constraintClassName = constraintClassName
         args.write(self._oprot)
@@ -1091,21 +1046,21 @@ class Client(Iface):
             raise result.ouch3
         raise TApplicationException(TApplicationException.MISSING_RESULT, "addConstraint failed: unknown result")
 
-    def addSplits(self, login, tableName, splits):
+    def addSplits(self, sharedSecret, tableName, splits):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - splits
 
         """
-        self.send_addSplits(login, tableName, splits)
+        self.send_addSplits(sharedSecret, tableName, splits)
         self.recv_addSplits()
 
-    def send_addSplits(self, login, tableName, splits):
+    def send_addSplits(self, sharedSecret, tableName, splits):
         self._oprot.writeMessageBegin('addSplits', TMessageType.CALL, self._seqid)
         args = addSplits_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.tableName = tableName
         args.splits = splits
         args.write(self._oprot)
@@ -1131,22 +1086,22 @@ class Client(Iface):
             raise result.ouch3
         return
 
-    def attachIterator(self, login, tableName, setting, scopes):
+    def attachIterator(self, sharedSecret, tableName, setting, scopes):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - setting
          - scopes
 
         """
-        self.send_attachIterator(login, tableName, setting, scopes)
+        self.send_attachIterator(sharedSecret, tableName, setting, scopes)
         self.recv_attachIterator()
 
-    def send_attachIterator(self, login, tableName, setting, scopes):
+    def send_attachIterator(self, sharedSecret, tableName, setting, scopes):
         self._oprot.writeMessageBegin('attachIterator', TMessageType.CALL, self._seqid)
         args = attachIterator_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.tableName = tableName
         args.setting = setting
         args.scopes = scopes
@@ -1173,22 +1128,22 @@ class Client(Iface):
             raise result.ouch3
         return
 
-    def checkIteratorConflicts(self, login, tableName, setting, scopes):
+    def checkIteratorConflicts(self, sharedSecret, tableName, setting, scopes):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - setting
          - scopes
 
         """
-        self.send_checkIteratorConflicts(login, tableName, setting, scopes)
+        self.send_checkIteratorConflicts(sharedSecret, tableName, setting, scopes)
         self.recv_checkIteratorConflicts()
 
-    def send_checkIteratorConflicts(self, login, tableName, setting, scopes):
+    def send_checkIteratorConflicts(self, sharedSecret, tableName, setting, scopes):
         self._oprot.writeMessageBegin('checkIteratorConflicts', TMessageType.CALL, self._seqid)
         args = checkIteratorConflicts_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.tableName = tableName
         args.setting = setting
         args.scopes = scopes
@@ -1215,20 +1170,20 @@ class Client(Iface):
             raise result.ouch3
         return
 
-    def clearLocatorCache(self, login, tableName):
+    def clearLocatorCache(self, sharedSecret, tableName):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
 
         """
-        self.send_clearLocatorCache(login, tableName)
+        self.send_clearLocatorCache(sharedSecret, tableName)
         self.recv_clearLocatorCache()
 
-    def send_clearLocatorCache(self, login, tableName):
+    def send_clearLocatorCache(self, sharedSecret, tableName):
         self._oprot.writeMessageBegin('clearLocatorCache', TMessageType.CALL, self._seqid)
         args = clearLocatorCache_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.tableName = tableName
         args.write(self._oprot)
         self._oprot.writeMessageEnd()
@@ -1249,10 +1204,10 @@ class Client(Iface):
             raise result.ouch1
         return
 
-    def cloneTable(self, login, tableName, newTableName, flush, propertiesToSet, propertiesToExclude):
+    def cloneTable(self, sharedSecret, tableName, newTableName, flush, propertiesToSet, propertiesToExclude):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - newTableName
          - flush
@@ -1260,13 +1215,13 @@ class Client(Iface):
          - propertiesToExclude
 
         """
-        self.send_cloneTable(login, tableName, newTableName, flush, propertiesToSet, propertiesToExclude)
+        self.send_cloneTable(sharedSecret, tableName, newTableName, flush, propertiesToSet, propertiesToExclude)
         self.recv_cloneTable()
 
-    def send_cloneTable(self, login, tableName, newTableName, flush, propertiesToSet, propertiesToExclude):
+    def send_cloneTable(self, sharedSecret, tableName, newTableName, flush, propertiesToSet, propertiesToExclude):
         self._oprot.writeMessageBegin('cloneTable', TMessageType.CALL, self._seqid)
         args = cloneTable_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.tableName = tableName
         args.newTableName = newTableName
         args.flush = flush
@@ -1297,10 +1252,10 @@ class Client(Iface):
             raise result.ouch4
         return
 
-    def compactTable(self, login, tableName, startRow, endRow, iterators, flush, wait, selectorConfig, configurerConfig):
+    def compactTable(self, sharedSecret, tableName, startRow, endRow, iterators, flush, wait, selectorConfig, configurerConfig):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - startRow
          - endRow
@@ -1311,13 +1266,13 @@ class Client(Iface):
          - configurerConfig
 
         """
-        self.send_compactTable(login, tableName, startRow, endRow, iterators, flush, wait, selectorConfig, configurerConfig)
+        self.send_compactTable(sharedSecret, tableName, startRow, endRow, iterators, flush, wait, selectorConfig, configurerConfig)
         self.recv_compactTable()
 
-    def send_compactTable(self, login, tableName, startRow, endRow, iterators, flush, wait, selectorConfig, configurerConfig):
+    def send_compactTable(self, sharedSecret, tableName, startRow, endRow, iterators, flush, wait, selectorConfig, configurerConfig):
         self._oprot.writeMessageBegin('compactTable', TMessageType.CALL, self._seqid)
         args = compactTable_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.tableName = tableName
         args.startRow = startRow
         args.endRow = endRow
@@ -1349,20 +1304,20 @@ class Client(Iface):
             raise result.ouch3
         return
 
-    def cancelCompaction(self, login, tableName):
+    def cancelCompaction(self, sharedSecret, tableName):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
 
         """
-        self.send_cancelCompaction(login, tableName)
+        self.send_cancelCompaction(sharedSecret, tableName)
         self.recv_cancelCompaction()
 
-    def send_cancelCompaction(self, login, tableName):
+    def send_cancelCompaction(self, sharedSecret, tableName):
         self._oprot.writeMessageBegin('cancelCompaction', TMessageType.CALL, self._seqid)
         args = cancelCompaction_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.tableName = tableName
         args.write(self._oprot)
         self._oprot.writeMessageEnd()
@@ -1387,22 +1342,22 @@ class Client(Iface):
             raise result.ouch3
         return
 
-    def createTable(self, login, tableName, versioningIter, type):
+    def createTable(self, sharedSecret, tableName, versioningIter, type):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - versioningIter
          - type
 
         """
-        self.send_createTable(login, tableName, versioningIter, type)
+        self.send_createTable(sharedSecret, tableName, versioningIter, type)
         self.recv_createTable()
 
-    def send_createTable(self, login, tableName, versioningIter, type):
+    def send_createTable(self, sharedSecret, tableName, versioningIter, type):
         self._oprot.writeMessageBegin('createTable', TMessageType.CALL, self._seqid)
         args = createTable_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.tableName = tableName
         args.versioningIter = versioningIter
         args.type = type
@@ -1429,20 +1384,20 @@ class Client(Iface):
             raise result.ouch3
         return
 
-    def deleteTable(self, login, tableName):
+    def deleteTable(self, sharedSecret, tableName):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
 
         """
-        self.send_deleteTable(login, tableName)
+        self.send_deleteTable(sharedSecret, tableName)
         self.recv_deleteTable()
 
-    def send_deleteTable(self, login, tableName):
+    def send_deleteTable(self, sharedSecret, tableName):
         self._oprot.writeMessageBegin('deleteTable', TMessageType.CALL, self._seqid)
         args = deleteTable_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.tableName = tableName
         args.write(self._oprot)
         self._oprot.writeMessageEnd()
@@ -1467,22 +1422,22 @@ class Client(Iface):
             raise result.ouch3
         return
 
-    def deleteRows(self, login, tableName, startRow, endRow):
+    def deleteRows(self, sharedSecret, tableName, startRow, endRow):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - startRow
          - endRow
 
         """
-        self.send_deleteRows(login, tableName, startRow, endRow)
+        self.send_deleteRows(sharedSecret, tableName, startRow, endRow)
         self.recv_deleteRows()
 
-    def send_deleteRows(self, login, tableName, startRow, endRow):
+    def send_deleteRows(self, sharedSecret, tableName, startRow, endRow):
         self._oprot.writeMessageBegin('deleteRows', TMessageType.CALL, self._seqid)
         args = deleteRows_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.tableName = tableName
         args.startRow = startRow
         args.endRow = endRow
@@ -1509,21 +1464,21 @@ class Client(Iface):
             raise result.ouch3
         return
 
-    def exportTable(self, login, tableName, exportDir):
+    def exportTable(self, sharedSecret, tableName, exportDir):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - exportDir
 
         """
-        self.send_exportTable(login, tableName, exportDir)
+        self.send_exportTable(sharedSecret, tableName, exportDir)
         self.recv_exportTable()
 
-    def send_exportTable(self, login, tableName, exportDir):
+    def send_exportTable(self, sharedSecret, tableName, exportDir):
         self._oprot.writeMessageBegin('exportTable', TMessageType.CALL, self._seqid)
         args = exportTable_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.tableName = tableName
         args.exportDir = exportDir
         args.write(self._oprot)
@@ -1549,23 +1504,23 @@ class Client(Iface):
             raise result.ouch3
         return
 
-    def flushTable(self, login, tableName, startRow, endRow, wait):
+    def flushTable(self, sharedSecret, tableName, startRow, endRow, wait):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - startRow
          - endRow
          - wait
 
         """
-        self.send_flushTable(login, tableName, startRow, endRow, wait)
+        self.send_flushTable(sharedSecret, tableName, startRow, endRow, wait)
         self.recv_flushTable()
 
-    def send_flushTable(self, login, tableName, startRow, endRow, wait):
+    def send_flushTable(self, sharedSecret, tableName, startRow, endRow, wait):
         self._oprot.writeMessageBegin('flushTable', TMessageType.CALL, self._seqid)
         args = flushTable_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.tableName = tableName
         args.startRow = startRow
         args.endRow = endRow
@@ -1593,20 +1548,20 @@ class Client(Iface):
             raise result.ouch3
         return
 
-    def getDiskUsage(self, login, tables):
+    def getDiskUsage(self, sharedSecret, tables):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tables
 
         """
-        self.send_getDiskUsage(login, tables)
+        self.send_getDiskUsage(sharedSecret, tables)
         return self.recv_getDiskUsage()
 
-    def send_getDiskUsage(self, login, tables):
+    def send_getDiskUsage(self, sharedSecret, tables):
         self._oprot.writeMessageBegin('getDiskUsage', TMessageType.CALL, self._seqid)
         args = getDiskUsage_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.tables = tables
         args.write(self._oprot)
         self._oprot.writeMessageEnd()
@@ -1633,20 +1588,20 @@ class Client(Iface):
             raise result.ouch3
         raise TApplicationException(TApplicationException.MISSING_RESULT, "getDiskUsage failed: unknown result")
 
-    def getLocalityGroups(self, login, tableName):
+    def getLocalityGroups(self, sharedSecret, tableName):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
 
         """
-        self.send_getLocalityGroups(login, tableName)
+        self.send_getLocalityGroups(sharedSecret, tableName)
         return self.recv_getLocalityGroups()
 
-    def send_getLocalityGroups(self, login, tableName):
+    def send_getLocalityGroups(self, sharedSecret, tableName):
         self._oprot.writeMessageBegin('getLocalityGroups', TMessageType.CALL, self._seqid)
         args = getLocalityGroups_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.tableName = tableName
         args.write(self._oprot)
         self._oprot.writeMessageEnd()
@@ -1673,22 +1628,22 @@ class Client(Iface):
             raise result.ouch3
         raise TApplicationException(TApplicationException.MISSING_RESULT, "getLocalityGroups failed: unknown result")
 
-    def getIteratorSetting(self, login, tableName, iteratorName, scope):
+    def getIteratorSetting(self, sharedSecret, tableName, iteratorName, scope):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - iteratorName
          - scope
 
         """
-        self.send_getIteratorSetting(login, tableName, iteratorName, scope)
+        self.send_getIteratorSetting(sharedSecret, tableName, iteratorName, scope)
         return self.recv_getIteratorSetting()
 
-    def send_getIteratorSetting(self, login, tableName, iteratorName, scope):
+    def send_getIteratorSetting(self, sharedSecret, tableName, iteratorName, scope):
         self._oprot.writeMessageBegin('getIteratorSetting', TMessageType.CALL, self._seqid)
         args = getIteratorSetting_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.tableName = tableName
         args.iteratorName = iteratorName
         args.scope = scope
@@ -1717,10 +1672,10 @@ class Client(Iface):
             raise result.ouch3
         raise TApplicationException(TApplicationException.MISSING_RESULT, "getIteratorSetting failed: unknown result")
 
-    def getMaxRow(self, login, tableName, auths, startRow, startInclusive, endRow, endInclusive):
+    def getMaxRow(self, sharedSecret, tableName, auths, startRow, startInclusive, endRow, endInclusive):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - auths
          - startRow
@@ -1729,13 +1684,13 @@ class Client(Iface):
          - endInclusive
 
         """
-        self.send_getMaxRow(login, tableName, auths, startRow, startInclusive, endRow, endInclusive)
+        self.send_getMaxRow(sharedSecret, tableName, auths, startRow, startInclusive, endRow, endInclusive)
         return self.recv_getMaxRow()
 
-    def send_getMaxRow(self, login, tableName, auths, startRow, startInclusive, endRow, endInclusive):
+    def send_getMaxRow(self, sharedSecret, tableName, auths, startRow, startInclusive, endRow, endInclusive):
         self._oprot.writeMessageBegin('getMaxRow', TMessageType.CALL, self._seqid)
         args = getMaxRow_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.tableName = tableName
         args.auths = auths
         args.startRow = startRow
@@ -1767,20 +1722,20 @@ class Client(Iface):
             raise result.ouch3
         raise TApplicationException(TApplicationException.MISSING_RESULT, "getMaxRow failed: unknown result")
 
-    def getTableProperties(self, login, tableName):
+    def getTableProperties(self, sharedSecret, tableName):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
 
         """
-        self.send_getTableProperties(login, tableName)
+        self.send_getTableProperties(sharedSecret, tableName)
         return self.recv_getTableProperties()
 
-    def send_getTableProperties(self, login, tableName):
+    def send_getTableProperties(self, sharedSecret, tableName):
         self._oprot.writeMessageBegin('getTableProperties', TMessageType.CALL, self._seqid)
         args = getTableProperties_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.tableName = tableName
         args.write(self._oprot)
         self._oprot.writeMessageEnd()
@@ -1807,23 +1762,23 @@ class Client(Iface):
             raise result.ouch3
         raise TApplicationException(TApplicationException.MISSING_RESULT, "getTableProperties failed: unknown result")
 
-    def importDirectory(self, login, tableName, importDir, failureDir, setTime):
+    def importDirectory(self, sharedSecret, tableName, importDir, failureDir, setTime):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - importDir
          - failureDir
          - setTime
 
         """
-        self.send_importDirectory(login, tableName, importDir, failureDir, setTime)
+        self.send_importDirectory(sharedSecret, tableName, importDir, failureDir, setTime)
         self.recv_importDirectory()
 
-    def send_importDirectory(self, login, tableName, importDir, failureDir, setTime):
+    def send_importDirectory(self, sharedSecret, tableName, importDir, failureDir, setTime):
         self._oprot.writeMessageBegin('importDirectory', TMessageType.CALL, self._seqid)
         args = importDirectory_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.tableName = tableName
         args.importDir = importDir
         args.failureDir = failureDir
@@ -1851,21 +1806,21 @@ class Client(Iface):
             raise result.ouch4
         return
 
-    def importTable(self, login, tableName, importDir):
+    def importTable(self, sharedSecret, tableName, importDir):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - importDir
 
         """
-        self.send_importTable(login, tableName, importDir)
+        self.send_importTable(sharedSecret, tableName, importDir)
         self.recv_importTable()
 
-    def send_importTable(self, login, tableName, importDir):
+    def send_importTable(self, sharedSecret, tableName, importDir):
         self._oprot.writeMessageBegin('importTable', TMessageType.CALL, self._seqid)
         args = importTable_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.tableName = tableName
         args.importDir = importDir
         args.write(self._oprot)
@@ -1891,21 +1846,21 @@ class Client(Iface):
             raise result.ouch3
         return
 
-    def listSplits(self, login, tableName, maxSplits):
+    def listSplits(self, sharedSecret, tableName, maxSplits):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - maxSplits
 
         """
-        self.send_listSplits(login, tableName, maxSplits)
+        self.send_listSplits(sharedSecret, tableName, maxSplits)
         return self.recv_listSplits()
 
-    def send_listSplits(self, login, tableName, maxSplits):
+    def send_listSplits(self, sharedSecret, tableName, maxSplits):
         self._oprot.writeMessageBegin('listSplits', TMessageType.CALL, self._seqid)
         args = listSplits_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.tableName = tableName
         args.maxSplits = maxSplits
         args.write(self._oprot)
@@ -1933,19 +1888,19 @@ class Client(Iface):
             raise result.ouch3
         raise TApplicationException(TApplicationException.MISSING_RESULT, "listSplits failed: unknown result")
 
-    def listTables(self, login):
+    def listTables(self, sharedSecret):
         """
         Parameters:
-         - login
+         - sharedSecret
 
         """
-        self.send_listTables(login)
+        self.send_listTables(sharedSecret)
         return self.recv_listTables()
 
-    def send_listTables(self, login):
+    def send_listTables(self, sharedSecret):
         self._oprot.writeMessageBegin('listTables', TMessageType.CALL, self._seqid)
         args = listTables_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.write(self._oprot)
         self._oprot.writeMessageEnd()
         self._oprot.trans.flush()
@@ -1965,20 +1920,20 @@ class Client(Iface):
             return result.success
         raise TApplicationException(TApplicationException.MISSING_RESULT, "listTables failed: unknown result")
 
-    def listIterators(self, login, tableName):
+    def listIterators(self, sharedSecret, tableName):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
 
         """
-        self.send_listIterators(login, tableName)
+        self.send_listIterators(sharedSecret, tableName)
         return self.recv_listIterators()
 
-    def send_listIterators(self, login, tableName):
+    def send_listIterators(self, sharedSecret, tableName):
         self._oprot.writeMessageBegin('listIterators', TMessageType.CALL, self._seqid)
         args = listIterators_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.tableName = tableName
         args.write(self._oprot)
         self._oprot.writeMessageEnd()
@@ -2005,20 +1960,20 @@ class Client(Iface):
             raise result.ouch3
         raise TApplicationException(TApplicationException.MISSING_RESULT, "listIterators failed: unknown result")
 
-    def listConstraints(self, login, tableName):
+    def listConstraints(self, sharedSecret, tableName):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
 
         """
-        self.send_listConstraints(login, tableName)
+        self.send_listConstraints(sharedSecret, tableName)
         return self.recv_listConstraints()
 
-    def send_listConstraints(self, login, tableName):
+    def send_listConstraints(self, sharedSecret, tableName):
         self._oprot.writeMessageBegin('listConstraints', TMessageType.CALL, self._seqid)
         args = listConstraints_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.tableName = tableName
         args.write(self._oprot)
         self._oprot.writeMessageEnd()
@@ -2045,22 +2000,22 @@ class Client(Iface):
             raise result.ouch3
         raise TApplicationException(TApplicationException.MISSING_RESULT, "listConstraints failed: unknown result")
 
-    def mergeTablets(self, login, tableName, startRow, endRow):
+    def mergeTablets(self, sharedSecret, tableName, startRow, endRow):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - startRow
          - endRow
 
         """
-        self.send_mergeTablets(login, tableName, startRow, endRow)
+        self.send_mergeTablets(sharedSecret, tableName, startRow, endRow)
         self.recv_mergeTablets()
 
-    def send_mergeTablets(self, login, tableName, startRow, endRow):
+    def send_mergeTablets(self, sharedSecret, tableName, startRow, endRow):
         self._oprot.writeMessageBegin('mergeTablets', TMessageType.CALL, self._seqid)
         args = mergeTablets_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.tableName = tableName
         args.startRow = startRow
         args.endRow = endRow
@@ -2087,21 +2042,21 @@ class Client(Iface):
             raise result.ouch3
         return
 
-    def offlineTable(self, login, tableName, wait):
+    def offlineTable(self, sharedSecret, tableName, wait):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - wait
 
         """
-        self.send_offlineTable(login, tableName, wait)
+        self.send_offlineTable(sharedSecret, tableName, wait)
         self.recv_offlineTable()
 
-    def send_offlineTable(self, login, tableName, wait):
+    def send_offlineTable(self, sharedSecret, tableName, wait):
         self._oprot.writeMessageBegin('offlineTable', TMessageType.CALL, self._seqid)
         args = offlineTable_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.tableName = tableName
         args.wait = wait
         args.write(self._oprot)
@@ -2127,21 +2082,21 @@ class Client(Iface):
             raise result.ouch3
         return
 
-    def onlineTable(self, login, tableName, wait):
+    def onlineTable(self, sharedSecret, tableName, wait):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - wait
 
         """
-        self.send_onlineTable(login, tableName, wait)
+        self.send_onlineTable(sharedSecret, tableName, wait)
         self.recv_onlineTable()
 
-    def send_onlineTable(self, login, tableName, wait):
+    def send_onlineTable(self, sharedSecret, tableName, wait):
         self._oprot.writeMessageBegin('onlineTable', TMessageType.CALL, self._seqid)
         args = onlineTable_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.tableName = tableName
         args.wait = wait
         args.write(self._oprot)
@@ -2167,21 +2122,21 @@ class Client(Iface):
             raise result.ouch3
         return
 
-    def removeConstraint(self, login, tableName, constraint):
+    def removeConstraint(self, sharedSecret, tableName, constraint):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - constraint
 
         """
-        self.send_removeConstraint(login, tableName, constraint)
+        self.send_removeConstraint(sharedSecret, tableName, constraint)
         self.recv_removeConstraint()
 
-    def send_removeConstraint(self, login, tableName, constraint):
+    def send_removeConstraint(self, sharedSecret, tableName, constraint):
         self._oprot.writeMessageBegin('removeConstraint', TMessageType.CALL, self._seqid)
         args = removeConstraint_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.tableName = tableName
         args.constraint = constraint
         args.write(self._oprot)
@@ -2207,22 +2162,22 @@ class Client(Iface):
             raise result.ouch3
         return
 
-    def removeIterator(self, login, tableName, iterName, scopes):
+    def removeIterator(self, sharedSecret, tableName, iterName, scopes):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - iterName
          - scopes
 
         """
-        self.send_removeIterator(login, tableName, iterName, scopes)
+        self.send_removeIterator(sharedSecret, tableName, iterName, scopes)
         self.recv_removeIterator()
 
-    def send_removeIterator(self, login, tableName, iterName, scopes):
+    def send_removeIterator(self, sharedSecret, tableName, iterName, scopes):
         self._oprot.writeMessageBegin('removeIterator', TMessageType.CALL, self._seqid)
         args = removeIterator_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.tableName = tableName
         args.iterName = iterName
         args.scopes = scopes
@@ -2249,21 +2204,21 @@ class Client(Iface):
             raise result.ouch3
         return
 
-    def removeTableProperty(self, login, tableName, property):
+    def removeTableProperty(self, sharedSecret, tableName, property):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - property
 
         """
-        self.send_removeTableProperty(login, tableName, property)
+        self.send_removeTableProperty(sharedSecret, tableName, property)
         self.recv_removeTableProperty()
 
-    def send_removeTableProperty(self, login, tableName, property):
+    def send_removeTableProperty(self, sharedSecret, tableName, property):
         self._oprot.writeMessageBegin('removeTableProperty', TMessageType.CALL, self._seqid)
         args = removeTableProperty_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.tableName = tableName
         args.property = property
         args.write(self._oprot)
@@ -2289,21 +2244,21 @@ class Client(Iface):
             raise result.ouch3
         return
 
-    def renameTable(self, login, oldTableName, newTableName):
+    def renameTable(self, sharedSecret, oldTableName, newTableName):
         """
         Parameters:
-         - login
+         - sharedSecret
          - oldTableName
          - newTableName
 
         """
-        self.send_renameTable(login, oldTableName, newTableName)
+        self.send_renameTable(sharedSecret, oldTableName, newTableName)
         self.recv_renameTable()
 
-    def send_renameTable(self, login, oldTableName, newTableName):
+    def send_renameTable(self, sharedSecret, oldTableName, newTableName):
         self._oprot.writeMessageBegin('renameTable', TMessageType.CALL, self._seqid)
         args = renameTable_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.oldTableName = oldTableName
         args.newTableName = newTableName
         args.write(self._oprot)
@@ -2331,21 +2286,21 @@ class Client(Iface):
             raise result.ouch4
         return
 
-    def setLocalityGroups(self, login, tableName, groups):
+    def setLocalityGroups(self, sharedSecret, tableName, groups):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - groups
 
         """
-        self.send_setLocalityGroups(login, tableName, groups)
+        self.send_setLocalityGroups(sharedSecret, tableName, groups)
         self.recv_setLocalityGroups()
 
-    def send_setLocalityGroups(self, login, tableName, groups):
+    def send_setLocalityGroups(self, sharedSecret, tableName, groups):
         self._oprot.writeMessageBegin('setLocalityGroups', TMessageType.CALL, self._seqid)
         args = setLocalityGroups_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.tableName = tableName
         args.groups = groups
         args.write(self._oprot)
@@ -2371,22 +2326,22 @@ class Client(Iface):
             raise result.ouch3
         return
 
-    def setTableProperty(self, login, tableName, property, value):
+    def setTableProperty(self, sharedSecret, tableName, property, value):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - property
          - value
 
         """
-        self.send_setTableProperty(login, tableName, property, value)
+        self.send_setTableProperty(sharedSecret, tableName, property, value)
         self.recv_setTableProperty()
 
-    def send_setTableProperty(self, login, tableName, property, value):
+    def send_setTableProperty(self, sharedSecret, tableName, property, value):
         self._oprot.writeMessageBegin('setTableProperty', TMessageType.CALL, self._seqid)
         args = setTableProperty_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.tableName = tableName
         args.property = property
         args.value = value
@@ -2413,22 +2368,22 @@ class Client(Iface):
             raise result.ouch3
         return
 
-    def splitRangeByTablets(self, login, tableName, range, maxSplits):
+    def splitRangeByTablets(self, sharedSecret, tableName, range, maxSplits):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - range
          - maxSplits
 
         """
-        self.send_splitRangeByTablets(login, tableName, range, maxSplits)
+        self.send_splitRangeByTablets(sharedSecret, tableName, range, maxSplits)
         return self.recv_splitRangeByTablets()
 
-    def send_splitRangeByTablets(self, login, tableName, range, maxSplits):
+    def send_splitRangeByTablets(self, sharedSecret, tableName, range, maxSplits):
         self._oprot.writeMessageBegin('splitRangeByTablets', TMessageType.CALL, self._seqid)
         args = splitRangeByTablets_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.tableName = tableName
         args.range = range
         args.maxSplits = maxSplits
@@ -2457,20 +2412,20 @@ class Client(Iface):
             raise result.ouch3
         raise TApplicationException(TApplicationException.MISSING_RESULT, "splitRangeByTablets failed: unknown result")
 
-    def tableExists(self, login, tableName):
+    def tableExists(self, sharedSecret, tableName):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
 
         """
-        self.send_tableExists(login, tableName)
+        self.send_tableExists(sharedSecret, tableName)
         return self.recv_tableExists()
 
-    def send_tableExists(self, login, tableName):
+    def send_tableExists(self, sharedSecret, tableName):
         self._oprot.writeMessageBegin('tableExists', TMessageType.CALL, self._seqid)
         args = tableExists_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.tableName = tableName
         args.write(self._oprot)
         self._oprot.writeMessageEnd()
@@ -2491,19 +2446,19 @@ class Client(Iface):
             return result.success
         raise TApplicationException(TApplicationException.MISSING_RESULT, "tableExists failed: unknown result")
 
-    def tableIdMap(self, login):
+    def tableIdMap(self, sharedSecret):
         """
         Parameters:
-         - login
+         - sharedSecret
 
         """
-        self.send_tableIdMap(login)
+        self.send_tableIdMap(sharedSecret)
         return self.recv_tableIdMap()
 
-    def send_tableIdMap(self, login):
+    def send_tableIdMap(self, sharedSecret):
         self._oprot.writeMessageBegin('tableIdMap', TMessageType.CALL, self._seqid)
         args = tableIdMap_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.write(self._oprot)
         self._oprot.writeMessageEnd()
         self._oprot.trans.flush()
@@ -2523,22 +2478,22 @@ class Client(Iface):
             return result.success
         raise TApplicationException(TApplicationException.MISSING_RESULT, "tableIdMap failed: unknown result")
 
-    def testTableClassLoad(self, login, tableName, className, asTypeName):
+    def testTableClassLoad(self, sharedSecret, tableName, className, asTypeName):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - className
          - asTypeName
 
         """
-        self.send_testTableClassLoad(login, tableName, className, asTypeName)
+        self.send_testTableClassLoad(sharedSecret, tableName, className, asTypeName)
         return self.recv_testTableClassLoad()
 
-    def send_testTableClassLoad(self, login, tableName, className, asTypeName):
+    def send_testTableClassLoad(self, sharedSecret, tableName, className, asTypeName):
         self._oprot.writeMessageBegin('testTableClassLoad', TMessageType.CALL, self._seqid)
         args = testTableClassLoad_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.tableName = tableName
         args.className = className
         args.asTypeName = asTypeName
@@ -2567,20 +2522,20 @@ class Client(Iface):
             raise result.ouch3
         raise TApplicationException(TApplicationException.MISSING_RESULT, "testTableClassLoad failed: unknown result")
 
-    def pingTabletServer(self, login, tserver):
+    def pingTabletServer(self, sharedSecret, tserver):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tserver
 
         """
-        self.send_pingTabletServer(login, tserver)
+        self.send_pingTabletServer(sharedSecret, tserver)
         self.recv_pingTabletServer()
 
-    def send_pingTabletServer(self, login, tserver):
+    def send_pingTabletServer(self, sharedSecret, tserver):
         self._oprot.writeMessageBegin('pingTabletServer', TMessageType.CALL, self._seqid)
         args = pingTabletServer_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.tserver = tserver
         args.write(self._oprot)
         self._oprot.writeMessageEnd()
@@ -2603,20 +2558,20 @@ class Client(Iface):
             raise result.ouch2
         return
 
-    def getActiveScans(self, login, tserver):
+    def getActiveScans(self, sharedSecret, tserver):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tserver
 
         """
-        self.send_getActiveScans(login, tserver)
+        self.send_getActiveScans(sharedSecret, tserver)
         return self.recv_getActiveScans()
 
-    def send_getActiveScans(self, login, tserver):
+    def send_getActiveScans(self, sharedSecret, tserver):
         self._oprot.writeMessageBegin('getActiveScans', TMessageType.CALL, self._seqid)
         args = getActiveScans_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.tserver = tserver
         args.write(self._oprot)
         self._oprot.writeMessageEnd()
@@ -2641,20 +2596,20 @@ class Client(Iface):
             raise result.ouch2
         raise TApplicationException(TApplicationException.MISSING_RESULT, "getActiveScans failed: unknown result")
 
-    def getActiveCompactions(self, login, tserver):
+    def getActiveCompactions(self, sharedSecret, tserver):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tserver
 
         """
-        self.send_getActiveCompactions(login, tserver)
+        self.send_getActiveCompactions(sharedSecret, tserver)
         return self.recv_getActiveCompactions()
 
-    def send_getActiveCompactions(self, login, tserver):
+    def send_getActiveCompactions(self, sharedSecret, tserver):
         self._oprot.writeMessageBegin('getActiveCompactions', TMessageType.CALL, self._seqid)
         args = getActiveCompactions_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.tserver = tserver
         args.write(self._oprot)
         self._oprot.writeMessageEnd()
@@ -2679,19 +2634,19 @@ class Client(Iface):
             raise result.ouch2
         raise TApplicationException(TApplicationException.MISSING_RESULT, "getActiveCompactions failed: unknown result")
 
-    def getSiteConfiguration(self, login):
+    def getSiteConfiguration(self, sharedSecret):
         """
         Parameters:
-         - login
+         - sharedSecret
 
         """
-        self.send_getSiteConfiguration(login)
+        self.send_getSiteConfiguration(sharedSecret)
         return self.recv_getSiteConfiguration()
 
-    def send_getSiteConfiguration(self, login):
+    def send_getSiteConfiguration(self, sharedSecret):
         self._oprot.writeMessageBegin('getSiteConfiguration', TMessageType.CALL, self._seqid)
         args = getSiteConfiguration_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.write(self._oprot)
         self._oprot.writeMessageEnd()
         self._oprot.trans.flush()
@@ -2715,19 +2670,19 @@ class Client(Iface):
             raise result.ouch2
         raise TApplicationException(TApplicationException.MISSING_RESULT, "getSiteConfiguration failed: unknown result")
 
-    def getSystemConfiguration(self, login):
+    def getSystemConfiguration(self, sharedSecret):
         """
         Parameters:
-         - login
+         - sharedSecret
 
         """
-        self.send_getSystemConfiguration(login)
+        self.send_getSystemConfiguration(sharedSecret)
         return self.recv_getSystemConfiguration()
 
-    def send_getSystemConfiguration(self, login):
+    def send_getSystemConfiguration(self, sharedSecret):
         self._oprot.writeMessageBegin('getSystemConfiguration', TMessageType.CALL, self._seqid)
         args = getSystemConfiguration_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.write(self._oprot)
         self._oprot.writeMessageEnd()
         self._oprot.trans.flush()
@@ -2751,19 +2706,19 @@ class Client(Iface):
             raise result.ouch2
         raise TApplicationException(TApplicationException.MISSING_RESULT, "getSystemConfiguration failed: unknown result")
 
-    def getTabletServers(self, login):
+    def getTabletServers(self, sharedSecret):
         """
         Parameters:
-         - login
+         - sharedSecret
 
         """
-        self.send_getTabletServers(login)
+        self.send_getTabletServers(sharedSecret)
         return self.recv_getTabletServers()
 
-    def send_getTabletServers(self, login):
+    def send_getTabletServers(self, sharedSecret):
         self._oprot.writeMessageBegin('getTabletServers', TMessageType.CALL, self._seqid)
         args = getTabletServers_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.write(self._oprot)
         self._oprot.writeMessageEnd()
         self._oprot.trans.flush()
@@ -2783,20 +2738,20 @@ class Client(Iface):
             return result.success
         raise TApplicationException(TApplicationException.MISSING_RESULT, "getTabletServers failed: unknown result")
 
-    def removeProperty(self, login, property):
+    def removeProperty(self, sharedSecret, property):
         """
         Parameters:
-         - login
+         - sharedSecret
          - property
 
         """
-        self.send_removeProperty(login, property)
+        self.send_removeProperty(sharedSecret, property)
         self.recv_removeProperty()
 
-    def send_removeProperty(self, login, property):
+    def send_removeProperty(self, sharedSecret, property):
         self._oprot.writeMessageBegin('removeProperty', TMessageType.CALL, self._seqid)
         args = removeProperty_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.property = property
         args.write(self._oprot)
         self._oprot.writeMessageEnd()
@@ -2819,21 +2774,21 @@ class Client(Iface):
             raise result.ouch2
         return
 
-    def setProperty(self, login, property, value):
+    def setProperty(self, sharedSecret, property, value):
         """
         Parameters:
-         - login
+         - sharedSecret
          - property
          - value
 
         """
-        self.send_setProperty(login, property, value)
+        self.send_setProperty(sharedSecret, property, value)
         self.recv_setProperty()
 
-    def send_setProperty(self, login, property, value):
+    def send_setProperty(self, sharedSecret, property, value):
         self._oprot.writeMessageBegin('setProperty', TMessageType.CALL, self._seqid)
         args = setProperty_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.property = property
         args.value = value
         args.write(self._oprot)
@@ -2857,21 +2812,21 @@ class Client(Iface):
             raise result.ouch2
         return
 
-    def testClassLoad(self, login, className, asTypeName):
+    def testClassLoad(self, sharedSecret, className, asTypeName):
         """
         Parameters:
-         - login
+         - sharedSecret
          - className
          - asTypeName
 
         """
-        self.send_testClassLoad(login, className, asTypeName)
+        self.send_testClassLoad(sharedSecret, className, asTypeName)
         return self.recv_testClassLoad()
 
-    def send_testClassLoad(self, login, className, asTypeName):
+    def send_testClassLoad(self, sharedSecret, className, asTypeName):
         self._oprot.writeMessageBegin('testClassLoad', TMessageType.CALL, self._seqid)
         args = testClassLoad_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.className = className
         args.asTypeName = asTypeName
         args.write(self._oprot)
@@ -2897,21 +2852,21 @@ class Client(Iface):
             raise result.ouch2
         raise TApplicationException(TApplicationException.MISSING_RESULT, "testClassLoad failed: unknown result")
 
-    def authenticateUser(self, login, user, properties):
+    def authenticateUser(self, sharedSecret, user, properties):
         """
         Parameters:
-         - login
+         - sharedSecret
          - user
          - properties
 
         """
-        self.send_authenticateUser(login, user, properties)
+        self.send_authenticateUser(sharedSecret, user, properties)
         return self.recv_authenticateUser()
 
-    def send_authenticateUser(self, login, user, properties):
+    def send_authenticateUser(self, sharedSecret, user, properties):
         self._oprot.writeMessageBegin('authenticateUser', TMessageType.CALL, self._seqid)
         args = authenticateUser_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.user = user
         args.properties = properties
         args.write(self._oprot)
@@ -2937,21 +2892,21 @@ class Client(Iface):
             raise result.ouch2
         raise TApplicationException(TApplicationException.MISSING_RESULT, "authenticateUser failed: unknown result")
 
-    def changeUserAuthorizations(self, login, user, authorizations):
+    def changeUserAuthorizations(self, sharedSecret, user, authorizations):
         """
         Parameters:
-         - login
+         - sharedSecret
          - user
          - authorizations
 
         """
-        self.send_changeUserAuthorizations(login, user, authorizations)
+        self.send_changeUserAuthorizations(sharedSecret, user, authorizations)
         self.recv_changeUserAuthorizations()
 
-    def send_changeUserAuthorizations(self, login, user, authorizations):
+    def send_changeUserAuthorizations(self, sharedSecret, user, authorizations):
         self._oprot.writeMessageBegin('changeUserAuthorizations', TMessageType.CALL, self._seqid)
         args = changeUserAuthorizations_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.user = user
         args.authorizations = authorizations
         args.write(self._oprot)
@@ -2975,21 +2930,21 @@ class Client(Iface):
             raise result.ouch2
         return
 
-    def changeLocalUserPassword(self, login, user, password):
+    def changeLocalUserPassword(self, sharedSecret, user, password):
         """
         Parameters:
-         - login
+         - sharedSecret
          - user
          - password
 
         """
-        self.send_changeLocalUserPassword(login, user, password)
+        self.send_changeLocalUserPassword(sharedSecret, user, password)
         self.recv_changeLocalUserPassword()
 
-    def send_changeLocalUserPassword(self, login, user, password):
+    def send_changeLocalUserPassword(self, sharedSecret, user, password):
         self._oprot.writeMessageBegin('changeLocalUserPassword', TMessageType.CALL, self._seqid)
         args = changeLocalUserPassword_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.user = user
         args.password = password
         args.write(self._oprot)
@@ -3013,21 +2968,21 @@ class Client(Iface):
             raise result.ouch2
         return
 
-    def createLocalUser(self, login, user, password):
+    def createLocalUser(self, sharedSecret, user, password):
         """
         Parameters:
-         - login
+         - sharedSecret
          - user
          - password
 
         """
-        self.send_createLocalUser(login, user, password)
+        self.send_createLocalUser(sharedSecret, user, password)
         self.recv_createLocalUser()
 
-    def send_createLocalUser(self, login, user, password):
+    def send_createLocalUser(self, sharedSecret, user, password):
         self._oprot.writeMessageBegin('createLocalUser', TMessageType.CALL, self._seqid)
         args = createLocalUser_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.user = user
         args.password = password
         args.write(self._oprot)
@@ -3051,20 +3006,20 @@ class Client(Iface):
             raise result.ouch2
         return
 
-    def dropLocalUser(self, login, user):
+    def dropLocalUser(self, sharedSecret, user):
         """
         Parameters:
-         - login
+         - sharedSecret
          - user
 
         """
-        self.send_dropLocalUser(login, user)
+        self.send_dropLocalUser(sharedSecret, user)
         self.recv_dropLocalUser()
 
-    def send_dropLocalUser(self, login, user):
+    def send_dropLocalUser(self, sharedSecret, user):
         self._oprot.writeMessageBegin('dropLocalUser', TMessageType.CALL, self._seqid)
         args = dropLocalUser_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.user = user
         args.write(self._oprot)
         self._oprot.writeMessageEnd()
@@ -3087,20 +3042,20 @@ class Client(Iface):
             raise result.ouch2
         return
 
-    def getUserAuthorizations(self, login, user):
+    def getUserAuthorizations(self, sharedSecret, user):
         """
         Parameters:
-         - login
+         - sharedSecret
          - user
 
         """
-        self.send_getUserAuthorizations(login, user)
+        self.send_getUserAuthorizations(sharedSecret, user)
         return self.recv_getUserAuthorizations()
 
-    def send_getUserAuthorizations(self, login, user):
+    def send_getUserAuthorizations(self, sharedSecret, user):
         self._oprot.writeMessageBegin('getUserAuthorizations', TMessageType.CALL, self._seqid)
         args = getUserAuthorizations_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.user = user
         args.write(self._oprot)
         self._oprot.writeMessageEnd()
@@ -3125,21 +3080,21 @@ class Client(Iface):
             raise result.ouch2
         raise TApplicationException(TApplicationException.MISSING_RESULT, "getUserAuthorizations failed: unknown result")
 
-    def grantSystemPermission(self, login, user, perm):
+    def grantSystemPermission(self, sharedSecret, user, perm):
         """
         Parameters:
-         - login
+         - sharedSecret
          - user
          - perm
 
         """
-        self.send_grantSystemPermission(login, user, perm)
+        self.send_grantSystemPermission(sharedSecret, user, perm)
         self.recv_grantSystemPermission()
 
-    def send_grantSystemPermission(self, login, user, perm):
+    def send_grantSystemPermission(self, sharedSecret, user, perm):
         self._oprot.writeMessageBegin('grantSystemPermission', TMessageType.CALL, self._seqid)
         args = grantSystemPermission_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.user = user
         args.perm = perm
         args.write(self._oprot)
@@ -3163,22 +3118,22 @@ class Client(Iface):
             raise result.ouch2
         return
 
-    def grantTablePermission(self, login, user, table, perm):
+    def grantTablePermission(self, sharedSecret, user, table, perm):
         """
         Parameters:
-         - login
+         - sharedSecret
          - user
          - table
          - perm
 
         """
-        self.send_grantTablePermission(login, user, table, perm)
+        self.send_grantTablePermission(sharedSecret, user, table, perm)
         self.recv_grantTablePermission()
 
-    def send_grantTablePermission(self, login, user, table, perm):
+    def send_grantTablePermission(self, sharedSecret, user, table, perm):
         self._oprot.writeMessageBegin('grantTablePermission', TMessageType.CALL, self._seqid)
         args = grantTablePermission_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.user = user
         args.table = table
         args.perm = perm
@@ -3205,21 +3160,21 @@ class Client(Iface):
             raise result.ouch3
         return
 
-    def hasSystemPermission(self, login, user, perm):
+    def hasSystemPermission(self, sharedSecret, user, perm):
         """
         Parameters:
-         - login
+         - sharedSecret
          - user
          - perm
 
         """
-        self.send_hasSystemPermission(login, user, perm)
+        self.send_hasSystemPermission(sharedSecret, user, perm)
         return self.recv_hasSystemPermission()
 
-    def send_hasSystemPermission(self, login, user, perm):
+    def send_hasSystemPermission(self, sharedSecret, user, perm):
         self._oprot.writeMessageBegin('hasSystemPermission', TMessageType.CALL, self._seqid)
         args = hasSystemPermission_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.user = user
         args.perm = perm
         args.write(self._oprot)
@@ -3245,22 +3200,22 @@ class Client(Iface):
             raise result.ouch2
         raise TApplicationException(TApplicationException.MISSING_RESULT, "hasSystemPermission failed: unknown result")
 
-    def hasTablePermission(self, login, user, table, perm):
+    def hasTablePermission(self, sharedSecret, user, table, perm):
         """
         Parameters:
-         - login
+         - sharedSecret
          - user
          - table
          - perm
 
         """
-        self.send_hasTablePermission(login, user, table, perm)
+        self.send_hasTablePermission(sharedSecret, user, table, perm)
         return self.recv_hasTablePermission()
 
-    def send_hasTablePermission(self, login, user, table, perm):
+    def send_hasTablePermission(self, sharedSecret, user, table, perm):
         self._oprot.writeMessageBegin('hasTablePermission', TMessageType.CALL, self._seqid)
         args = hasTablePermission_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.user = user
         args.table = table
         args.perm = perm
@@ -3289,19 +3244,19 @@ class Client(Iface):
             raise result.ouch3
         raise TApplicationException(TApplicationException.MISSING_RESULT, "hasTablePermission failed: unknown result")
 
-    def listLocalUsers(self, login):
+    def listLocalUsers(self, sharedSecret):
         """
         Parameters:
-         - login
+         - sharedSecret
 
         """
-        self.send_listLocalUsers(login)
+        self.send_listLocalUsers(sharedSecret)
         return self.recv_listLocalUsers()
 
-    def send_listLocalUsers(self, login):
+    def send_listLocalUsers(self, sharedSecret):
         self._oprot.writeMessageBegin('listLocalUsers', TMessageType.CALL, self._seqid)
         args = listLocalUsers_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.write(self._oprot)
         self._oprot.writeMessageEnd()
         self._oprot.trans.flush()
@@ -3327,21 +3282,21 @@ class Client(Iface):
             raise result.ouch3
         raise TApplicationException(TApplicationException.MISSING_RESULT, "listLocalUsers failed: unknown result")
 
-    def revokeSystemPermission(self, login, user, perm):
+    def revokeSystemPermission(self, sharedSecret, user, perm):
         """
         Parameters:
-         - login
+         - sharedSecret
          - user
          - perm
 
         """
-        self.send_revokeSystemPermission(login, user, perm)
+        self.send_revokeSystemPermission(sharedSecret, user, perm)
         self.recv_revokeSystemPermission()
 
-    def send_revokeSystemPermission(self, login, user, perm):
+    def send_revokeSystemPermission(self, sharedSecret, user, perm):
         self._oprot.writeMessageBegin('revokeSystemPermission', TMessageType.CALL, self._seqid)
         args = revokeSystemPermission_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.user = user
         args.perm = perm
         args.write(self._oprot)
@@ -3365,22 +3320,22 @@ class Client(Iface):
             raise result.ouch2
         return
 
-    def revokeTablePermission(self, login, user, table, perm):
+    def revokeTablePermission(self, sharedSecret, user, table, perm):
         """
         Parameters:
-         - login
+         - sharedSecret
          - user
          - table
          - perm
 
         """
-        self.send_revokeTablePermission(login, user, table, perm)
+        self.send_revokeTablePermission(sharedSecret, user, table, perm)
         self.recv_revokeTablePermission()
 
-    def send_revokeTablePermission(self, login, user, table, perm):
+    def send_revokeTablePermission(self, sharedSecret, user, table, perm):
         self._oprot.writeMessageBegin('revokeTablePermission', TMessageType.CALL, self._seqid)
         args = revokeTablePermission_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.user = user
         args.table = table
         args.perm = perm
@@ -3407,22 +3362,22 @@ class Client(Iface):
             raise result.ouch3
         return
 
-    def grantNamespacePermission(self, login, user, namespaceName, perm):
+    def grantNamespacePermission(self, sharedSecret, user, namespaceName, perm):
         """
         Parameters:
-         - login
+         - sharedSecret
          - user
          - namespaceName
          - perm
 
         """
-        self.send_grantNamespacePermission(login, user, namespaceName, perm)
+        self.send_grantNamespacePermission(sharedSecret, user, namespaceName, perm)
         self.recv_grantNamespacePermission()
 
-    def send_grantNamespacePermission(self, login, user, namespaceName, perm):
+    def send_grantNamespacePermission(self, sharedSecret, user, namespaceName, perm):
         self._oprot.writeMessageBegin('grantNamespacePermission', TMessageType.CALL, self._seqid)
         args = grantNamespacePermission_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.user = user
         args.namespaceName = namespaceName
         args.perm = perm
@@ -3447,22 +3402,22 @@ class Client(Iface):
             raise result.ouch2
         return
 
-    def hasNamespacePermission(self, login, user, namespaceName, perm):
+    def hasNamespacePermission(self, sharedSecret, user, namespaceName, perm):
         """
         Parameters:
-         - login
+         - sharedSecret
          - user
          - namespaceName
          - perm
 
         """
-        self.send_hasNamespacePermission(login, user, namespaceName, perm)
+        self.send_hasNamespacePermission(sharedSecret, user, namespaceName, perm)
         return self.recv_hasNamespacePermission()
 
-    def send_hasNamespacePermission(self, login, user, namespaceName, perm):
+    def send_hasNamespacePermission(self, sharedSecret, user, namespaceName, perm):
         self._oprot.writeMessageBegin('hasNamespacePermission', TMessageType.CALL, self._seqid)
         args = hasNamespacePermission_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.user = user
         args.namespaceName = namespaceName
         args.perm = perm
@@ -3489,22 +3444,22 @@ class Client(Iface):
             raise result.ouch2
         raise TApplicationException(TApplicationException.MISSING_RESULT, "hasNamespacePermission failed: unknown result")
 
-    def revokeNamespacePermission(self, login, user, namespaceName, perm):
+    def revokeNamespacePermission(self, sharedSecret, user, namespaceName, perm):
         """
         Parameters:
-         - login
+         - sharedSecret
          - user
          - namespaceName
          - perm
 
         """
-        self.send_revokeNamespacePermission(login, user, namespaceName, perm)
+        self.send_revokeNamespacePermission(sharedSecret, user, namespaceName, perm)
         self.recv_revokeNamespacePermission()
 
-    def send_revokeNamespacePermission(self, login, user, namespaceName, perm):
+    def send_revokeNamespacePermission(self, sharedSecret, user, namespaceName, perm):
         self._oprot.writeMessageBegin('revokeNamespacePermission', TMessageType.CALL, self._seqid)
         args = revokeNamespacePermission_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.user = user
         args.namespaceName = namespaceName
         args.perm = perm
@@ -3529,21 +3484,21 @@ class Client(Iface):
             raise result.ouch2
         return
 
-    def createBatchScanner(self, login, tableName, options):
+    def createBatchScanner(self, sharedSecret, tableName, options):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - options
 
         """
-        self.send_createBatchScanner(login, tableName, options)
+        self.send_createBatchScanner(sharedSecret, tableName, options)
         return self.recv_createBatchScanner()
 
-    def send_createBatchScanner(self, login, tableName, options):
+    def send_createBatchScanner(self, sharedSecret, tableName, options):
         self._oprot.writeMessageBegin('createBatchScanner', TMessageType.CALL, self._seqid)
         args = createBatchScanner_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.tableName = tableName
         args.options = options
         args.write(self._oprot)
@@ -3571,21 +3526,21 @@ class Client(Iface):
             raise result.ouch3
         raise TApplicationException(TApplicationException.MISSING_RESULT, "createBatchScanner failed: unknown result")
 
-    def createScanner(self, login, tableName, options):
+    def createScanner(self, sharedSecret, tableName, options):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - options
 
         """
-        self.send_createScanner(login, tableName, options)
+        self.send_createScanner(sharedSecret, tableName, options)
         return self.recv_createScanner()
 
-    def send_createScanner(self, login, tableName, options):
+    def send_createScanner(self, sharedSecret, tableName, options):
         self._oprot.writeMessageBegin('createScanner', TMessageType.CALL, self._seqid)
         args = createScanner_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.tableName = tableName
         args.options = options
         args.write(self._oprot)
@@ -3757,21 +3712,21 @@ class Client(Iface):
             raise result.ouch1
         return
 
-    def updateAndFlush(self, login, tableName, cells):
+    def updateAndFlush(self, sharedSecret, tableName, cells):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - cells
 
         """
-        self.send_updateAndFlush(login, tableName, cells)
+        self.send_updateAndFlush(sharedSecret, tableName, cells)
         self.recv_updateAndFlush()
 
-    def send_updateAndFlush(self, login, tableName, cells):
+    def send_updateAndFlush(self, sharedSecret, tableName, cells):
         self._oprot.writeMessageBegin('updateAndFlush', TMessageType.CALL, self._seqid)
         args = updateAndFlush_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.tableName = tableName
         args.cells = cells
         args.write(self._oprot)
@@ -3799,21 +3754,21 @@ class Client(Iface):
             raise result.ouch4
         return
 
-    def createWriter(self, login, tableName, opts):
+    def createWriter(self, sharedSecret, tableName, opts):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - opts
 
         """
-        self.send_createWriter(login, tableName, opts)
+        self.send_createWriter(sharedSecret, tableName, opts)
         return self.recv_createWriter()
 
-    def send_createWriter(self, login, tableName, opts):
+    def send_createWriter(self, sharedSecret, tableName, opts):
         self._oprot.writeMessageBegin('createWriter', TMessageType.CALL, self._seqid)
         args = createWriter_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.tableName = tableName
         args.opts = opts
         args.write(self._oprot)
@@ -3927,22 +3882,22 @@ class Client(Iface):
             raise result.ouch2
         return
 
-    def updateRowConditionally(self, login, tableName, row, updates):
+    def updateRowConditionally(self, sharedSecret, tableName, row, updates):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - row
          - updates
 
         """
-        self.send_updateRowConditionally(login, tableName, row, updates)
+        self.send_updateRowConditionally(sharedSecret, tableName, row, updates)
         return self.recv_updateRowConditionally()
 
-    def send_updateRowConditionally(self, login, tableName, row, updates):
+    def send_updateRowConditionally(self, sharedSecret, tableName, row, updates):
         self._oprot.writeMessageBegin('updateRowConditionally', TMessageType.CALL, self._seqid)
         args = updateRowConditionally_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.tableName = tableName
         args.row = row
         args.updates = updates
@@ -3971,21 +3926,21 @@ class Client(Iface):
             raise result.ouch3
         raise TApplicationException(TApplicationException.MISSING_RESULT, "updateRowConditionally failed: unknown result")
 
-    def createConditionalWriter(self, login, tableName, options):
+    def createConditionalWriter(self, sharedSecret, tableName, options):
         """
         Parameters:
-         - login
+         - sharedSecret
          - tableName
          - options
 
         """
-        self.send_createConditionalWriter(login, tableName, options)
+        self.send_createConditionalWriter(sharedSecret, tableName, options)
         return self.recv_createConditionalWriter()
 
-    def send_createConditionalWriter(self, login, tableName, options):
+    def send_createConditionalWriter(self, sharedSecret, tableName, options):
         self._oprot.writeMessageBegin('createConditionalWriter', TMessageType.CALL, self._seqid)
         args = createConditionalWriter_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.tableName = tableName
         args.options = options
         args.write(self._oprot)
@@ -4201,19 +4156,19 @@ class Client(Iface):
             return result.success
         raise TApplicationException(TApplicationException.MISSING_RESULT, "defaultNamespace failed: unknown result")
 
-    def listNamespaces(self, login):
+    def listNamespaces(self, sharedSecret):
         """
         Parameters:
-         - login
+         - sharedSecret
 
         """
-        self.send_listNamespaces(login)
+        self.send_listNamespaces(sharedSecret)
         return self.recv_listNamespaces()
 
-    def send_listNamespaces(self, login):
+    def send_listNamespaces(self, sharedSecret):
         self._oprot.writeMessageBegin('listNamespaces', TMessageType.CALL, self._seqid)
         args = listNamespaces_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.write(self._oprot)
         self._oprot.writeMessageEnd()
         self._oprot.trans.flush()
@@ -4237,20 +4192,20 @@ class Client(Iface):
             raise result.ouch2
         raise TApplicationException(TApplicationException.MISSING_RESULT, "listNamespaces failed: unknown result")
 
-    def namespaceExists(self, login, namespaceName):
+    def namespaceExists(self, sharedSecret, namespaceName):
         """
         Parameters:
-         - login
+         - sharedSecret
          - namespaceName
 
         """
-        self.send_namespaceExists(login, namespaceName)
+        self.send_namespaceExists(sharedSecret, namespaceName)
         return self.recv_namespaceExists()
 
-    def send_namespaceExists(self, login, namespaceName):
+    def send_namespaceExists(self, sharedSecret, namespaceName):
         self._oprot.writeMessageBegin('namespaceExists', TMessageType.CALL, self._seqid)
         args = namespaceExists_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.namespaceName = namespaceName
         args.write(self._oprot)
         self._oprot.writeMessageEnd()
@@ -4275,20 +4230,20 @@ class Client(Iface):
             raise result.ouch2
         raise TApplicationException(TApplicationException.MISSING_RESULT, "namespaceExists failed: unknown result")
 
-    def createNamespace(self, login, namespaceName):
+    def createNamespace(self, sharedSecret, namespaceName):
         """
         Parameters:
-         - login
+         - sharedSecret
          - namespaceName
 
         """
-        self.send_createNamespace(login, namespaceName)
+        self.send_createNamespace(sharedSecret, namespaceName)
         self.recv_createNamespace()
 
-    def send_createNamespace(self, login, namespaceName):
+    def send_createNamespace(self, sharedSecret, namespaceName):
         self._oprot.writeMessageBegin('createNamespace', TMessageType.CALL, self._seqid)
         args = createNamespace_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.namespaceName = namespaceName
         args.write(self._oprot)
         self._oprot.writeMessageEnd()
@@ -4313,20 +4268,20 @@ class Client(Iface):
             raise result.ouch3
         return
 
-    def deleteNamespace(self, login, namespaceName):
+    def deleteNamespace(self, sharedSecret, namespaceName):
         """
         Parameters:
-         - login
+         - sharedSecret
          - namespaceName
 
         """
-        self.send_deleteNamespace(login, namespaceName)
+        self.send_deleteNamespace(sharedSecret, namespaceName)
         self.recv_deleteNamespace()
 
-    def send_deleteNamespace(self, login, namespaceName):
+    def send_deleteNamespace(self, sharedSecret, namespaceName):
         self._oprot.writeMessageBegin('deleteNamespace', TMessageType.CALL, self._seqid)
         args = deleteNamespace_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.namespaceName = namespaceName
         args.write(self._oprot)
         self._oprot.writeMessageEnd()
@@ -4353,21 +4308,21 @@ class Client(Iface):
             raise result.ouch4
         return
 
-    def renameNamespace(self, login, oldNamespaceName, newNamespaceName):
+    def renameNamespace(self, sharedSecret, oldNamespaceName, newNamespaceName):
         """
         Parameters:
-         - login
+         - sharedSecret
          - oldNamespaceName
          - newNamespaceName
 
         """
-        self.send_renameNamespace(login, oldNamespaceName, newNamespaceName)
+        self.send_renameNamespace(sharedSecret, oldNamespaceName, newNamespaceName)
         self.recv_renameNamespace()
 
-    def send_renameNamespace(self, login, oldNamespaceName, newNamespaceName):
+    def send_renameNamespace(self, sharedSecret, oldNamespaceName, newNamespaceName):
         self._oprot.writeMessageBegin('renameNamespace', TMessageType.CALL, self._seqid)
         args = renameNamespace_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.oldNamespaceName = oldNamespaceName
         args.newNamespaceName = newNamespaceName
         args.write(self._oprot)
@@ -4395,22 +4350,22 @@ class Client(Iface):
             raise result.ouch4
         return
 
-    def setNamespaceProperty(self, login, namespaceName, property, value):
+    def setNamespaceProperty(self, sharedSecret, namespaceName, property, value):
         """
         Parameters:
-         - login
+         - sharedSecret
          - namespaceName
          - property
          - value
 
         """
-        self.send_setNamespaceProperty(login, namespaceName, property, value)
+        self.send_setNamespaceProperty(sharedSecret, namespaceName, property, value)
         self.recv_setNamespaceProperty()
 
-    def send_setNamespaceProperty(self, login, namespaceName, property, value):
+    def send_setNamespaceProperty(self, sharedSecret, namespaceName, property, value):
         self._oprot.writeMessageBegin('setNamespaceProperty', TMessageType.CALL, self._seqid)
         args = setNamespaceProperty_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.namespaceName = namespaceName
         args.property = property
         args.value = value
@@ -4437,21 +4392,21 @@ class Client(Iface):
             raise result.ouch3
         return
 
-    def removeNamespaceProperty(self, login, namespaceName, property):
+    def removeNamespaceProperty(self, sharedSecret, namespaceName, property):
         """
         Parameters:
-         - login
+         - sharedSecret
          - namespaceName
          - property
 
         """
-        self.send_removeNamespaceProperty(login, namespaceName, property)
+        self.send_removeNamespaceProperty(sharedSecret, namespaceName, property)
         self.recv_removeNamespaceProperty()
 
-    def send_removeNamespaceProperty(self, login, namespaceName, property):
+    def send_removeNamespaceProperty(self, sharedSecret, namespaceName, property):
         self._oprot.writeMessageBegin('removeNamespaceProperty', TMessageType.CALL, self._seqid)
         args = removeNamespaceProperty_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.namespaceName = namespaceName
         args.property = property
         args.write(self._oprot)
@@ -4477,20 +4432,20 @@ class Client(Iface):
             raise result.ouch3
         return
 
-    def getNamespaceProperties(self, login, namespaceName):
+    def getNamespaceProperties(self, sharedSecret, namespaceName):
         """
         Parameters:
-         - login
+         - sharedSecret
          - namespaceName
 
         """
-        self.send_getNamespaceProperties(login, namespaceName)
+        self.send_getNamespaceProperties(sharedSecret, namespaceName)
         return self.recv_getNamespaceProperties()
 
-    def send_getNamespaceProperties(self, login, namespaceName):
+    def send_getNamespaceProperties(self, sharedSecret, namespaceName):
         self._oprot.writeMessageBegin('getNamespaceProperties', TMessageType.CALL, self._seqid)
         args = getNamespaceProperties_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.namespaceName = namespaceName
         args.write(self._oprot)
         self._oprot.writeMessageEnd()
@@ -4517,19 +4472,19 @@ class Client(Iface):
             raise result.ouch3
         raise TApplicationException(TApplicationException.MISSING_RESULT, "getNamespaceProperties failed: unknown result")
 
-    def namespaceIdMap(self, login):
+    def namespaceIdMap(self, sharedSecret):
         """
         Parameters:
-         - login
+         - sharedSecret
 
         """
-        self.send_namespaceIdMap(login)
+        self.send_namespaceIdMap(sharedSecret)
         return self.recv_namespaceIdMap()
 
-    def send_namespaceIdMap(self, login):
+    def send_namespaceIdMap(self, sharedSecret):
         self._oprot.writeMessageBegin('namespaceIdMap', TMessageType.CALL, self._seqid)
         args = namespaceIdMap_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.write(self._oprot)
         self._oprot.writeMessageEnd()
         self._oprot.trans.flush()
@@ -4553,22 +4508,22 @@ class Client(Iface):
             raise result.ouch2
         raise TApplicationException(TApplicationException.MISSING_RESULT, "namespaceIdMap failed: unknown result")
 
-    def attachNamespaceIterator(self, login, namespaceName, setting, scopes):
+    def attachNamespaceIterator(self, sharedSecret, namespaceName, setting, scopes):
         """
         Parameters:
-         - login
+         - sharedSecret
          - namespaceName
          - setting
          - scopes
 
         """
-        self.send_attachNamespaceIterator(login, namespaceName, setting, scopes)
+        self.send_attachNamespaceIterator(sharedSecret, namespaceName, setting, scopes)
         self.recv_attachNamespaceIterator()
 
-    def send_attachNamespaceIterator(self, login, namespaceName, setting, scopes):
+    def send_attachNamespaceIterator(self, sharedSecret, namespaceName, setting, scopes):
         self._oprot.writeMessageBegin('attachNamespaceIterator', TMessageType.CALL, self._seqid)
         args = attachNamespaceIterator_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.namespaceName = namespaceName
         args.setting = setting
         args.scopes = scopes
@@ -4595,22 +4550,22 @@ class Client(Iface):
             raise result.ouch3
         return
 
-    def removeNamespaceIterator(self, login, namespaceName, name, scopes):
+    def removeNamespaceIterator(self, sharedSecret, namespaceName, name, scopes):
         """
         Parameters:
-         - login
+         - sharedSecret
          - namespaceName
          - name
          - scopes
 
         """
-        self.send_removeNamespaceIterator(login, namespaceName, name, scopes)
+        self.send_removeNamespaceIterator(sharedSecret, namespaceName, name, scopes)
         self.recv_removeNamespaceIterator()
 
-    def send_removeNamespaceIterator(self, login, namespaceName, name, scopes):
+    def send_removeNamespaceIterator(self, sharedSecret, namespaceName, name, scopes):
         self._oprot.writeMessageBegin('removeNamespaceIterator', TMessageType.CALL, self._seqid)
         args = removeNamespaceIterator_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.namespaceName = namespaceName
         args.name = name
         args.scopes = scopes
@@ -4637,22 +4592,22 @@ class Client(Iface):
             raise result.ouch3
         return
 
-    def getNamespaceIteratorSetting(self, login, namespaceName, name, scope):
+    def getNamespaceIteratorSetting(self, sharedSecret, namespaceName, name, scope):
         """
         Parameters:
-         - login
+         - sharedSecret
          - namespaceName
          - name
          - scope
 
         """
-        self.send_getNamespaceIteratorSetting(login, namespaceName, name, scope)
+        self.send_getNamespaceIteratorSetting(sharedSecret, namespaceName, name, scope)
         return self.recv_getNamespaceIteratorSetting()
 
-    def send_getNamespaceIteratorSetting(self, login, namespaceName, name, scope):
+    def send_getNamespaceIteratorSetting(self, sharedSecret, namespaceName, name, scope):
         self._oprot.writeMessageBegin('getNamespaceIteratorSetting', TMessageType.CALL, self._seqid)
         args = getNamespaceIteratorSetting_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.namespaceName = namespaceName
         args.name = name
         args.scope = scope
@@ -4681,20 +4636,20 @@ class Client(Iface):
             raise result.ouch3
         raise TApplicationException(TApplicationException.MISSING_RESULT, "getNamespaceIteratorSetting failed: unknown result")
 
-    def listNamespaceIterators(self, login, namespaceName):
+    def listNamespaceIterators(self, sharedSecret, namespaceName):
         """
         Parameters:
-         - login
+         - sharedSecret
          - namespaceName
 
         """
-        self.send_listNamespaceIterators(login, namespaceName)
+        self.send_listNamespaceIterators(sharedSecret, namespaceName)
         return self.recv_listNamespaceIterators()
 
-    def send_listNamespaceIterators(self, login, namespaceName):
+    def send_listNamespaceIterators(self, sharedSecret, namespaceName):
         self._oprot.writeMessageBegin('listNamespaceIterators', TMessageType.CALL, self._seqid)
         args = listNamespaceIterators_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.namespaceName = namespaceName
         args.write(self._oprot)
         self._oprot.writeMessageEnd()
@@ -4721,22 +4676,22 @@ class Client(Iface):
             raise result.ouch3
         raise TApplicationException(TApplicationException.MISSING_RESULT, "listNamespaceIterators failed: unknown result")
 
-    def checkNamespaceIteratorConflicts(self, login, namespaceName, setting, scopes):
+    def checkNamespaceIteratorConflicts(self, sharedSecret, namespaceName, setting, scopes):
         """
         Parameters:
-         - login
+         - sharedSecret
          - namespaceName
          - setting
          - scopes
 
         """
-        self.send_checkNamespaceIteratorConflicts(login, namespaceName, setting, scopes)
+        self.send_checkNamespaceIteratorConflicts(sharedSecret, namespaceName, setting, scopes)
         self.recv_checkNamespaceIteratorConflicts()
 
-    def send_checkNamespaceIteratorConflicts(self, login, namespaceName, setting, scopes):
+    def send_checkNamespaceIteratorConflicts(self, sharedSecret, namespaceName, setting, scopes):
         self._oprot.writeMessageBegin('checkNamespaceIteratorConflicts', TMessageType.CALL, self._seqid)
         args = checkNamespaceIteratorConflicts_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.namespaceName = namespaceName
         args.setting = setting
         args.scopes = scopes
@@ -4763,21 +4718,21 @@ class Client(Iface):
             raise result.ouch3
         return
 
-    def addNamespaceConstraint(self, login, namespaceName, constraintClassName):
+    def addNamespaceConstraint(self, sharedSecret, namespaceName, constraintClassName):
         """
         Parameters:
-         - login
+         - sharedSecret
          - namespaceName
          - constraintClassName
 
         """
-        self.send_addNamespaceConstraint(login, namespaceName, constraintClassName)
+        self.send_addNamespaceConstraint(sharedSecret, namespaceName, constraintClassName)
         return self.recv_addNamespaceConstraint()
 
-    def send_addNamespaceConstraint(self, login, namespaceName, constraintClassName):
+    def send_addNamespaceConstraint(self, sharedSecret, namespaceName, constraintClassName):
         self._oprot.writeMessageBegin('addNamespaceConstraint', TMessageType.CALL, self._seqid)
         args = addNamespaceConstraint_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.namespaceName = namespaceName
         args.constraintClassName = constraintClassName
         args.write(self._oprot)
@@ -4805,21 +4760,21 @@ class Client(Iface):
             raise result.ouch3
         raise TApplicationException(TApplicationException.MISSING_RESULT, "addNamespaceConstraint failed: unknown result")
 
-    def removeNamespaceConstraint(self, login, namespaceName, id):
+    def removeNamespaceConstraint(self, sharedSecret, namespaceName, id):
         """
         Parameters:
-         - login
+         - sharedSecret
          - namespaceName
          - id
 
         """
-        self.send_removeNamespaceConstraint(login, namespaceName, id)
+        self.send_removeNamespaceConstraint(sharedSecret, namespaceName, id)
         self.recv_removeNamespaceConstraint()
 
-    def send_removeNamespaceConstraint(self, login, namespaceName, id):
+    def send_removeNamespaceConstraint(self, sharedSecret, namespaceName, id):
         self._oprot.writeMessageBegin('removeNamespaceConstraint', TMessageType.CALL, self._seqid)
         args = removeNamespaceConstraint_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.namespaceName = namespaceName
         args.id = id
         args.write(self._oprot)
@@ -4845,20 +4800,20 @@ class Client(Iface):
             raise result.ouch3
         return
 
-    def listNamespaceConstraints(self, login, namespaceName):
+    def listNamespaceConstraints(self, sharedSecret, namespaceName):
         """
         Parameters:
-         - login
+         - sharedSecret
          - namespaceName
 
         """
-        self.send_listNamespaceConstraints(login, namespaceName)
+        self.send_listNamespaceConstraints(sharedSecret, namespaceName)
         return self.recv_listNamespaceConstraints()
 
-    def send_listNamespaceConstraints(self, login, namespaceName):
+    def send_listNamespaceConstraints(self, sharedSecret, namespaceName):
         self._oprot.writeMessageBegin('listNamespaceConstraints', TMessageType.CALL, self._seqid)
         args = listNamespaceConstraints_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.namespaceName = namespaceName
         args.write(self._oprot)
         self._oprot.writeMessageEnd()
@@ -4885,22 +4840,22 @@ class Client(Iface):
             raise result.ouch3
         raise TApplicationException(TApplicationException.MISSING_RESULT, "listNamespaceConstraints failed: unknown result")
 
-    def testNamespaceClassLoad(self, login, namespaceName, className, asTypeName):
+    def testNamespaceClassLoad(self, sharedSecret, namespaceName, className, asTypeName):
         """
         Parameters:
-         - login
+         - sharedSecret
          - namespaceName
          - className
          - asTypeName
 
         """
-        self.send_testNamespaceClassLoad(login, namespaceName, className, asTypeName)
+        self.send_testNamespaceClassLoad(sharedSecret, namespaceName, className, asTypeName)
         return self.recv_testNamespaceClassLoad()
 
-    def send_testNamespaceClassLoad(self, login, namespaceName, className, asTypeName):
+    def send_testNamespaceClassLoad(self, sharedSecret, namespaceName, className, asTypeName):
         self._oprot.writeMessageBegin('testNamespaceClassLoad', TMessageType.CALL, self._seqid)
         args = testNamespaceClassLoad_args()
-        args.login = login
+        args.sharedSecret = sharedSecret
         args.namespaceName = namespaceName
         args.className = className
         args.asTypeName = asTypeName
@@ -4934,7 +4889,6 @@ class Processor(Iface, TProcessor):
     def __init__(self, handler):
         self._handler = handler
         self._processMap = {}
-        self._processMap["login"] = Processor.process_login
         self._processMap["addConstraint"] = Processor.process_addConstraint
         self._processMap["addSplits"] = Processor.process_addSplits
         self._processMap["attachIterator"] = Processor.process_attachIterator
@@ -5056,39 +5010,13 @@ class Processor(Iface, TProcessor):
             self._processMap[name](self, seqid, iprot, oprot)
         return True
 
-    def process_login(self, seqid, iprot, oprot):
-        args = login_args()
-        args.read(iprot)
-        iprot.readMessageEnd()
-        result = login_result()
-        try:
-            result.success = self._handler.login(args.principal, args.loginProperties)
-            msg_type = TMessageType.REPLY
-        except TTransport.TTransportException:
-            raise
-        except AccumuloSecurityException as ouch2:
-            msg_type = TMessageType.REPLY
-            result.ouch2 = ouch2
-        except TApplicationException as ex:
-            logging.exception('TApplication exception in handler')
-            msg_type = TMessageType.EXCEPTION
-            result = ex
-        except Exception:
-            logging.exception('Unexpected exception in handler')
-            msg_type = TMessageType.EXCEPTION
-            result = TApplicationException(TApplicationException.INTERNAL_ERROR, 'Internal error')
-        oprot.writeMessageBegin("login", msg_type, seqid)
-        result.write(oprot)
-        oprot.writeMessageEnd()
-        oprot.trans.flush()
-
     def process_addConstraint(self, seqid, iprot, oprot):
         args = addConstraint_args()
         args.read(iprot)
         iprot.readMessageEnd()
         result = addConstraint_result()
         try:
-            result.success = self._handler.addConstraint(args.login, args.tableName, args.constraintClassName)
+            result.success = self._handler.addConstraint(args.sharedSecret, args.tableName, args.constraintClassName)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -5120,7 +5048,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = addSplits_result()
         try:
-            self._handler.addSplits(args.login, args.tableName, args.splits)
+            self._handler.addSplits(args.sharedSecret, args.tableName, args.splits)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -5152,7 +5080,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = attachIterator_result()
         try:
-            self._handler.attachIterator(args.login, args.tableName, args.setting, args.scopes)
+            self._handler.attachIterator(args.sharedSecret, args.tableName, args.setting, args.scopes)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -5184,7 +5112,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = checkIteratorConflicts_result()
         try:
-            self._handler.checkIteratorConflicts(args.login, args.tableName, args.setting, args.scopes)
+            self._handler.checkIteratorConflicts(args.sharedSecret, args.tableName, args.setting, args.scopes)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -5216,7 +5144,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = clearLocatorCache_result()
         try:
-            self._handler.clearLocatorCache(args.login, args.tableName)
+            self._handler.clearLocatorCache(args.sharedSecret, args.tableName)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -5242,7 +5170,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = cloneTable_result()
         try:
-            self._handler.cloneTable(args.login, args.tableName, args.newTableName, args.flush, args.propertiesToSet, args.propertiesToExclude)
+            self._handler.cloneTable(args.sharedSecret, args.tableName, args.newTableName, args.flush, args.propertiesToSet, args.propertiesToExclude)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -5277,7 +5205,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = compactTable_result()
         try:
-            self._handler.compactTable(args.login, args.tableName, args.startRow, args.endRow, args.iterators, args.flush, args.wait, args.selectorConfig, args.configurerConfig)
+            self._handler.compactTable(args.sharedSecret, args.tableName, args.startRow, args.endRow, args.iterators, args.flush, args.wait, args.selectorConfig, args.configurerConfig)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -5309,7 +5237,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = cancelCompaction_result()
         try:
-            self._handler.cancelCompaction(args.login, args.tableName)
+            self._handler.cancelCompaction(args.sharedSecret, args.tableName)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -5341,7 +5269,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = createTable_result()
         try:
-            self._handler.createTable(args.login, args.tableName, args.versioningIter, args.type)
+            self._handler.createTable(args.sharedSecret, args.tableName, args.versioningIter, args.type)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -5373,7 +5301,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = deleteTable_result()
         try:
-            self._handler.deleteTable(args.login, args.tableName)
+            self._handler.deleteTable(args.sharedSecret, args.tableName)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -5405,7 +5333,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = deleteRows_result()
         try:
-            self._handler.deleteRows(args.login, args.tableName, args.startRow, args.endRow)
+            self._handler.deleteRows(args.sharedSecret, args.tableName, args.startRow, args.endRow)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -5437,7 +5365,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = exportTable_result()
         try:
-            self._handler.exportTable(args.login, args.tableName, args.exportDir)
+            self._handler.exportTable(args.sharedSecret, args.tableName, args.exportDir)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -5469,7 +5397,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = flushTable_result()
         try:
-            self._handler.flushTable(args.login, args.tableName, args.startRow, args.endRow, args.wait)
+            self._handler.flushTable(args.sharedSecret, args.tableName, args.startRow, args.endRow, args.wait)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -5501,7 +5429,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = getDiskUsage_result()
         try:
-            result.success = self._handler.getDiskUsage(args.login, args.tables)
+            result.success = self._handler.getDiskUsage(args.sharedSecret, args.tables)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -5533,7 +5461,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = getLocalityGroups_result()
         try:
-            result.success = self._handler.getLocalityGroups(args.login, args.tableName)
+            result.success = self._handler.getLocalityGroups(args.sharedSecret, args.tableName)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -5565,7 +5493,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = getIteratorSetting_result()
         try:
-            result.success = self._handler.getIteratorSetting(args.login, args.tableName, args.iteratorName, args.scope)
+            result.success = self._handler.getIteratorSetting(args.sharedSecret, args.tableName, args.iteratorName, args.scope)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -5597,7 +5525,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = getMaxRow_result()
         try:
-            result.success = self._handler.getMaxRow(args.login, args.tableName, args.auths, args.startRow, args.startInclusive, args.endRow, args.endInclusive)
+            result.success = self._handler.getMaxRow(args.sharedSecret, args.tableName, args.auths, args.startRow, args.startInclusive, args.endRow, args.endInclusive)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -5629,7 +5557,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = getTableProperties_result()
         try:
-            result.success = self._handler.getTableProperties(args.login, args.tableName)
+            result.success = self._handler.getTableProperties(args.sharedSecret, args.tableName)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -5661,7 +5589,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = importDirectory_result()
         try:
-            self._handler.importDirectory(args.login, args.tableName, args.importDir, args.failureDir, args.setTime)
+            self._handler.importDirectory(args.sharedSecret, args.tableName, args.importDir, args.failureDir, args.setTime)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -5693,7 +5621,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = importTable_result()
         try:
-            self._handler.importTable(args.login, args.tableName, args.importDir)
+            self._handler.importTable(args.sharedSecret, args.tableName, args.importDir)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -5725,7 +5653,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = listSplits_result()
         try:
-            result.success = self._handler.listSplits(args.login, args.tableName, args.maxSplits)
+            result.success = self._handler.listSplits(args.sharedSecret, args.tableName, args.maxSplits)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -5757,7 +5685,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = listTables_result()
         try:
-            result.success = self._handler.listTables(args.login)
+            result.success = self._handler.listTables(args.sharedSecret)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -5780,7 +5708,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = listIterators_result()
         try:
-            result.success = self._handler.listIterators(args.login, args.tableName)
+            result.success = self._handler.listIterators(args.sharedSecret, args.tableName)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -5812,7 +5740,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = listConstraints_result()
         try:
-            result.success = self._handler.listConstraints(args.login, args.tableName)
+            result.success = self._handler.listConstraints(args.sharedSecret, args.tableName)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -5844,7 +5772,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = mergeTablets_result()
         try:
-            self._handler.mergeTablets(args.login, args.tableName, args.startRow, args.endRow)
+            self._handler.mergeTablets(args.sharedSecret, args.tableName, args.startRow, args.endRow)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -5876,7 +5804,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = offlineTable_result()
         try:
-            self._handler.offlineTable(args.login, args.tableName, args.wait)
+            self._handler.offlineTable(args.sharedSecret, args.tableName, args.wait)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -5908,7 +5836,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = onlineTable_result()
         try:
-            self._handler.onlineTable(args.login, args.tableName, args.wait)
+            self._handler.onlineTable(args.sharedSecret, args.tableName, args.wait)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -5940,7 +5868,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = removeConstraint_result()
         try:
-            self._handler.removeConstraint(args.login, args.tableName, args.constraint)
+            self._handler.removeConstraint(args.sharedSecret, args.tableName, args.constraint)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -5972,7 +5900,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = removeIterator_result()
         try:
-            self._handler.removeIterator(args.login, args.tableName, args.iterName, args.scopes)
+            self._handler.removeIterator(args.sharedSecret, args.tableName, args.iterName, args.scopes)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -6004,7 +5932,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = removeTableProperty_result()
         try:
-            self._handler.removeTableProperty(args.login, args.tableName, args.property)
+            self._handler.removeTableProperty(args.sharedSecret, args.tableName, args.property)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -6036,7 +5964,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = renameTable_result()
         try:
-            self._handler.renameTable(args.login, args.oldTableName, args.newTableName)
+            self._handler.renameTable(args.sharedSecret, args.oldTableName, args.newTableName)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -6071,7 +5999,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = setLocalityGroups_result()
         try:
-            self._handler.setLocalityGroups(args.login, args.tableName, args.groups)
+            self._handler.setLocalityGroups(args.sharedSecret, args.tableName, args.groups)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -6103,7 +6031,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = setTableProperty_result()
         try:
-            self._handler.setTableProperty(args.login, args.tableName, args.property, args.value)
+            self._handler.setTableProperty(args.sharedSecret, args.tableName, args.property, args.value)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -6135,7 +6063,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = splitRangeByTablets_result()
         try:
-            result.success = self._handler.splitRangeByTablets(args.login, args.tableName, args.range, args.maxSplits)
+            result.success = self._handler.splitRangeByTablets(args.sharedSecret, args.tableName, args.range, args.maxSplits)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -6167,7 +6095,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = tableExists_result()
         try:
-            result.success = self._handler.tableExists(args.login, args.tableName)
+            result.success = self._handler.tableExists(args.sharedSecret, args.tableName)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -6190,7 +6118,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = tableIdMap_result()
         try:
-            result.success = self._handler.tableIdMap(args.login)
+            result.success = self._handler.tableIdMap(args.sharedSecret)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -6213,7 +6141,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = testTableClassLoad_result()
         try:
-            result.success = self._handler.testTableClassLoad(args.login, args.tableName, args.className, args.asTypeName)
+            result.success = self._handler.testTableClassLoad(args.sharedSecret, args.tableName, args.className, args.asTypeName)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -6245,7 +6173,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = pingTabletServer_result()
         try:
-            self._handler.pingTabletServer(args.login, args.tserver)
+            self._handler.pingTabletServer(args.sharedSecret, args.tserver)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -6274,7 +6202,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = getActiveScans_result()
         try:
-            result.success = self._handler.getActiveScans(args.login, args.tserver)
+            result.success = self._handler.getActiveScans(args.sharedSecret, args.tserver)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -6303,7 +6231,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = getActiveCompactions_result()
         try:
-            result.success = self._handler.getActiveCompactions(args.login, args.tserver)
+            result.success = self._handler.getActiveCompactions(args.sharedSecret, args.tserver)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -6332,7 +6260,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = getSiteConfiguration_result()
         try:
-            result.success = self._handler.getSiteConfiguration(args.login)
+            result.success = self._handler.getSiteConfiguration(args.sharedSecret)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -6361,7 +6289,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = getSystemConfiguration_result()
         try:
-            result.success = self._handler.getSystemConfiguration(args.login)
+            result.success = self._handler.getSystemConfiguration(args.sharedSecret)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -6390,7 +6318,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = getTabletServers_result()
         try:
-            result.success = self._handler.getTabletServers(args.login)
+            result.success = self._handler.getTabletServers(args.sharedSecret)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -6413,7 +6341,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = removeProperty_result()
         try:
-            self._handler.removeProperty(args.login, args.property)
+            self._handler.removeProperty(args.sharedSecret, args.property)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -6442,7 +6370,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = setProperty_result()
         try:
-            self._handler.setProperty(args.login, args.property, args.value)
+            self._handler.setProperty(args.sharedSecret, args.property, args.value)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -6471,7 +6399,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = testClassLoad_result()
         try:
-            result.success = self._handler.testClassLoad(args.login, args.className, args.asTypeName)
+            result.success = self._handler.testClassLoad(args.sharedSecret, args.className, args.asTypeName)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -6500,7 +6428,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = authenticateUser_result()
         try:
-            result.success = self._handler.authenticateUser(args.login, args.user, args.properties)
+            result.success = self._handler.authenticateUser(args.sharedSecret, args.user, args.properties)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -6529,7 +6457,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = changeUserAuthorizations_result()
         try:
-            self._handler.changeUserAuthorizations(args.login, args.user, args.authorizations)
+            self._handler.changeUserAuthorizations(args.sharedSecret, args.user, args.authorizations)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -6558,7 +6486,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = changeLocalUserPassword_result()
         try:
-            self._handler.changeLocalUserPassword(args.login, args.user, args.password)
+            self._handler.changeLocalUserPassword(args.sharedSecret, args.user, args.password)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -6587,7 +6515,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = createLocalUser_result()
         try:
-            self._handler.createLocalUser(args.login, args.user, args.password)
+            self._handler.createLocalUser(args.sharedSecret, args.user, args.password)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -6616,7 +6544,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = dropLocalUser_result()
         try:
-            self._handler.dropLocalUser(args.login, args.user)
+            self._handler.dropLocalUser(args.sharedSecret, args.user)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -6645,7 +6573,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = getUserAuthorizations_result()
         try:
-            result.success = self._handler.getUserAuthorizations(args.login, args.user)
+            result.success = self._handler.getUserAuthorizations(args.sharedSecret, args.user)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -6674,7 +6602,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = grantSystemPermission_result()
         try:
-            self._handler.grantSystemPermission(args.login, args.user, args.perm)
+            self._handler.grantSystemPermission(args.sharedSecret, args.user, args.perm)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -6703,7 +6631,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = grantTablePermission_result()
         try:
-            self._handler.grantTablePermission(args.login, args.user, args.table, args.perm)
+            self._handler.grantTablePermission(args.sharedSecret, args.user, args.table, args.perm)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -6735,7 +6663,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = hasSystemPermission_result()
         try:
-            result.success = self._handler.hasSystemPermission(args.login, args.user, args.perm)
+            result.success = self._handler.hasSystemPermission(args.sharedSecret, args.user, args.perm)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -6764,7 +6692,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = hasTablePermission_result()
         try:
-            result.success = self._handler.hasTablePermission(args.login, args.user, args.table, args.perm)
+            result.success = self._handler.hasTablePermission(args.sharedSecret, args.user, args.table, args.perm)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -6796,7 +6724,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = listLocalUsers_result()
         try:
-            result.success = self._handler.listLocalUsers(args.login)
+            result.success = self._handler.listLocalUsers(args.sharedSecret)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -6828,7 +6756,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = revokeSystemPermission_result()
         try:
-            self._handler.revokeSystemPermission(args.login, args.user, args.perm)
+            self._handler.revokeSystemPermission(args.sharedSecret, args.user, args.perm)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -6857,7 +6785,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = revokeTablePermission_result()
         try:
-            self._handler.revokeTablePermission(args.login, args.user, args.table, args.perm)
+            self._handler.revokeTablePermission(args.sharedSecret, args.user, args.table, args.perm)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -6889,7 +6817,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = grantNamespacePermission_result()
         try:
-            self._handler.grantNamespacePermission(args.login, args.user, args.namespaceName, args.perm)
+            self._handler.grantNamespacePermission(args.sharedSecret, args.user, args.namespaceName, args.perm)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -6918,7 +6846,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = hasNamespacePermission_result()
         try:
-            result.success = self._handler.hasNamespacePermission(args.login, args.user, args.namespaceName, args.perm)
+            result.success = self._handler.hasNamespacePermission(args.sharedSecret, args.user, args.namespaceName, args.perm)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -6947,7 +6875,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = revokeNamespacePermission_result()
         try:
-            self._handler.revokeNamespacePermission(args.login, args.user, args.namespaceName, args.perm)
+            self._handler.revokeNamespacePermission(args.sharedSecret, args.user, args.namespaceName, args.perm)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -6976,7 +6904,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = createBatchScanner_result()
         try:
-            result.success = self._handler.createBatchScanner(args.login, args.tableName, args.options)
+            result.success = self._handler.createBatchScanner(args.sharedSecret, args.tableName, args.options)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -7008,7 +6936,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = createScanner_result()
         try:
-            result.success = self._handler.createScanner(args.login, args.tableName, args.options)
+            result.success = self._handler.createScanner(args.sharedSecret, args.tableName, args.options)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -7156,7 +7084,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = updateAndFlush_result()
         try:
-            self._handler.updateAndFlush(args.login, args.tableName, args.cells)
+            self._handler.updateAndFlush(args.sharedSecret, args.tableName, args.cells)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -7191,7 +7119,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = createWriter_result()
         try:
-            result.success = self._handler.createWriter(args.login, args.tableName, args.opts)
+            result.success = self._handler.createWriter(args.sharedSecret, args.tableName, args.opts)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -7292,7 +7220,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = updateRowConditionally_result()
         try:
-            result.success = self._handler.updateRowConditionally(args.login, args.tableName, args.row, args.updates)
+            result.success = self._handler.updateRowConditionally(args.sharedSecret, args.tableName, args.row, args.updates)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -7324,7 +7252,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = createConditionalWriter_result()
         try:
-            result.success = self._handler.createConditionalWriter(args.login, args.tableName, args.options)
+            result.success = self._handler.createConditionalWriter(args.sharedSecret, args.tableName, args.options)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -7503,7 +7431,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = listNamespaces_result()
         try:
-            result.success = self._handler.listNamespaces(args.login)
+            result.success = self._handler.listNamespaces(args.sharedSecret)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -7532,7 +7460,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = namespaceExists_result()
         try:
-            result.success = self._handler.namespaceExists(args.login, args.namespaceName)
+            result.success = self._handler.namespaceExists(args.sharedSecret, args.namespaceName)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -7561,7 +7489,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = createNamespace_result()
         try:
-            self._handler.createNamespace(args.login, args.namespaceName)
+            self._handler.createNamespace(args.sharedSecret, args.namespaceName)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -7593,7 +7521,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = deleteNamespace_result()
         try:
-            self._handler.deleteNamespace(args.login, args.namespaceName)
+            self._handler.deleteNamespace(args.sharedSecret, args.namespaceName)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -7628,7 +7556,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = renameNamespace_result()
         try:
-            self._handler.renameNamespace(args.login, args.oldNamespaceName, args.newNamespaceName)
+            self._handler.renameNamespace(args.sharedSecret, args.oldNamespaceName, args.newNamespaceName)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -7663,7 +7591,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = setNamespaceProperty_result()
         try:
-            self._handler.setNamespaceProperty(args.login, args.namespaceName, args.property, args.value)
+            self._handler.setNamespaceProperty(args.sharedSecret, args.namespaceName, args.property, args.value)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -7695,7 +7623,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = removeNamespaceProperty_result()
         try:
-            self._handler.removeNamespaceProperty(args.login, args.namespaceName, args.property)
+            self._handler.removeNamespaceProperty(args.sharedSecret, args.namespaceName, args.property)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -7727,7 +7655,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = getNamespaceProperties_result()
         try:
-            result.success = self._handler.getNamespaceProperties(args.login, args.namespaceName)
+            result.success = self._handler.getNamespaceProperties(args.sharedSecret, args.namespaceName)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -7759,7 +7687,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = namespaceIdMap_result()
         try:
-            result.success = self._handler.namespaceIdMap(args.login)
+            result.success = self._handler.namespaceIdMap(args.sharedSecret)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -7788,7 +7716,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = attachNamespaceIterator_result()
         try:
-            self._handler.attachNamespaceIterator(args.login, args.namespaceName, args.setting, args.scopes)
+            self._handler.attachNamespaceIterator(args.sharedSecret, args.namespaceName, args.setting, args.scopes)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -7820,7 +7748,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = removeNamespaceIterator_result()
         try:
-            self._handler.removeNamespaceIterator(args.login, args.namespaceName, args.name, args.scopes)
+            self._handler.removeNamespaceIterator(args.sharedSecret, args.namespaceName, args.name, args.scopes)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -7852,7 +7780,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = getNamespaceIteratorSetting_result()
         try:
-            result.success = self._handler.getNamespaceIteratorSetting(args.login, args.namespaceName, args.name, args.scope)
+            result.success = self._handler.getNamespaceIteratorSetting(args.sharedSecret, args.namespaceName, args.name, args.scope)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -7884,7 +7812,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = listNamespaceIterators_result()
         try:
-            result.success = self._handler.listNamespaceIterators(args.login, args.namespaceName)
+            result.success = self._handler.listNamespaceIterators(args.sharedSecret, args.namespaceName)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -7916,7 +7844,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = checkNamespaceIteratorConflicts_result()
         try:
-            self._handler.checkNamespaceIteratorConflicts(args.login, args.namespaceName, args.setting, args.scopes)
+            self._handler.checkNamespaceIteratorConflicts(args.sharedSecret, args.namespaceName, args.setting, args.scopes)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -7948,7 +7876,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = addNamespaceConstraint_result()
         try:
-            result.success = self._handler.addNamespaceConstraint(args.login, args.namespaceName, args.constraintClassName)
+            result.success = self._handler.addNamespaceConstraint(args.sharedSecret, args.namespaceName, args.constraintClassName)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -7980,7 +7908,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = removeNamespaceConstraint_result()
         try:
-            self._handler.removeNamespaceConstraint(args.login, args.namespaceName, args.id)
+            self._handler.removeNamespaceConstraint(args.sharedSecret, args.namespaceName, args.id)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -8012,7 +7940,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = listNamespaceConstraints_result()
         try:
-            result.success = self._handler.listNamespaceConstraints(args.login, args.namespaceName)
+            result.success = self._handler.listNamespaceConstraints(args.sharedSecret, args.namespaceName)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -8044,7 +7972,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = testNamespaceClassLoad_result()
         try:
-            result.success = self._handler.testNamespaceClassLoad(args.login, args.namespaceName, args.className, args.asTypeName)
+            result.success = self._handler.testNamespaceClassLoad(args.sharedSecret, args.namespaceName, args.className, args.asTypeName)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -8073,175 +8001,18 @@ class Processor(Iface, TProcessor):
 # HELPER FUNCTIONS AND STRUCTURES
 
 
-class login_args(object):
-    """
-    Attributes:
-     - principal
-     - loginProperties
-
-    """
-
-
-    def __init__(self, principal=None, loginProperties=None,):
-        self.principal = principal
-        self.loginProperties = loginProperties
-
-    def read(self, iprot):
-        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
-            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
-            return
-        iprot.readStructBegin()
-        while True:
-            (fname, ftype, fid) = iprot.readFieldBegin()
-            if ftype == TType.STOP:
-                break
-            if fid == 1:
-                if ftype == TType.STRING:
-                    self.principal = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
-                else:
-                    iprot.skip(ftype)
-            elif fid == 2:
-                if ftype == TType.MAP:
-                    self.loginProperties = {}
-                    (_ktype145, _vtype146, _size144) = iprot.readMapBegin()
-                    for _i148 in range(_size144):
-                        _key149 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
-                        _val150 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
-                        self.loginProperties[_key149] = _val150
-                    iprot.readMapEnd()
-                else:
-                    iprot.skip(ftype)
-            else:
-                iprot.skip(ftype)
-            iprot.readFieldEnd()
-        iprot.readStructEnd()
-
-    def write(self, oprot):
-        if oprot._fast_encode is not None and self.thrift_spec is not None:
-            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
-            return
-        oprot.writeStructBegin('login_args')
-        if self.principal is not None:
-            oprot.writeFieldBegin('principal', TType.STRING, 1)
-            oprot.writeString(self.principal.encode('utf-8') if sys.version_info[0] == 2 else self.principal)
-            oprot.writeFieldEnd()
-        if self.loginProperties is not None:
-            oprot.writeFieldBegin('loginProperties', TType.MAP, 2)
-            oprot.writeMapBegin(TType.STRING, TType.STRING, len(self.loginProperties))
-            for kiter151, viter152 in self.loginProperties.items():
-                oprot.writeString(kiter151.encode('utf-8') if sys.version_info[0] == 2 else kiter151)
-                oprot.writeString(viter152.encode('utf-8') if sys.version_info[0] == 2 else viter152)
-            oprot.writeMapEnd()
-            oprot.writeFieldEnd()
-        oprot.writeFieldStop()
-        oprot.writeStructEnd()
-
-    def validate(self):
-        return
-
-    def __repr__(self):
-        L = ['%s=%r' % (key, value)
-             for key, value in self.__dict__.items()]
-        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
-
-    def __eq__(self, other):
-        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
-
-    def __ne__(self, other):
-        return not (self == other)
-all_structs.append(login_args)
-login_args.thrift_spec = (
-    None,  # 0
-    (1, TType.STRING, 'principal', 'UTF8', None, ),  # 1
-    (2, TType.MAP, 'loginProperties', (TType.STRING, 'UTF8', TType.STRING, 'UTF8', False), None, ),  # 2
-)
-
-
-class login_result(object):
-    """
-    Attributes:
-     - success
-     - ouch2
-
-    """
-
-
-    def __init__(self, success=None, ouch2=None,):
-        self.success = success
-        self.ouch2 = ouch2
-
-    def read(self, iprot):
-        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
-            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
-            return
-        iprot.readStructBegin()
-        while True:
-            (fname, ftype, fid) = iprot.readFieldBegin()
-            if ftype == TType.STOP:
-                break
-            if fid == 0:
-                if ftype == TType.STRING:
-                    self.success = iprot.readBinary()
-                else:
-                    iprot.skip(ftype)
-            elif fid == 1:
-                if ftype == TType.STRUCT:
-                    self.ouch2 = AccumuloSecurityException.read(iprot)
-                else:
-                    iprot.skip(ftype)
-            else:
-                iprot.skip(ftype)
-            iprot.readFieldEnd()
-        iprot.readStructEnd()
-
-    def write(self, oprot):
-        if oprot._fast_encode is not None and self.thrift_spec is not None:
-            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
-            return
-        oprot.writeStructBegin('login_result')
-        if self.success is not None:
-            oprot.writeFieldBegin('success', TType.STRING, 0)
-            oprot.writeBinary(self.success)
-            oprot.writeFieldEnd()
-        if self.ouch2 is not None:
-            oprot.writeFieldBegin('ouch2', TType.STRUCT, 1)
-            self.ouch2.write(oprot)
-            oprot.writeFieldEnd()
-        oprot.writeFieldStop()
-        oprot.writeStructEnd()
-
-    def validate(self):
-        return
-
-    def __repr__(self):
-        L = ['%s=%r' % (key, value)
-             for key, value in self.__dict__.items()]
-        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
-
-    def __eq__(self, other):
-        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
-
-    def __ne__(self, other):
-        return not (self == other)
-all_structs.append(login_result)
-login_result.thrift_spec = (
-    (0, TType.STRING, 'success', 'BINARY', None, ),  # 0
-    (1, TType.STRUCT, 'ouch2', [AccumuloSecurityException, None], None, ),  # 1
-)
-
-
 class addConstraint_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - tableName
      - constraintClassName
 
     """
 
 
-    def __init__(self, login=None, tableName=None, constraintClassName=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, tableName=None, constraintClassName=None,):
+        self.sharedSecret = sharedSecret
         self.tableName = tableName
         self.constraintClassName = constraintClassName
 
@@ -8256,7 +8027,7 @@ class addConstraint_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -8279,9 +8050,9 @@ class addConstraint_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('addConstraint_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.tableName is not None:
             oprot.writeFieldBegin('tableName', TType.STRING, 2)
@@ -8310,7 +8081,7 @@ class addConstraint_args(object):
 all_structs.append(addConstraint_args)
 addConstraint_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'tableName', 'UTF8', None, ),  # 2
     (3, TType.STRING, 'constraintClassName', 'UTF8', None, ),  # 3
 )
@@ -8416,15 +8187,15 @@ addConstraint_result.thrift_spec = (
 class addSplits_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - tableName
      - splits
 
     """
 
 
-    def __init__(self, login=None, tableName=None, splits=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, tableName=None, splits=None,):
+        self.sharedSecret = sharedSecret
         self.tableName = tableName
         self.splits = splits
 
@@ -8439,7 +8210,7 @@ class addSplits_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -8450,10 +8221,10 @@ class addSplits_args(object):
             elif fid == 3:
                 if ftype == TType.SET:
                     self.splits = set()
-                    (_etype156, _size153) = iprot.readSetBegin()
-                    for _i157 in range(_size153):
-                        _elem158 = iprot.readBinary()
-                        self.splits.add(_elem158)
+                    (_etype147, _size144) = iprot.readSetBegin()
+                    for _i148 in range(_size144):
+                        _elem149 = iprot.readBinary()
+                        self.splits.add(_elem149)
                     iprot.readSetEnd()
                 else:
                     iprot.skip(ftype)
@@ -8467,9 +8238,9 @@ class addSplits_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('addSplits_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.tableName is not None:
             oprot.writeFieldBegin('tableName', TType.STRING, 2)
@@ -8478,8 +8249,8 @@ class addSplits_args(object):
         if self.splits is not None:
             oprot.writeFieldBegin('splits', TType.SET, 3)
             oprot.writeSetBegin(TType.STRING, len(self.splits))
-            for iter159 in self.splits:
-                oprot.writeBinary(iter159)
+            for iter150 in self.splits:
+                oprot.writeBinary(iter150)
             oprot.writeSetEnd()
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
@@ -8501,7 +8272,7 @@ class addSplits_args(object):
 all_structs.append(addSplits_args)
 addSplits_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'tableName', 'UTF8', None, ),  # 2
     (3, TType.SET, 'splits', (TType.STRING, 'BINARY', False), None, ),  # 3
 )
@@ -8596,7 +8367,7 @@ addSplits_result.thrift_spec = (
 class attachIterator_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - tableName
      - setting
      - scopes
@@ -8604,8 +8375,8 @@ class attachIterator_args(object):
     """
 
 
-    def __init__(self, login=None, tableName=None, setting=None, scopes=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, tableName=None, setting=None, scopes=None,):
+        self.sharedSecret = sharedSecret
         self.tableName = tableName
         self.setting = setting
         self.scopes = scopes
@@ -8621,7 +8392,7 @@ class attachIterator_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -8638,10 +8409,10 @@ class attachIterator_args(object):
             elif fid == 4:
                 if ftype == TType.SET:
                     self.scopes = set()
-                    (_etype163, _size160) = iprot.readSetBegin()
-                    for _i164 in range(_size160):
-                        _elem165 = iprot.readI32()
-                        self.scopes.add(_elem165)
+                    (_etype154, _size151) = iprot.readSetBegin()
+                    for _i155 in range(_size151):
+                        _elem156 = iprot.readI32()
+                        self.scopes.add(_elem156)
                     iprot.readSetEnd()
                 else:
                     iprot.skip(ftype)
@@ -8655,9 +8426,9 @@ class attachIterator_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('attachIterator_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.tableName is not None:
             oprot.writeFieldBegin('tableName', TType.STRING, 2)
@@ -8670,8 +8441,8 @@ class attachIterator_args(object):
         if self.scopes is not None:
             oprot.writeFieldBegin('scopes', TType.SET, 4)
             oprot.writeSetBegin(TType.I32, len(self.scopes))
-            for iter166 in self.scopes:
-                oprot.writeI32(iter166)
+            for iter157 in self.scopes:
+                oprot.writeI32(iter157)
             oprot.writeSetEnd()
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
@@ -8693,7 +8464,7 @@ class attachIterator_args(object):
 all_structs.append(attachIterator_args)
 attachIterator_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'tableName', 'UTF8', None, ),  # 2
     (3, TType.STRUCT, 'setting', [IteratorSetting, None], None, ),  # 3
     (4, TType.SET, 'scopes', (TType.I32, None, False), None, ),  # 4
@@ -8789,7 +8560,7 @@ attachIterator_result.thrift_spec = (
 class checkIteratorConflicts_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - tableName
      - setting
      - scopes
@@ -8797,8 +8568,8 @@ class checkIteratorConflicts_args(object):
     """
 
 
-    def __init__(self, login=None, tableName=None, setting=None, scopes=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, tableName=None, setting=None, scopes=None,):
+        self.sharedSecret = sharedSecret
         self.tableName = tableName
         self.setting = setting
         self.scopes = scopes
@@ -8814,7 +8585,7 @@ class checkIteratorConflicts_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -8831,10 +8602,10 @@ class checkIteratorConflicts_args(object):
             elif fid == 4:
                 if ftype == TType.SET:
                     self.scopes = set()
-                    (_etype170, _size167) = iprot.readSetBegin()
-                    for _i171 in range(_size167):
-                        _elem172 = iprot.readI32()
-                        self.scopes.add(_elem172)
+                    (_etype161, _size158) = iprot.readSetBegin()
+                    for _i162 in range(_size158):
+                        _elem163 = iprot.readI32()
+                        self.scopes.add(_elem163)
                     iprot.readSetEnd()
                 else:
                     iprot.skip(ftype)
@@ -8848,9 +8619,9 @@ class checkIteratorConflicts_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('checkIteratorConflicts_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.tableName is not None:
             oprot.writeFieldBegin('tableName', TType.STRING, 2)
@@ -8863,8 +8634,8 @@ class checkIteratorConflicts_args(object):
         if self.scopes is not None:
             oprot.writeFieldBegin('scopes', TType.SET, 4)
             oprot.writeSetBegin(TType.I32, len(self.scopes))
-            for iter173 in self.scopes:
-                oprot.writeI32(iter173)
+            for iter164 in self.scopes:
+                oprot.writeI32(iter164)
             oprot.writeSetEnd()
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
@@ -8886,7 +8657,7 @@ class checkIteratorConflicts_args(object):
 all_structs.append(checkIteratorConflicts_args)
 checkIteratorConflicts_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'tableName', 'UTF8', None, ),  # 2
     (3, TType.STRUCT, 'setting', [IteratorSetting, None], None, ),  # 3
     (4, TType.SET, 'scopes', (TType.I32, None, False), None, ),  # 4
@@ -8982,14 +8753,14 @@ checkIteratorConflicts_result.thrift_spec = (
 class clearLocatorCache_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - tableName
 
     """
 
 
-    def __init__(self, login=None, tableName=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, tableName=None,):
+        self.sharedSecret = sharedSecret
         self.tableName = tableName
 
     def read(self, iprot):
@@ -9003,7 +8774,7 @@ class clearLocatorCache_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -9021,9 +8792,9 @@ class clearLocatorCache_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('clearLocatorCache_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.tableName is not None:
             oprot.writeFieldBegin('tableName', TType.STRING, 2)
@@ -9048,7 +8819,7 @@ class clearLocatorCache_args(object):
 all_structs.append(clearLocatorCache_args)
 clearLocatorCache_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'tableName', 'UTF8', None, ),  # 2
 )
 
@@ -9118,7 +8889,7 @@ clearLocatorCache_result.thrift_spec = (
 class cloneTable_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - tableName
      - newTableName
      - flush
@@ -9128,8 +8899,8 @@ class cloneTable_args(object):
     """
 
 
-    def __init__(self, login=None, tableName=None, newTableName=None, flush=None, propertiesToSet=None, propertiesToExclude=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, tableName=None, newTableName=None, flush=None, propertiesToSet=None, propertiesToExclude=None,):
+        self.sharedSecret = sharedSecret
         self.tableName = tableName
         self.newTableName = newTableName
         self.flush = flush
@@ -9147,7 +8918,7 @@ class cloneTable_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -9168,21 +8939,21 @@ class cloneTable_args(object):
             elif fid == 5:
                 if ftype == TType.MAP:
                     self.propertiesToSet = {}
-                    (_ktype175, _vtype176, _size174) = iprot.readMapBegin()
-                    for _i178 in range(_size174):
-                        _key179 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
-                        _val180 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
-                        self.propertiesToSet[_key179] = _val180
+                    (_ktype166, _vtype167, _size165) = iprot.readMapBegin()
+                    for _i169 in range(_size165):
+                        _key170 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
+                        _val171 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
+                        self.propertiesToSet[_key170] = _val171
                     iprot.readMapEnd()
                 else:
                     iprot.skip(ftype)
             elif fid == 6:
                 if ftype == TType.SET:
                     self.propertiesToExclude = set()
-                    (_etype184, _size181) = iprot.readSetBegin()
-                    for _i185 in range(_size181):
-                        _elem186 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
-                        self.propertiesToExclude.add(_elem186)
+                    (_etype175, _size172) = iprot.readSetBegin()
+                    for _i176 in range(_size172):
+                        _elem177 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
+                        self.propertiesToExclude.add(_elem177)
                     iprot.readSetEnd()
                 else:
                     iprot.skip(ftype)
@@ -9196,9 +8967,9 @@ class cloneTable_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('cloneTable_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.tableName is not None:
             oprot.writeFieldBegin('tableName', TType.STRING, 2)
@@ -9215,16 +8986,16 @@ class cloneTable_args(object):
         if self.propertiesToSet is not None:
             oprot.writeFieldBegin('propertiesToSet', TType.MAP, 5)
             oprot.writeMapBegin(TType.STRING, TType.STRING, len(self.propertiesToSet))
-            for kiter187, viter188 in self.propertiesToSet.items():
-                oprot.writeString(kiter187.encode('utf-8') if sys.version_info[0] == 2 else kiter187)
-                oprot.writeString(viter188.encode('utf-8') if sys.version_info[0] == 2 else viter188)
+            for kiter178, viter179 in self.propertiesToSet.items():
+                oprot.writeString(kiter178.encode('utf-8') if sys.version_info[0] == 2 else kiter178)
+                oprot.writeString(viter179.encode('utf-8') if sys.version_info[0] == 2 else viter179)
             oprot.writeMapEnd()
             oprot.writeFieldEnd()
         if self.propertiesToExclude is not None:
             oprot.writeFieldBegin('propertiesToExclude', TType.SET, 6)
             oprot.writeSetBegin(TType.STRING, len(self.propertiesToExclude))
-            for iter189 in self.propertiesToExclude:
-                oprot.writeString(iter189.encode('utf-8') if sys.version_info[0] == 2 else iter189)
+            for iter180 in self.propertiesToExclude:
+                oprot.writeString(iter180.encode('utf-8') if sys.version_info[0] == 2 else iter180)
             oprot.writeSetEnd()
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
@@ -9246,7 +9017,7 @@ class cloneTable_args(object):
 all_structs.append(cloneTable_args)
 cloneTable_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'tableName', 'UTF8', None, ),  # 2
     (3, TType.STRING, 'newTableName', 'UTF8', None, ),  # 3
     (4, TType.BOOL, 'flush', None, None, ),  # 4
@@ -9356,7 +9127,7 @@ cloneTable_result.thrift_spec = (
 class compactTable_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - tableName
      - startRow
      - endRow
@@ -9369,8 +9140,8 @@ class compactTable_args(object):
     """
 
 
-    def __init__(self, login=None, tableName=None, startRow=None, endRow=None, iterators=None, flush=None, wait=None, selectorConfig=None, configurerConfig=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, tableName=None, startRow=None, endRow=None, iterators=None, flush=None, wait=None, selectorConfig=None, configurerConfig=None,):
+        self.sharedSecret = sharedSecret
         self.tableName = tableName
         self.startRow = startRow
         self.endRow = endRow
@@ -9391,7 +9162,7 @@ class compactTable_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -9412,11 +9183,11 @@ class compactTable_args(object):
             elif fid == 5:
                 if ftype == TType.LIST:
                     self.iterators = []
-                    (_etype193, _size190) = iprot.readListBegin()
-                    for _i194 in range(_size190):
-                        _elem195 = IteratorSetting()
-                        _elem195.read(iprot)
-                        self.iterators.append(_elem195)
+                    (_etype184, _size181) = iprot.readListBegin()
+                    for _i185 in range(_size181):
+                        _elem186 = IteratorSetting()
+                        _elem186.read(iprot)
+                        self.iterators.append(_elem186)
                     iprot.readListEnd()
                 else:
                     iprot.skip(ftype)
@@ -9452,9 +9223,9 @@ class compactTable_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('compactTable_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.tableName is not None:
             oprot.writeFieldBegin('tableName', TType.STRING, 2)
@@ -9471,8 +9242,8 @@ class compactTable_args(object):
         if self.iterators is not None:
             oprot.writeFieldBegin('iterators', TType.LIST, 5)
             oprot.writeListBegin(TType.STRUCT, len(self.iterators))
-            for iter196 in self.iterators:
-                iter196.write(oprot)
+            for iter187 in self.iterators:
+                iter187.write(oprot)
             oprot.writeListEnd()
             oprot.writeFieldEnd()
         if self.flush is not None:
@@ -9510,7 +9281,7 @@ class compactTable_args(object):
 all_structs.append(compactTable_args)
 compactTable_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'tableName', 'UTF8', None, ),  # 2
     (3, TType.STRING, 'startRow', 'BINARY', None, ),  # 3
     (4, TType.STRING, 'endRow', 'BINARY', None, ),  # 4
@@ -9611,14 +9382,14 @@ compactTable_result.thrift_spec = (
 class cancelCompaction_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - tableName
 
     """
 
 
-    def __init__(self, login=None, tableName=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, tableName=None,):
+        self.sharedSecret = sharedSecret
         self.tableName = tableName
 
     def read(self, iprot):
@@ -9632,7 +9403,7 @@ class cancelCompaction_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -9650,9 +9421,9 @@ class cancelCompaction_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('cancelCompaction_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.tableName is not None:
             oprot.writeFieldBegin('tableName', TType.STRING, 2)
@@ -9677,7 +9448,7 @@ class cancelCompaction_args(object):
 all_structs.append(cancelCompaction_args)
 cancelCompaction_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'tableName', 'UTF8', None, ),  # 2
 )
 
@@ -9771,7 +9542,7 @@ cancelCompaction_result.thrift_spec = (
 class createTable_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - tableName
      - versioningIter
      - type
@@ -9779,8 +9550,8 @@ class createTable_args(object):
     """
 
 
-    def __init__(self, login=None, tableName=None, versioningIter=None, type=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, tableName=None, versioningIter=None, type=None,):
+        self.sharedSecret = sharedSecret
         self.tableName = tableName
         self.versioningIter = versioningIter
         self.type = type
@@ -9796,7 +9567,7 @@ class createTable_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -9824,9 +9595,9 @@ class createTable_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('createTable_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.tableName is not None:
             oprot.writeFieldBegin('tableName', TType.STRING, 2)
@@ -9859,7 +9630,7 @@ class createTable_args(object):
 all_structs.append(createTable_args)
 createTable_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'tableName', 'UTF8', None, ),  # 2
     (3, TType.BOOL, 'versioningIter', None, None, ),  # 3
     (4, TType.I32, 'type', None, None, ),  # 4
@@ -9955,14 +9726,14 @@ createTable_result.thrift_spec = (
 class deleteTable_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - tableName
 
     """
 
 
-    def __init__(self, login=None, tableName=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, tableName=None,):
+        self.sharedSecret = sharedSecret
         self.tableName = tableName
 
     def read(self, iprot):
@@ -9976,7 +9747,7 @@ class deleteTable_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -9994,9 +9765,9 @@ class deleteTable_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('deleteTable_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.tableName is not None:
             oprot.writeFieldBegin('tableName', TType.STRING, 2)
@@ -10021,7 +9792,7 @@ class deleteTable_args(object):
 all_structs.append(deleteTable_args)
 deleteTable_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'tableName', 'UTF8', None, ),  # 2
 )
 
@@ -10115,7 +9886,7 @@ deleteTable_result.thrift_spec = (
 class deleteRows_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - tableName
      - startRow
      - endRow
@@ -10123,8 +9894,8 @@ class deleteRows_args(object):
     """
 
 
-    def __init__(self, login=None, tableName=None, startRow=None, endRow=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, tableName=None, startRow=None, endRow=None,):
+        self.sharedSecret = sharedSecret
         self.tableName = tableName
         self.startRow = startRow
         self.endRow = endRow
@@ -10140,7 +9911,7 @@ class deleteRows_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -10168,9 +9939,9 @@ class deleteRows_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('deleteRows_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.tableName is not None:
             oprot.writeFieldBegin('tableName', TType.STRING, 2)
@@ -10203,7 +9974,7 @@ class deleteRows_args(object):
 all_structs.append(deleteRows_args)
 deleteRows_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'tableName', 'UTF8', None, ),  # 2
     (3, TType.STRING, 'startRow', 'BINARY', None, ),  # 3
     (4, TType.STRING, 'endRow', 'BINARY', None, ),  # 4
@@ -10299,15 +10070,15 @@ deleteRows_result.thrift_spec = (
 class exportTable_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - tableName
      - exportDir
 
     """
 
 
-    def __init__(self, login=None, tableName=None, exportDir=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, tableName=None, exportDir=None,):
+        self.sharedSecret = sharedSecret
         self.tableName = tableName
         self.exportDir = exportDir
 
@@ -10322,7 +10093,7 @@ class exportTable_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -10345,9 +10116,9 @@ class exportTable_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('exportTable_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.tableName is not None:
             oprot.writeFieldBegin('tableName', TType.STRING, 2)
@@ -10376,7 +10147,7 @@ class exportTable_args(object):
 all_structs.append(exportTable_args)
 exportTable_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'tableName', 'UTF8', None, ),  # 2
     (3, TType.STRING, 'exportDir', 'UTF8', None, ),  # 3
 )
@@ -10471,7 +10242,7 @@ exportTable_result.thrift_spec = (
 class flushTable_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - tableName
      - startRow
      - endRow
@@ -10480,8 +10251,8 @@ class flushTable_args(object):
     """
 
 
-    def __init__(self, login=None, tableName=None, startRow=None, endRow=None, wait=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, tableName=None, startRow=None, endRow=None, wait=None,):
+        self.sharedSecret = sharedSecret
         self.tableName = tableName
         self.startRow = startRow
         self.endRow = endRow
@@ -10498,7 +10269,7 @@ class flushTable_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -10531,9 +10302,9 @@ class flushTable_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('flushTable_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.tableName is not None:
             oprot.writeFieldBegin('tableName', TType.STRING, 2)
@@ -10570,7 +10341,7 @@ class flushTable_args(object):
 all_structs.append(flushTable_args)
 flushTable_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'tableName', 'UTF8', None, ),  # 2
     (3, TType.STRING, 'startRow', 'BINARY', None, ),  # 3
     (4, TType.STRING, 'endRow', 'BINARY', None, ),  # 4
@@ -10667,14 +10438,14 @@ flushTable_result.thrift_spec = (
 class getDiskUsage_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - tables
 
     """
 
 
-    def __init__(self, login=None, tables=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, tables=None,):
+        self.sharedSecret = sharedSecret
         self.tables = tables
 
     def read(self, iprot):
@@ -10688,16 +10459,16 @@ class getDiskUsage_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
                 if ftype == TType.SET:
                     self.tables = set()
-                    (_etype200, _size197) = iprot.readSetBegin()
-                    for _i201 in range(_size197):
-                        _elem202 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
-                        self.tables.add(_elem202)
+                    (_etype191, _size188) = iprot.readSetBegin()
+                    for _i192 in range(_size188):
+                        _elem193 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
+                        self.tables.add(_elem193)
                     iprot.readSetEnd()
                 else:
                     iprot.skip(ftype)
@@ -10711,15 +10482,15 @@ class getDiskUsage_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('getDiskUsage_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.tables is not None:
             oprot.writeFieldBegin('tables', TType.SET, 2)
             oprot.writeSetBegin(TType.STRING, len(self.tables))
-            for iter203 in self.tables:
-                oprot.writeString(iter203.encode('utf-8') if sys.version_info[0] == 2 else iter203)
+            for iter194 in self.tables:
+                oprot.writeString(iter194.encode('utf-8') if sys.version_info[0] == 2 else iter194)
             oprot.writeSetEnd()
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
@@ -10741,7 +10512,7 @@ class getDiskUsage_args(object):
 all_structs.append(getDiskUsage_args)
 getDiskUsage_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.SET, 'tables', (TType.STRING, 'UTF8', False), None, ),  # 2
 )
 
@@ -10775,11 +10546,11 @@ class getDiskUsage_result(object):
             if fid == 0:
                 if ftype == TType.LIST:
                     self.success = []
-                    (_etype207, _size204) = iprot.readListBegin()
-                    for _i208 in range(_size204):
-                        _elem209 = DiskUsage()
-                        _elem209.read(iprot)
-                        self.success.append(_elem209)
+                    (_etype198, _size195) = iprot.readListBegin()
+                    for _i199 in range(_size195):
+                        _elem200 = DiskUsage()
+                        _elem200.read(iprot)
+                        self.success.append(_elem200)
                     iprot.readListEnd()
                 else:
                     iprot.skip(ftype)
@@ -10811,8 +10582,8 @@ class getDiskUsage_result(object):
         if self.success is not None:
             oprot.writeFieldBegin('success', TType.LIST, 0)
             oprot.writeListBegin(TType.STRUCT, len(self.success))
-            for iter210 in self.success:
-                iter210.write(oprot)
+            for iter201 in self.success:
+                iter201.write(oprot)
             oprot.writeListEnd()
             oprot.writeFieldEnd()
         if self.ouch1 is not None:
@@ -10855,14 +10626,14 @@ getDiskUsage_result.thrift_spec = (
 class getLocalityGroups_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - tableName
 
     """
 
 
-    def __init__(self, login=None, tableName=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, tableName=None,):
+        self.sharedSecret = sharedSecret
         self.tableName = tableName
 
     def read(self, iprot):
@@ -10876,7 +10647,7 @@ class getLocalityGroups_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -10894,9 +10665,9 @@ class getLocalityGroups_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('getLocalityGroups_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.tableName is not None:
             oprot.writeFieldBegin('tableName', TType.STRING, 2)
@@ -10921,7 +10692,7 @@ class getLocalityGroups_args(object):
 all_structs.append(getLocalityGroups_args)
 getLocalityGroups_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'tableName', 'UTF8', None, ),  # 2
 )
 
@@ -10955,16 +10726,16 @@ class getLocalityGroups_result(object):
             if fid == 0:
                 if ftype == TType.MAP:
                     self.success = {}
-                    (_ktype212, _vtype213, _size211) = iprot.readMapBegin()
-                    for _i215 in range(_size211):
-                        _key216 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
-                        _val217 = set()
-                        (_etype221, _size218) = iprot.readSetBegin()
-                        for _i222 in range(_size218):
-                            _elem223 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
-                            _val217.add(_elem223)
+                    (_ktype203, _vtype204, _size202) = iprot.readMapBegin()
+                    for _i206 in range(_size202):
+                        _key207 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
+                        _val208 = set()
+                        (_etype212, _size209) = iprot.readSetBegin()
+                        for _i213 in range(_size209):
+                            _elem214 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
+                            _val208.add(_elem214)
                         iprot.readSetEnd()
-                        self.success[_key216] = _val217
+                        self.success[_key207] = _val208
                     iprot.readMapEnd()
                 else:
                     iprot.skip(ftype)
@@ -10996,11 +10767,11 @@ class getLocalityGroups_result(object):
         if self.success is not None:
             oprot.writeFieldBegin('success', TType.MAP, 0)
             oprot.writeMapBegin(TType.STRING, TType.SET, len(self.success))
-            for kiter224, viter225 in self.success.items():
-                oprot.writeString(kiter224.encode('utf-8') if sys.version_info[0] == 2 else kiter224)
-                oprot.writeSetBegin(TType.STRING, len(viter225))
-                for iter226 in viter225:
-                    oprot.writeString(iter226.encode('utf-8') if sys.version_info[0] == 2 else iter226)
+            for kiter215, viter216 in self.success.items():
+                oprot.writeString(kiter215.encode('utf-8') if sys.version_info[0] == 2 else kiter215)
+                oprot.writeSetBegin(TType.STRING, len(viter216))
+                for iter217 in viter216:
+                    oprot.writeString(iter217.encode('utf-8') if sys.version_info[0] == 2 else iter217)
                 oprot.writeSetEnd()
             oprot.writeMapEnd()
             oprot.writeFieldEnd()
@@ -11044,7 +10815,7 @@ getLocalityGroups_result.thrift_spec = (
 class getIteratorSetting_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - tableName
      - iteratorName
      - scope
@@ -11052,8 +10823,8 @@ class getIteratorSetting_args(object):
     """
 
 
-    def __init__(self, login=None, tableName=None, iteratorName=None, scope=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, tableName=None, iteratorName=None, scope=None,):
+        self.sharedSecret = sharedSecret
         self.tableName = tableName
         self.iteratorName = iteratorName
         self.scope = scope
@@ -11069,7 +10840,7 @@ class getIteratorSetting_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -11097,9 +10868,9 @@ class getIteratorSetting_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('getIteratorSetting_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.tableName is not None:
             oprot.writeFieldBegin('tableName', TType.STRING, 2)
@@ -11132,7 +10903,7 @@ class getIteratorSetting_args(object):
 all_structs.append(getIteratorSetting_args)
 getIteratorSetting_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'tableName', 'UTF8', None, ),  # 2
     (3, TType.STRING, 'iteratorName', 'UTF8', None, ),  # 3
     (4, TType.I32, 'scope', None, None, ),  # 4
@@ -11240,7 +11011,7 @@ getIteratorSetting_result.thrift_spec = (
 class getMaxRow_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - tableName
      - auths
      - startRow
@@ -11251,8 +11022,8 @@ class getMaxRow_args(object):
     """
 
 
-    def __init__(self, login=None, tableName=None, auths=None, startRow=None, startInclusive=None, endRow=None, endInclusive=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, tableName=None, auths=None, startRow=None, startInclusive=None, endRow=None, endInclusive=None,):
+        self.sharedSecret = sharedSecret
         self.tableName = tableName
         self.auths = auths
         self.startRow = startRow
@@ -11271,7 +11042,7 @@ class getMaxRow_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -11282,10 +11053,10 @@ class getMaxRow_args(object):
             elif fid == 3:
                 if ftype == TType.SET:
                     self.auths = set()
-                    (_etype230, _size227) = iprot.readSetBegin()
-                    for _i231 in range(_size227):
-                        _elem232 = iprot.readBinary()
-                        self.auths.add(_elem232)
+                    (_etype221, _size218) = iprot.readSetBegin()
+                    for _i222 in range(_size218):
+                        _elem223 = iprot.readBinary()
+                        self.auths.add(_elem223)
                     iprot.readSetEnd()
                 else:
                     iprot.skip(ftype)
@@ -11319,9 +11090,9 @@ class getMaxRow_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('getMaxRow_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.tableName is not None:
             oprot.writeFieldBegin('tableName', TType.STRING, 2)
@@ -11330,8 +11101,8 @@ class getMaxRow_args(object):
         if self.auths is not None:
             oprot.writeFieldBegin('auths', TType.SET, 3)
             oprot.writeSetBegin(TType.STRING, len(self.auths))
-            for iter233 in self.auths:
-                oprot.writeBinary(iter233)
+            for iter224 in self.auths:
+                oprot.writeBinary(iter224)
             oprot.writeSetEnd()
             oprot.writeFieldEnd()
         if self.startRow is not None:
@@ -11369,7 +11140,7 @@ class getMaxRow_args(object):
 all_structs.append(getMaxRow_args)
 getMaxRow_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'tableName', 'UTF8', None, ),  # 2
     (3, TType.SET, 'auths', (TType.STRING, 'BINARY', False), None, ),  # 3
     (4, TType.STRING, 'startRow', 'BINARY', None, ),  # 4
@@ -11479,14 +11250,14 @@ getMaxRow_result.thrift_spec = (
 class getTableProperties_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - tableName
 
     """
 
 
-    def __init__(self, login=None, tableName=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, tableName=None,):
+        self.sharedSecret = sharedSecret
         self.tableName = tableName
 
     def read(self, iprot):
@@ -11500,7 +11271,7 @@ class getTableProperties_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -11518,9 +11289,9 @@ class getTableProperties_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('getTableProperties_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.tableName is not None:
             oprot.writeFieldBegin('tableName', TType.STRING, 2)
@@ -11545,7 +11316,7 @@ class getTableProperties_args(object):
 all_structs.append(getTableProperties_args)
 getTableProperties_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'tableName', 'UTF8', None, ),  # 2
 )
 
@@ -11579,11 +11350,11 @@ class getTableProperties_result(object):
             if fid == 0:
                 if ftype == TType.MAP:
                     self.success = {}
-                    (_ktype235, _vtype236, _size234) = iprot.readMapBegin()
-                    for _i238 in range(_size234):
-                        _key239 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
-                        _val240 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
-                        self.success[_key239] = _val240
+                    (_ktype226, _vtype227, _size225) = iprot.readMapBegin()
+                    for _i229 in range(_size225):
+                        _key230 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
+                        _val231 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
+                        self.success[_key230] = _val231
                     iprot.readMapEnd()
                 else:
                     iprot.skip(ftype)
@@ -11615,9 +11386,9 @@ class getTableProperties_result(object):
         if self.success is not None:
             oprot.writeFieldBegin('success', TType.MAP, 0)
             oprot.writeMapBegin(TType.STRING, TType.STRING, len(self.success))
-            for kiter241, viter242 in self.success.items():
-                oprot.writeString(kiter241.encode('utf-8') if sys.version_info[0] == 2 else kiter241)
-                oprot.writeString(viter242.encode('utf-8') if sys.version_info[0] == 2 else viter242)
+            for kiter232, viter233 in self.success.items():
+                oprot.writeString(kiter232.encode('utf-8') if sys.version_info[0] == 2 else kiter232)
+                oprot.writeString(viter233.encode('utf-8') if sys.version_info[0] == 2 else viter233)
             oprot.writeMapEnd()
             oprot.writeFieldEnd()
         if self.ouch1 is not None:
@@ -11660,7 +11431,7 @@ getTableProperties_result.thrift_spec = (
 class importDirectory_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - tableName
      - importDir
      - failureDir
@@ -11669,8 +11440,8 @@ class importDirectory_args(object):
     """
 
 
-    def __init__(self, login=None, tableName=None, importDir=None, failureDir=None, setTime=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, tableName=None, importDir=None, failureDir=None, setTime=None,):
+        self.sharedSecret = sharedSecret
         self.tableName = tableName
         self.importDir = importDir
         self.failureDir = failureDir
@@ -11687,7 +11458,7 @@ class importDirectory_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -11720,9 +11491,9 @@ class importDirectory_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('importDirectory_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.tableName is not None:
             oprot.writeFieldBegin('tableName', TType.STRING, 2)
@@ -11759,7 +11530,7 @@ class importDirectory_args(object):
 all_structs.append(importDirectory_args)
 importDirectory_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'tableName', 'UTF8', None, ),  # 2
     (3, TType.STRING, 'importDir', 'UTF8', None, ),  # 3
     (4, TType.STRING, 'failureDir', 'UTF8', None, ),  # 4
@@ -11856,15 +11627,15 @@ importDirectory_result.thrift_spec = (
 class importTable_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - tableName
      - importDir
 
     """
 
 
-    def __init__(self, login=None, tableName=None, importDir=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, tableName=None, importDir=None,):
+        self.sharedSecret = sharedSecret
         self.tableName = tableName
         self.importDir = importDir
 
@@ -11879,7 +11650,7 @@ class importTable_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -11902,9 +11673,9 @@ class importTable_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('importTable_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.tableName is not None:
             oprot.writeFieldBegin('tableName', TType.STRING, 2)
@@ -11933,7 +11704,7 @@ class importTable_args(object):
 all_structs.append(importTable_args)
 importTable_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'tableName', 'UTF8', None, ),  # 2
     (3, TType.STRING, 'importDir', 'UTF8', None, ),  # 3
 )
@@ -12028,15 +11799,15 @@ importTable_result.thrift_spec = (
 class listSplits_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - tableName
      - maxSplits
 
     """
 
 
-    def __init__(self, login=None, tableName=None, maxSplits=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, tableName=None, maxSplits=None,):
+        self.sharedSecret = sharedSecret
         self.tableName = tableName
         self.maxSplits = maxSplits
 
@@ -12051,7 +11822,7 @@ class listSplits_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -12074,9 +11845,9 @@ class listSplits_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('listSplits_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.tableName is not None:
             oprot.writeFieldBegin('tableName', TType.STRING, 2)
@@ -12105,7 +11876,7 @@ class listSplits_args(object):
 all_structs.append(listSplits_args)
 listSplits_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'tableName', 'UTF8', None, ),  # 2
     (3, TType.I32, 'maxSplits', None, None, ),  # 3
 )
@@ -12140,10 +11911,10 @@ class listSplits_result(object):
             if fid == 0:
                 if ftype == TType.LIST:
                     self.success = []
-                    (_etype246, _size243) = iprot.readListBegin()
-                    for _i247 in range(_size243):
-                        _elem248 = iprot.readBinary()
-                        self.success.append(_elem248)
+                    (_etype237, _size234) = iprot.readListBegin()
+                    for _i238 in range(_size234):
+                        _elem239 = iprot.readBinary()
+                        self.success.append(_elem239)
                     iprot.readListEnd()
                 else:
                     iprot.skip(ftype)
@@ -12175,8 +11946,8 @@ class listSplits_result(object):
         if self.success is not None:
             oprot.writeFieldBegin('success', TType.LIST, 0)
             oprot.writeListBegin(TType.STRING, len(self.success))
-            for iter249 in self.success:
-                oprot.writeBinary(iter249)
+            for iter240 in self.success:
+                oprot.writeBinary(iter240)
             oprot.writeListEnd()
             oprot.writeFieldEnd()
         if self.ouch1 is not None:
@@ -12219,13 +11990,13 @@ listSplits_result.thrift_spec = (
 class listTables_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
 
     """
 
 
-    def __init__(self, login=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None,):
+        self.sharedSecret = sharedSecret
 
     def read(self, iprot):
         if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
@@ -12238,7 +12009,7 @@ class listTables_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             else:
@@ -12251,9 +12022,9 @@ class listTables_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('listTables_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
         oprot.writeStructEnd()
@@ -12274,7 +12045,7 @@ class listTables_args(object):
 all_structs.append(listTables_args)
 listTables_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
 )
 
 
@@ -12301,10 +12072,10 @@ class listTables_result(object):
             if fid == 0:
                 if ftype == TType.SET:
                     self.success = set()
-                    (_etype253, _size250) = iprot.readSetBegin()
-                    for _i254 in range(_size250):
-                        _elem255 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
-                        self.success.add(_elem255)
+                    (_etype244, _size241) = iprot.readSetBegin()
+                    for _i245 in range(_size241):
+                        _elem246 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
+                        self.success.add(_elem246)
                     iprot.readSetEnd()
                 else:
                     iprot.skip(ftype)
@@ -12321,8 +12092,8 @@ class listTables_result(object):
         if self.success is not None:
             oprot.writeFieldBegin('success', TType.SET, 0)
             oprot.writeSetBegin(TType.STRING, len(self.success))
-            for iter256 in self.success:
-                oprot.writeString(iter256.encode('utf-8') if sys.version_info[0] == 2 else iter256)
+            for iter247 in self.success:
+                oprot.writeString(iter247.encode('utf-8') if sys.version_info[0] == 2 else iter247)
             oprot.writeSetEnd()
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
@@ -12350,14 +12121,14 @@ listTables_result.thrift_spec = (
 class listIterators_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - tableName
 
     """
 
 
-    def __init__(self, login=None, tableName=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, tableName=None,):
+        self.sharedSecret = sharedSecret
         self.tableName = tableName
 
     def read(self, iprot):
@@ -12371,7 +12142,7 @@ class listIterators_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -12389,9 +12160,9 @@ class listIterators_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('listIterators_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.tableName is not None:
             oprot.writeFieldBegin('tableName', TType.STRING, 2)
@@ -12416,7 +12187,7 @@ class listIterators_args(object):
 all_structs.append(listIterators_args)
 listIterators_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'tableName', 'UTF8', None, ),  # 2
 )
 
@@ -12450,16 +12221,16 @@ class listIterators_result(object):
             if fid == 0:
                 if ftype == TType.MAP:
                     self.success = {}
-                    (_ktype258, _vtype259, _size257) = iprot.readMapBegin()
-                    for _i261 in range(_size257):
-                        _key262 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
-                        _val263 = set()
-                        (_etype267, _size264) = iprot.readSetBegin()
-                        for _i268 in range(_size264):
-                            _elem269 = iprot.readI32()
-                            _val263.add(_elem269)
+                    (_ktype249, _vtype250, _size248) = iprot.readMapBegin()
+                    for _i252 in range(_size248):
+                        _key253 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
+                        _val254 = set()
+                        (_etype258, _size255) = iprot.readSetBegin()
+                        for _i259 in range(_size255):
+                            _elem260 = iprot.readI32()
+                            _val254.add(_elem260)
                         iprot.readSetEnd()
-                        self.success[_key262] = _val263
+                        self.success[_key253] = _val254
                     iprot.readMapEnd()
                 else:
                     iprot.skip(ftype)
@@ -12491,11 +12262,11 @@ class listIterators_result(object):
         if self.success is not None:
             oprot.writeFieldBegin('success', TType.MAP, 0)
             oprot.writeMapBegin(TType.STRING, TType.SET, len(self.success))
-            for kiter270, viter271 in self.success.items():
-                oprot.writeString(kiter270.encode('utf-8') if sys.version_info[0] == 2 else kiter270)
-                oprot.writeSetBegin(TType.I32, len(viter271))
-                for iter272 in viter271:
-                    oprot.writeI32(iter272)
+            for kiter261, viter262 in self.success.items():
+                oprot.writeString(kiter261.encode('utf-8') if sys.version_info[0] == 2 else kiter261)
+                oprot.writeSetBegin(TType.I32, len(viter262))
+                for iter263 in viter262:
+                    oprot.writeI32(iter263)
                 oprot.writeSetEnd()
             oprot.writeMapEnd()
             oprot.writeFieldEnd()
@@ -12539,14 +12310,14 @@ listIterators_result.thrift_spec = (
 class listConstraints_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - tableName
 
     """
 
 
-    def __init__(self, login=None, tableName=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, tableName=None,):
+        self.sharedSecret = sharedSecret
         self.tableName = tableName
 
     def read(self, iprot):
@@ -12560,7 +12331,7 @@ class listConstraints_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -12578,9 +12349,9 @@ class listConstraints_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('listConstraints_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.tableName is not None:
             oprot.writeFieldBegin('tableName', TType.STRING, 2)
@@ -12605,7 +12376,7 @@ class listConstraints_args(object):
 all_structs.append(listConstraints_args)
 listConstraints_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'tableName', 'UTF8', None, ),  # 2
 )
 
@@ -12639,11 +12410,11 @@ class listConstraints_result(object):
             if fid == 0:
                 if ftype == TType.MAP:
                     self.success = {}
-                    (_ktype274, _vtype275, _size273) = iprot.readMapBegin()
-                    for _i277 in range(_size273):
-                        _key278 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
-                        _val279 = iprot.readI32()
-                        self.success[_key278] = _val279
+                    (_ktype265, _vtype266, _size264) = iprot.readMapBegin()
+                    for _i268 in range(_size264):
+                        _key269 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
+                        _val270 = iprot.readI32()
+                        self.success[_key269] = _val270
                     iprot.readMapEnd()
                 else:
                     iprot.skip(ftype)
@@ -12675,9 +12446,9 @@ class listConstraints_result(object):
         if self.success is not None:
             oprot.writeFieldBegin('success', TType.MAP, 0)
             oprot.writeMapBegin(TType.STRING, TType.I32, len(self.success))
-            for kiter280, viter281 in self.success.items():
-                oprot.writeString(kiter280.encode('utf-8') if sys.version_info[0] == 2 else kiter280)
-                oprot.writeI32(viter281)
+            for kiter271, viter272 in self.success.items():
+                oprot.writeString(kiter271.encode('utf-8') if sys.version_info[0] == 2 else kiter271)
+                oprot.writeI32(viter272)
             oprot.writeMapEnd()
             oprot.writeFieldEnd()
         if self.ouch1 is not None:
@@ -12720,7 +12491,7 @@ listConstraints_result.thrift_spec = (
 class mergeTablets_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - tableName
      - startRow
      - endRow
@@ -12728,8 +12499,8 @@ class mergeTablets_args(object):
     """
 
 
-    def __init__(self, login=None, tableName=None, startRow=None, endRow=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, tableName=None, startRow=None, endRow=None,):
+        self.sharedSecret = sharedSecret
         self.tableName = tableName
         self.startRow = startRow
         self.endRow = endRow
@@ -12745,7 +12516,7 @@ class mergeTablets_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -12773,9 +12544,9 @@ class mergeTablets_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('mergeTablets_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.tableName is not None:
             oprot.writeFieldBegin('tableName', TType.STRING, 2)
@@ -12808,7 +12579,7 @@ class mergeTablets_args(object):
 all_structs.append(mergeTablets_args)
 mergeTablets_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'tableName', 'UTF8', None, ),  # 2
     (3, TType.STRING, 'startRow', 'BINARY', None, ),  # 3
     (4, TType.STRING, 'endRow', 'BINARY', None, ),  # 4
@@ -12904,15 +12675,15 @@ mergeTablets_result.thrift_spec = (
 class offlineTable_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - tableName
      - wait
 
     """
 
 
-    def __init__(self, login=None, tableName=None, wait=False,):
-        self.login = login
+    def __init__(self, sharedSecret=None, tableName=None, wait=False,):
+        self.sharedSecret = sharedSecret
         self.tableName = tableName
         self.wait = wait
 
@@ -12927,7 +12698,7 @@ class offlineTable_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -12950,9 +12721,9 @@ class offlineTable_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('offlineTable_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.tableName is not None:
             oprot.writeFieldBegin('tableName', TType.STRING, 2)
@@ -12981,7 +12752,7 @@ class offlineTable_args(object):
 all_structs.append(offlineTable_args)
 offlineTable_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'tableName', 'UTF8', None, ),  # 2
     (3, TType.BOOL, 'wait', None, False, ),  # 3
 )
@@ -13076,15 +12847,15 @@ offlineTable_result.thrift_spec = (
 class onlineTable_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - tableName
      - wait
 
     """
 
 
-    def __init__(self, login=None, tableName=None, wait=False,):
-        self.login = login
+    def __init__(self, sharedSecret=None, tableName=None, wait=False,):
+        self.sharedSecret = sharedSecret
         self.tableName = tableName
         self.wait = wait
 
@@ -13099,7 +12870,7 @@ class onlineTable_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -13122,9 +12893,9 @@ class onlineTable_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('onlineTable_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.tableName is not None:
             oprot.writeFieldBegin('tableName', TType.STRING, 2)
@@ -13153,7 +12924,7 @@ class onlineTable_args(object):
 all_structs.append(onlineTable_args)
 onlineTable_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'tableName', 'UTF8', None, ),  # 2
     (3, TType.BOOL, 'wait', None, False, ),  # 3
 )
@@ -13248,15 +13019,15 @@ onlineTable_result.thrift_spec = (
 class removeConstraint_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - tableName
      - constraint
 
     """
 
 
-    def __init__(self, login=None, tableName=None, constraint=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, tableName=None, constraint=None,):
+        self.sharedSecret = sharedSecret
         self.tableName = tableName
         self.constraint = constraint
 
@@ -13271,7 +13042,7 @@ class removeConstraint_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -13294,9 +13065,9 @@ class removeConstraint_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('removeConstraint_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.tableName is not None:
             oprot.writeFieldBegin('tableName', TType.STRING, 2)
@@ -13325,7 +13096,7 @@ class removeConstraint_args(object):
 all_structs.append(removeConstraint_args)
 removeConstraint_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'tableName', 'UTF8', None, ),  # 2
     (3, TType.I32, 'constraint', None, None, ),  # 3
 )
@@ -13420,7 +13191,7 @@ removeConstraint_result.thrift_spec = (
 class removeIterator_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - tableName
      - iterName
      - scopes
@@ -13428,8 +13199,8 @@ class removeIterator_args(object):
     """
 
 
-    def __init__(self, login=None, tableName=None, iterName=None, scopes=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, tableName=None, iterName=None, scopes=None,):
+        self.sharedSecret = sharedSecret
         self.tableName = tableName
         self.iterName = iterName
         self.scopes = scopes
@@ -13445,7 +13216,7 @@ class removeIterator_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -13461,10 +13232,10 @@ class removeIterator_args(object):
             elif fid == 4:
                 if ftype == TType.SET:
                     self.scopes = set()
-                    (_etype285, _size282) = iprot.readSetBegin()
-                    for _i286 in range(_size282):
-                        _elem287 = iprot.readI32()
-                        self.scopes.add(_elem287)
+                    (_etype276, _size273) = iprot.readSetBegin()
+                    for _i277 in range(_size273):
+                        _elem278 = iprot.readI32()
+                        self.scopes.add(_elem278)
                     iprot.readSetEnd()
                 else:
                     iprot.skip(ftype)
@@ -13478,9 +13249,9 @@ class removeIterator_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('removeIterator_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.tableName is not None:
             oprot.writeFieldBegin('tableName', TType.STRING, 2)
@@ -13493,8 +13264,8 @@ class removeIterator_args(object):
         if self.scopes is not None:
             oprot.writeFieldBegin('scopes', TType.SET, 4)
             oprot.writeSetBegin(TType.I32, len(self.scopes))
-            for iter288 in self.scopes:
-                oprot.writeI32(iter288)
+            for iter279 in self.scopes:
+                oprot.writeI32(iter279)
             oprot.writeSetEnd()
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
@@ -13516,7 +13287,7 @@ class removeIterator_args(object):
 all_structs.append(removeIterator_args)
 removeIterator_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'tableName', 'UTF8', None, ),  # 2
     (3, TType.STRING, 'iterName', 'UTF8', None, ),  # 3
     (4, TType.SET, 'scopes', (TType.I32, None, False), None, ),  # 4
@@ -13612,15 +13383,15 @@ removeIterator_result.thrift_spec = (
 class removeTableProperty_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - tableName
      - property
 
     """
 
 
-    def __init__(self, login=None, tableName=None, property=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, tableName=None, property=None,):
+        self.sharedSecret = sharedSecret
         self.tableName = tableName
         self.property = property
 
@@ -13635,7 +13406,7 @@ class removeTableProperty_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -13658,9 +13429,9 @@ class removeTableProperty_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('removeTableProperty_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.tableName is not None:
             oprot.writeFieldBegin('tableName', TType.STRING, 2)
@@ -13689,7 +13460,7 @@ class removeTableProperty_args(object):
 all_structs.append(removeTableProperty_args)
 removeTableProperty_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'tableName', 'UTF8', None, ),  # 2
     (3, TType.STRING, 'property', 'UTF8', None, ),  # 3
 )
@@ -13784,15 +13555,15 @@ removeTableProperty_result.thrift_spec = (
 class renameTable_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - oldTableName
      - newTableName
 
     """
 
 
-    def __init__(self, login=None, oldTableName=None, newTableName=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, oldTableName=None, newTableName=None,):
+        self.sharedSecret = sharedSecret
         self.oldTableName = oldTableName
         self.newTableName = newTableName
 
@@ -13807,7 +13578,7 @@ class renameTable_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -13830,9 +13601,9 @@ class renameTable_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('renameTable_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.oldTableName is not None:
             oprot.writeFieldBegin('oldTableName', TType.STRING, 2)
@@ -13861,7 +13632,7 @@ class renameTable_args(object):
 all_structs.append(renameTable_args)
 renameTable_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'oldTableName', 'UTF8', None, ),  # 2
     (3, TType.STRING, 'newTableName', 'UTF8', None, ),  # 3
 )
@@ -13968,15 +13739,15 @@ renameTable_result.thrift_spec = (
 class setLocalityGroups_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - tableName
      - groups
 
     """
 
 
-    def __init__(self, login=None, tableName=None, groups=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, tableName=None, groups=None,):
+        self.sharedSecret = sharedSecret
         self.tableName = tableName
         self.groups = groups
 
@@ -13991,7 +13762,7 @@ class setLocalityGroups_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -14002,16 +13773,16 @@ class setLocalityGroups_args(object):
             elif fid == 3:
                 if ftype == TType.MAP:
                     self.groups = {}
-                    (_ktype290, _vtype291, _size289) = iprot.readMapBegin()
-                    for _i293 in range(_size289):
-                        _key294 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
-                        _val295 = set()
-                        (_etype299, _size296) = iprot.readSetBegin()
-                        for _i300 in range(_size296):
-                            _elem301 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
-                            _val295.add(_elem301)
+                    (_ktype281, _vtype282, _size280) = iprot.readMapBegin()
+                    for _i284 in range(_size280):
+                        _key285 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
+                        _val286 = set()
+                        (_etype290, _size287) = iprot.readSetBegin()
+                        for _i291 in range(_size287):
+                            _elem292 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
+                            _val286.add(_elem292)
                         iprot.readSetEnd()
-                        self.groups[_key294] = _val295
+                        self.groups[_key285] = _val286
                     iprot.readMapEnd()
                 else:
                     iprot.skip(ftype)
@@ -14025,9 +13796,9 @@ class setLocalityGroups_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('setLocalityGroups_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.tableName is not None:
             oprot.writeFieldBegin('tableName', TType.STRING, 2)
@@ -14036,11 +13807,11 @@ class setLocalityGroups_args(object):
         if self.groups is not None:
             oprot.writeFieldBegin('groups', TType.MAP, 3)
             oprot.writeMapBegin(TType.STRING, TType.SET, len(self.groups))
-            for kiter302, viter303 in self.groups.items():
-                oprot.writeString(kiter302.encode('utf-8') if sys.version_info[0] == 2 else kiter302)
-                oprot.writeSetBegin(TType.STRING, len(viter303))
-                for iter304 in viter303:
-                    oprot.writeString(iter304.encode('utf-8') if sys.version_info[0] == 2 else iter304)
+            for kiter293, viter294 in self.groups.items():
+                oprot.writeString(kiter293.encode('utf-8') if sys.version_info[0] == 2 else kiter293)
+                oprot.writeSetBegin(TType.STRING, len(viter294))
+                for iter295 in viter294:
+                    oprot.writeString(iter295.encode('utf-8') if sys.version_info[0] == 2 else iter295)
                 oprot.writeSetEnd()
             oprot.writeMapEnd()
             oprot.writeFieldEnd()
@@ -14063,7 +13834,7 @@ class setLocalityGroups_args(object):
 all_structs.append(setLocalityGroups_args)
 setLocalityGroups_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'tableName', 'UTF8', None, ),  # 2
     (3, TType.MAP, 'groups', (TType.STRING, 'UTF8', TType.SET, (TType.STRING, 'UTF8', False), False), None, ),  # 3
 )
@@ -14158,7 +13929,7 @@ setLocalityGroups_result.thrift_spec = (
 class setTableProperty_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - tableName
      - property
      - value
@@ -14166,8 +13937,8 @@ class setTableProperty_args(object):
     """
 
 
-    def __init__(self, login=None, tableName=None, property=None, value=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, tableName=None, property=None, value=None,):
+        self.sharedSecret = sharedSecret
         self.tableName = tableName
         self.property = property
         self.value = value
@@ -14183,7 +13954,7 @@ class setTableProperty_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -14211,9 +13982,9 @@ class setTableProperty_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('setTableProperty_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.tableName is not None:
             oprot.writeFieldBegin('tableName', TType.STRING, 2)
@@ -14246,7 +14017,7 @@ class setTableProperty_args(object):
 all_structs.append(setTableProperty_args)
 setTableProperty_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'tableName', 'UTF8', None, ),  # 2
     (3, TType.STRING, 'property', 'UTF8', None, ),  # 3
     (4, TType.STRING, 'value', 'UTF8', None, ),  # 4
@@ -14342,7 +14113,7 @@ setTableProperty_result.thrift_spec = (
 class splitRangeByTablets_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - tableName
      - range
      - maxSplits
@@ -14350,8 +14121,8 @@ class splitRangeByTablets_args(object):
     """
 
 
-    def __init__(self, login=None, tableName=None, range=None, maxSplits=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, tableName=None, range=None, maxSplits=None,):
+        self.sharedSecret = sharedSecret
         self.tableName = tableName
         self.range = range
         self.maxSplits = maxSplits
@@ -14367,7 +14138,7 @@ class splitRangeByTablets_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -14396,9 +14167,9 @@ class splitRangeByTablets_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('splitRangeByTablets_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.tableName is not None:
             oprot.writeFieldBegin('tableName', TType.STRING, 2)
@@ -14431,7 +14202,7 @@ class splitRangeByTablets_args(object):
 all_structs.append(splitRangeByTablets_args)
 splitRangeByTablets_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'tableName', 'UTF8', None, ),  # 2
     (3, TType.STRUCT, 'range', [Range, None], None, ),  # 3
     (4, TType.I32, 'maxSplits', None, None, ),  # 4
@@ -14467,11 +14238,11 @@ class splitRangeByTablets_result(object):
             if fid == 0:
                 if ftype == TType.SET:
                     self.success = set()
-                    (_etype308, _size305) = iprot.readSetBegin()
-                    for _i309 in range(_size305):
-                        _elem310 = Range()
-                        _elem310.read(iprot)
-                        self.success.add(_elem310)
+                    (_etype299, _size296) = iprot.readSetBegin()
+                    for _i300 in range(_size296):
+                        _elem301 = Range()
+                        _elem301.read(iprot)
+                        self.success.add(_elem301)
                     iprot.readSetEnd()
                 else:
                     iprot.skip(ftype)
@@ -14503,8 +14274,8 @@ class splitRangeByTablets_result(object):
         if self.success is not None:
             oprot.writeFieldBegin('success', TType.SET, 0)
             oprot.writeSetBegin(TType.STRUCT, len(self.success))
-            for iter311 in self.success:
-                iter311.write(oprot)
+            for iter302 in self.success:
+                iter302.write(oprot)
             oprot.writeSetEnd()
             oprot.writeFieldEnd()
         if self.ouch1 is not None:
@@ -14547,14 +14318,14 @@ splitRangeByTablets_result.thrift_spec = (
 class tableExists_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - tableName
 
     """
 
 
-    def __init__(self, login=None, tableName=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, tableName=None,):
+        self.sharedSecret = sharedSecret
         self.tableName = tableName
 
     def read(self, iprot):
@@ -14568,7 +14339,7 @@ class tableExists_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -14586,9 +14357,9 @@ class tableExists_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('tableExists_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.tableName is not None:
             oprot.writeFieldBegin('tableName', TType.STRING, 2)
@@ -14613,7 +14384,7 @@ class tableExists_args(object):
 all_structs.append(tableExists_args)
 tableExists_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'tableName', 'UTF8', None, ),  # 2
 )
 
@@ -14682,13 +14453,13 @@ tableExists_result.thrift_spec = (
 class tableIdMap_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
 
     """
 
 
-    def __init__(self, login=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None,):
+        self.sharedSecret = sharedSecret
 
     def read(self, iprot):
         if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
@@ -14701,7 +14472,7 @@ class tableIdMap_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             else:
@@ -14714,9 +14485,9 @@ class tableIdMap_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('tableIdMap_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
         oprot.writeStructEnd()
@@ -14737,7 +14508,7 @@ class tableIdMap_args(object):
 all_structs.append(tableIdMap_args)
 tableIdMap_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
 )
 
 
@@ -14764,11 +14535,11 @@ class tableIdMap_result(object):
             if fid == 0:
                 if ftype == TType.MAP:
                     self.success = {}
-                    (_ktype313, _vtype314, _size312) = iprot.readMapBegin()
-                    for _i316 in range(_size312):
-                        _key317 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
-                        _val318 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
-                        self.success[_key317] = _val318
+                    (_ktype304, _vtype305, _size303) = iprot.readMapBegin()
+                    for _i307 in range(_size303):
+                        _key308 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
+                        _val309 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
+                        self.success[_key308] = _val309
                     iprot.readMapEnd()
                 else:
                     iprot.skip(ftype)
@@ -14785,9 +14556,9 @@ class tableIdMap_result(object):
         if self.success is not None:
             oprot.writeFieldBegin('success', TType.MAP, 0)
             oprot.writeMapBegin(TType.STRING, TType.STRING, len(self.success))
-            for kiter319, viter320 in self.success.items():
-                oprot.writeString(kiter319.encode('utf-8') if sys.version_info[0] == 2 else kiter319)
-                oprot.writeString(viter320.encode('utf-8') if sys.version_info[0] == 2 else viter320)
+            for kiter310, viter311 in self.success.items():
+                oprot.writeString(kiter310.encode('utf-8') if sys.version_info[0] == 2 else kiter310)
+                oprot.writeString(viter311.encode('utf-8') if sys.version_info[0] == 2 else viter311)
             oprot.writeMapEnd()
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
@@ -14815,7 +14586,7 @@ tableIdMap_result.thrift_spec = (
 class testTableClassLoad_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - tableName
      - className
      - asTypeName
@@ -14823,8 +14594,8 @@ class testTableClassLoad_args(object):
     """
 
 
-    def __init__(self, login=None, tableName=None, className=None, asTypeName=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, tableName=None, className=None, asTypeName=None,):
+        self.sharedSecret = sharedSecret
         self.tableName = tableName
         self.className = className
         self.asTypeName = asTypeName
@@ -14840,7 +14611,7 @@ class testTableClassLoad_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -14868,9 +14639,9 @@ class testTableClassLoad_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('testTableClassLoad_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.tableName is not None:
             oprot.writeFieldBegin('tableName', TType.STRING, 2)
@@ -14903,7 +14674,7 @@ class testTableClassLoad_args(object):
 all_structs.append(testTableClassLoad_args)
 testTableClassLoad_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'tableName', 'UTF8', None, ),  # 2
     (3, TType.STRING, 'className', 'UTF8', None, ),  # 3
     (4, TType.STRING, 'asTypeName', 'UTF8', None, ),  # 4
@@ -15010,14 +14781,14 @@ testTableClassLoad_result.thrift_spec = (
 class pingTabletServer_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - tserver
 
     """
 
 
-    def __init__(self, login=None, tserver=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, tserver=None,):
+        self.sharedSecret = sharedSecret
         self.tserver = tserver
 
     def read(self, iprot):
@@ -15031,7 +14802,7 @@ class pingTabletServer_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -15049,9 +14820,9 @@ class pingTabletServer_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('pingTabletServer_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.tserver is not None:
             oprot.writeFieldBegin('tserver', TType.STRING, 2)
@@ -15076,7 +14847,7 @@ class pingTabletServer_args(object):
 all_structs.append(pingTabletServer_args)
 pingTabletServer_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'tserver', 'UTF8', None, ),  # 2
 )
 
@@ -15158,14 +14929,14 @@ pingTabletServer_result.thrift_spec = (
 class getActiveScans_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - tserver
 
     """
 
 
-    def __init__(self, login=None, tserver=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, tserver=None,):
+        self.sharedSecret = sharedSecret
         self.tserver = tserver
 
     def read(self, iprot):
@@ -15179,7 +14950,7 @@ class getActiveScans_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -15197,9 +14968,9 @@ class getActiveScans_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('getActiveScans_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.tserver is not None:
             oprot.writeFieldBegin('tserver', TType.STRING, 2)
@@ -15224,7 +14995,7 @@ class getActiveScans_args(object):
 all_structs.append(getActiveScans_args)
 getActiveScans_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'tserver', 'UTF8', None, ),  # 2
 )
 
@@ -15256,11 +15027,11 @@ class getActiveScans_result(object):
             if fid == 0:
                 if ftype == TType.LIST:
                     self.success = []
-                    (_etype324, _size321) = iprot.readListBegin()
-                    for _i325 in range(_size321):
-                        _elem326 = ActiveScan()
-                        _elem326.read(iprot)
-                        self.success.append(_elem326)
+                    (_etype315, _size312) = iprot.readListBegin()
+                    for _i316 in range(_size312):
+                        _elem317 = ActiveScan()
+                        _elem317.read(iprot)
+                        self.success.append(_elem317)
                     iprot.readListEnd()
                 else:
                     iprot.skip(ftype)
@@ -15287,8 +15058,8 @@ class getActiveScans_result(object):
         if self.success is not None:
             oprot.writeFieldBegin('success', TType.LIST, 0)
             oprot.writeListBegin(TType.STRUCT, len(self.success))
-            for iter327 in self.success:
-                iter327.write(oprot)
+            for iter318 in self.success:
+                iter318.write(oprot)
             oprot.writeListEnd()
             oprot.writeFieldEnd()
         if self.ouch1 is not None:
@@ -15326,14 +15097,14 @@ getActiveScans_result.thrift_spec = (
 class getActiveCompactions_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - tserver
 
     """
 
 
-    def __init__(self, login=None, tserver=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, tserver=None,):
+        self.sharedSecret = sharedSecret
         self.tserver = tserver
 
     def read(self, iprot):
@@ -15347,7 +15118,7 @@ class getActiveCompactions_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -15365,9 +15136,9 @@ class getActiveCompactions_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('getActiveCompactions_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.tserver is not None:
             oprot.writeFieldBegin('tserver', TType.STRING, 2)
@@ -15392,7 +15163,7 @@ class getActiveCompactions_args(object):
 all_structs.append(getActiveCompactions_args)
 getActiveCompactions_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'tserver', 'UTF8', None, ),  # 2
 )
 
@@ -15424,11 +15195,11 @@ class getActiveCompactions_result(object):
             if fid == 0:
                 if ftype == TType.LIST:
                     self.success = []
-                    (_etype331, _size328) = iprot.readListBegin()
-                    for _i332 in range(_size328):
-                        _elem333 = ActiveCompaction()
-                        _elem333.read(iprot)
-                        self.success.append(_elem333)
+                    (_etype322, _size319) = iprot.readListBegin()
+                    for _i323 in range(_size319):
+                        _elem324 = ActiveCompaction()
+                        _elem324.read(iprot)
+                        self.success.append(_elem324)
                     iprot.readListEnd()
                 else:
                     iprot.skip(ftype)
@@ -15455,8 +15226,8 @@ class getActiveCompactions_result(object):
         if self.success is not None:
             oprot.writeFieldBegin('success', TType.LIST, 0)
             oprot.writeListBegin(TType.STRUCT, len(self.success))
-            for iter334 in self.success:
-                iter334.write(oprot)
+            for iter325 in self.success:
+                iter325.write(oprot)
             oprot.writeListEnd()
             oprot.writeFieldEnd()
         if self.ouch1 is not None:
@@ -15494,13 +15265,13 @@ getActiveCompactions_result.thrift_spec = (
 class getSiteConfiguration_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
 
     """
 
 
-    def __init__(self, login=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None,):
+        self.sharedSecret = sharedSecret
 
     def read(self, iprot):
         if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
@@ -15513,7 +15284,7 @@ class getSiteConfiguration_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             else:
@@ -15526,9 +15297,9 @@ class getSiteConfiguration_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('getSiteConfiguration_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
         oprot.writeStructEnd()
@@ -15549,11 +15320,168 @@ class getSiteConfiguration_args(object):
 all_structs.append(getSiteConfiguration_args)
 getSiteConfiguration_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
 )
 
 
 class getSiteConfiguration_result(object):
+    """
+    Attributes:
+     - success
+     - ouch1
+     - ouch2
+
+    """
+
+
+    def __init__(self, success=None, ouch1=None, ouch2=None,):
+        self.success = success
+        self.ouch1 = ouch1
+        self.ouch2 = ouch2
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 0:
+                if ftype == TType.MAP:
+                    self.success = {}
+                    (_ktype327, _vtype328, _size326) = iprot.readMapBegin()
+                    for _i330 in range(_size326):
+                        _key331 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
+                        _val332 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
+                        self.success[_key331] = _val332
+                    iprot.readMapEnd()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 1:
+                if ftype == TType.STRUCT:
+                    self.ouch1 = AccumuloException.read(iprot)
+                else:
+                    iprot.skip(ftype)
+            elif fid == 2:
+                if ftype == TType.STRUCT:
+                    self.ouch2 = AccumuloSecurityException.read(iprot)
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('getSiteConfiguration_result')
+        if self.success is not None:
+            oprot.writeFieldBegin('success', TType.MAP, 0)
+            oprot.writeMapBegin(TType.STRING, TType.STRING, len(self.success))
+            for kiter333, viter334 in self.success.items():
+                oprot.writeString(kiter333.encode('utf-8') if sys.version_info[0] == 2 else kiter333)
+                oprot.writeString(viter334.encode('utf-8') if sys.version_info[0] == 2 else viter334)
+            oprot.writeMapEnd()
+            oprot.writeFieldEnd()
+        if self.ouch1 is not None:
+            oprot.writeFieldBegin('ouch1', TType.STRUCT, 1)
+            self.ouch1.write(oprot)
+            oprot.writeFieldEnd()
+        if self.ouch2 is not None:
+            oprot.writeFieldBegin('ouch2', TType.STRUCT, 2)
+            self.ouch2.write(oprot)
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+all_structs.append(getSiteConfiguration_result)
+getSiteConfiguration_result.thrift_spec = (
+    (0, TType.MAP, 'success', (TType.STRING, 'UTF8', TType.STRING, 'UTF8', False), None, ),  # 0
+    (1, TType.STRUCT, 'ouch1', [AccumuloException, None], None, ),  # 1
+    (2, TType.STRUCT, 'ouch2', [AccumuloSecurityException, None], None, ),  # 2
+)
+
+
+class getSystemConfiguration_args(object):
+    """
+    Attributes:
+     - sharedSecret
+
+    """
+
+
+    def __init__(self, sharedSecret=None,):
+        self.sharedSecret = sharedSecret
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 1:
+                if ftype == TType.STRING:
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('getSystemConfiguration_args')
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+all_structs.append(getSystemConfiguration_args)
+getSystemConfiguration_args.thrift_spec = (
+    None,  # 0
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
+)
+
+
+class getSystemConfiguration_result(object):
     """
     Attributes:
      - success
@@ -15607,170 +15535,13 @@ class getSiteConfiguration_result(object):
         if oprot._fast_encode is not None and self.thrift_spec is not None:
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
-        oprot.writeStructBegin('getSiteConfiguration_result')
+        oprot.writeStructBegin('getSystemConfiguration_result')
         if self.success is not None:
             oprot.writeFieldBegin('success', TType.MAP, 0)
             oprot.writeMapBegin(TType.STRING, TType.STRING, len(self.success))
             for kiter342, viter343 in self.success.items():
                 oprot.writeString(kiter342.encode('utf-8') if sys.version_info[0] == 2 else kiter342)
                 oprot.writeString(viter343.encode('utf-8') if sys.version_info[0] == 2 else viter343)
-            oprot.writeMapEnd()
-            oprot.writeFieldEnd()
-        if self.ouch1 is not None:
-            oprot.writeFieldBegin('ouch1', TType.STRUCT, 1)
-            self.ouch1.write(oprot)
-            oprot.writeFieldEnd()
-        if self.ouch2 is not None:
-            oprot.writeFieldBegin('ouch2', TType.STRUCT, 2)
-            self.ouch2.write(oprot)
-            oprot.writeFieldEnd()
-        oprot.writeFieldStop()
-        oprot.writeStructEnd()
-
-    def validate(self):
-        return
-
-    def __repr__(self):
-        L = ['%s=%r' % (key, value)
-             for key, value in self.__dict__.items()]
-        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
-
-    def __eq__(self, other):
-        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
-
-    def __ne__(self, other):
-        return not (self == other)
-all_structs.append(getSiteConfiguration_result)
-getSiteConfiguration_result.thrift_spec = (
-    (0, TType.MAP, 'success', (TType.STRING, 'UTF8', TType.STRING, 'UTF8', False), None, ),  # 0
-    (1, TType.STRUCT, 'ouch1', [AccumuloException, None], None, ),  # 1
-    (2, TType.STRUCT, 'ouch2', [AccumuloSecurityException, None], None, ),  # 2
-)
-
-
-class getSystemConfiguration_args(object):
-    """
-    Attributes:
-     - login
-
-    """
-
-
-    def __init__(self, login=None,):
-        self.login = login
-
-    def read(self, iprot):
-        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
-            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
-            return
-        iprot.readStructBegin()
-        while True:
-            (fname, ftype, fid) = iprot.readFieldBegin()
-            if ftype == TType.STOP:
-                break
-            if fid == 1:
-                if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
-                else:
-                    iprot.skip(ftype)
-            else:
-                iprot.skip(ftype)
-            iprot.readFieldEnd()
-        iprot.readStructEnd()
-
-    def write(self, oprot):
-        if oprot._fast_encode is not None and self.thrift_spec is not None:
-            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
-            return
-        oprot.writeStructBegin('getSystemConfiguration_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
-            oprot.writeFieldEnd()
-        oprot.writeFieldStop()
-        oprot.writeStructEnd()
-
-    def validate(self):
-        return
-
-    def __repr__(self):
-        L = ['%s=%r' % (key, value)
-             for key, value in self.__dict__.items()]
-        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
-
-    def __eq__(self, other):
-        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
-
-    def __ne__(self, other):
-        return not (self == other)
-all_structs.append(getSystemConfiguration_args)
-getSystemConfiguration_args.thrift_spec = (
-    None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
-)
-
-
-class getSystemConfiguration_result(object):
-    """
-    Attributes:
-     - success
-     - ouch1
-     - ouch2
-
-    """
-
-
-    def __init__(self, success=None, ouch1=None, ouch2=None,):
-        self.success = success
-        self.ouch1 = ouch1
-        self.ouch2 = ouch2
-
-    def read(self, iprot):
-        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
-            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
-            return
-        iprot.readStructBegin()
-        while True:
-            (fname, ftype, fid) = iprot.readFieldBegin()
-            if ftype == TType.STOP:
-                break
-            if fid == 0:
-                if ftype == TType.MAP:
-                    self.success = {}
-                    (_ktype345, _vtype346, _size344) = iprot.readMapBegin()
-                    for _i348 in range(_size344):
-                        _key349 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
-                        _val350 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
-                        self.success[_key349] = _val350
-                    iprot.readMapEnd()
-                else:
-                    iprot.skip(ftype)
-            elif fid == 1:
-                if ftype == TType.STRUCT:
-                    self.ouch1 = AccumuloException.read(iprot)
-                else:
-                    iprot.skip(ftype)
-            elif fid == 2:
-                if ftype == TType.STRUCT:
-                    self.ouch2 = AccumuloSecurityException.read(iprot)
-                else:
-                    iprot.skip(ftype)
-            else:
-                iprot.skip(ftype)
-            iprot.readFieldEnd()
-        iprot.readStructEnd()
-
-    def write(self, oprot):
-        if oprot._fast_encode is not None and self.thrift_spec is not None:
-            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
-            return
-        oprot.writeStructBegin('getSystemConfiguration_result')
-        if self.success is not None:
-            oprot.writeFieldBegin('success', TType.MAP, 0)
-            oprot.writeMapBegin(TType.STRING, TType.STRING, len(self.success))
-            for kiter351, viter352 in self.success.items():
-                oprot.writeString(kiter351.encode('utf-8') if sys.version_info[0] == 2 else kiter351)
-                oprot.writeString(viter352.encode('utf-8') if sys.version_info[0] == 2 else viter352)
             oprot.writeMapEnd()
             oprot.writeFieldEnd()
         if self.ouch1 is not None:
@@ -15808,13 +15579,13 @@ getSystemConfiguration_result.thrift_spec = (
 class getTabletServers_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
 
     """
 
 
-    def __init__(self, login=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None,):
+        self.sharedSecret = sharedSecret
 
     def read(self, iprot):
         if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
@@ -15827,7 +15598,7 @@ class getTabletServers_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             else:
@@ -15840,9 +15611,9 @@ class getTabletServers_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('getTabletServers_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
         oprot.writeStructEnd()
@@ -15863,7 +15634,7 @@ class getTabletServers_args(object):
 all_structs.append(getTabletServers_args)
 getTabletServers_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
 )
 
 
@@ -15890,10 +15661,10 @@ class getTabletServers_result(object):
             if fid == 0:
                 if ftype == TType.LIST:
                     self.success = []
-                    (_etype356, _size353) = iprot.readListBegin()
-                    for _i357 in range(_size353):
-                        _elem358 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
-                        self.success.append(_elem358)
+                    (_etype347, _size344) = iprot.readListBegin()
+                    for _i348 in range(_size344):
+                        _elem349 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
+                        self.success.append(_elem349)
                     iprot.readListEnd()
                 else:
                     iprot.skip(ftype)
@@ -15910,8 +15681,8 @@ class getTabletServers_result(object):
         if self.success is not None:
             oprot.writeFieldBegin('success', TType.LIST, 0)
             oprot.writeListBegin(TType.STRING, len(self.success))
-            for iter359 in self.success:
-                oprot.writeString(iter359.encode('utf-8') if sys.version_info[0] == 2 else iter359)
+            for iter350 in self.success:
+                oprot.writeString(iter350.encode('utf-8') if sys.version_info[0] == 2 else iter350)
             oprot.writeListEnd()
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
@@ -15939,14 +15710,14 @@ getTabletServers_result.thrift_spec = (
 class removeProperty_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - property
 
     """
 
 
-    def __init__(self, login=None, property=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, property=None,):
+        self.sharedSecret = sharedSecret
         self.property = property
 
     def read(self, iprot):
@@ -15960,7 +15731,7 @@ class removeProperty_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -15978,9 +15749,9 @@ class removeProperty_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('removeProperty_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.property is not None:
             oprot.writeFieldBegin('property', TType.STRING, 2)
@@ -16005,7 +15776,7 @@ class removeProperty_args(object):
 all_structs.append(removeProperty_args)
 removeProperty_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'property', 'UTF8', None, ),  # 2
 )
 
@@ -16087,15 +15858,15 @@ removeProperty_result.thrift_spec = (
 class setProperty_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - property
      - value
 
     """
 
 
-    def __init__(self, login=None, property=None, value=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, property=None, value=None,):
+        self.sharedSecret = sharedSecret
         self.property = property
         self.value = value
 
@@ -16110,7 +15881,7 @@ class setProperty_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -16133,9 +15904,9 @@ class setProperty_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('setProperty_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.property is not None:
             oprot.writeFieldBegin('property', TType.STRING, 2)
@@ -16164,7 +15935,7 @@ class setProperty_args(object):
 all_structs.append(setProperty_args)
 setProperty_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'property', 'UTF8', None, ),  # 2
     (3, TType.STRING, 'value', 'UTF8', None, ),  # 3
 )
@@ -16247,15 +16018,15 @@ setProperty_result.thrift_spec = (
 class testClassLoad_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - className
      - asTypeName
 
     """
 
 
-    def __init__(self, login=None, className=None, asTypeName=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, className=None, asTypeName=None,):
+        self.sharedSecret = sharedSecret
         self.className = className
         self.asTypeName = asTypeName
 
@@ -16270,7 +16041,7 @@ class testClassLoad_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -16293,9 +16064,9 @@ class testClassLoad_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('testClassLoad_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.className is not None:
             oprot.writeFieldBegin('className', TType.STRING, 2)
@@ -16324,7 +16095,7 @@ class testClassLoad_args(object):
 all_structs.append(testClassLoad_args)
 testClassLoad_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'className', 'UTF8', None, ),  # 2
     (3, TType.STRING, 'asTypeName', 'UTF8', None, ),  # 3
 )
@@ -16418,15 +16189,15 @@ testClassLoad_result.thrift_spec = (
 class authenticateUser_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - user
      - properties
 
     """
 
 
-    def __init__(self, login=None, user=None, properties=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, user=None, properties=None,):
+        self.sharedSecret = sharedSecret
         self.user = user
         self.properties = properties
 
@@ -16441,7 +16212,7 @@ class authenticateUser_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -16452,11 +16223,11 @@ class authenticateUser_args(object):
             elif fid == 3:
                 if ftype == TType.MAP:
                     self.properties = {}
-                    (_ktype361, _vtype362, _size360) = iprot.readMapBegin()
-                    for _i364 in range(_size360):
-                        _key365 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
-                        _val366 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
-                        self.properties[_key365] = _val366
+                    (_ktype352, _vtype353, _size351) = iprot.readMapBegin()
+                    for _i355 in range(_size351):
+                        _key356 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
+                        _val357 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
+                        self.properties[_key356] = _val357
                     iprot.readMapEnd()
                 else:
                     iprot.skip(ftype)
@@ -16470,9 +16241,9 @@ class authenticateUser_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('authenticateUser_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.user is not None:
             oprot.writeFieldBegin('user', TType.STRING, 2)
@@ -16481,9 +16252,9 @@ class authenticateUser_args(object):
         if self.properties is not None:
             oprot.writeFieldBegin('properties', TType.MAP, 3)
             oprot.writeMapBegin(TType.STRING, TType.STRING, len(self.properties))
-            for kiter367, viter368 in self.properties.items():
-                oprot.writeString(kiter367.encode('utf-8') if sys.version_info[0] == 2 else kiter367)
-                oprot.writeString(viter368.encode('utf-8') if sys.version_info[0] == 2 else viter368)
+            for kiter358, viter359 in self.properties.items():
+                oprot.writeString(kiter358.encode('utf-8') if sys.version_info[0] == 2 else kiter358)
+                oprot.writeString(viter359.encode('utf-8') if sys.version_info[0] == 2 else viter359)
             oprot.writeMapEnd()
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
@@ -16505,7 +16276,7 @@ class authenticateUser_args(object):
 all_structs.append(authenticateUser_args)
 authenticateUser_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'user', 'UTF8', None, ),  # 2
     (3, TType.MAP, 'properties', (TType.STRING, 'UTF8', TType.STRING, 'UTF8', False), None, ),  # 3
 )
@@ -16599,15 +16370,15 @@ authenticateUser_result.thrift_spec = (
 class changeUserAuthorizations_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - user
      - authorizations
 
     """
 
 
-    def __init__(self, login=None, user=None, authorizations=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, user=None, authorizations=None,):
+        self.sharedSecret = sharedSecret
         self.user = user
         self.authorizations = authorizations
 
@@ -16622,7 +16393,7 @@ class changeUserAuthorizations_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -16633,10 +16404,10 @@ class changeUserAuthorizations_args(object):
             elif fid == 3:
                 if ftype == TType.SET:
                     self.authorizations = set()
-                    (_etype372, _size369) = iprot.readSetBegin()
-                    for _i373 in range(_size369):
-                        _elem374 = iprot.readBinary()
-                        self.authorizations.add(_elem374)
+                    (_etype363, _size360) = iprot.readSetBegin()
+                    for _i364 in range(_size360):
+                        _elem365 = iprot.readBinary()
+                        self.authorizations.add(_elem365)
                     iprot.readSetEnd()
                 else:
                     iprot.skip(ftype)
@@ -16650,9 +16421,9 @@ class changeUserAuthorizations_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('changeUserAuthorizations_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.user is not None:
             oprot.writeFieldBegin('user', TType.STRING, 2)
@@ -16661,8 +16432,8 @@ class changeUserAuthorizations_args(object):
         if self.authorizations is not None:
             oprot.writeFieldBegin('authorizations', TType.SET, 3)
             oprot.writeSetBegin(TType.STRING, len(self.authorizations))
-            for iter375 in self.authorizations:
-                oprot.writeBinary(iter375)
+            for iter366 in self.authorizations:
+                oprot.writeBinary(iter366)
             oprot.writeSetEnd()
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
@@ -16684,7 +16455,7 @@ class changeUserAuthorizations_args(object):
 all_structs.append(changeUserAuthorizations_args)
 changeUserAuthorizations_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'user', 'UTF8', None, ),  # 2
     (3, TType.SET, 'authorizations', (TType.STRING, 'BINARY', False), None, ),  # 3
 )
@@ -16767,15 +16538,15 @@ changeUserAuthorizations_result.thrift_spec = (
 class changeLocalUserPassword_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - user
      - password
 
     """
 
 
-    def __init__(self, login=None, user=None, password=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, user=None, password=None,):
+        self.sharedSecret = sharedSecret
         self.user = user
         self.password = password
 
@@ -16790,7 +16561,7 @@ class changeLocalUserPassword_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -16813,9 +16584,9 @@ class changeLocalUserPassword_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('changeLocalUserPassword_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.user is not None:
             oprot.writeFieldBegin('user', TType.STRING, 2)
@@ -16844,7 +16615,7 @@ class changeLocalUserPassword_args(object):
 all_structs.append(changeLocalUserPassword_args)
 changeLocalUserPassword_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'user', 'UTF8', None, ),  # 2
     (3, TType.STRING, 'password', 'BINARY', None, ),  # 3
 )
@@ -16927,15 +16698,15 @@ changeLocalUserPassword_result.thrift_spec = (
 class createLocalUser_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - user
      - password
 
     """
 
 
-    def __init__(self, login=None, user=None, password=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, user=None, password=None,):
+        self.sharedSecret = sharedSecret
         self.user = user
         self.password = password
 
@@ -16950,7 +16721,7 @@ class createLocalUser_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -16973,9 +16744,9 @@ class createLocalUser_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('createLocalUser_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.user is not None:
             oprot.writeFieldBegin('user', TType.STRING, 2)
@@ -17004,7 +16775,7 @@ class createLocalUser_args(object):
 all_structs.append(createLocalUser_args)
 createLocalUser_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'user', 'UTF8', None, ),  # 2
     (3, TType.STRING, 'password', 'BINARY', None, ),  # 3
 )
@@ -17087,14 +16858,14 @@ createLocalUser_result.thrift_spec = (
 class dropLocalUser_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - user
 
     """
 
 
-    def __init__(self, login=None, user=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, user=None,):
+        self.sharedSecret = sharedSecret
         self.user = user
 
     def read(self, iprot):
@@ -17108,7 +16879,7 @@ class dropLocalUser_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -17126,9 +16897,9 @@ class dropLocalUser_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('dropLocalUser_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.user is not None:
             oprot.writeFieldBegin('user', TType.STRING, 2)
@@ -17153,7 +16924,7 @@ class dropLocalUser_args(object):
 all_structs.append(dropLocalUser_args)
 dropLocalUser_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'user', 'UTF8', None, ),  # 2
 )
 
@@ -17235,14 +17006,14 @@ dropLocalUser_result.thrift_spec = (
 class getUserAuthorizations_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - user
 
     """
 
 
-    def __init__(self, login=None, user=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, user=None,):
+        self.sharedSecret = sharedSecret
         self.user = user
 
     def read(self, iprot):
@@ -17256,7 +17027,7 @@ class getUserAuthorizations_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -17274,9 +17045,9 @@ class getUserAuthorizations_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('getUserAuthorizations_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.user is not None:
             oprot.writeFieldBegin('user', TType.STRING, 2)
@@ -17301,7 +17072,7 @@ class getUserAuthorizations_args(object):
 all_structs.append(getUserAuthorizations_args)
 getUserAuthorizations_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'user', 'UTF8', None, ),  # 2
 )
 
@@ -17333,10 +17104,10 @@ class getUserAuthorizations_result(object):
             if fid == 0:
                 if ftype == TType.LIST:
                     self.success = []
-                    (_etype379, _size376) = iprot.readListBegin()
-                    for _i380 in range(_size376):
-                        _elem381 = iprot.readBinary()
-                        self.success.append(_elem381)
+                    (_etype370, _size367) = iprot.readListBegin()
+                    for _i371 in range(_size367):
+                        _elem372 = iprot.readBinary()
+                        self.success.append(_elem372)
                     iprot.readListEnd()
                 else:
                     iprot.skip(ftype)
@@ -17363,8 +17134,8 @@ class getUserAuthorizations_result(object):
         if self.success is not None:
             oprot.writeFieldBegin('success', TType.LIST, 0)
             oprot.writeListBegin(TType.STRING, len(self.success))
-            for iter382 in self.success:
-                oprot.writeBinary(iter382)
+            for iter373 in self.success:
+                oprot.writeBinary(iter373)
             oprot.writeListEnd()
             oprot.writeFieldEnd()
         if self.ouch1 is not None:
@@ -17402,15 +17173,15 @@ getUserAuthorizations_result.thrift_spec = (
 class grantSystemPermission_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - user
      - perm
 
     """
 
 
-    def __init__(self, login=None, user=None, perm=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, user=None, perm=None,):
+        self.sharedSecret = sharedSecret
         self.user = user
         self.perm = perm
 
@@ -17425,7 +17196,7 @@ class grantSystemPermission_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -17448,9 +17219,9 @@ class grantSystemPermission_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('grantSystemPermission_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.user is not None:
             oprot.writeFieldBegin('user', TType.STRING, 2)
@@ -17479,7 +17250,7 @@ class grantSystemPermission_args(object):
 all_structs.append(grantSystemPermission_args)
 grantSystemPermission_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'user', 'UTF8', None, ),  # 2
     (3, TType.I32, 'perm', None, None, ),  # 3
 )
@@ -17562,7 +17333,7 @@ grantSystemPermission_result.thrift_spec = (
 class grantTablePermission_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - user
      - table
      - perm
@@ -17570,8 +17341,8 @@ class grantTablePermission_args(object):
     """
 
 
-    def __init__(self, login=None, user=None, table=None, perm=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, user=None, table=None, perm=None,):
+        self.sharedSecret = sharedSecret
         self.user = user
         self.table = table
         self.perm = perm
@@ -17587,7 +17358,7 @@ class grantTablePermission_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -17615,9 +17386,9 @@ class grantTablePermission_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('grantTablePermission_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.user is not None:
             oprot.writeFieldBegin('user', TType.STRING, 2)
@@ -17650,7 +17421,7 @@ class grantTablePermission_args(object):
 all_structs.append(grantTablePermission_args)
 grantTablePermission_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'user', 'UTF8', None, ),  # 2
     (3, TType.STRING, 'table', 'UTF8', None, ),  # 3
     (4, TType.I32, 'perm', None, None, ),  # 4
@@ -17746,15 +17517,15 @@ grantTablePermission_result.thrift_spec = (
 class hasSystemPermission_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - user
      - perm
 
     """
 
 
-    def __init__(self, login=None, user=None, perm=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, user=None, perm=None,):
+        self.sharedSecret = sharedSecret
         self.user = user
         self.perm = perm
 
@@ -17769,7 +17540,7 @@ class hasSystemPermission_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -17792,9 +17563,9 @@ class hasSystemPermission_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('hasSystemPermission_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.user is not None:
             oprot.writeFieldBegin('user', TType.STRING, 2)
@@ -17823,7 +17594,7 @@ class hasSystemPermission_args(object):
 all_structs.append(hasSystemPermission_args)
 hasSystemPermission_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'user', 'UTF8', None, ),  # 2
     (3, TType.I32, 'perm', None, None, ),  # 3
 )
@@ -17917,7 +17688,7 @@ hasSystemPermission_result.thrift_spec = (
 class hasTablePermission_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - user
      - table
      - perm
@@ -17925,8 +17696,8 @@ class hasTablePermission_args(object):
     """
 
 
-    def __init__(self, login=None, user=None, table=None, perm=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, user=None, table=None, perm=None,):
+        self.sharedSecret = sharedSecret
         self.user = user
         self.table = table
         self.perm = perm
@@ -17942,7 +17713,7 @@ class hasTablePermission_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -17970,9 +17741,9 @@ class hasTablePermission_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('hasTablePermission_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.user is not None:
             oprot.writeFieldBegin('user', TType.STRING, 2)
@@ -18005,7 +17776,7 @@ class hasTablePermission_args(object):
 all_structs.append(hasTablePermission_args)
 hasTablePermission_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'user', 'UTF8', None, ),  # 2
     (3, TType.STRING, 'table', 'UTF8', None, ),  # 3
     (4, TType.I32, 'perm', None, None, ),  # 4
@@ -18112,13 +17883,13 @@ hasTablePermission_result.thrift_spec = (
 class listLocalUsers_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
 
     """
 
 
-    def __init__(self, login=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None,):
+        self.sharedSecret = sharedSecret
 
     def read(self, iprot):
         if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
@@ -18131,7 +17902,7 @@ class listLocalUsers_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             else:
@@ -18144,9 +17915,9 @@ class listLocalUsers_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('listLocalUsers_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
         oprot.writeStructEnd()
@@ -18167,7 +17938,7 @@ class listLocalUsers_args(object):
 all_structs.append(listLocalUsers_args)
 listLocalUsers_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
 )
 
 
@@ -18200,10 +17971,10 @@ class listLocalUsers_result(object):
             if fid == 0:
                 if ftype == TType.SET:
                     self.success = set()
-                    (_etype386, _size383) = iprot.readSetBegin()
-                    for _i387 in range(_size383):
-                        _elem388 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
-                        self.success.add(_elem388)
+                    (_etype377, _size374) = iprot.readSetBegin()
+                    for _i378 in range(_size374):
+                        _elem379 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
+                        self.success.add(_elem379)
                     iprot.readSetEnd()
                 else:
                     iprot.skip(ftype)
@@ -18235,8 +18006,8 @@ class listLocalUsers_result(object):
         if self.success is not None:
             oprot.writeFieldBegin('success', TType.SET, 0)
             oprot.writeSetBegin(TType.STRING, len(self.success))
-            for iter389 in self.success:
-                oprot.writeString(iter389.encode('utf-8') if sys.version_info[0] == 2 else iter389)
+            for iter380 in self.success:
+                oprot.writeString(iter380.encode('utf-8') if sys.version_info[0] == 2 else iter380)
             oprot.writeSetEnd()
             oprot.writeFieldEnd()
         if self.ouch1 is not None:
@@ -18279,15 +18050,15 @@ listLocalUsers_result.thrift_spec = (
 class revokeSystemPermission_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - user
      - perm
 
     """
 
 
-    def __init__(self, login=None, user=None, perm=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, user=None, perm=None,):
+        self.sharedSecret = sharedSecret
         self.user = user
         self.perm = perm
 
@@ -18302,7 +18073,7 @@ class revokeSystemPermission_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -18325,9 +18096,9 @@ class revokeSystemPermission_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('revokeSystemPermission_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.user is not None:
             oprot.writeFieldBegin('user', TType.STRING, 2)
@@ -18356,7 +18127,7 @@ class revokeSystemPermission_args(object):
 all_structs.append(revokeSystemPermission_args)
 revokeSystemPermission_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'user', 'UTF8', None, ),  # 2
     (3, TType.I32, 'perm', None, None, ),  # 3
 )
@@ -18439,7 +18210,7 @@ revokeSystemPermission_result.thrift_spec = (
 class revokeTablePermission_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - user
      - table
      - perm
@@ -18447,8 +18218,8 @@ class revokeTablePermission_args(object):
     """
 
 
-    def __init__(self, login=None, user=None, table=None, perm=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, user=None, table=None, perm=None,):
+        self.sharedSecret = sharedSecret
         self.user = user
         self.table = table
         self.perm = perm
@@ -18464,7 +18235,7 @@ class revokeTablePermission_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -18492,9 +18263,9 @@ class revokeTablePermission_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('revokeTablePermission_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.user is not None:
             oprot.writeFieldBegin('user', TType.STRING, 2)
@@ -18527,7 +18298,7 @@ class revokeTablePermission_args(object):
 all_structs.append(revokeTablePermission_args)
 revokeTablePermission_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'user', 'UTF8', None, ),  # 2
     (3, TType.STRING, 'table', 'UTF8', None, ),  # 3
     (4, TType.I32, 'perm', None, None, ),  # 4
@@ -18623,7 +18394,7 @@ revokeTablePermission_result.thrift_spec = (
 class grantNamespacePermission_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - user
      - namespaceName
      - perm
@@ -18631,8 +18402,8 @@ class grantNamespacePermission_args(object):
     """
 
 
-    def __init__(self, login=None, user=None, namespaceName=None, perm=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, user=None, namespaceName=None, perm=None,):
+        self.sharedSecret = sharedSecret
         self.user = user
         self.namespaceName = namespaceName
         self.perm = perm
@@ -18648,7 +18419,7 @@ class grantNamespacePermission_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -18676,9 +18447,9 @@ class grantNamespacePermission_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('grantNamespacePermission_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.user is not None:
             oprot.writeFieldBegin('user', TType.STRING, 2)
@@ -18711,7 +18482,7 @@ class grantNamespacePermission_args(object):
 all_structs.append(grantNamespacePermission_args)
 grantNamespacePermission_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'user', 'UTF8', None, ),  # 2
     (3, TType.STRING, 'namespaceName', 'UTF8', None, ),  # 3
     (4, TType.I32, 'perm', None, None, ),  # 4
@@ -18795,7 +18566,7 @@ grantNamespacePermission_result.thrift_spec = (
 class hasNamespacePermission_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - user
      - namespaceName
      - perm
@@ -18803,8 +18574,8 @@ class hasNamespacePermission_args(object):
     """
 
 
-    def __init__(self, login=None, user=None, namespaceName=None, perm=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, user=None, namespaceName=None, perm=None,):
+        self.sharedSecret = sharedSecret
         self.user = user
         self.namespaceName = namespaceName
         self.perm = perm
@@ -18820,7 +18591,7 @@ class hasNamespacePermission_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -18848,9 +18619,9 @@ class hasNamespacePermission_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('hasNamespacePermission_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.user is not None:
             oprot.writeFieldBegin('user', TType.STRING, 2)
@@ -18883,7 +18654,7 @@ class hasNamespacePermission_args(object):
 all_structs.append(hasNamespacePermission_args)
 hasNamespacePermission_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'user', 'UTF8', None, ),  # 2
     (3, TType.STRING, 'namespaceName', 'UTF8', None, ),  # 3
     (4, TType.I32, 'perm', None, None, ),  # 4
@@ -18978,7 +18749,7 @@ hasNamespacePermission_result.thrift_spec = (
 class revokeNamespacePermission_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - user
      - namespaceName
      - perm
@@ -18986,8 +18757,8 @@ class revokeNamespacePermission_args(object):
     """
 
 
-    def __init__(self, login=None, user=None, namespaceName=None, perm=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, user=None, namespaceName=None, perm=None,):
+        self.sharedSecret = sharedSecret
         self.user = user
         self.namespaceName = namespaceName
         self.perm = perm
@@ -19003,7 +18774,7 @@ class revokeNamespacePermission_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -19031,9 +18802,9 @@ class revokeNamespacePermission_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('revokeNamespacePermission_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.user is not None:
             oprot.writeFieldBegin('user', TType.STRING, 2)
@@ -19066,7 +18837,7 @@ class revokeNamespacePermission_args(object):
 all_structs.append(revokeNamespacePermission_args)
 revokeNamespacePermission_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'user', 'UTF8', None, ),  # 2
     (3, TType.STRING, 'namespaceName', 'UTF8', None, ),  # 3
     (4, TType.I32, 'perm', None, None, ),  # 4
@@ -19150,15 +18921,15 @@ revokeNamespacePermission_result.thrift_spec = (
 class createBatchScanner_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - tableName
      - options
 
     """
 
 
-    def __init__(self, login=None, tableName=None, options=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, tableName=None, options=None,):
+        self.sharedSecret = sharedSecret
         self.tableName = tableName
         self.options = options
 
@@ -19173,7 +18944,7 @@ class createBatchScanner_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -19197,9 +18968,9 @@ class createBatchScanner_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('createBatchScanner_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.tableName is not None:
             oprot.writeFieldBegin('tableName', TType.STRING, 2)
@@ -19228,7 +18999,7 @@ class createBatchScanner_args(object):
 all_structs.append(createBatchScanner_args)
 createBatchScanner_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'tableName', 'UTF8', None, ),  # 2
     (3, TType.STRUCT, 'options', [BatchScanOptions, None], None, ),  # 3
 )
@@ -19334,15 +19105,15 @@ createBatchScanner_result.thrift_spec = (
 class createScanner_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - tableName
      - options
 
     """
 
 
-    def __init__(self, login=None, tableName=None, options=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, tableName=None, options=None,):
+        self.sharedSecret = sharedSecret
         self.tableName = tableName
         self.options = options
 
@@ -19357,7 +19128,7 @@ class createScanner_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -19381,9 +19152,9 @@ class createScanner_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('createScanner_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.tableName is not None:
             oprot.writeFieldBegin('tableName', TType.STRING, 2)
@@ -19412,7 +19183,7 @@ class createScanner_args(object):
 all_structs.append(createScanner_args)
 createScanner_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'tableName', 'UTF8', None, ),  # 2
     (3, TType.STRUCT, 'options', [ScanOptions, None], None, ),  # 3
 )
@@ -20109,15 +19880,15 @@ closeScanner_result.thrift_spec = (
 class updateAndFlush_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - tableName
      - cells
 
     """
 
 
-    def __init__(self, login=None, tableName=None, cells=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, tableName=None, cells=None,):
+        self.sharedSecret = sharedSecret
         self.tableName = tableName
         self.cells = cells
 
@@ -20132,7 +19903,7 @@ class updateAndFlush_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -20143,17 +19914,17 @@ class updateAndFlush_args(object):
             elif fid == 3:
                 if ftype == TType.MAP:
                     self.cells = {}
-                    (_ktype391, _vtype392, _size390) = iprot.readMapBegin()
-                    for _i394 in range(_size390):
-                        _key395 = iprot.readBinary()
-                        _val396 = []
-                        (_etype400, _size397) = iprot.readListBegin()
-                        for _i401 in range(_size397):
-                            _elem402 = ColumnUpdate()
-                            _elem402.read(iprot)
-                            _val396.append(_elem402)
+                    (_ktype382, _vtype383, _size381) = iprot.readMapBegin()
+                    for _i385 in range(_size381):
+                        _key386 = iprot.readBinary()
+                        _val387 = []
+                        (_etype391, _size388) = iprot.readListBegin()
+                        for _i392 in range(_size388):
+                            _elem393 = ColumnUpdate()
+                            _elem393.read(iprot)
+                            _val387.append(_elem393)
                         iprot.readListEnd()
-                        self.cells[_key395] = _val396
+                        self.cells[_key386] = _val387
                     iprot.readMapEnd()
                 else:
                     iprot.skip(ftype)
@@ -20167,9 +19938,9 @@ class updateAndFlush_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('updateAndFlush_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.tableName is not None:
             oprot.writeFieldBegin('tableName', TType.STRING, 2)
@@ -20178,11 +19949,11 @@ class updateAndFlush_args(object):
         if self.cells is not None:
             oprot.writeFieldBegin('cells', TType.MAP, 3)
             oprot.writeMapBegin(TType.STRING, TType.LIST, len(self.cells))
-            for kiter403, viter404 in self.cells.items():
-                oprot.writeBinary(kiter403)
-                oprot.writeListBegin(TType.STRUCT, len(viter404))
-                for iter405 in viter404:
-                    iter405.write(oprot)
+            for kiter394, viter395 in self.cells.items():
+                oprot.writeBinary(kiter394)
+                oprot.writeListBegin(TType.STRUCT, len(viter395))
+                for iter396 in viter395:
+                    iter396.write(oprot)
                 oprot.writeListEnd()
             oprot.writeMapEnd()
             oprot.writeFieldEnd()
@@ -20205,7 +19976,7 @@ class updateAndFlush_args(object):
 all_structs.append(updateAndFlush_args)
 updateAndFlush_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'tableName', 'UTF8', None, ),  # 2
     (3, TType.MAP, 'cells', (TType.STRING, 'BINARY', TType.LIST, (TType.STRUCT, [ColumnUpdate, None], False), False), None, ),  # 3
 )
@@ -20312,15 +20083,15 @@ updateAndFlush_result.thrift_spec = (
 class createWriter_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - tableName
      - opts
 
     """
 
 
-    def __init__(self, login=None, tableName=None, opts=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, tableName=None, opts=None,):
+        self.sharedSecret = sharedSecret
         self.tableName = tableName
         self.opts = opts
 
@@ -20335,7 +20106,7 @@ class createWriter_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -20359,9 +20130,9 @@ class createWriter_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('createWriter_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.tableName is not None:
             oprot.writeFieldBegin('tableName', TType.STRING, 2)
@@ -20390,7 +20161,7 @@ class createWriter_args(object):
 all_structs.append(createWriter_args)
 createWriter_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'tableName', 'UTF8', None, ),  # 2
     (3, TType.STRUCT, 'opts', [WriterOptions, None], None, ),  # 3
 )
@@ -20523,17 +20294,17 @@ class update_args(object):
             elif fid == 2:
                 if ftype == TType.MAP:
                     self.cells = {}
-                    (_ktype407, _vtype408, _size406) = iprot.readMapBegin()
-                    for _i410 in range(_size406):
-                        _key411 = iprot.readBinary()
-                        _val412 = []
-                        (_etype416, _size413) = iprot.readListBegin()
-                        for _i417 in range(_size413):
-                            _elem418 = ColumnUpdate()
-                            _elem418.read(iprot)
-                            _val412.append(_elem418)
+                    (_ktype398, _vtype399, _size397) = iprot.readMapBegin()
+                    for _i401 in range(_size397):
+                        _key402 = iprot.readBinary()
+                        _val403 = []
+                        (_etype407, _size404) = iprot.readListBegin()
+                        for _i408 in range(_size404):
+                            _elem409 = ColumnUpdate()
+                            _elem409.read(iprot)
+                            _val403.append(_elem409)
                         iprot.readListEnd()
-                        self.cells[_key411] = _val412
+                        self.cells[_key402] = _val403
                     iprot.readMapEnd()
                 else:
                     iprot.skip(ftype)
@@ -20554,11 +20325,11 @@ class update_args(object):
         if self.cells is not None:
             oprot.writeFieldBegin('cells', TType.MAP, 2)
             oprot.writeMapBegin(TType.STRING, TType.LIST, len(self.cells))
-            for kiter419, viter420 in self.cells.items():
-                oprot.writeBinary(kiter419)
-                oprot.writeListBegin(TType.STRUCT, len(viter420))
-                for iter421 in viter420:
-                    iter421.write(oprot)
+            for kiter410, viter411 in self.cells.items():
+                oprot.writeBinary(kiter410)
+                oprot.writeListBegin(TType.STRUCT, len(viter411))
+                for iter412 in viter411:
+                    iter412.write(oprot)
                 oprot.writeListEnd()
             oprot.writeMapEnd()
             oprot.writeFieldEnd()
@@ -20861,7 +20632,7 @@ closeWriter_result.thrift_spec = (
 class updateRowConditionally_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - tableName
      - row
      - updates
@@ -20869,8 +20640,8 @@ class updateRowConditionally_args(object):
     """
 
 
-    def __init__(self, login=None, tableName=None, row=None, updates=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, tableName=None, row=None, updates=None,):
+        self.sharedSecret = sharedSecret
         self.tableName = tableName
         self.row = row
         self.updates = updates
@@ -20886,7 +20657,7 @@ class updateRowConditionally_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -20915,9 +20686,9 @@ class updateRowConditionally_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('updateRowConditionally_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.tableName is not None:
             oprot.writeFieldBegin('tableName', TType.STRING, 2)
@@ -20950,7 +20721,7 @@ class updateRowConditionally_args(object):
 all_structs.append(updateRowConditionally_args)
 updateRowConditionally_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'tableName', 'UTF8', None, ),  # 2
     (3, TType.STRING, 'row', 'BINARY', None, ),  # 3
     (4, TType.STRUCT, 'updates', [ConditionalUpdates, None], None, ),  # 4
@@ -21057,15 +20828,15 @@ updateRowConditionally_result.thrift_spec = (
 class createConditionalWriter_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - tableName
      - options
 
     """
 
 
-    def __init__(self, login=None, tableName=None, options=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, tableName=None, options=None,):
+        self.sharedSecret = sharedSecret
         self.tableName = tableName
         self.options = options
 
@@ -21080,7 +20851,7 @@ class createConditionalWriter_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -21104,9 +20875,9 @@ class createConditionalWriter_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('createConditionalWriter_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.tableName is not None:
             oprot.writeFieldBegin('tableName', TType.STRING, 2)
@@ -21135,7 +20906,7 @@ class createConditionalWriter_args(object):
 all_structs.append(createConditionalWriter_args)
 createConditionalWriter_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'tableName', 'UTF8', None, ),  # 2
     (3, TType.STRUCT, 'options', [ConditionalWriterOptions, None], None, ),  # 3
 )
@@ -21268,12 +21039,12 @@ class updateRowsConditionally_args(object):
             elif fid == 2:
                 if ftype == TType.MAP:
                     self.updates = {}
-                    (_ktype423, _vtype424, _size422) = iprot.readMapBegin()
-                    for _i426 in range(_size422):
-                        _key427 = iprot.readBinary()
-                        _val428 = ConditionalUpdates()
-                        _val428.read(iprot)
-                        self.updates[_key427] = _val428
+                    (_ktype414, _vtype415, _size413) = iprot.readMapBegin()
+                    for _i417 in range(_size413):
+                        _key418 = iprot.readBinary()
+                        _val419 = ConditionalUpdates()
+                        _val419.read(iprot)
+                        self.updates[_key418] = _val419
                     iprot.readMapEnd()
                 else:
                     iprot.skip(ftype)
@@ -21294,9 +21065,9 @@ class updateRowsConditionally_args(object):
         if self.updates is not None:
             oprot.writeFieldBegin('updates', TType.MAP, 2)
             oprot.writeMapBegin(TType.STRING, TType.STRUCT, len(self.updates))
-            for kiter429, viter430 in self.updates.items():
-                oprot.writeBinary(kiter429)
-                viter430.write(oprot)
+            for kiter420, viter421 in self.updates.items():
+                oprot.writeBinary(kiter420)
+                viter421.write(oprot)
             oprot.writeMapEnd()
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
@@ -21352,11 +21123,11 @@ class updateRowsConditionally_result(object):
             if fid == 0:
                 if ftype == TType.MAP:
                     self.success = {}
-                    (_ktype432, _vtype433, _size431) = iprot.readMapBegin()
-                    for _i435 in range(_size431):
-                        _key436 = iprot.readBinary()
-                        _val437 = iprot.readI32()
-                        self.success[_key436] = _val437
+                    (_ktype423, _vtype424, _size422) = iprot.readMapBegin()
+                    for _i426 in range(_size422):
+                        _key427 = iprot.readBinary()
+                        _val428 = iprot.readI32()
+                        self.success[_key427] = _val428
                     iprot.readMapEnd()
                 else:
                     iprot.skip(ftype)
@@ -21388,9 +21159,9 @@ class updateRowsConditionally_result(object):
         if self.success is not None:
             oprot.writeFieldBegin('success', TType.MAP, 0)
             oprot.writeMapBegin(TType.STRING, TType.I32, len(self.success))
-            for kiter438, viter439 in self.success.items():
-                oprot.writeBinary(kiter438)
-                oprot.writeI32(viter439)
+            for kiter429, viter430 in self.success.items():
+                oprot.writeBinary(kiter429)
+                oprot.writeI32(viter430)
             oprot.writeMapEnd()
             oprot.writeFieldEnd()
         if self.ouch1 is not None:
@@ -22007,13 +21778,13 @@ defaultNamespace_result.thrift_spec = (
 class listNamespaces_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
 
     """
 
 
-    def __init__(self, login=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None,):
+        self.sharedSecret = sharedSecret
 
     def read(self, iprot):
         if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
@@ -22026,7 +21797,7 @@ class listNamespaces_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             else:
@@ -22039,9 +21810,9 @@ class listNamespaces_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('listNamespaces_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
         oprot.writeStructEnd()
@@ -22062,7 +21833,7 @@ class listNamespaces_args(object):
 all_structs.append(listNamespaces_args)
 listNamespaces_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
 )
 
 
@@ -22093,10 +21864,10 @@ class listNamespaces_result(object):
             if fid == 0:
                 if ftype == TType.LIST:
                     self.success = []
-                    (_etype443, _size440) = iprot.readListBegin()
-                    for _i444 in range(_size440):
-                        _elem445 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
-                        self.success.append(_elem445)
+                    (_etype434, _size431) = iprot.readListBegin()
+                    for _i435 in range(_size431):
+                        _elem436 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
+                        self.success.append(_elem436)
                     iprot.readListEnd()
                 else:
                     iprot.skip(ftype)
@@ -22123,8 +21894,8 @@ class listNamespaces_result(object):
         if self.success is not None:
             oprot.writeFieldBegin('success', TType.LIST, 0)
             oprot.writeListBegin(TType.STRING, len(self.success))
-            for iter446 in self.success:
-                oprot.writeString(iter446.encode('utf-8') if sys.version_info[0] == 2 else iter446)
+            for iter437 in self.success:
+                oprot.writeString(iter437.encode('utf-8') if sys.version_info[0] == 2 else iter437)
             oprot.writeListEnd()
             oprot.writeFieldEnd()
         if self.ouch1 is not None:
@@ -22162,14 +21933,14 @@ listNamespaces_result.thrift_spec = (
 class namespaceExists_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - namespaceName
 
     """
 
 
-    def __init__(self, login=None, namespaceName=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, namespaceName=None,):
+        self.sharedSecret = sharedSecret
         self.namespaceName = namespaceName
 
     def read(self, iprot):
@@ -22183,7 +21954,7 @@ class namespaceExists_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -22201,9 +21972,9 @@ class namespaceExists_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('namespaceExists_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.namespaceName is not None:
             oprot.writeFieldBegin('namespaceName', TType.STRING, 2)
@@ -22228,7 +21999,7 @@ class namespaceExists_args(object):
 all_structs.append(namespaceExists_args)
 namespaceExists_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'namespaceName', 'UTF8', None, ),  # 2
 )
 
@@ -22321,14 +22092,14 @@ namespaceExists_result.thrift_spec = (
 class createNamespace_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - namespaceName
 
     """
 
 
-    def __init__(self, login=None, namespaceName=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, namespaceName=None,):
+        self.sharedSecret = sharedSecret
         self.namespaceName = namespaceName
 
     def read(self, iprot):
@@ -22342,7 +22113,7 @@ class createNamespace_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -22360,9 +22131,9 @@ class createNamespace_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('createNamespace_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.namespaceName is not None:
             oprot.writeFieldBegin('namespaceName', TType.STRING, 2)
@@ -22387,7 +22158,7 @@ class createNamespace_args(object):
 all_structs.append(createNamespace_args)
 createNamespace_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'namespaceName', 'UTF8', None, ),  # 2
 )
 
@@ -22481,14 +22252,14 @@ createNamespace_result.thrift_spec = (
 class deleteNamespace_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - namespaceName
 
     """
 
 
-    def __init__(self, login=None, namespaceName=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, namespaceName=None,):
+        self.sharedSecret = sharedSecret
         self.namespaceName = namespaceName
 
     def read(self, iprot):
@@ -22502,7 +22273,7 @@ class deleteNamespace_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -22520,9 +22291,9 @@ class deleteNamespace_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('deleteNamespace_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.namespaceName is not None:
             oprot.writeFieldBegin('namespaceName', TType.STRING, 2)
@@ -22547,7 +22318,7 @@ class deleteNamespace_args(object):
 all_structs.append(deleteNamespace_args)
 deleteNamespace_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'namespaceName', 'UTF8', None, ),  # 2
 )
 
@@ -22653,15 +22424,15 @@ deleteNamespace_result.thrift_spec = (
 class renameNamespace_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - oldNamespaceName
      - newNamespaceName
 
     """
 
 
-    def __init__(self, login=None, oldNamespaceName=None, newNamespaceName=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, oldNamespaceName=None, newNamespaceName=None,):
+        self.sharedSecret = sharedSecret
         self.oldNamespaceName = oldNamespaceName
         self.newNamespaceName = newNamespaceName
 
@@ -22676,7 +22447,7 @@ class renameNamespace_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -22699,9 +22470,9 @@ class renameNamespace_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('renameNamespace_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.oldNamespaceName is not None:
             oprot.writeFieldBegin('oldNamespaceName', TType.STRING, 2)
@@ -22730,7 +22501,7 @@ class renameNamespace_args(object):
 all_structs.append(renameNamespace_args)
 renameNamespace_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'oldNamespaceName', 'UTF8', None, ),  # 2
     (3, TType.STRING, 'newNamespaceName', 'UTF8', None, ),  # 3
 )
@@ -22837,7 +22608,7 @@ renameNamespace_result.thrift_spec = (
 class setNamespaceProperty_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - namespaceName
      - property
      - value
@@ -22845,8 +22616,8 @@ class setNamespaceProperty_args(object):
     """
 
 
-    def __init__(self, login=None, namespaceName=None, property=None, value=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, namespaceName=None, property=None, value=None,):
+        self.sharedSecret = sharedSecret
         self.namespaceName = namespaceName
         self.property = property
         self.value = value
@@ -22862,7 +22633,7 @@ class setNamespaceProperty_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -22890,9 +22661,9 @@ class setNamespaceProperty_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('setNamespaceProperty_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.namespaceName is not None:
             oprot.writeFieldBegin('namespaceName', TType.STRING, 2)
@@ -22925,7 +22696,7 @@ class setNamespaceProperty_args(object):
 all_structs.append(setNamespaceProperty_args)
 setNamespaceProperty_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'namespaceName', 'UTF8', None, ),  # 2
     (3, TType.STRING, 'property', 'UTF8', None, ),  # 3
     (4, TType.STRING, 'value', 'UTF8', None, ),  # 4
@@ -23021,15 +22792,15 @@ setNamespaceProperty_result.thrift_spec = (
 class removeNamespaceProperty_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - namespaceName
      - property
 
     """
 
 
-    def __init__(self, login=None, namespaceName=None, property=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, namespaceName=None, property=None,):
+        self.sharedSecret = sharedSecret
         self.namespaceName = namespaceName
         self.property = property
 
@@ -23044,7 +22815,7 @@ class removeNamespaceProperty_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -23067,9 +22838,9 @@ class removeNamespaceProperty_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('removeNamespaceProperty_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.namespaceName is not None:
             oprot.writeFieldBegin('namespaceName', TType.STRING, 2)
@@ -23098,7 +22869,7 @@ class removeNamespaceProperty_args(object):
 all_structs.append(removeNamespaceProperty_args)
 removeNamespaceProperty_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'namespaceName', 'UTF8', None, ),  # 2
     (3, TType.STRING, 'property', 'UTF8', None, ),  # 3
 )
@@ -23193,14 +22964,14 @@ removeNamespaceProperty_result.thrift_spec = (
 class getNamespaceProperties_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - namespaceName
 
     """
 
 
-    def __init__(self, login=None, namespaceName=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, namespaceName=None,):
+        self.sharedSecret = sharedSecret
         self.namespaceName = namespaceName
 
     def read(self, iprot):
@@ -23214,7 +22985,7 @@ class getNamespaceProperties_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -23232,9 +23003,9 @@ class getNamespaceProperties_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('getNamespaceProperties_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.namespaceName is not None:
             oprot.writeFieldBegin('namespaceName', TType.STRING, 2)
@@ -23259,7 +23030,7 @@ class getNamespaceProperties_args(object):
 all_structs.append(getNamespaceProperties_args)
 getNamespaceProperties_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'namespaceName', 'UTF8', None, ),  # 2
 )
 
@@ -23293,11 +23064,11 @@ class getNamespaceProperties_result(object):
             if fid == 0:
                 if ftype == TType.MAP:
                     self.success = {}
-                    (_ktype448, _vtype449, _size447) = iprot.readMapBegin()
-                    for _i451 in range(_size447):
-                        _key452 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
-                        _val453 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
-                        self.success[_key452] = _val453
+                    (_ktype439, _vtype440, _size438) = iprot.readMapBegin()
+                    for _i442 in range(_size438):
+                        _key443 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
+                        _val444 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
+                        self.success[_key443] = _val444
                     iprot.readMapEnd()
                 else:
                     iprot.skip(ftype)
@@ -23329,9 +23100,9 @@ class getNamespaceProperties_result(object):
         if self.success is not None:
             oprot.writeFieldBegin('success', TType.MAP, 0)
             oprot.writeMapBegin(TType.STRING, TType.STRING, len(self.success))
-            for kiter454, viter455 in self.success.items():
-                oprot.writeString(kiter454.encode('utf-8') if sys.version_info[0] == 2 else kiter454)
-                oprot.writeString(viter455.encode('utf-8') if sys.version_info[0] == 2 else viter455)
+            for kiter445, viter446 in self.success.items():
+                oprot.writeString(kiter445.encode('utf-8') if sys.version_info[0] == 2 else kiter445)
+                oprot.writeString(viter446.encode('utf-8') if sys.version_info[0] == 2 else viter446)
             oprot.writeMapEnd()
             oprot.writeFieldEnd()
         if self.ouch1 is not None:
@@ -23374,13 +23145,13 @@ getNamespaceProperties_result.thrift_spec = (
 class namespaceIdMap_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
 
     """
 
 
-    def __init__(self, login=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None,):
+        self.sharedSecret = sharedSecret
 
     def read(self, iprot):
         if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
@@ -23393,7 +23164,7 @@ class namespaceIdMap_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             else:
@@ -23406,9 +23177,9 @@ class namespaceIdMap_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('namespaceIdMap_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
         oprot.writeStructEnd()
@@ -23429,7 +23200,7 @@ class namespaceIdMap_args(object):
 all_structs.append(namespaceIdMap_args)
 namespaceIdMap_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
 )
 
 
@@ -23460,11 +23231,11 @@ class namespaceIdMap_result(object):
             if fid == 0:
                 if ftype == TType.MAP:
                     self.success = {}
-                    (_ktype457, _vtype458, _size456) = iprot.readMapBegin()
-                    for _i460 in range(_size456):
-                        _key461 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
-                        _val462 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
-                        self.success[_key461] = _val462
+                    (_ktype448, _vtype449, _size447) = iprot.readMapBegin()
+                    for _i451 in range(_size447):
+                        _key452 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
+                        _val453 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
+                        self.success[_key452] = _val453
                     iprot.readMapEnd()
                 else:
                     iprot.skip(ftype)
@@ -23491,9 +23262,9 @@ class namespaceIdMap_result(object):
         if self.success is not None:
             oprot.writeFieldBegin('success', TType.MAP, 0)
             oprot.writeMapBegin(TType.STRING, TType.STRING, len(self.success))
-            for kiter463, viter464 in self.success.items():
-                oprot.writeString(kiter463.encode('utf-8') if sys.version_info[0] == 2 else kiter463)
-                oprot.writeString(viter464.encode('utf-8') if sys.version_info[0] == 2 else viter464)
+            for kiter454, viter455 in self.success.items():
+                oprot.writeString(kiter454.encode('utf-8') if sys.version_info[0] == 2 else kiter454)
+                oprot.writeString(viter455.encode('utf-8') if sys.version_info[0] == 2 else viter455)
             oprot.writeMapEnd()
             oprot.writeFieldEnd()
         if self.ouch1 is not None:
@@ -23531,7 +23302,7 @@ namespaceIdMap_result.thrift_spec = (
 class attachNamespaceIterator_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - namespaceName
      - setting
      - scopes
@@ -23539,8 +23310,8 @@ class attachNamespaceIterator_args(object):
     """
 
 
-    def __init__(self, login=None, namespaceName=None, setting=None, scopes=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, namespaceName=None, setting=None, scopes=None,):
+        self.sharedSecret = sharedSecret
         self.namespaceName = namespaceName
         self.setting = setting
         self.scopes = scopes
@@ -23556,7 +23327,7 @@ class attachNamespaceIterator_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -23573,10 +23344,10 @@ class attachNamespaceIterator_args(object):
             elif fid == 4:
                 if ftype == TType.SET:
                     self.scopes = set()
-                    (_etype468, _size465) = iprot.readSetBegin()
-                    for _i469 in range(_size465):
-                        _elem470 = iprot.readI32()
-                        self.scopes.add(_elem470)
+                    (_etype459, _size456) = iprot.readSetBegin()
+                    for _i460 in range(_size456):
+                        _elem461 = iprot.readI32()
+                        self.scopes.add(_elem461)
                     iprot.readSetEnd()
                 else:
                     iprot.skip(ftype)
@@ -23590,9 +23361,9 @@ class attachNamespaceIterator_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('attachNamespaceIterator_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.namespaceName is not None:
             oprot.writeFieldBegin('namespaceName', TType.STRING, 2)
@@ -23605,8 +23376,8 @@ class attachNamespaceIterator_args(object):
         if self.scopes is not None:
             oprot.writeFieldBegin('scopes', TType.SET, 4)
             oprot.writeSetBegin(TType.I32, len(self.scopes))
-            for iter471 in self.scopes:
-                oprot.writeI32(iter471)
+            for iter462 in self.scopes:
+                oprot.writeI32(iter462)
             oprot.writeSetEnd()
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
@@ -23628,7 +23399,7 @@ class attachNamespaceIterator_args(object):
 all_structs.append(attachNamespaceIterator_args)
 attachNamespaceIterator_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'namespaceName', 'UTF8', None, ),  # 2
     (3, TType.STRUCT, 'setting', [IteratorSetting, None], None, ),  # 3
     (4, TType.SET, 'scopes', (TType.I32, None, False), None, ),  # 4
@@ -23724,7 +23495,7 @@ attachNamespaceIterator_result.thrift_spec = (
 class removeNamespaceIterator_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - namespaceName
      - name
      - scopes
@@ -23732,8 +23503,8 @@ class removeNamespaceIterator_args(object):
     """
 
 
-    def __init__(self, login=None, namespaceName=None, name=None, scopes=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, namespaceName=None, name=None, scopes=None,):
+        self.sharedSecret = sharedSecret
         self.namespaceName = namespaceName
         self.name = name
         self.scopes = scopes
@@ -23749,7 +23520,7 @@ class removeNamespaceIterator_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -23765,10 +23536,10 @@ class removeNamespaceIterator_args(object):
             elif fid == 4:
                 if ftype == TType.SET:
                     self.scopes = set()
-                    (_etype475, _size472) = iprot.readSetBegin()
-                    for _i476 in range(_size472):
-                        _elem477 = iprot.readI32()
-                        self.scopes.add(_elem477)
+                    (_etype466, _size463) = iprot.readSetBegin()
+                    for _i467 in range(_size463):
+                        _elem468 = iprot.readI32()
+                        self.scopes.add(_elem468)
                     iprot.readSetEnd()
                 else:
                     iprot.skip(ftype)
@@ -23782,9 +23553,9 @@ class removeNamespaceIterator_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('removeNamespaceIterator_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.namespaceName is not None:
             oprot.writeFieldBegin('namespaceName', TType.STRING, 2)
@@ -23797,8 +23568,8 @@ class removeNamespaceIterator_args(object):
         if self.scopes is not None:
             oprot.writeFieldBegin('scopes', TType.SET, 4)
             oprot.writeSetBegin(TType.I32, len(self.scopes))
-            for iter478 in self.scopes:
-                oprot.writeI32(iter478)
+            for iter469 in self.scopes:
+                oprot.writeI32(iter469)
             oprot.writeSetEnd()
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
@@ -23820,7 +23591,7 @@ class removeNamespaceIterator_args(object):
 all_structs.append(removeNamespaceIterator_args)
 removeNamespaceIterator_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'namespaceName', 'UTF8', None, ),  # 2
     (3, TType.STRING, 'name', 'UTF8', None, ),  # 3
     (4, TType.SET, 'scopes', (TType.I32, None, False), None, ),  # 4
@@ -23916,7 +23687,7 @@ removeNamespaceIterator_result.thrift_spec = (
 class getNamespaceIteratorSetting_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - namespaceName
      - name
      - scope
@@ -23924,8 +23695,8 @@ class getNamespaceIteratorSetting_args(object):
     """
 
 
-    def __init__(self, login=None, namespaceName=None, name=None, scope=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, namespaceName=None, name=None, scope=None,):
+        self.sharedSecret = sharedSecret
         self.namespaceName = namespaceName
         self.name = name
         self.scope = scope
@@ -23941,7 +23712,7 @@ class getNamespaceIteratorSetting_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -23969,9 +23740,9 @@ class getNamespaceIteratorSetting_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('getNamespaceIteratorSetting_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.namespaceName is not None:
             oprot.writeFieldBegin('namespaceName', TType.STRING, 2)
@@ -24004,7 +23775,7 @@ class getNamespaceIteratorSetting_args(object):
 all_structs.append(getNamespaceIteratorSetting_args)
 getNamespaceIteratorSetting_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'namespaceName', 'UTF8', None, ),  # 2
     (3, TType.STRING, 'name', 'UTF8', None, ),  # 3
     (4, TType.I32, 'scope', None, None, ),  # 4
@@ -24112,14 +23883,14 @@ getNamespaceIteratorSetting_result.thrift_spec = (
 class listNamespaceIterators_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - namespaceName
 
     """
 
 
-    def __init__(self, login=None, namespaceName=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, namespaceName=None,):
+        self.sharedSecret = sharedSecret
         self.namespaceName = namespaceName
 
     def read(self, iprot):
@@ -24133,7 +23904,7 @@ class listNamespaceIterators_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -24151,9 +23922,9 @@ class listNamespaceIterators_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('listNamespaceIterators_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.namespaceName is not None:
             oprot.writeFieldBegin('namespaceName', TType.STRING, 2)
@@ -24178,7 +23949,7 @@ class listNamespaceIterators_args(object):
 all_structs.append(listNamespaceIterators_args)
 listNamespaceIterators_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'namespaceName', 'UTF8', None, ),  # 2
 )
 
@@ -24212,16 +23983,16 @@ class listNamespaceIterators_result(object):
             if fid == 0:
                 if ftype == TType.MAP:
                     self.success = {}
-                    (_ktype480, _vtype481, _size479) = iprot.readMapBegin()
-                    for _i483 in range(_size479):
-                        _key484 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
-                        _val485 = set()
-                        (_etype489, _size486) = iprot.readSetBegin()
-                        for _i490 in range(_size486):
-                            _elem491 = iprot.readI32()
-                            _val485.add(_elem491)
+                    (_ktype471, _vtype472, _size470) = iprot.readMapBegin()
+                    for _i474 in range(_size470):
+                        _key475 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
+                        _val476 = set()
+                        (_etype480, _size477) = iprot.readSetBegin()
+                        for _i481 in range(_size477):
+                            _elem482 = iprot.readI32()
+                            _val476.add(_elem482)
                         iprot.readSetEnd()
-                        self.success[_key484] = _val485
+                        self.success[_key475] = _val476
                     iprot.readMapEnd()
                 else:
                     iprot.skip(ftype)
@@ -24253,11 +24024,11 @@ class listNamespaceIterators_result(object):
         if self.success is not None:
             oprot.writeFieldBegin('success', TType.MAP, 0)
             oprot.writeMapBegin(TType.STRING, TType.SET, len(self.success))
-            for kiter492, viter493 in self.success.items():
-                oprot.writeString(kiter492.encode('utf-8') if sys.version_info[0] == 2 else kiter492)
-                oprot.writeSetBegin(TType.I32, len(viter493))
-                for iter494 in viter493:
-                    oprot.writeI32(iter494)
+            for kiter483, viter484 in self.success.items():
+                oprot.writeString(kiter483.encode('utf-8') if sys.version_info[0] == 2 else kiter483)
+                oprot.writeSetBegin(TType.I32, len(viter484))
+                for iter485 in viter484:
+                    oprot.writeI32(iter485)
                 oprot.writeSetEnd()
             oprot.writeMapEnd()
             oprot.writeFieldEnd()
@@ -24301,7 +24072,7 @@ listNamespaceIterators_result.thrift_spec = (
 class checkNamespaceIteratorConflicts_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - namespaceName
      - setting
      - scopes
@@ -24309,8 +24080,8 @@ class checkNamespaceIteratorConflicts_args(object):
     """
 
 
-    def __init__(self, login=None, namespaceName=None, setting=None, scopes=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, namespaceName=None, setting=None, scopes=None,):
+        self.sharedSecret = sharedSecret
         self.namespaceName = namespaceName
         self.setting = setting
         self.scopes = scopes
@@ -24326,7 +24097,7 @@ class checkNamespaceIteratorConflicts_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -24343,10 +24114,10 @@ class checkNamespaceIteratorConflicts_args(object):
             elif fid == 4:
                 if ftype == TType.SET:
                     self.scopes = set()
-                    (_etype498, _size495) = iprot.readSetBegin()
-                    for _i499 in range(_size495):
-                        _elem500 = iprot.readI32()
-                        self.scopes.add(_elem500)
+                    (_etype489, _size486) = iprot.readSetBegin()
+                    for _i490 in range(_size486):
+                        _elem491 = iprot.readI32()
+                        self.scopes.add(_elem491)
                     iprot.readSetEnd()
                 else:
                     iprot.skip(ftype)
@@ -24360,9 +24131,9 @@ class checkNamespaceIteratorConflicts_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('checkNamespaceIteratorConflicts_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.namespaceName is not None:
             oprot.writeFieldBegin('namespaceName', TType.STRING, 2)
@@ -24375,8 +24146,8 @@ class checkNamespaceIteratorConflicts_args(object):
         if self.scopes is not None:
             oprot.writeFieldBegin('scopes', TType.SET, 4)
             oprot.writeSetBegin(TType.I32, len(self.scopes))
-            for iter501 in self.scopes:
-                oprot.writeI32(iter501)
+            for iter492 in self.scopes:
+                oprot.writeI32(iter492)
             oprot.writeSetEnd()
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
@@ -24398,7 +24169,7 @@ class checkNamespaceIteratorConflicts_args(object):
 all_structs.append(checkNamespaceIteratorConflicts_args)
 checkNamespaceIteratorConflicts_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'namespaceName', 'UTF8', None, ),  # 2
     (3, TType.STRUCT, 'setting', [IteratorSetting, None], None, ),  # 3
     (4, TType.SET, 'scopes', (TType.I32, None, False), None, ),  # 4
@@ -24494,15 +24265,15 @@ checkNamespaceIteratorConflicts_result.thrift_spec = (
 class addNamespaceConstraint_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - namespaceName
      - constraintClassName
 
     """
 
 
-    def __init__(self, login=None, namespaceName=None, constraintClassName=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, namespaceName=None, constraintClassName=None,):
+        self.sharedSecret = sharedSecret
         self.namespaceName = namespaceName
         self.constraintClassName = constraintClassName
 
@@ -24517,7 +24288,7 @@ class addNamespaceConstraint_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -24540,9 +24311,9 @@ class addNamespaceConstraint_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('addNamespaceConstraint_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.namespaceName is not None:
             oprot.writeFieldBegin('namespaceName', TType.STRING, 2)
@@ -24571,7 +24342,7 @@ class addNamespaceConstraint_args(object):
 all_structs.append(addNamespaceConstraint_args)
 addNamespaceConstraint_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'namespaceName', 'UTF8', None, ),  # 2
     (3, TType.STRING, 'constraintClassName', 'UTF8', None, ),  # 3
 )
@@ -24677,15 +24448,15 @@ addNamespaceConstraint_result.thrift_spec = (
 class removeNamespaceConstraint_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - namespaceName
      - id
 
     """
 
 
-    def __init__(self, login=None, namespaceName=None, id=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, namespaceName=None, id=None,):
+        self.sharedSecret = sharedSecret
         self.namespaceName = namespaceName
         self.id = id
 
@@ -24700,7 +24471,7 @@ class removeNamespaceConstraint_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -24723,9 +24494,9 @@ class removeNamespaceConstraint_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('removeNamespaceConstraint_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.namespaceName is not None:
             oprot.writeFieldBegin('namespaceName', TType.STRING, 2)
@@ -24754,7 +24525,7 @@ class removeNamespaceConstraint_args(object):
 all_structs.append(removeNamespaceConstraint_args)
 removeNamespaceConstraint_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'namespaceName', 'UTF8', None, ),  # 2
     (3, TType.I32, 'id', None, None, ),  # 3
 )
@@ -24849,14 +24620,14 @@ removeNamespaceConstraint_result.thrift_spec = (
 class listNamespaceConstraints_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - namespaceName
 
     """
 
 
-    def __init__(self, login=None, namespaceName=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, namespaceName=None,):
+        self.sharedSecret = sharedSecret
         self.namespaceName = namespaceName
 
     def read(self, iprot):
@@ -24870,7 +24641,7 @@ class listNamespaceConstraints_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -24888,9 +24659,9 @@ class listNamespaceConstraints_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('listNamespaceConstraints_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.namespaceName is not None:
             oprot.writeFieldBegin('namespaceName', TType.STRING, 2)
@@ -24915,7 +24686,7 @@ class listNamespaceConstraints_args(object):
 all_structs.append(listNamespaceConstraints_args)
 listNamespaceConstraints_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'namespaceName', 'UTF8', None, ),  # 2
 )
 
@@ -24949,11 +24720,11 @@ class listNamespaceConstraints_result(object):
             if fid == 0:
                 if ftype == TType.MAP:
                     self.success = {}
-                    (_ktype503, _vtype504, _size502) = iprot.readMapBegin()
-                    for _i506 in range(_size502):
-                        _key507 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
-                        _val508 = iprot.readI32()
-                        self.success[_key507] = _val508
+                    (_ktype494, _vtype495, _size493) = iprot.readMapBegin()
+                    for _i497 in range(_size493):
+                        _key498 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
+                        _val499 = iprot.readI32()
+                        self.success[_key498] = _val499
                     iprot.readMapEnd()
                 else:
                     iprot.skip(ftype)
@@ -24985,9 +24756,9 @@ class listNamespaceConstraints_result(object):
         if self.success is not None:
             oprot.writeFieldBegin('success', TType.MAP, 0)
             oprot.writeMapBegin(TType.STRING, TType.I32, len(self.success))
-            for kiter509, viter510 in self.success.items():
-                oprot.writeString(kiter509.encode('utf-8') if sys.version_info[0] == 2 else kiter509)
-                oprot.writeI32(viter510)
+            for kiter500, viter501 in self.success.items():
+                oprot.writeString(kiter500.encode('utf-8') if sys.version_info[0] == 2 else kiter500)
+                oprot.writeI32(viter501)
             oprot.writeMapEnd()
             oprot.writeFieldEnd()
         if self.ouch1 is not None:
@@ -25030,7 +24801,7 @@ listNamespaceConstraints_result.thrift_spec = (
 class testNamespaceClassLoad_args(object):
     """
     Attributes:
-     - login
+     - sharedSecret
      - namespaceName
      - className
      - asTypeName
@@ -25038,8 +24809,8 @@ class testNamespaceClassLoad_args(object):
     """
 
 
-    def __init__(self, login=None, namespaceName=None, className=None, asTypeName=None,):
-        self.login = login
+    def __init__(self, sharedSecret=None, namespaceName=None, className=None, asTypeName=None,):
+        self.sharedSecret = sharedSecret
         self.namespaceName = namespaceName
         self.className = className
         self.asTypeName = asTypeName
@@ -25055,7 +24826,7 @@ class testNamespaceClassLoad_args(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.login = iprot.readBinary()
+                    self.sharedSecret = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -25083,9 +24854,9 @@ class testNamespaceClassLoad_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('testNamespaceClassLoad_args')
-        if self.login is not None:
-            oprot.writeFieldBegin('login', TType.STRING, 1)
-            oprot.writeBinary(self.login)
+        if self.sharedSecret is not None:
+            oprot.writeFieldBegin('sharedSecret', TType.STRING, 1)
+            oprot.writeString(self.sharedSecret.encode('utf-8') if sys.version_info[0] == 2 else self.sharedSecret)
             oprot.writeFieldEnd()
         if self.namespaceName is not None:
             oprot.writeFieldBegin('namespaceName', TType.STRING, 2)
@@ -25118,7 +24889,7 @@ class testNamespaceClassLoad_args(object):
 all_structs.append(testNamespaceClassLoad_args)
 testNamespaceClassLoad_args.thrift_spec = (
     None,  # 0
-    (1, TType.STRING, 'login', 'BINARY', None, ),  # 1
+    (1, TType.STRING, 'sharedSecret', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'namespaceName', 'UTF8', None, ),  # 2
     (3, TType.STRING, 'className', 'UTF8', None, ),  # 3
     (4, TType.STRING, 'asTypeName', 'UTF8', None, ),  # 4

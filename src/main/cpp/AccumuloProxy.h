@@ -40,106 +40,105 @@ namespace accumulo {
 class AccumuloProxyIf {
  public:
   virtual ~AccumuloProxyIf() {}
-  virtual void login(std::string& _return, const std::string& principal, const std::map<std::string, std::string> & loginProperties) = 0;
-  virtual int32_t addConstraint(const std::string& login, const std::string& tableName, const std::string& constraintClassName) = 0;
-  virtual void addSplits(const std::string& login, const std::string& tableName, const std::set<std::string> & splits) = 0;
-  virtual void attachIterator(const std::string& login, const std::string& tableName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes) = 0;
-  virtual void checkIteratorConflicts(const std::string& login, const std::string& tableName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes) = 0;
-  virtual void clearLocatorCache(const std::string& login, const std::string& tableName) = 0;
-  virtual void cloneTable(const std::string& login, const std::string& tableName, const std::string& newTableName, const bool flush, const std::map<std::string, std::string> & propertiesToSet, const std::set<std::string> & propertiesToExclude) = 0;
-  virtual void compactTable(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow, const std::vector<IteratorSetting> & iterators, const bool flush, const bool wait, const PluginConfig& selectorConfig, const PluginConfig& configurerConfig) = 0;
-  virtual void cancelCompaction(const std::string& login, const std::string& tableName) = 0;
-  virtual void createTable(const std::string& login, const std::string& tableName, const bool versioningIter, const TimeType::type type) = 0;
-  virtual void deleteTable(const std::string& login, const std::string& tableName) = 0;
-  virtual void deleteRows(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow) = 0;
-  virtual void exportTable(const std::string& login, const std::string& tableName, const std::string& exportDir) = 0;
-  virtual void flushTable(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow, const bool wait) = 0;
-  virtual void getDiskUsage(std::vector<DiskUsage> & _return, const std::string& login, const std::set<std::string> & tables) = 0;
-  virtual void getLocalityGroups(std::map<std::string, std::set<std::string> > & _return, const std::string& login, const std::string& tableName) = 0;
-  virtual void getIteratorSetting(IteratorSetting& _return, const std::string& login, const std::string& tableName, const std::string& iteratorName, const IteratorScope::type scope) = 0;
-  virtual void getMaxRow(std::string& _return, const std::string& login, const std::string& tableName, const std::set<std::string> & auths, const std::string& startRow, const bool startInclusive, const std::string& endRow, const bool endInclusive) = 0;
-  virtual void getTableProperties(std::map<std::string, std::string> & _return, const std::string& login, const std::string& tableName) = 0;
-  virtual void importDirectory(const std::string& login, const std::string& tableName, const std::string& importDir, const std::string& failureDir, const bool setTime) = 0;
-  virtual void importTable(const std::string& login, const std::string& tableName, const std::string& importDir) = 0;
-  virtual void listSplits(std::vector<std::string> & _return, const std::string& login, const std::string& tableName, const int32_t maxSplits) = 0;
-  virtual void listTables(std::set<std::string> & _return, const std::string& login) = 0;
-  virtual void listIterators(std::map<std::string, std::set<IteratorScope::type> > & _return, const std::string& login, const std::string& tableName) = 0;
-  virtual void listConstraints(std::map<std::string, int32_t> & _return, const std::string& login, const std::string& tableName) = 0;
-  virtual void mergeTablets(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow) = 0;
-  virtual void offlineTable(const std::string& login, const std::string& tableName, const bool wait) = 0;
-  virtual void onlineTable(const std::string& login, const std::string& tableName, const bool wait) = 0;
-  virtual void removeConstraint(const std::string& login, const std::string& tableName, const int32_t constraint) = 0;
-  virtual void removeIterator(const std::string& login, const std::string& tableName, const std::string& iterName, const std::set<IteratorScope::type> & scopes) = 0;
-  virtual void removeTableProperty(const std::string& login, const std::string& tableName, const std::string& property) = 0;
-  virtual void renameTable(const std::string& login, const std::string& oldTableName, const std::string& newTableName) = 0;
-  virtual void setLocalityGroups(const std::string& login, const std::string& tableName, const std::map<std::string, std::set<std::string> > & groups) = 0;
-  virtual void setTableProperty(const std::string& login, const std::string& tableName, const std::string& property, const std::string& value) = 0;
-  virtual void splitRangeByTablets(std::set<Range> & _return, const std::string& login, const std::string& tableName, const Range& range, const int32_t maxSplits) = 0;
-  virtual bool tableExists(const std::string& login, const std::string& tableName) = 0;
-  virtual void tableIdMap(std::map<std::string, std::string> & _return, const std::string& login) = 0;
-  virtual bool testTableClassLoad(const std::string& login, const std::string& tableName, const std::string& className, const std::string& asTypeName) = 0;
-  virtual void pingTabletServer(const std::string& login, const std::string& tserver) = 0;
-  virtual void getActiveScans(std::vector<ActiveScan> & _return, const std::string& login, const std::string& tserver) = 0;
-  virtual void getActiveCompactions(std::vector<ActiveCompaction> & _return, const std::string& login, const std::string& tserver) = 0;
-  virtual void getSiteConfiguration(std::map<std::string, std::string> & _return, const std::string& login) = 0;
-  virtual void getSystemConfiguration(std::map<std::string, std::string> & _return, const std::string& login) = 0;
-  virtual void getTabletServers(std::vector<std::string> & _return, const std::string& login) = 0;
-  virtual void removeProperty(const std::string& login, const std::string& property) = 0;
-  virtual void setProperty(const std::string& login, const std::string& property, const std::string& value) = 0;
-  virtual bool testClassLoad(const std::string& login, const std::string& className, const std::string& asTypeName) = 0;
-  virtual bool authenticateUser(const std::string& login, const std::string& user, const std::map<std::string, std::string> & properties) = 0;
-  virtual void changeUserAuthorizations(const std::string& login, const std::string& user, const std::set<std::string> & authorizations) = 0;
-  virtual void changeLocalUserPassword(const std::string& login, const std::string& user, const std::string& password) = 0;
-  virtual void createLocalUser(const std::string& login, const std::string& user, const std::string& password) = 0;
-  virtual void dropLocalUser(const std::string& login, const std::string& user) = 0;
-  virtual void getUserAuthorizations(std::vector<std::string> & _return, const std::string& login, const std::string& user) = 0;
-  virtual void grantSystemPermission(const std::string& login, const std::string& user, const SystemPermission::type perm) = 0;
-  virtual void grantTablePermission(const std::string& login, const std::string& user, const std::string& table, const TablePermission::type perm) = 0;
-  virtual bool hasSystemPermission(const std::string& login, const std::string& user, const SystemPermission::type perm) = 0;
-  virtual bool hasTablePermission(const std::string& login, const std::string& user, const std::string& table, const TablePermission::type perm) = 0;
-  virtual void listLocalUsers(std::set<std::string> & _return, const std::string& login) = 0;
-  virtual void revokeSystemPermission(const std::string& login, const std::string& user, const SystemPermission::type perm) = 0;
-  virtual void revokeTablePermission(const std::string& login, const std::string& user, const std::string& table, const TablePermission::type perm) = 0;
-  virtual void grantNamespacePermission(const std::string& login, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm) = 0;
-  virtual bool hasNamespacePermission(const std::string& login, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm) = 0;
-  virtual void revokeNamespacePermission(const std::string& login, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm) = 0;
-  virtual void createBatchScanner(std::string& _return, const std::string& login, const std::string& tableName, const BatchScanOptions& options) = 0;
-  virtual void createScanner(std::string& _return, const std::string& login, const std::string& tableName, const ScanOptions& options) = 0;
+  virtual int32_t addConstraint(const std::string& sharedSecret, const std::string& tableName, const std::string& constraintClassName) = 0;
+  virtual void addSplits(const std::string& sharedSecret, const std::string& tableName, const std::set<std::string> & splits) = 0;
+  virtual void attachIterator(const std::string& sharedSecret, const std::string& tableName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes) = 0;
+  virtual void checkIteratorConflicts(const std::string& sharedSecret, const std::string& tableName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes) = 0;
+  virtual void clearLocatorCache(const std::string& sharedSecret, const std::string& tableName) = 0;
+  virtual void cloneTable(const std::string& sharedSecret, const std::string& tableName, const std::string& newTableName, const bool flush, const std::map<std::string, std::string> & propertiesToSet, const std::set<std::string> & propertiesToExclude) = 0;
+  virtual void compactTable(const std::string& sharedSecret, const std::string& tableName, const std::string& startRow, const std::string& endRow, const std::vector<IteratorSetting> & iterators, const bool flush, const bool wait, const PluginConfig& selectorConfig, const PluginConfig& configurerConfig) = 0;
+  virtual void cancelCompaction(const std::string& sharedSecret, const std::string& tableName) = 0;
+  virtual void createTable(const std::string& sharedSecret, const std::string& tableName, const bool versioningIter, const TimeType::type type) = 0;
+  virtual void deleteTable(const std::string& sharedSecret, const std::string& tableName) = 0;
+  virtual void deleteRows(const std::string& sharedSecret, const std::string& tableName, const std::string& startRow, const std::string& endRow) = 0;
+  virtual void exportTable(const std::string& sharedSecret, const std::string& tableName, const std::string& exportDir) = 0;
+  virtual void flushTable(const std::string& sharedSecret, const std::string& tableName, const std::string& startRow, const std::string& endRow, const bool wait) = 0;
+  virtual void getDiskUsage(std::vector<DiskUsage> & _return, const std::string& sharedSecret, const std::set<std::string> & tables) = 0;
+  virtual void getLocalityGroups(std::map<std::string, std::set<std::string> > & _return, const std::string& sharedSecret, const std::string& tableName) = 0;
+  virtual void getIteratorSetting(IteratorSetting& _return, const std::string& sharedSecret, const std::string& tableName, const std::string& iteratorName, const IteratorScope::type scope) = 0;
+  virtual void getMaxRow(std::string& _return, const std::string& sharedSecret, const std::string& tableName, const std::set<std::string> & auths, const std::string& startRow, const bool startInclusive, const std::string& endRow, const bool endInclusive) = 0;
+  virtual void getTableProperties(std::map<std::string, std::string> & _return, const std::string& sharedSecret, const std::string& tableName) = 0;
+  virtual void importDirectory(const std::string& sharedSecret, const std::string& tableName, const std::string& importDir, const std::string& failureDir, const bool setTime) = 0;
+  virtual void importTable(const std::string& sharedSecret, const std::string& tableName, const std::string& importDir) = 0;
+  virtual void listSplits(std::vector<std::string> & _return, const std::string& sharedSecret, const std::string& tableName, const int32_t maxSplits) = 0;
+  virtual void listTables(std::set<std::string> & _return, const std::string& sharedSecret) = 0;
+  virtual void listIterators(std::map<std::string, std::set<IteratorScope::type> > & _return, const std::string& sharedSecret, const std::string& tableName) = 0;
+  virtual void listConstraints(std::map<std::string, int32_t> & _return, const std::string& sharedSecret, const std::string& tableName) = 0;
+  virtual void mergeTablets(const std::string& sharedSecret, const std::string& tableName, const std::string& startRow, const std::string& endRow) = 0;
+  virtual void offlineTable(const std::string& sharedSecret, const std::string& tableName, const bool wait) = 0;
+  virtual void onlineTable(const std::string& sharedSecret, const std::string& tableName, const bool wait) = 0;
+  virtual void removeConstraint(const std::string& sharedSecret, const std::string& tableName, const int32_t constraint) = 0;
+  virtual void removeIterator(const std::string& sharedSecret, const std::string& tableName, const std::string& iterName, const std::set<IteratorScope::type> & scopes) = 0;
+  virtual void removeTableProperty(const std::string& sharedSecret, const std::string& tableName, const std::string& property) = 0;
+  virtual void renameTable(const std::string& sharedSecret, const std::string& oldTableName, const std::string& newTableName) = 0;
+  virtual void setLocalityGroups(const std::string& sharedSecret, const std::string& tableName, const std::map<std::string, std::set<std::string> > & groups) = 0;
+  virtual void setTableProperty(const std::string& sharedSecret, const std::string& tableName, const std::string& property, const std::string& value) = 0;
+  virtual void splitRangeByTablets(std::set<Range> & _return, const std::string& sharedSecret, const std::string& tableName, const Range& range, const int32_t maxSplits) = 0;
+  virtual bool tableExists(const std::string& sharedSecret, const std::string& tableName) = 0;
+  virtual void tableIdMap(std::map<std::string, std::string> & _return, const std::string& sharedSecret) = 0;
+  virtual bool testTableClassLoad(const std::string& sharedSecret, const std::string& tableName, const std::string& className, const std::string& asTypeName) = 0;
+  virtual void pingTabletServer(const std::string& sharedSecret, const std::string& tserver) = 0;
+  virtual void getActiveScans(std::vector<ActiveScan> & _return, const std::string& sharedSecret, const std::string& tserver) = 0;
+  virtual void getActiveCompactions(std::vector<ActiveCompaction> & _return, const std::string& sharedSecret, const std::string& tserver) = 0;
+  virtual void getSiteConfiguration(std::map<std::string, std::string> & _return, const std::string& sharedSecret) = 0;
+  virtual void getSystemConfiguration(std::map<std::string, std::string> & _return, const std::string& sharedSecret) = 0;
+  virtual void getTabletServers(std::vector<std::string> & _return, const std::string& sharedSecret) = 0;
+  virtual void removeProperty(const std::string& sharedSecret, const std::string& property) = 0;
+  virtual void setProperty(const std::string& sharedSecret, const std::string& property, const std::string& value) = 0;
+  virtual bool testClassLoad(const std::string& sharedSecret, const std::string& className, const std::string& asTypeName) = 0;
+  virtual bool authenticateUser(const std::string& sharedSecret, const std::string& user, const std::map<std::string, std::string> & properties) = 0;
+  virtual void changeUserAuthorizations(const std::string& sharedSecret, const std::string& user, const std::set<std::string> & authorizations) = 0;
+  virtual void changeLocalUserPassword(const std::string& sharedSecret, const std::string& user, const std::string& password) = 0;
+  virtual void createLocalUser(const std::string& sharedSecret, const std::string& user, const std::string& password) = 0;
+  virtual void dropLocalUser(const std::string& sharedSecret, const std::string& user) = 0;
+  virtual void getUserAuthorizations(std::vector<std::string> & _return, const std::string& sharedSecret, const std::string& user) = 0;
+  virtual void grantSystemPermission(const std::string& sharedSecret, const std::string& user, const SystemPermission::type perm) = 0;
+  virtual void grantTablePermission(const std::string& sharedSecret, const std::string& user, const std::string& table, const TablePermission::type perm) = 0;
+  virtual bool hasSystemPermission(const std::string& sharedSecret, const std::string& user, const SystemPermission::type perm) = 0;
+  virtual bool hasTablePermission(const std::string& sharedSecret, const std::string& user, const std::string& table, const TablePermission::type perm) = 0;
+  virtual void listLocalUsers(std::set<std::string> & _return, const std::string& sharedSecret) = 0;
+  virtual void revokeSystemPermission(const std::string& sharedSecret, const std::string& user, const SystemPermission::type perm) = 0;
+  virtual void revokeTablePermission(const std::string& sharedSecret, const std::string& user, const std::string& table, const TablePermission::type perm) = 0;
+  virtual void grantNamespacePermission(const std::string& sharedSecret, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm) = 0;
+  virtual bool hasNamespacePermission(const std::string& sharedSecret, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm) = 0;
+  virtual void revokeNamespacePermission(const std::string& sharedSecret, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm) = 0;
+  virtual void createBatchScanner(std::string& _return, const std::string& sharedSecret, const std::string& tableName, const BatchScanOptions& options) = 0;
+  virtual void createScanner(std::string& _return, const std::string& sharedSecret, const std::string& tableName, const ScanOptions& options) = 0;
   virtual bool hasNext(const std::string& scanner) = 0;
   virtual void nextEntry(KeyValueAndPeek& _return, const std::string& scanner) = 0;
   virtual void nextK(ScanResult& _return, const std::string& scanner, const int32_t k) = 0;
   virtual void closeScanner(const std::string& scanner) = 0;
-  virtual void updateAndFlush(const std::string& login, const std::string& tableName, const std::map<std::string, std::vector<ColumnUpdate> > & cells) = 0;
-  virtual void createWriter(std::string& _return, const std::string& login, const std::string& tableName, const WriterOptions& opts) = 0;
+  virtual void updateAndFlush(const std::string& sharedSecret, const std::string& tableName, const std::map<std::string, std::vector<ColumnUpdate> > & cells) = 0;
+  virtual void createWriter(std::string& _return, const std::string& sharedSecret, const std::string& tableName, const WriterOptions& opts) = 0;
   virtual void update(const std::string& writer, const std::map<std::string, std::vector<ColumnUpdate> > & cells) = 0;
   virtual void flush(const std::string& writer) = 0;
   virtual void closeWriter(const std::string& writer) = 0;
-  virtual ConditionalStatus::type updateRowConditionally(const std::string& login, const std::string& tableName, const std::string& row, const ConditionalUpdates& updates) = 0;
-  virtual void createConditionalWriter(std::string& _return, const std::string& login, const std::string& tableName, const ConditionalWriterOptions& options) = 0;
+  virtual ConditionalStatus::type updateRowConditionally(const std::string& sharedSecret, const std::string& tableName, const std::string& row, const ConditionalUpdates& updates) = 0;
+  virtual void createConditionalWriter(std::string& _return, const std::string& sharedSecret, const std::string& tableName, const ConditionalWriterOptions& options) = 0;
   virtual void updateRowsConditionally(std::map<std::string, ConditionalStatus::type> & _return, const std::string& conditionalWriter, const std::map<std::string, ConditionalUpdates> & updates) = 0;
   virtual void closeConditionalWriter(const std::string& conditionalWriter) = 0;
   virtual void getRowRange(Range& _return, const std::string& row) = 0;
   virtual void getFollowing(Key& _return, const Key& key, const PartialKey::type part) = 0;
   virtual void systemNamespace(std::string& _return) = 0;
   virtual void defaultNamespace(std::string& _return) = 0;
-  virtual void listNamespaces(std::vector<std::string> & _return, const std::string& login) = 0;
-  virtual bool namespaceExists(const std::string& login, const std::string& namespaceName) = 0;
-  virtual void createNamespace(const std::string& login, const std::string& namespaceName) = 0;
-  virtual void deleteNamespace(const std::string& login, const std::string& namespaceName) = 0;
-  virtual void renameNamespace(const std::string& login, const std::string& oldNamespaceName, const std::string& newNamespaceName) = 0;
-  virtual void setNamespaceProperty(const std::string& login, const std::string& namespaceName, const std::string& property, const std::string& value) = 0;
-  virtual void removeNamespaceProperty(const std::string& login, const std::string& namespaceName, const std::string& property) = 0;
-  virtual void getNamespaceProperties(std::map<std::string, std::string> & _return, const std::string& login, const std::string& namespaceName) = 0;
-  virtual void namespaceIdMap(std::map<std::string, std::string> & _return, const std::string& login) = 0;
-  virtual void attachNamespaceIterator(const std::string& login, const std::string& namespaceName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes) = 0;
-  virtual void removeNamespaceIterator(const std::string& login, const std::string& namespaceName, const std::string& name, const std::set<IteratorScope::type> & scopes) = 0;
-  virtual void getNamespaceIteratorSetting(IteratorSetting& _return, const std::string& login, const std::string& namespaceName, const std::string& name, const IteratorScope::type scope) = 0;
-  virtual void listNamespaceIterators(std::map<std::string, std::set<IteratorScope::type> > & _return, const std::string& login, const std::string& namespaceName) = 0;
-  virtual void checkNamespaceIteratorConflicts(const std::string& login, const std::string& namespaceName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes) = 0;
-  virtual int32_t addNamespaceConstraint(const std::string& login, const std::string& namespaceName, const std::string& constraintClassName) = 0;
-  virtual void removeNamespaceConstraint(const std::string& login, const std::string& namespaceName, const int32_t id) = 0;
-  virtual void listNamespaceConstraints(std::map<std::string, int32_t> & _return, const std::string& login, const std::string& namespaceName) = 0;
-  virtual bool testNamespaceClassLoad(const std::string& login, const std::string& namespaceName, const std::string& className, const std::string& asTypeName) = 0;
+  virtual void listNamespaces(std::vector<std::string> & _return, const std::string& sharedSecret) = 0;
+  virtual bool namespaceExists(const std::string& sharedSecret, const std::string& namespaceName) = 0;
+  virtual void createNamespace(const std::string& sharedSecret, const std::string& namespaceName) = 0;
+  virtual void deleteNamespace(const std::string& sharedSecret, const std::string& namespaceName) = 0;
+  virtual void renameNamespace(const std::string& sharedSecret, const std::string& oldNamespaceName, const std::string& newNamespaceName) = 0;
+  virtual void setNamespaceProperty(const std::string& sharedSecret, const std::string& namespaceName, const std::string& property, const std::string& value) = 0;
+  virtual void removeNamespaceProperty(const std::string& sharedSecret, const std::string& namespaceName, const std::string& property) = 0;
+  virtual void getNamespaceProperties(std::map<std::string, std::string> & _return, const std::string& sharedSecret, const std::string& namespaceName) = 0;
+  virtual void namespaceIdMap(std::map<std::string, std::string> & _return, const std::string& sharedSecret) = 0;
+  virtual void attachNamespaceIterator(const std::string& sharedSecret, const std::string& namespaceName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes) = 0;
+  virtual void removeNamespaceIterator(const std::string& sharedSecret, const std::string& namespaceName, const std::string& name, const std::set<IteratorScope::type> & scopes) = 0;
+  virtual void getNamespaceIteratorSetting(IteratorSetting& _return, const std::string& sharedSecret, const std::string& namespaceName, const std::string& name, const IteratorScope::type scope) = 0;
+  virtual void listNamespaceIterators(std::map<std::string, std::set<IteratorScope::type> > & _return, const std::string& sharedSecret, const std::string& namespaceName) = 0;
+  virtual void checkNamespaceIteratorConflicts(const std::string& sharedSecret, const std::string& namespaceName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes) = 0;
+  virtual int32_t addNamespaceConstraint(const std::string& sharedSecret, const std::string& namespaceName, const std::string& constraintClassName) = 0;
+  virtual void removeNamespaceConstraint(const std::string& sharedSecret, const std::string& namespaceName, const int32_t id) = 0;
+  virtual void listNamespaceConstraints(std::map<std::string, int32_t> & _return, const std::string& sharedSecret, const std::string& namespaceName) = 0;
+  virtual bool testNamespaceClassLoad(const std::string& sharedSecret, const std::string& namespaceName, const std::string& className, const std::string& asTypeName) = 0;
 };
 
 class AccumuloProxyIfFactory {
@@ -169,207 +168,204 @@ class AccumuloProxyIfSingletonFactory : virtual public AccumuloProxyIfFactory {
 class AccumuloProxyNull : virtual public AccumuloProxyIf {
  public:
   virtual ~AccumuloProxyNull() {}
-  void login(std::string& /* _return */, const std::string& /* principal */, const std::map<std::string, std::string> & /* loginProperties */) override {
-    return;
-  }
-  int32_t addConstraint(const std::string& /* login */, const std::string& /* tableName */, const std::string& /* constraintClassName */) override {
+  int32_t addConstraint(const std::string& /* sharedSecret */, const std::string& /* tableName */, const std::string& /* constraintClassName */) override {
     int32_t _return = 0;
     return _return;
   }
-  void addSplits(const std::string& /* login */, const std::string& /* tableName */, const std::set<std::string> & /* splits */) override {
+  void addSplits(const std::string& /* sharedSecret */, const std::string& /* tableName */, const std::set<std::string> & /* splits */) override {
     return;
   }
-  void attachIterator(const std::string& /* login */, const std::string& /* tableName */, const IteratorSetting& /* setting */, const std::set<IteratorScope::type> & /* scopes */) override {
+  void attachIterator(const std::string& /* sharedSecret */, const std::string& /* tableName */, const IteratorSetting& /* setting */, const std::set<IteratorScope::type> & /* scopes */) override {
     return;
   }
-  void checkIteratorConflicts(const std::string& /* login */, const std::string& /* tableName */, const IteratorSetting& /* setting */, const std::set<IteratorScope::type> & /* scopes */) override {
+  void checkIteratorConflicts(const std::string& /* sharedSecret */, const std::string& /* tableName */, const IteratorSetting& /* setting */, const std::set<IteratorScope::type> & /* scopes */) override {
     return;
   }
-  void clearLocatorCache(const std::string& /* login */, const std::string& /* tableName */) override {
+  void clearLocatorCache(const std::string& /* sharedSecret */, const std::string& /* tableName */) override {
     return;
   }
-  void cloneTable(const std::string& /* login */, const std::string& /* tableName */, const std::string& /* newTableName */, const bool /* flush */, const std::map<std::string, std::string> & /* propertiesToSet */, const std::set<std::string> & /* propertiesToExclude */) override {
+  void cloneTable(const std::string& /* sharedSecret */, const std::string& /* tableName */, const std::string& /* newTableName */, const bool /* flush */, const std::map<std::string, std::string> & /* propertiesToSet */, const std::set<std::string> & /* propertiesToExclude */) override {
     return;
   }
-  void compactTable(const std::string& /* login */, const std::string& /* tableName */, const std::string& /* startRow */, const std::string& /* endRow */, const std::vector<IteratorSetting> & /* iterators */, const bool /* flush */, const bool /* wait */, const PluginConfig& /* selectorConfig */, const PluginConfig& /* configurerConfig */) override {
+  void compactTable(const std::string& /* sharedSecret */, const std::string& /* tableName */, const std::string& /* startRow */, const std::string& /* endRow */, const std::vector<IteratorSetting> & /* iterators */, const bool /* flush */, const bool /* wait */, const PluginConfig& /* selectorConfig */, const PluginConfig& /* configurerConfig */) override {
     return;
   }
-  void cancelCompaction(const std::string& /* login */, const std::string& /* tableName */) override {
+  void cancelCompaction(const std::string& /* sharedSecret */, const std::string& /* tableName */) override {
     return;
   }
-  void createTable(const std::string& /* login */, const std::string& /* tableName */, const bool /* versioningIter */, const TimeType::type /* type */) override {
+  void createTable(const std::string& /* sharedSecret */, const std::string& /* tableName */, const bool /* versioningIter */, const TimeType::type /* type */) override {
     return;
   }
-  void deleteTable(const std::string& /* login */, const std::string& /* tableName */) override {
+  void deleteTable(const std::string& /* sharedSecret */, const std::string& /* tableName */) override {
     return;
   }
-  void deleteRows(const std::string& /* login */, const std::string& /* tableName */, const std::string& /* startRow */, const std::string& /* endRow */) override {
+  void deleteRows(const std::string& /* sharedSecret */, const std::string& /* tableName */, const std::string& /* startRow */, const std::string& /* endRow */) override {
     return;
   }
-  void exportTable(const std::string& /* login */, const std::string& /* tableName */, const std::string& /* exportDir */) override {
+  void exportTable(const std::string& /* sharedSecret */, const std::string& /* tableName */, const std::string& /* exportDir */) override {
     return;
   }
-  void flushTable(const std::string& /* login */, const std::string& /* tableName */, const std::string& /* startRow */, const std::string& /* endRow */, const bool /* wait */) override {
+  void flushTable(const std::string& /* sharedSecret */, const std::string& /* tableName */, const std::string& /* startRow */, const std::string& /* endRow */, const bool /* wait */) override {
     return;
   }
-  void getDiskUsage(std::vector<DiskUsage> & /* _return */, const std::string& /* login */, const std::set<std::string> & /* tables */) override {
+  void getDiskUsage(std::vector<DiskUsage> & /* _return */, const std::string& /* sharedSecret */, const std::set<std::string> & /* tables */) override {
     return;
   }
-  void getLocalityGroups(std::map<std::string, std::set<std::string> > & /* _return */, const std::string& /* login */, const std::string& /* tableName */) override {
+  void getLocalityGroups(std::map<std::string, std::set<std::string> > & /* _return */, const std::string& /* sharedSecret */, const std::string& /* tableName */) override {
     return;
   }
-  void getIteratorSetting(IteratorSetting& /* _return */, const std::string& /* login */, const std::string& /* tableName */, const std::string& /* iteratorName */, const IteratorScope::type /* scope */) override {
+  void getIteratorSetting(IteratorSetting& /* _return */, const std::string& /* sharedSecret */, const std::string& /* tableName */, const std::string& /* iteratorName */, const IteratorScope::type /* scope */) override {
     return;
   }
-  void getMaxRow(std::string& /* _return */, const std::string& /* login */, const std::string& /* tableName */, const std::set<std::string> & /* auths */, const std::string& /* startRow */, const bool /* startInclusive */, const std::string& /* endRow */, const bool /* endInclusive */) override {
+  void getMaxRow(std::string& /* _return */, const std::string& /* sharedSecret */, const std::string& /* tableName */, const std::set<std::string> & /* auths */, const std::string& /* startRow */, const bool /* startInclusive */, const std::string& /* endRow */, const bool /* endInclusive */) override {
     return;
   }
-  void getTableProperties(std::map<std::string, std::string> & /* _return */, const std::string& /* login */, const std::string& /* tableName */) override {
+  void getTableProperties(std::map<std::string, std::string> & /* _return */, const std::string& /* sharedSecret */, const std::string& /* tableName */) override {
     return;
   }
-  void importDirectory(const std::string& /* login */, const std::string& /* tableName */, const std::string& /* importDir */, const std::string& /* failureDir */, const bool /* setTime */) override {
+  void importDirectory(const std::string& /* sharedSecret */, const std::string& /* tableName */, const std::string& /* importDir */, const std::string& /* failureDir */, const bool /* setTime */) override {
     return;
   }
-  void importTable(const std::string& /* login */, const std::string& /* tableName */, const std::string& /* importDir */) override {
+  void importTable(const std::string& /* sharedSecret */, const std::string& /* tableName */, const std::string& /* importDir */) override {
     return;
   }
-  void listSplits(std::vector<std::string> & /* _return */, const std::string& /* login */, const std::string& /* tableName */, const int32_t /* maxSplits */) override {
+  void listSplits(std::vector<std::string> & /* _return */, const std::string& /* sharedSecret */, const std::string& /* tableName */, const int32_t /* maxSplits */) override {
     return;
   }
-  void listTables(std::set<std::string> & /* _return */, const std::string& /* login */) override {
+  void listTables(std::set<std::string> & /* _return */, const std::string& /* sharedSecret */) override {
     return;
   }
-  void listIterators(std::map<std::string, std::set<IteratorScope::type> > & /* _return */, const std::string& /* login */, const std::string& /* tableName */) override {
+  void listIterators(std::map<std::string, std::set<IteratorScope::type> > & /* _return */, const std::string& /* sharedSecret */, const std::string& /* tableName */) override {
     return;
   }
-  void listConstraints(std::map<std::string, int32_t> & /* _return */, const std::string& /* login */, const std::string& /* tableName */) override {
+  void listConstraints(std::map<std::string, int32_t> & /* _return */, const std::string& /* sharedSecret */, const std::string& /* tableName */) override {
     return;
   }
-  void mergeTablets(const std::string& /* login */, const std::string& /* tableName */, const std::string& /* startRow */, const std::string& /* endRow */) override {
+  void mergeTablets(const std::string& /* sharedSecret */, const std::string& /* tableName */, const std::string& /* startRow */, const std::string& /* endRow */) override {
     return;
   }
-  void offlineTable(const std::string& /* login */, const std::string& /* tableName */, const bool /* wait */) override {
+  void offlineTable(const std::string& /* sharedSecret */, const std::string& /* tableName */, const bool /* wait */) override {
     return;
   }
-  void onlineTable(const std::string& /* login */, const std::string& /* tableName */, const bool /* wait */) override {
+  void onlineTable(const std::string& /* sharedSecret */, const std::string& /* tableName */, const bool /* wait */) override {
     return;
   }
-  void removeConstraint(const std::string& /* login */, const std::string& /* tableName */, const int32_t /* constraint */) override {
+  void removeConstraint(const std::string& /* sharedSecret */, const std::string& /* tableName */, const int32_t /* constraint */) override {
     return;
   }
-  void removeIterator(const std::string& /* login */, const std::string& /* tableName */, const std::string& /* iterName */, const std::set<IteratorScope::type> & /* scopes */) override {
+  void removeIterator(const std::string& /* sharedSecret */, const std::string& /* tableName */, const std::string& /* iterName */, const std::set<IteratorScope::type> & /* scopes */) override {
     return;
   }
-  void removeTableProperty(const std::string& /* login */, const std::string& /* tableName */, const std::string& /* property */) override {
+  void removeTableProperty(const std::string& /* sharedSecret */, const std::string& /* tableName */, const std::string& /* property */) override {
     return;
   }
-  void renameTable(const std::string& /* login */, const std::string& /* oldTableName */, const std::string& /* newTableName */) override {
+  void renameTable(const std::string& /* sharedSecret */, const std::string& /* oldTableName */, const std::string& /* newTableName */) override {
     return;
   }
-  void setLocalityGroups(const std::string& /* login */, const std::string& /* tableName */, const std::map<std::string, std::set<std::string> > & /* groups */) override {
+  void setLocalityGroups(const std::string& /* sharedSecret */, const std::string& /* tableName */, const std::map<std::string, std::set<std::string> > & /* groups */) override {
     return;
   }
-  void setTableProperty(const std::string& /* login */, const std::string& /* tableName */, const std::string& /* property */, const std::string& /* value */) override {
+  void setTableProperty(const std::string& /* sharedSecret */, const std::string& /* tableName */, const std::string& /* property */, const std::string& /* value */) override {
     return;
   }
-  void splitRangeByTablets(std::set<Range> & /* _return */, const std::string& /* login */, const std::string& /* tableName */, const Range& /* range */, const int32_t /* maxSplits */) override {
+  void splitRangeByTablets(std::set<Range> & /* _return */, const std::string& /* sharedSecret */, const std::string& /* tableName */, const Range& /* range */, const int32_t /* maxSplits */) override {
     return;
   }
-  bool tableExists(const std::string& /* login */, const std::string& /* tableName */) override {
+  bool tableExists(const std::string& /* sharedSecret */, const std::string& /* tableName */) override {
     bool _return = false;
     return _return;
   }
-  void tableIdMap(std::map<std::string, std::string> & /* _return */, const std::string& /* login */) override {
+  void tableIdMap(std::map<std::string, std::string> & /* _return */, const std::string& /* sharedSecret */) override {
     return;
   }
-  bool testTableClassLoad(const std::string& /* login */, const std::string& /* tableName */, const std::string& /* className */, const std::string& /* asTypeName */) override {
+  bool testTableClassLoad(const std::string& /* sharedSecret */, const std::string& /* tableName */, const std::string& /* className */, const std::string& /* asTypeName */) override {
     bool _return = false;
     return _return;
   }
-  void pingTabletServer(const std::string& /* login */, const std::string& /* tserver */) override {
+  void pingTabletServer(const std::string& /* sharedSecret */, const std::string& /* tserver */) override {
     return;
   }
-  void getActiveScans(std::vector<ActiveScan> & /* _return */, const std::string& /* login */, const std::string& /* tserver */) override {
+  void getActiveScans(std::vector<ActiveScan> & /* _return */, const std::string& /* sharedSecret */, const std::string& /* tserver */) override {
     return;
   }
-  void getActiveCompactions(std::vector<ActiveCompaction> & /* _return */, const std::string& /* login */, const std::string& /* tserver */) override {
+  void getActiveCompactions(std::vector<ActiveCompaction> & /* _return */, const std::string& /* sharedSecret */, const std::string& /* tserver */) override {
     return;
   }
-  void getSiteConfiguration(std::map<std::string, std::string> & /* _return */, const std::string& /* login */) override {
+  void getSiteConfiguration(std::map<std::string, std::string> & /* _return */, const std::string& /* sharedSecret */) override {
     return;
   }
-  void getSystemConfiguration(std::map<std::string, std::string> & /* _return */, const std::string& /* login */) override {
+  void getSystemConfiguration(std::map<std::string, std::string> & /* _return */, const std::string& /* sharedSecret */) override {
     return;
   }
-  void getTabletServers(std::vector<std::string> & /* _return */, const std::string& /* login */) override {
+  void getTabletServers(std::vector<std::string> & /* _return */, const std::string& /* sharedSecret */) override {
     return;
   }
-  void removeProperty(const std::string& /* login */, const std::string& /* property */) override {
+  void removeProperty(const std::string& /* sharedSecret */, const std::string& /* property */) override {
     return;
   }
-  void setProperty(const std::string& /* login */, const std::string& /* property */, const std::string& /* value */) override {
+  void setProperty(const std::string& /* sharedSecret */, const std::string& /* property */, const std::string& /* value */) override {
     return;
   }
-  bool testClassLoad(const std::string& /* login */, const std::string& /* className */, const std::string& /* asTypeName */) override {
+  bool testClassLoad(const std::string& /* sharedSecret */, const std::string& /* className */, const std::string& /* asTypeName */) override {
     bool _return = false;
     return _return;
   }
-  bool authenticateUser(const std::string& /* login */, const std::string& /* user */, const std::map<std::string, std::string> & /* properties */) override {
+  bool authenticateUser(const std::string& /* sharedSecret */, const std::string& /* user */, const std::map<std::string, std::string> & /* properties */) override {
     bool _return = false;
     return _return;
   }
-  void changeUserAuthorizations(const std::string& /* login */, const std::string& /* user */, const std::set<std::string> & /* authorizations */) override {
+  void changeUserAuthorizations(const std::string& /* sharedSecret */, const std::string& /* user */, const std::set<std::string> & /* authorizations */) override {
     return;
   }
-  void changeLocalUserPassword(const std::string& /* login */, const std::string& /* user */, const std::string& /* password */) override {
+  void changeLocalUserPassword(const std::string& /* sharedSecret */, const std::string& /* user */, const std::string& /* password */) override {
     return;
   }
-  void createLocalUser(const std::string& /* login */, const std::string& /* user */, const std::string& /* password */) override {
+  void createLocalUser(const std::string& /* sharedSecret */, const std::string& /* user */, const std::string& /* password */) override {
     return;
   }
-  void dropLocalUser(const std::string& /* login */, const std::string& /* user */) override {
+  void dropLocalUser(const std::string& /* sharedSecret */, const std::string& /* user */) override {
     return;
   }
-  void getUserAuthorizations(std::vector<std::string> & /* _return */, const std::string& /* login */, const std::string& /* user */) override {
+  void getUserAuthorizations(std::vector<std::string> & /* _return */, const std::string& /* sharedSecret */, const std::string& /* user */) override {
     return;
   }
-  void grantSystemPermission(const std::string& /* login */, const std::string& /* user */, const SystemPermission::type /* perm */) override {
+  void grantSystemPermission(const std::string& /* sharedSecret */, const std::string& /* user */, const SystemPermission::type /* perm */) override {
     return;
   }
-  void grantTablePermission(const std::string& /* login */, const std::string& /* user */, const std::string& /* table */, const TablePermission::type /* perm */) override {
+  void grantTablePermission(const std::string& /* sharedSecret */, const std::string& /* user */, const std::string& /* table */, const TablePermission::type /* perm */) override {
     return;
   }
-  bool hasSystemPermission(const std::string& /* login */, const std::string& /* user */, const SystemPermission::type /* perm */) override {
+  bool hasSystemPermission(const std::string& /* sharedSecret */, const std::string& /* user */, const SystemPermission::type /* perm */) override {
     bool _return = false;
     return _return;
   }
-  bool hasTablePermission(const std::string& /* login */, const std::string& /* user */, const std::string& /* table */, const TablePermission::type /* perm */) override {
+  bool hasTablePermission(const std::string& /* sharedSecret */, const std::string& /* user */, const std::string& /* table */, const TablePermission::type /* perm */) override {
     bool _return = false;
     return _return;
   }
-  void listLocalUsers(std::set<std::string> & /* _return */, const std::string& /* login */) override {
+  void listLocalUsers(std::set<std::string> & /* _return */, const std::string& /* sharedSecret */) override {
     return;
   }
-  void revokeSystemPermission(const std::string& /* login */, const std::string& /* user */, const SystemPermission::type /* perm */) override {
+  void revokeSystemPermission(const std::string& /* sharedSecret */, const std::string& /* user */, const SystemPermission::type /* perm */) override {
     return;
   }
-  void revokeTablePermission(const std::string& /* login */, const std::string& /* user */, const std::string& /* table */, const TablePermission::type /* perm */) override {
+  void revokeTablePermission(const std::string& /* sharedSecret */, const std::string& /* user */, const std::string& /* table */, const TablePermission::type /* perm */) override {
     return;
   }
-  void grantNamespacePermission(const std::string& /* login */, const std::string& /* user */, const std::string& /* namespaceName */, const NamespacePermission::type /* perm */) override {
+  void grantNamespacePermission(const std::string& /* sharedSecret */, const std::string& /* user */, const std::string& /* namespaceName */, const NamespacePermission::type /* perm */) override {
     return;
   }
-  bool hasNamespacePermission(const std::string& /* login */, const std::string& /* user */, const std::string& /* namespaceName */, const NamespacePermission::type /* perm */) override {
+  bool hasNamespacePermission(const std::string& /* sharedSecret */, const std::string& /* user */, const std::string& /* namespaceName */, const NamespacePermission::type /* perm */) override {
     bool _return = false;
     return _return;
   }
-  void revokeNamespacePermission(const std::string& /* login */, const std::string& /* user */, const std::string& /* namespaceName */, const NamespacePermission::type /* perm */) override {
+  void revokeNamespacePermission(const std::string& /* sharedSecret */, const std::string& /* user */, const std::string& /* namespaceName */, const NamespacePermission::type /* perm */) override {
     return;
   }
-  void createBatchScanner(std::string& /* _return */, const std::string& /* login */, const std::string& /* tableName */, const BatchScanOptions& /* options */) override {
+  void createBatchScanner(std::string& /* _return */, const std::string& /* sharedSecret */, const std::string& /* tableName */, const BatchScanOptions& /* options */) override {
     return;
   }
-  void createScanner(std::string& /* _return */, const std::string& /* login */, const std::string& /* tableName */, const ScanOptions& /* options */) override {
+  void createScanner(std::string& /* _return */, const std::string& /* sharedSecret */, const std::string& /* tableName */, const ScanOptions& /* options */) override {
     return;
   }
   bool hasNext(const std::string& /* scanner */) override {
@@ -385,10 +381,10 @@ class AccumuloProxyNull : virtual public AccumuloProxyIf {
   void closeScanner(const std::string& /* scanner */) override {
     return;
   }
-  void updateAndFlush(const std::string& /* login */, const std::string& /* tableName */, const std::map<std::string, std::vector<ColumnUpdate> > & /* cells */) override {
+  void updateAndFlush(const std::string& /* sharedSecret */, const std::string& /* tableName */, const std::map<std::string, std::vector<ColumnUpdate> > & /* cells */) override {
     return;
   }
-  void createWriter(std::string& /* _return */, const std::string& /* login */, const std::string& /* tableName */, const WriterOptions& /* opts */) override {
+  void createWriter(std::string& /* _return */, const std::string& /* sharedSecret */, const std::string& /* tableName */, const WriterOptions& /* opts */) override {
     return;
   }
   void update(const std::string& /* writer */, const std::map<std::string, std::vector<ColumnUpdate> > & /* cells */) override {
@@ -400,11 +396,11 @@ class AccumuloProxyNull : virtual public AccumuloProxyIf {
   void closeWriter(const std::string& /* writer */) override {
     return;
   }
-  ConditionalStatus::type updateRowConditionally(const std::string& /* login */, const std::string& /* tableName */, const std::string& /* row */, const ConditionalUpdates& /* updates */) override {
+  ConditionalStatus::type updateRowConditionally(const std::string& /* sharedSecret */, const std::string& /* tableName */, const std::string& /* row */, const ConditionalUpdates& /* updates */) override {
     ConditionalStatus::type _return = static_cast<ConditionalStatus::type>(0);
     return _return;
   }
-  void createConditionalWriter(std::string& /* _return */, const std::string& /* login */, const std::string& /* tableName */, const ConditionalWriterOptions& /* options */) override {
+  void createConditionalWriter(std::string& /* _return */, const std::string& /* sharedSecret */, const std::string& /* tableName */, const ConditionalWriterOptions& /* options */) override {
     return;
   }
   void updateRowsConditionally(std::map<std::string, ConditionalStatus::type> & /* _return */, const std::string& /* conditionalWriter */, const std::map<std::string, ConditionalUpdates> & /* updates */) override {
@@ -425,189 +421,68 @@ class AccumuloProxyNull : virtual public AccumuloProxyIf {
   void defaultNamespace(std::string& /* _return */) override {
     return;
   }
-  void listNamespaces(std::vector<std::string> & /* _return */, const std::string& /* login */) override {
+  void listNamespaces(std::vector<std::string> & /* _return */, const std::string& /* sharedSecret */) override {
     return;
   }
-  bool namespaceExists(const std::string& /* login */, const std::string& /* namespaceName */) override {
+  bool namespaceExists(const std::string& /* sharedSecret */, const std::string& /* namespaceName */) override {
     bool _return = false;
     return _return;
   }
-  void createNamespace(const std::string& /* login */, const std::string& /* namespaceName */) override {
+  void createNamespace(const std::string& /* sharedSecret */, const std::string& /* namespaceName */) override {
     return;
   }
-  void deleteNamespace(const std::string& /* login */, const std::string& /* namespaceName */) override {
+  void deleteNamespace(const std::string& /* sharedSecret */, const std::string& /* namespaceName */) override {
     return;
   }
-  void renameNamespace(const std::string& /* login */, const std::string& /* oldNamespaceName */, const std::string& /* newNamespaceName */) override {
+  void renameNamespace(const std::string& /* sharedSecret */, const std::string& /* oldNamespaceName */, const std::string& /* newNamespaceName */) override {
     return;
   }
-  void setNamespaceProperty(const std::string& /* login */, const std::string& /* namespaceName */, const std::string& /* property */, const std::string& /* value */) override {
+  void setNamespaceProperty(const std::string& /* sharedSecret */, const std::string& /* namespaceName */, const std::string& /* property */, const std::string& /* value */) override {
     return;
   }
-  void removeNamespaceProperty(const std::string& /* login */, const std::string& /* namespaceName */, const std::string& /* property */) override {
+  void removeNamespaceProperty(const std::string& /* sharedSecret */, const std::string& /* namespaceName */, const std::string& /* property */) override {
     return;
   }
-  void getNamespaceProperties(std::map<std::string, std::string> & /* _return */, const std::string& /* login */, const std::string& /* namespaceName */) override {
+  void getNamespaceProperties(std::map<std::string, std::string> & /* _return */, const std::string& /* sharedSecret */, const std::string& /* namespaceName */) override {
     return;
   }
-  void namespaceIdMap(std::map<std::string, std::string> & /* _return */, const std::string& /* login */) override {
+  void namespaceIdMap(std::map<std::string, std::string> & /* _return */, const std::string& /* sharedSecret */) override {
     return;
   }
-  void attachNamespaceIterator(const std::string& /* login */, const std::string& /* namespaceName */, const IteratorSetting& /* setting */, const std::set<IteratorScope::type> & /* scopes */) override {
+  void attachNamespaceIterator(const std::string& /* sharedSecret */, const std::string& /* namespaceName */, const IteratorSetting& /* setting */, const std::set<IteratorScope::type> & /* scopes */) override {
     return;
   }
-  void removeNamespaceIterator(const std::string& /* login */, const std::string& /* namespaceName */, const std::string& /* name */, const std::set<IteratorScope::type> & /* scopes */) override {
+  void removeNamespaceIterator(const std::string& /* sharedSecret */, const std::string& /* namespaceName */, const std::string& /* name */, const std::set<IteratorScope::type> & /* scopes */) override {
     return;
   }
-  void getNamespaceIteratorSetting(IteratorSetting& /* _return */, const std::string& /* login */, const std::string& /* namespaceName */, const std::string& /* name */, const IteratorScope::type /* scope */) override {
+  void getNamespaceIteratorSetting(IteratorSetting& /* _return */, const std::string& /* sharedSecret */, const std::string& /* namespaceName */, const std::string& /* name */, const IteratorScope::type /* scope */) override {
     return;
   }
-  void listNamespaceIterators(std::map<std::string, std::set<IteratorScope::type> > & /* _return */, const std::string& /* login */, const std::string& /* namespaceName */) override {
+  void listNamespaceIterators(std::map<std::string, std::set<IteratorScope::type> > & /* _return */, const std::string& /* sharedSecret */, const std::string& /* namespaceName */) override {
     return;
   }
-  void checkNamespaceIteratorConflicts(const std::string& /* login */, const std::string& /* namespaceName */, const IteratorSetting& /* setting */, const std::set<IteratorScope::type> & /* scopes */) override {
+  void checkNamespaceIteratorConflicts(const std::string& /* sharedSecret */, const std::string& /* namespaceName */, const IteratorSetting& /* setting */, const std::set<IteratorScope::type> & /* scopes */) override {
     return;
   }
-  int32_t addNamespaceConstraint(const std::string& /* login */, const std::string& /* namespaceName */, const std::string& /* constraintClassName */) override {
+  int32_t addNamespaceConstraint(const std::string& /* sharedSecret */, const std::string& /* namespaceName */, const std::string& /* constraintClassName */) override {
     int32_t _return = 0;
     return _return;
   }
-  void removeNamespaceConstraint(const std::string& /* login */, const std::string& /* namespaceName */, const int32_t /* id */) override {
+  void removeNamespaceConstraint(const std::string& /* sharedSecret */, const std::string& /* namespaceName */, const int32_t /* id */) override {
     return;
   }
-  void listNamespaceConstraints(std::map<std::string, int32_t> & /* _return */, const std::string& /* login */, const std::string& /* namespaceName */) override {
+  void listNamespaceConstraints(std::map<std::string, int32_t> & /* _return */, const std::string& /* sharedSecret */, const std::string& /* namespaceName */) override {
     return;
   }
-  bool testNamespaceClassLoad(const std::string& /* login */, const std::string& /* namespaceName */, const std::string& /* className */, const std::string& /* asTypeName */) override {
+  bool testNamespaceClassLoad(const std::string& /* sharedSecret */, const std::string& /* namespaceName */, const std::string& /* className */, const std::string& /* asTypeName */) override {
     bool _return = false;
     return _return;
   }
 };
 
-typedef struct _AccumuloProxy_login_args__isset {
-  _AccumuloProxy_login_args__isset() : principal(false), loginProperties(false) {}
-  bool principal :1;
-  bool loginProperties :1;
-} _AccumuloProxy_login_args__isset;
-
-class AccumuloProxy_login_args {
- public:
-
-  AccumuloProxy_login_args(const AccumuloProxy_login_args&);
-  AccumuloProxy_login_args& operator=(const AccumuloProxy_login_args&);
-  AccumuloProxy_login_args() noexcept
-                           : principal() {
-  }
-
-  virtual ~AccumuloProxy_login_args() noexcept;
-  std::string principal;
-  std::map<std::string, std::string>  loginProperties;
-
-  _AccumuloProxy_login_args__isset __isset;
-
-  void __set_principal(const std::string& val);
-
-  void __set_loginProperties(const std::map<std::string, std::string> & val);
-
-  bool operator == (const AccumuloProxy_login_args & rhs) const
-  {
-    if (!(principal == rhs.principal))
-      return false;
-    if (!(loginProperties == rhs.loginProperties))
-      return false;
-    return true;
-  }
-  bool operator != (const AccumuloProxy_login_args &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const AccumuloProxy_login_args & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-
-class AccumuloProxy_login_pargs {
- public:
-
-
-  virtual ~AccumuloProxy_login_pargs() noexcept;
-  const std::string* principal;
-  const std::map<std::string, std::string> * loginProperties;
-
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-typedef struct _AccumuloProxy_login_result__isset {
-  _AccumuloProxy_login_result__isset() : success(false), ouch2(false) {}
-  bool success :1;
-  bool ouch2 :1;
-} _AccumuloProxy_login_result__isset;
-
-class AccumuloProxy_login_result {
- public:
-
-  AccumuloProxy_login_result(const AccumuloProxy_login_result&);
-  AccumuloProxy_login_result& operator=(const AccumuloProxy_login_result&);
-  AccumuloProxy_login_result() noexcept
-                             : success() {
-  }
-
-  virtual ~AccumuloProxy_login_result() noexcept;
-  std::string success;
-  AccumuloSecurityException ouch2;
-
-  _AccumuloProxy_login_result__isset __isset;
-
-  void __set_success(const std::string& val);
-
-  void __set_ouch2(const AccumuloSecurityException& val);
-
-  bool operator == (const AccumuloProxy_login_result & rhs) const
-  {
-    if (!(success == rhs.success))
-      return false;
-    if (!(ouch2 == rhs.ouch2))
-      return false;
-    return true;
-  }
-  bool operator != (const AccumuloProxy_login_result &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const AccumuloProxy_login_result & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-typedef struct _AccumuloProxy_login_presult__isset {
-  _AccumuloProxy_login_presult__isset() : success(false), ouch2(false) {}
-  bool success :1;
-  bool ouch2 :1;
-} _AccumuloProxy_login_presult__isset;
-
-class AccumuloProxy_login_presult {
- public:
-
-
-  virtual ~AccumuloProxy_login_presult() noexcept;
-  std::string* success;
-  AccumuloSecurityException ouch2;
-
-  _AccumuloProxy_login_presult__isset __isset;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-
-};
-
 typedef struct _AccumuloProxy_addConstraint_args__isset {
-  _AccumuloProxy_addConstraint_args__isset() : login(false), tableName(false), constraintClassName(false) {}
-  bool login :1;
+  _AccumuloProxy_addConstraint_args__isset() : sharedSecret(false), tableName(false), constraintClassName(false) {}
+  bool sharedSecret :1;
   bool tableName :1;
   bool constraintClassName :1;
 } _AccumuloProxy_addConstraint_args__isset;
@@ -618,19 +493,19 @@ class AccumuloProxy_addConstraint_args {
   AccumuloProxy_addConstraint_args(const AccumuloProxy_addConstraint_args&);
   AccumuloProxy_addConstraint_args& operator=(const AccumuloProxy_addConstraint_args&);
   AccumuloProxy_addConstraint_args() noexcept
-                                   : login(),
+                                   : sharedSecret(),
                                      tableName(),
                                      constraintClassName() {
   }
 
   virtual ~AccumuloProxy_addConstraint_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string tableName;
   std::string constraintClassName;
 
   _AccumuloProxy_addConstraint_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_tableName(const std::string& val);
 
@@ -638,7 +513,7 @@ class AccumuloProxy_addConstraint_args {
 
   bool operator == (const AccumuloProxy_addConstraint_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(tableName == rhs.tableName))
       return false;
@@ -663,7 +538,7 @@ class AccumuloProxy_addConstraint_pargs {
 
 
   virtual ~AccumuloProxy_addConstraint_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* tableName;
   const std::string* constraintClassName;
 
@@ -752,8 +627,8 @@ class AccumuloProxy_addConstraint_presult {
 };
 
 typedef struct _AccumuloProxy_addSplits_args__isset {
-  _AccumuloProxy_addSplits_args__isset() : login(false), tableName(false), splits(false) {}
-  bool login :1;
+  _AccumuloProxy_addSplits_args__isset() : sharedSecret(false), tableName(false), splits(false) {}
+  bool sharedSecret :1;
   bool tableName :1;
   bool splits :1;
 } _AccumuloProxy_addSplits_args__isset;
@@ -764,18 +639,18 @@ class AccumuloProxy_addSplits_args {
   AccumuloProxy_addSplits_args(const AccumuloProxy_addSplits_args&);
   AccumuloProxy_addSplits_args& operator=(const AccumuloProxy_addSplits_args&);
   AccumuloProxy_addSplits_args() noexcept
-                               : login(),
+                               : sharedSecret(),
                                  tableName() {
   }
 
   virtual ~AccumuloProxy_addSplits_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string tableName;
   std::set<std::string>  splits;
 
   _AccumuloProxy_addSplits_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_tableName(const std::string& val);
 
@@ -783,7 +658,7 @@ class AccumuloProxy_addSplits_args {
 
   bool operator == (const AccumuloProxy_addSplits_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(tableName == rhs.tableName))
       return false;
@@ -808,7 +683,7 @@ class AccumuloProxy_addSplits_pargs {
 
 
   virtual ~AccumuloProxy_addSplits_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* tableName;
   const std::set<std::string> * splits;
 
@@ -888,8 +763,8 @@ class AccumuloProxy_addSplits_presult {
 };
 
 typedef struct _AccumuloProxy_attachIterator_args__isset {
-  _AccumuloProxy_attachIterator_args__isset() : login(false), tableName(false), setting(false), scopes(false) {}
-  bool login :1;
+  _AccumuloProxy_attachIterator_args__isset() : sharedSecret(false), tableName(false), setting(false), scopes(false) {}
+  bool sharedSecret :1;
   bool tableName :1;
   bool setting :1;
   bool scopes :1;
@@ -901,19 +776,19 @@ class AccumuloProxy_attachIterator_args {
   AccumuloProxy_attachIterator_args(const AccumuloProxy_attachIterator_args&);
   AccumuloProxy_attachIterator_args& operator=(const AccumuloProxy_attachIterator_args&);
   AccumuloProxy_attachIterator_args() noexcept
-                                    : login(),
+                                    : sharedSecret(),
                                       tableName() {
   }
 
   virtual ~AccumuloProxy_attachIterator_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string tableName;
   IteratorSetting setting;
   std::set<IteratorScope::type>  scopes;
 
   _AccumuloProxy_attachIterator_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_tableName(const std::string& val);
 
@@ -923,7 +798,7 @@ class AccumuloProxy_attachIterator_args {
 
   bool operator == (const AccumuloProxy_attachIterator_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(tableName == rhs.tableName))
       return false;
@@ -950,7 +825,7 @@ class AccumuloProxy_attachIterator_pargs {
 
 
   virtual ~AccumuloProxy_attachIterator_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* tableName;
   const IteratorSetting* setting;
   const std::set<IteratorScope::type> * scopes;
@@ -1031,8 +906,8 @@ class AccumuloProxy_attachIterator_presult {
 };
 
 typedef struct _AccumuloProxy_checkIteratorConflicts_args__isset {
-  _AccumuloProxy_checkIteratorConflicts_args__isset() : login(false), tableName(false), setting(false), scopes(false) {}
-  bool login :1;
+  _AccumuloProxy_checkIteratorConflicts_args__isset() : sharedSecret(false), tableName(false), setting(false), scopes(false) {}
+  bool sharedSecret :1;
   bool tableName :1;
   bool setting :1;
   bool scopes :1;
@@ -1044,19 +919,19 @@ class AccumuloProxy_checkIteratorConflicts_args {
   AccumuloProxy_checkIteratorConflicts_args(const AccumuloProxy_checkIteratorConflicts_args&);
   AccumuloProxy_checkIteratorConflicts_args& operator=(const AccumuloProxy_checkIteratorConflicts_args&);
   AccumuloProxy_checkIteratorConflicts_args() noexcept
-                                            : login(),
+                                            : sharedSecret(),
                                               tableName() {
   }
 
   virtual ~AccumuloProxy_checkIteratorConflicts_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string tableName;
   IteratorSetting setting;
   std::set<IteratorScope::type>  scopes;
 
   _AccumuloProxy_checkIteratorConflicts_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_tableName(const std::string& val);
 
@@ -1066,7 +941,7 @@ class AccumuloProxy_checkIteratorConflicts_args {
 
   bool operator == (const AccumuloProxy_checkIteratorConflicts_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(tableName == rhs.tableName))
       return false;
@@ -1093,7 +968,7 @@ class AccumuloProxy_checkIteratorConflicts_pargs {
 
 
   virtual ~AccumuloProxy_checkIteratorConflicts_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* tableName;
   const IteratorSetting* setting;
   const std::set<IteratorScope::type> * scopes;
@@ -1174,8 +1049,8 @@ class AccumuloProxy_checkIteratorConflicts_presult {
 };
 
 typedef struct _AccumuloProxy_clearLocatorCache_args__isset {
-  _AccumuloProxy_clearLocatorCache_args__isset() : login(false), tableName(false) {}
-  bool login :1;
+  _AccumuloProxy_clearLocatorCache_args__isset() : sharedSecret(false), tableName(false) {}
+  bool sharedSecret :1;
   bool tableName :1;
 } _AccumuloProxy_clearLocatorCache_args__isset;
 
@@ -1185,23 +1060,23 @@ class AccumuloProxy_clearLocatorCache_args {
   AccumuloProxy_clearLocatorCache_args(const AccumuloProxy_clearLocatorCache_args&);
   AccumuloProxy_clearLocatorCache_args& operator=(const AccumuloProxy_clearLocatorCache_args&);
   AccumuloProxy_clearLocatorCache_args() noexcept
-                                       : login(),
+                                       : sharedSecret(),
                                          tableName() {
   }
 
   virtual ~AccumuloProxy_clearLocatorCache_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string tableName;
 
   _AccumuloProxy_clearLocatorCache_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_tableName(const std::string& val);
 
   bool operator == (const AccumuloProxy_clearLocatorCache_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(tableName == rhs.tableName))
       return false;
@@ -1224,7 +1099,7 @@ class AccumuloProxy_clearLocatorCache_pargs {
 
 
   virtual ~AccumuloProxy_clearLocatorCache_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* tableName;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -1287,8 +1162,8 @@ class AccumuloProxy_clearLocatorCache_presult {
 };
 
 typedef struct _AccumuloProxy_cloneTable_args__isset {
-  _AccumuloProxy_cloneTable_args__isset() : login(false), tableName(false), newTableName(false), flush(false), propertiesToSet(false), propertiesToExclude(false) {}
-  bool login :1;
+  _AccumuloProxy_cloneTable_args__isset() : sharedSecret(false), tableName(false), newTableName(false), flush(false), propertiesToSet(false), propertiesToExclude(false) {}
+  bool sharedSecret :1;
   bool tableName :1;
   bool newTableName :1;
   bool flush :1;
@@ -1302,14 +1177,14 @@ class AccumuloProxy_cloneTable_args {
   AccumuloProxy_cloneTable_args(const AccumuloProxy_cloneTable_args&);
   AccumuloProxy_cloneTable_args& operator=(const AccumuloProxy_cloneTable_args&);
   AccumuloProxy_cloneTable_args() noexcept
-                                : login(),
+                                : sharedSecret(),
                                   tableName(),
                                   newTableName(),
                                   flush(0) {
   }
 
   virtual ~AccumuloProxy_cloneTable_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string tableName;
   std::string newTableName;
   bool flush;
@@ -1318,7 +1193,7 @@ class AccumuloProxy_cloneTable_args {
 
   _AccumuloProxy_cloneTable_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_tableName(const std::string& val);
 
@@ -1332,7 +1207,7 @@ class AccumuloProxy_cloneTable_args {
 
   bool operator == (const AccumuloProxy_cloneTable_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(tableName == rhs.tableName))
       return false;
@@ -1363,7 +1238,7 @@ class AccumuloProxy_cloneTable_pargs {
 
 
   virtual ~AccumuloProxy_cloneTable_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* tableName;
   const std::string* newTableName;
   const bool* flush;
@@ -1454,8 +1329,8 @@ class AccumuloProxy_cloneTable_presult {
 };
 
 typedef struct _AccumuloProxy_compactTable_args__isset {
-  _AccumuloProxy_compactTable_args__isset() : login(false), tableName(false), startRow(false), endRow(false), iterators(false), flush(false), wait(false), selectorConfig(false), configurerConfig(false) {}
-  bool login :1;
+  _AccumuloProxy_compactTable_args__isset() : sharedSecret(false), tableName(false), startRow(false), endRow(false), iterators(false), flush(false), wait(false), selectorConfig(false), configurerConfig(false) {}
+  bool sharedSecret :1;
   bool tableName :1;
   bool startRow :1;
   bool endRow :1;
@@ -1472,7 +1347,7 @@ class AccumuloProxy_compactTable_args {
   AccumuloProxy_compactTable_args(const AccumuloProxy_compactTable_args&);
   AccumuloProxy_compactTable_args& operator=(const AccumuloProxy_compactTable_args&);
   AccumuloProxy_compactTable_args() noexcept
-                                  : login(),
+                                  : sharedSecret(),
                                     tableName(),
                                     startRow(),
                                     endRow(),
@@ -1481,7 +1356,7 @@ class AccumuloProxy_compactTable_args {
   }
 
   virtual ~AccumuloProxy_compactTable_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string tableName;
   std::string startRow;
   std::string endRow;
@@ -1493,7 +1368,7 @@ class AccumuloProxy_compactTable_args {
 
   _AccumuloProxy_compactTable_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_tableName(const std::string& val);
 
@@ -1513,7 +1388,7 @@ class AccumuloProxy_compactTable_args {
 
   bool operator == (const AccumuloProxy_compactTable_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(tableName == rhs.tableName))
       return false;
@@ -1550,7 +1425,7 @@ class AccumuloProxy_compactTable_pargs {
 
 
   virtual ~AccumuloProxy_compactTable_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* tableName;
   const std::string* startRow;
   const std::string* endRow;
@@ -1636,8 +1511,8 @@ class AccumuloProxy_compactTable_presult {
 };
 
 typedef struct _AccumuloProxy_cancelCompaction_args__isset {
-  _AccumuloProxy_cancelCompaction_args__isset() : login(false), tableName(false) {}
-  bool login :1;
+  _AccumuloProxy_cancelCompaction_args__isset() : sharedSecret(false), tableName(false) {}
+  bool sharedSecret :1;
   bool tableName :1;
 } _AccumuloProxy_cancelCompaction_args__isset;
 
@@ -1647,23 +1522,23 @@ class AccumuloProxy_cancelCompaction_args {
   AccumuloProxy_cancelCompaction_args(const AccumuloProxy_cancelCompaction_args&);
   AccumuloProxy_cancelCompaction_args& operator=(const AccumuloProxy_cancelCompaction_args&);
   AccumuloProxy_cancelCompaction_args() noexcept
-                                      : login(),
+                                      : sharedSecret(),
                                         tableName() {
   }
 
   virtual ~AccumuloProxy_cancelCompaction_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string tableName;
 
   _AccumuloProxy_cancelCompaction_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_tableName(const std::string& val);
 
   bool operator == (const AccumuloProxy_cancelCompaction_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(tableName == rhs.tableName))
       return false;
@@ -1686,7 +1561,7 @@ class AccumuloProxy_cancelCompaction_pargs {
 
 
   virtual ~AccumuloProxy_cancelCompaction_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* tableName;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -1765,8 +1640,8 @@ class AccumuloProxy_cancelCompaction_presult {
 };
 
 typedef struct _AccumuloProxy_createTable_args__isset {
-  _AccumuloProxy_createTable_args__isset() : login(false), tableName(false), versioningIter(false), type(false) {}
-  bool login :1;
+  _AccumuloProxy_createTable_args__isset() : sharedSecret(false), tableName(false), versioningIter(false), type(false) {}
+  bool sharedSecret :1;
   bool tableName :1;
   bool versioningIter :1;
   bool type :1;
@@ -1778,14 +1653,14 @@ class AccumuloProxy_createTable_args {
   AccumuloProxy_createTable_args(const AccumuloProxy_createTable_args&);
   AccumuloProxy_createTable_args& operator=(const AccumuloProxy_createTable_args&);
   AccumuloProxy_createTable_args() noexcept
-                                 : login(),
+                                 : sharedSecret(),
                                    tableName(),
                                    versioningIter(0),
                                    type(static_cast<TimeType::type>(0)) {
   }
 
   virtual ~AccumuloProxy_createTable_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string tableName;
   bool versioningIter;
   /**
@@ -1796,7 +1671,7 @@ class AccumuloProxy_createTable_args {
 
   _AccumuloProxy_createTable_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_tableName(const std::string& val);
 
@@ -1806,7 +1681,7 @@ class AccumuloProxy_createTable_args {
 
   bool operator == (const AccumuloProxy_createTable_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(tableName == rhs.tableName))
       return false;
@@ -1833,7 +1708,7 @@ class AccumuloProxy_createTable_pargs {
 
 
   virtual ~AccumuloProxy_createTable_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* tableName;
   const bool* versioningIter;
   /**
@@ -1918,8 +1793,8 @@ class AccumuloProxy_createTable_presult {
 };
 
 typedef struct _AccumuloProxy_deleteTable_args__isset {
-  _AccumuloProxy_deleteTable_args__isset() : login(false), tableName(false) {}
-  bool login :1;
+  _AccumuloProxy_deleteTable_args__isset() : sharedSecret(false), tableName(false) {}
+  bool sharedSecret :1;
   bool tableName :1;
 } _AccumuloProxy_deleteTable_args__isset;
 
@@ -1929,23 +1804,23 @@ class AccumuloProxy_deleteTable_args {
   AccumuloProxy_deleteTable_args(const AccumuloProxy_deleteTable_args&);
   AccumuloProxy_deleteTable_args& operator=(const AccumuloProxy_deleteTable_args&);
   AccumuloProxy_deleteTable_args() noexcept
-                                 : login(),
+                                 : sharedSecret(),
                                    tableName() {
   }
 
   virtual ~AccumuloProxy_deleteTable_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string tableName;
 
   _AccumuloProxy_deleteTable_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_tableName(const std::string& val);
 
   bool operator == (const AccumuloProxy_deleteTable_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(tableName == rhs.tableName))
       return false;
@@ -1968,7 +1843,7 @@ class AccumuloProxy_deleteTable_pargs {
 
 
   virtual ~AccumuloProxy_deleteTable_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* tableName;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -2047,8 +1922,8 @@ class AccumuloProxy_deleteTable_presult {
 };
 
 typedef struct _AccumuloProxy_deleteRows_args__isset {
-  _AccumuloProxy_deleteRows_args__isset() : login(false), tableName(false), startRow(false), endRow(false) {}
-  bool login :1;
+  _AccumuloProxy_deleteRows_args__isset() : sharedSecret(false), tableName(false), startRow(false), endRow(false) {}
+  bool sharedSecret :1;
   bool tableName :1;
   bool startRow :1;
   bool endRow :1;
@@ -2060,21 +1935,21 @@ class AccumuloProxy_deleteRows_args {
   AccumuloProxy_deleteRows_args(const AccumuloProxy_deleteRows_args&);
   AccumuloProxy_deleteRows_args& operator=(const AccumuloProxy_deleteRows_args&);
   AccumuloProxy_deleteRows_args() noexcept
-                                : login(),
+                                : sharedSecret(),
                                   tableName(),
                                   startRow(),
                                   endRow() {
   }
 
   virtual ~AccumuloProxy_deleteRows_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string tableName;
   std::string startRow;
   std::string endRow;
 
   _AccumuloProxy_deleteRows_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_tableName(const std::string& val);
 
@@ -2084,7 +1959,7 @@ class AccumuloProxy_deleteRows_args {
 
   bool operator == (const AccumuloProxy_deleteRows_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(tableName == rhs.tableName))
       return false;
@@ -2111,7 +1986,7 @@ class AccumuloProxy_deleteRows_pargs {
 
 
   virtual ~AccumuloProxy_deleteRows_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* tableName;
   const std::string* startRow;
   const std::string* endRow;
@@ -2192,8 +2067,8 @@ class AccumuloProxy_deleteRows_presult {
 };
 
 typedef struct _AccumuloProxy_exportTable_args__isset {
-  _AccumuloProxy_exportTable_args__isset() : login(false), tableName(false), exportDir(false) {}
-  bool login :1;
+  _AccumuloProxy_exportTable_args__isset() : sharedSecret(false), tableName(false), exportDir(false) {}
+  bool sharedSecret :1;
   bool tableName :1;
   bool exportDir :1;
 } _AccumuloProxy_exportTable_args__isset;
@@ -2204,19 +2079,19 @@ class AccumuloProxy_exportTable_args {
   AccumuloProxy_exportTable_args(const AccumuloProxy_exportTable_args&);
   AccumuloProxy_exportTable_args& operator=(const AccumuloProxy_exportTable_args&);
   AccumuloProxy_exportTable_args() noexcept
-                                 : login(),
+                                 : sharedSecret(),
                                    tableName(),
                                    exportDir() {
   }
 
   virtual ~AccumuloProxy_exportTable_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string tableName;
   std::string exportDir;
 
   _AccumuloProxy_exportTable_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_tableName(const std::string& val);
 
@@ -2224,7 +2099,7 @@ class AccumuloProxy_exportTable_args {
 
   bool operator == (const AccumuloProxy_exportTable_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(tableName == rhs.tableName))
       return false;
@@ -2249,7 +2124,7 @@ class AccumuloProxy_exportTable_pargs {
 
 
   virtual ~AccumuloProxy_exportTable_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* tableName;
   const std::string* exportDir;
 
@@ -2329,8 +2204,8 @@ class AccumuloProxy_exportTable_presult {
 };
 
 typedef struct _AccumuloProxy_flushTable_args__isset {
-  _AccumuloProxy_flushTable_args__isset() : login(false), tableName(false), startRow(false), endRow(false), wait(false) {}
-  bool login :1;
+  _AccumuloProxy_flushTable_args__isset() : sharedSecret(false), tableName(false), startRow(false), endRow(false), wait(false) {}
+  bool sharedSecret :1;
   bool tableName :1;
   bool startRow :1;
   bool endRow :1;
@@ -2343,7 +2218,7 @@ class AccumuloProxy_flushTable_args {
   AccumuloProxy_flushTable_args(const AccumuloProxy_flushTable_args&);
   AccumuloProxy_flushTable_args& operator=(const AccumuloProxy_flushTable_args&);
   AccumuloProxy_flushTable_args() noexcept
-                                : login(),
+                                : sharedSecret(),
                                   tableName(),
                                   startRow(),
                                   endRow(),
@@ -2351,7 +2226,7 @@ class AccumuloProxy_flushTable_args {
   }
 
   virtual ~AccumuloProxy_flushTable_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string tableName;
   std::string startRow;
   std::string endRow;
@@ -2359,7 +2234,7 @@ class AccumuloProxy_flushTable_args {
 
   _AccumuloProxy_flushTable_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_tableName(const std::string& val);
 
@@ -2371,7 +2246,7 @@ class AccumuloProxy_flushTable_args {
 
   bool operator == (const AccumuloProxy_flushTable_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(tableName == rhs.tableName))
       return false;
@@ -2400,7 +2275,7 @@ class AccumuloProxy_flushTable_pargs {
 
 
   virtual ~AccumuloProxy_flushTable_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* tableName;
   const std::string* startRow;
   const std::string* endRow;
@@ -2482,8 +2357,8 @@ class AccumuloProxy_flushTable_presult {
 };
 
 typedef struct _AccumuloProxy_getDiskUsage_args__isset {
-  _AccumuloProxy_getDiskUsage_args__isset() : login(false), tables(false) {}
-  bool login :1;
+  _AccumuloProxy_getDiskUsage_args__isset() : sharedSecret(false), tables(false) {}
+  bool sharedSecret :1;
   bool tables :1;
 } _AccumuloProxy_getDiskUsage_args__isset;
 
@@ -2493,22 +2368,22 @@ class AccumuloProxy_getDiskUsage_args {
   AccumuloProxy_getDiskUsage_args(const AccumuloProxy_getDiskUsage_args&);
   AccumuloProxy_getDiskUsage_args& operator=(const AccumuloProxy_getDiskUsage_args&);
   AccumuloProxy_getDiskUsage_args() noexcept
-                                  : login() {
+                                  : sharedSecret() {
   }
 
   virtual ~AccumuloProxy_getDiskUsage_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::set<std::string>  tables;
 
   _AccumuloProxy_getDiskUsage_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_tables(const std::set<std::string> & val);
 
   bool operator == (const AccumuloProxy_getDiskUsage_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(tables == rhs.tables))
       return false;
@@ -2531,7 +2406,7 @@ class AccumuloProxy_getDiskUsage_pargs {
 
 
   virtual ~AccumuloProxy_getDiskUsage_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::set<std::string> * tables;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -2618,8 +2493,8 @@ class AccumuloProxy_getDiskUsage_presult {
 };
 
 typedef struct _AccumuloProxy_getLocalityGroups_args__isset {
-  _AccumuloProxy_getLocalityGroups_args__isset() : login(false), tableName(false) {}
-  bool login :1;
+  _AccumuloProxy_getLocalityGroups_args__isset() : sharedSecret(false), tableName(false) {}
+  bool sharedSecret :1;
   bool tableName :1;
 } _AccumuloProxy_getLocalityGroups_args__isset;
 
@@ -2629,23 +2504,23 @@ class AccumuloProxy_getLocalityGroups_args {
   AccumuloProxy_getLocalityGroups_args(const AccumuloProxy_getLocalityGroups_args&);
   AccumuloProxy_getLocalityGroups_args& operator=(const AccumuloProxy_getLocalityGroups_args&);
   AccumuloProxy_getLocalityGroups_args() noexcept
-                                       : login(),
+                                       : sharedSecret(),
                                          tableName() {
   }
 
   virtual ~AccumuloProxy_getLocalityGroups_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string tableName;
 
   _AccumuloProxy_getLocalityGroups_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_tableName(const std::string& val);
 
   bool operator == (const AccumuloProxy_getLocalityGroups_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(tableName == rhs.tableName))
       return false;
@@ -2668,7 +2543,7 @@ class AccumuloProxy_getLocalityGroups_pargs {
 
 
   virtual ~AccumuloProxy_getLocalityGroups_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* tableName;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -2755,8 +2630,8 @@ class AccumuloProxy_getLocalityGroups_presult {
 };
 
 typedef struct _AccumuloProxy_getIteratorSetting_args__isset {
-  _AccumuloProxy_getIteratorSetting_args__isset() : login(false), tableName(false), iteratorName(false), scope(false) {}
-  bool login :1;
+  _AccumuloProxy_getIteratorSetting_args__isset() : sharedSecret(false), tableName(false), iteratorName(false), scope(false) {}
+  bool sharedSecret :1;
   bool tableName :1;
   bool iteratorName :1;
   bool scope :1;
@@ -2768,14 +2643,14 @@ class AccumuloProxy_getIteratorSetting_args {
   AccumuloProxy_getIteratorSetting_args(const AccumuloProxy_getIteratorSetting_args&);
   AccumuloProxy_getIteratorSetting_args& operator=(const AccumuloProxy_getIteratorSetting_args&);
   AccumuloProxy_getIteratorSetting_args() noexcept
-                                        : login(),
+                                        : sharedSecret(),
                                           tableName(),
                                           iteratorName(),
                                           scope(static_cast<IteratorScope::type>(0)) {
   }
 
   virtual ~AccumuloProxy_getIteratorSetting_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string tableName;
   std::string iteratorName;
   /**
@@ -2786,7 +2661,7 @@ class AccumuloProxy_getIteratorSetting_args {
 
   _AccumuloProxy_getIteratorSetting_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_tableName(const std::string& val);
 
@@ -2796,7 +2671,7 @@ class AccumuloProxy_getIteratorSetting_args {
 
   bool operator == (const AccumuloProxy_getIteratorSetting_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(tableName == rhs.tableName))
       return false;
@@ -2823,7 +2698,7 @@ class AccumuloProxy_getIteratorSetting_pargs {
 
 
   virtual ~AccumuloProxy_getIteratorSetting_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* tableName;
   const std::string* iteratorName;
   /**
@@ -2916,8 +2791,8 @@ class AccumuloProxy_getIteratorSetting_presult {
 };
 
 typedef struct _AccumuloProxy_getMaxRow_args__isset {
-  _AccumuloProxy_getMaxRow_args__isset() : login(false), tableName(false), auths(false), startRow(false), startInclusive(false), endRow(false), endInclusive(false) {}
-  bool login :1;
+  _AccumuloProxy_getMaxRow_args__isset() : sharedSecret(false), tableName(false), auths(false), startRow(false), startInclusive(false), endRow(false), endInclusive(false) {}
+  bool sharedSecret :1;
   bool tableName :1;
   bool auths :1;
   bool startRow :1;
@@ -2932,7 +2807,7 @@ class AccumuloProxy_getMaxRow_args {
   AccumuloProxy_getMaxRow_args(const AccumuloProxy_getMaxRow_args&);
   AccumuloProxy_getMaxRow_args& operator=(const AccumuloProxy_getMaxRow_args&);
   AccumuloProxy_getMaxRow_args() noexcept
-                               : login(),
+                               : sharedSecret(),
                                  tableName(),
                                  startRow(),
                                  startInclusive(0),
@@ -2941,7 +2816,7 @@ class AccumuloProxy_getMaxRow_args {
   }
 
   virtual ~AccumuloProxy_getMaxRow_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string tableName;
   std::set<std::string>  auths;
   std::string startRow;
@@ -2951,7 +2826,7 @@ class AccumuloProxy_getMaxRow_args {
 
   _AccumuloProxy_getMaxRow_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_tableName(const std::string& val);
 
@@ -2967,7 +2842,7 @@ class AccumuloProxy_getMaxRow_args {
 
   bool operator == (const AccumuloProxy_getMaxRow_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(tableName == rhs.tableName))
       return false;
@@ -3000,7 +2875,7 @@ class AccumuloProxy_getMaxRow_pargs {
 
 
   virtual ~AccumuloProxy_getMaxRow_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* tableName;
   const std::set<std::string> * auths;
   const std::string* startRow;
@@ -3093,8 +2968,8 @@ class AccumuloProxy_getMaxRow_presult {
 };
 
 typedef struct _AccumuloProxy_getTableProperties_args__isset {
-  _AccumuloProxy_getTableProperties_args__isset() : login(false), tableName(false) {}
-  bool login :1;
+  _AccumuloProxy_getTableProperties_args__isset() : sharedSecret(false), tableName(false) {}
+  bool sharedSecret :1;
   bool tableName :1;
 } _AccumuloProxy_getTableProperties_args__isset;
 
@@ -3104,23 +2979,23 @@ class AccumuloProxy_getTableProperties_args {
   AccumuloProxy_getTableProperties_args(const AccumuloProxy_getTableProperties_args&);
   AccumuloProxy_getTableProperties_args& operator=(const AccumuloProxy_getTableProperties_args&);
   AccumuloProxy_getTableProperties_args() noexcept
-                                        : login(),
+                                        : sharedSecret(),
                                           tableName() {
   }
 
   virtual ~AccumuloProxy_getTableProperties_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string tableName;
 
   _AccumuloProxy_getTableProperties_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_tableName(const std::string& val);
 
   bool operator == (const AccumuloProxy_getTableProperties_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(tableName == rhs.tableName))
       return false;
@@ -3143,7 +3018,7 @@ class AccumuloProxy_getTableProperties_pargs {
 
 
   virtual ~AccumuloProxy_getTableProperties_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* tableName;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -3230,8 +3105,8 @@ class AccumuloProxy_getTableProperties_presult {
 };
 
 typedef struct _AccumuloProxy_importDirectory_args__isset {
-  _AccumuloProxy_importDirectory_args__isset() : login(false), tableName(false), importDir(false), failureDir(false), setTime(false) {}
-  bool login :1;
+  _AccumuloProxy_importDirectory_args__isset() : sharedSecret(false), tableName(false), importDir(false), failureDir(false), setTime(false) {}
+  bool sharedSecret :1;
   bool tableName :1;
   bool importDir :1;
   bool failureDir :1;
@@ -3244,7 +3119,7 @@ class AccumuloProxy_importDirectory_args {
   AccumuloProxy_importDirectory_args(const AccumuloProxy_importDirectory_args&);
   AccumuloProxy_importDirectory_args& operator=(const AccumuloProxy_importDirectory_args&);
   AccumuloProxy_importDirectory_args() noexcept
-                                     : login(),
+                                     : sharedSecret(),
                                        tableName(),
                                        importDir(),
                                        failureDir(),
@@ -3252,7 +3127,7 @@ class AccumuloProxy_importDirectory_args {
   }
 
   virtual ~AccumuloProxy_importDirectory_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string tableName;
   std::string importDir;
   std::string failureDir;
@@ -3260,7 +3135,7 @@ class AccumuloProxy_importDirectory_args {
 
   _AccumuloProxy_importDirectory_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_tableName(const std::string& val);
 
@@ -3272,7 +3147,7 @@ class AccumuloProxy_importDirectory_args {
 
   bool operator == (const AccumuloProxy_importDirectory_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(tableName == rhs.tableName))
       return false;
@@ -3301,7 +3176,7 @@ class AccumuloProxy_importDirectory_pargs {
 
 
   virtual ~AccumuloProxy_importDirectory_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* tableName;
   const std::string* importDir;
   const std::string* failureDir;
@@ -3383,8 +3258,8 @@ class AccumuloProxy_importDirectory_presult {
 };
 
 typedef struct _AccumuloProxy_importTable_args__isset {
-  _AccumuloProxy_importTable_args__isset() : login(false), tableName(false), importDir(false) {}
-  bool login :1;
+  _AccumuloProxy_importTable_args__isset() : sharedSecret(false), tableName(false), importDir(false) {}
+  bool sharedSecret :1;
   bool tableName :1;
   bool importDir :1;
 } _AccumuloProxy_importTable_args__isset;
@@ -3395,19 +3270,19 @@ class AccumuloProxy_importTable_args {
   AccumuloProxy_importTable_args(const AccumuloProxy_importTable_args&);
   AccumuloProxy_importTable_args& operator=(const AccumuloProxy_importTable_args&);
   AccumuloProxy_importTable_args() noexcept
-                                 : login(),
+                                 : sharedSecret(),
                                    tableName(),
                                    importDir() {
   }
 
   virtual ~AccumuloProxy_importTable_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string tableName;
   std::string importDir;
 
   _AccumuloProxy_importTable_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_tableName(const std::string& val);
 
@@ -3415,7 +3290,7 @@ class AccumuloProxy_importTable_args {
 
   bool operator == (const AccumuloProxy_importTable_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(tableName == rhs.tableName))
       return false;
@@ -3440,7 +3315,7 @@ class AccumuloProxy_importTable_pargs {
 
 
   virtual ~AccumuloProxy_importTable_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* tableName;
   const std::string* importDir;
 
@@ -3520,8 +3395,8 @@ class AccumuloProxy_importTable_presult {
 };
 
 typedef struct _AccumuloProxy_listSplits_args__isset {
-  _AccumuloProxy_listSplits_args__isset() : login(false), tableName(false), maxSplits(false) {}
-  bool login :1;
+  _AccumuloProxy_listSplits_args__isset() : sharedSecret(false), tableName(false), maxSplits(false) {}
+  bool sharedSecret :1;
   bool tableName :1;
   bool maxSplits :1;
 } _AccumuloProxy_listSplits_args__isset;
@@ -3532,19 +3407,19 @@ class AccumuloProxy_listSplits_args {
   AccumuloProxy_listSplits_args(const AccumuloProxy_listSplits_args&);
   AccumuloProxy_listSplits_args& operator=(const AccumuloProxy_listSplits_args&);
   AccumuloProxy_listSplits_args() noexcept
-                                : login(),
+                                : sharedSecret(),
                                   tableName(),
                                   maxSplits(0) {
   }
 
   virtual ~AccumuloProxy_listSplits_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string tableName;
   int32_t maxSplits;
 
   _AccumuloProxy_listSplits_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_tableName(const std::string& val);
 
@@ -3552,7 +3427,7 @@ class AccumuloProxy_listSplits_args {
 
   bool operator == (const AccumuloProxy_listSplits_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(tableName == rhs.tableName))
       return false;
@@ -3577,7 +3452,7 @@ class AccumuloProxy_listSplits_pargs {
 
 
   virtual ~AccumuloProxy_listSplits_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* tableName;
   const int32_t* maxSplits;
 
@@ -3665,8 +3540,8 @@ class AccumuloProxy_listSplits_presult {
 };
 
 typedef struct _AccumuloProxy_listTables_args__isset {
-  _AccumuloProxy_listTables_args__isset() : login(false) {}
-  bool login :1;
+  _AccumuloProxy_listTables_args__isset() : sharedSecret(false) {}
+  bool sharedSecret :1;
 } _AccumuloProxy_listTables_args__isset;
 
 class AccumuloProxy_listTables_args {
@@ -3675,19 +3550,19 @@ class AccumuloProxy_listTables_args {
   AccumuloProxy_listTables_args(const AccumuloProxy_listTables_args&);
   AccumuloProxy_listTables_args& operator=(const AccumuloProxy_listTables_args&);
   AccumuloProxy_listTables_args() noexcept
-                                : login() {
+                                : sharedSecret() {
   }
 
   virtual ~AccumuloProxy_listTables_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
 
   _AccumuloProxy_listTables_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   bool operator == (const AccumuloProxy_listTables_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     return true;
   }
@@ -3708,7 +3583,7 @@ class AccumuloProxy_listTables_pargs {
 
 
   virtual ~AccumuloProxy_listTables_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -3770,8 +3645,8 @@ class AccumuloProxy_listTables_presult {
 };
 
 typedef struct _AccumuloProxy_listIterators_args__isset {
-  _AccumuloProxy_listIterators_args__isset() : login(false), tableName(false) {}
-  bool login :1;
+  _AccumuloProxy_listIterators_args__isset() : sharedSecret(false), tableName(false) {}
+  bool sharedSecret :1;
   bool tableName :1;
 } _AccumuloProxy_listIterators_args__isset;
 
@@ -3781,23 +3656,23 @@ class AccumuloProxy_listIterators_args {
   AccumuloProxy_listIterators_args(const AccumuloProxy_listIterators_args&);
   AccumuloProxy_listIterators_args& operator=(const AccumuloProxy_listIterators_args&);
   AccumuloProxy_listIterators_args() noexcept
-                                   : login(),
+                                   : sharedSecret(),
                                      tableName() {
   }
 
   virtual ~AccumuloProxy_listIterators_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string tableName;
 
   _AccumuloProxy_listIterators_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_tableName(const std::string& val);
 
   bool operator == (const AccumuloProxy_listIterators_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(tableName == rhs.tableName))
       return false;
@@ -3820,7 +3695,7 @@ class AccumuloProxy_listIterators_pargs {
 
 
   virtual ~AccumuloProxy_listIterators_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* tableName;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -3907,8 +3782,8 @@ class AccumuloProxy_listIterators_presult {
 };
 
 typedef struct _AccumuloProxy_listConstraints_args__isset {
-  _AccumuloProxy_listConstraints_args__isset() : login(false), tableName(false) {}
-  bool login :1;
+  _AccumuloProxy_listConstraints_args__isset() : sharedSecret(false), tableName(false) {}
+  bool sharedSecret :1;
   bool tableName :1;
 } _AccumuloProxy_listConstraints_args__isset;
 
@@ -3918,23 +3793,23 @@ class AccumuloProxy_listConstraints_args {
   AccumuloProxy_listConstraints_args(const AccumuloProxy_listConstraints_args&);
   AccumuloProxy_listConstraints_args& operator=(const AccumuloProxy_listConstraints_args&);
   AccumuloProxy_listConstraints_args() noexcept
-                                     : login(),
+                                     : sharedSecret(),
                                        tableName() {
   }
 
   virtual ~AccumuloProxy_listConstraints_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string tableName;
 
   _AccumuloProxy_listConstraints_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_tableName(const std::string& val);
 
   bool operator == (const AccumuloProxy_listConstraints_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(tableName == rhs.tableName))
       return false;
@@ -3957,7 +3832,7 @@ class AccumuloProxy_listConstraints_pargs {
 
 
   virtual ~AccumuloProxy_listConstraints_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* tableName;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -4044,8 +3919,8 @@ class AccumuloProxy_listConstraints_presult {
 };
 
 typedef struct _AccumuloProxy_mergeTablets_args__isset {
-  _AccumuloProxy_mergeTablets_args__isset() : login(false), tableName(false), startRow(false), endRow(false) {}
-  bool login :1;
+  _AccumuloProxy_mergeTablets_args__isset() : sharedSecret(false), tableName(false), startRow(false), endRow(false) {}
+  bool sharedSecret :1;
   bool tableName :1;
   bool startRow :1;
   bool endRow :1;
@@ -4057,21 +3932,21 @@ class AccumuloProxy_mergeTablets_args {
   AccumuloProxy_mergeTablets_args(const AccumuloProxy_mergeTablets_args&);
   AccumuloProxy_mergeTablets_args& operator=(const AccumuloProxy_mergeTablets_args&);
   AccumuloProxy_mergeTablets_args() noexcept
-                                  : login(),
+                                  : sharedSecret(),
                                     tableName(),
                                     startRow(),
                                     endRow() {
   }
 
   virtual ~AccumuloProxy_mergeTablets_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string tableName;
   std::string startRow;
   std::string endRow;
 
   _AccumuloProxy_mergeTablets_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_tableName(const std::string& val);
 
@@ -4081,7 +3956,7 @@ class AccumuloProxy_mergeTablets_args {
 
   bool operator == (const AccumuloProxy_mergeTablets_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(tableName == rhs.tableName))
       return false;
@@ -4108,7 +3983,7 @@ class AccumuloProxy_mergeTablets_pargs {
 
 
   virtual ~AccumuloProxy_mergeTablets_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* tableName;
   const std::string* startRow;
   const std::string* endRow;
@@ -4189,8 +4064,8 @@ class AccumuloProxy_mergeTablets_presult {
 };
 
 typedef struct _AccumuloProxy_offlineTable_args__isset {
-  _AccumuloProxy_offlineTable_args__isset() : login(false), tableName(false), wait(true) {}
-  bool login :1;
+  _AccumuloProxy_offlineTable_args__isset() : sharedSecret(false), tableName(false), wait(true) {}
+  bool sharedSecret :1;
   bool tableName :1;
   bool wait :1;
 } _AccumuloProxy_offlineTable_args__isset;
@@ -4201,19 +4076,19 @@ class AccumuloProxy_offlineTable_args {
   AccumuloProxy_offlineTable_args(const AccumuloProxy_offlineTable_args&);
   AccumuloProxy_offlineTable_args& operator=(const AccumuloProxy_offlineTable_args&);
   AccumuloProxy_offlineTable_args() noexcept
-                                  : login(),
+                                  : sharedSecret(),
                                     tableName(),
                                     wait(false) {
   }
 
   virtual ~AccumuloProxy_offlineTable_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string tableName;
   bool wait;
 
   _AccumuloProxy_offlineTable_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_tableName(const std::string& val);
 
@@ -4221,7 +4096,7 @@ class AccumuloProxy_offlineTable_args {
 
   bool operator == (const AccumuloProxy_offlineTable_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(tableName == rhs.tableName))
       return false;
@@ -4246,7 +4121,7 @@ class AccumuloProxy_offlineTable_pargs {
 
 
   virtual ~AccumuloProxy_offlineTable_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* tableName;
   const bool* wait;
 
@@ -4326,8 +4201,8 @@ class AccumuloProxy_offlineTable_presult {
 };
 
 typedef struct _AccumuloProxy_onlineTable_args__isset {
-  _AccumuloProxy_onlineTable_args__isset() : login(false), tableName(false), wait(true) {}
-  bool login :1;
+  _AccumuloProxy_onlineTable_args__isset() : sharedSecret(false), tableName(false), wait(true) {}
+  bool sharedSecret :1;
   bool tableName :1;
   bool wait :1;
 } _AccumuloProxy_onlineTable_args__isset;
@@ -4338,19 +4213,19 @@ class AccumuloProxy_onlineTable_args {
   AccumuloProxy_onlineTable_args(const AccumuloProxy_onlineTable_args&);
   AccumuloProxy_onlineTable_args& operator=(const AccumuloProxy_onlineTable_args&);
   AccumuloProxy_onlineTable_args() noexcept
-                                 : login(),
+                                 : sharedSecret(),
                                    tableName(),
                                    wait(false) {
   }
 
   virtual ~AccumuloProxy_onlineTable_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string tableName;
   bool wait;
 
   _AccumuloProxy_onlineTable_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_tableName(const std::string& val);
 
@@ -4358,7 +4233,7 @@ class AccumuloProxy_onlineTable_args {
 
   bool operator == (const AccumuloProxy_onlineTable_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(tableName == rhs.tableName))
       return false;
@@ -4383,7 +4258,7 @@ class AccumuloProxy_onlineTable_pargs {
 
 
   virtual ~AccumuloProxy_onlineTable_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* tableName;
   const bool* wait;
 
@@ -4463,8 +4338,8 @@ class AccumuloProxy_onlineTable_presult {
 };
 
 typedef struct _AccumuloProxy_removeConstraint_args__isset {
-  _AccumuloProxy_removeConstraint_args__isset() : login(false), tableName(false), constraint(false) {}
-  bool login :1;
+  _AccumuloProxy_removeConstraint_args__isset() : sharedSecret(false), tableName(false), constraint(false) {}
+  bool sharedSecret :1;
   bool tableName :1;
   bool constraint :1;
 } _AccumuloProxy_removeConstraint_args__isset;
@@ -4475,19 +4350,19 @@ class AccumuloProxy_removeConstraint_args {
   AccumuloProxy_removeConstraint_args(const AccumuloProxy_removeConstraint_args&);
   AccumuloProxy_removeConstraint_args& operator=(const AccumuloProxy_removeConstraint_args&);
   AccumuloProxy_removeConstraint_args() noexcept
-                                      : login(),
+                                      : sharedSecret(),
                                         tableName(),
                                         constraint(0) {
   }
 
   virtual ~AccumuloProxy_removeConstraint_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string tableName;
   int32_t constraint;
 
   _AccumuloProxy_removeConstraint_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_tableName(const std::string& val);
 
@@ -4495,7 +4370,7 @@ class AccumuloProxy_removeConstraint_args {
 
   bool operator == (const AccumuloProxy_removeConstraint_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(tableName == rhs.tableName))
       return false;
@@ -4520,7 +4395,7 @@ class AccumuloProxy_removeConstraint_pargs {
 
 
   virtual ~AccumuloProxy_removeConstraint_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* tableName;
   const int32_t* constraint;
 
@@ -4600,8 +4475,8 @@ class AccumuloProxy_removeConstraint_presult {
 };
 
 typedef struct _AccumuloProxy_removeIterator_args__isset {
-  _AccumuloProxy_removeIterator_args__isset() : login(false), tableName(false), iterName(false), scopes(false) {}
-  bool login :1;
+  _AccumuloProxy_removeIterator_args__isset() : sharedSecret(false), tableName(false), iterName(false), scopes(false) {}
+  bool sharedSecret :1;
   bool tableName :1;
   bool iterName :1;
   bool scopes :1;
@@ -4613,20 +4488,20 @@ class AccumuloProxy_removeIterator_args {
   AccumuloProxy_removeIterator_args(const AccumuloProxy_removeIterator_args&);
   AccumuloProxy_removeIterator_args& operator=(const AccumuloProxy_removeIterator_args&);
   AccumuloProxy_removeIterator_args() noexcept
-                                    : login(),
+                                    : sharedSecret(),
                                       tableName(),
                                       iterName() {
   }
 
   virtual ~AccumuloProxy_removeIterator_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string tableName;
   std::string iterName;
   std::set<IteratorScope::type>  scopes;
 
   _AccumuloProxy_removeIterator_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_tableName(const std::string& val);
 
@@ -4636,7 +4511,7 @@ class AccumuloProxy_removeIterator_args {
 
   bool operator == (const AccumuloProxy_removeIterator_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(tableName == rhs.tableName))
       return false;
@@ -4663,7 +4538,7 @@ class AccumuloProxy_removeIterator_pargs {
 
 
   virtual ~AccumuloProxy_removeIterator_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* tableName;
   const std::string* iterName;
   const std::set<IteratorScope::type> * scopes;
@@ -4744,8 +4619,8 @@ class AccumuloProxy_removeIterator_presult {
 };
 
 typedef struct _AccumuloProxy_removeTableProperty_args__isset {
-  _AccumuloProxy_removeTableProperty_args__isset() : login(false), tableName(false), property(false) {}
-  bool login :1;
+  _AccumuloProxy_removeTableProperty_args__isset() : sharedSecret(false), tableName(false), property(false) {}
+  bool sharedSecret :1;
   bool tableName :1;
   bool property :1;
 } _AccumuloProxy_removeTableProperty_args__isset;
@@ -4756,19 +4631,19 @@ class AccumuloProxy_removeTableProperty_args {
   AccumuloProxy_removeTableProperty_args(const AccumuloProxy_removeTableProperty_args&);
   AccumuloProxy_removeTableProperty_args& operator=(const AccumuloProxy_removeTableProperty_args&);
   AccumuloProxy_removeTableProperty_args() noexcept
-                                         : login(),
+                                         : sharedSecret(),
                                            tableName(),
                                            property() {
   }
 
   virtual ~AccumuloProxy_removeTableProperty_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string tableName;
   std::string property;
 
   _AccumuloProxy_removeTableProperty_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_tableName(const std::string& val);
 
@@ -4776,7 +4651,7 @@ class AccumuloProxy_removeTableProperty_args {
 
   bool operator == (const AccumuloProxy_removeTableProperty_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(tableName == rhs.tableName))
       return false;
@@ -4801,7 +4676,7 @@ class AccumuloProxy_removeTableProperty_pargs {
 
 
   virtual ~AccumuloProxy_removeTableProperty_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* tableName;
   const std::string* property;
 
@@ -4881,8 +4756,8 @@ class AccumuloProxy_removeTableProperty_presult {
 };
 
 typedef struct _AccumuloProxy_renameTable_args__isset {
-  _AccumuloProxy_renameTable_args__isset() : login(false), oldTableName(false), newTableName(false) {}
-  bool login :1;
+  _AccumuloProxy_renameTable_args__isset() : sharedSecret(false), oldTableName(false), newTableName(false) {}
+  bool sharedSecret :1;
   bool oldTableName :1;
   bool newTableName :1;
 } _AccumuloProxy_renameTable_args__isset;
@@ -4893,19 +4768,19 @@ class AccumuloProxy_renameTable_args {
   AccumuloProxy_renameTable_args(const AccumuloProxy_renameTable_args&);
   AccumuloProxy_renameTable_args& operator=(const AccumuloProxy_renameTable_args&);
   AccumuloProxy_renameTable_args() noexcept
-                                 : login(),
+                                 : sharedSecret(),
                                    oldTableName(),
                                    newTableName() {
   }
 
   virtual ~AccumuloProxy_renameTable_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string oldTableName;
   std::string newTableName;
 
   _AccumuloProxy_renameTable_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_oldTableName(const std::string& val);
 
@@ -4913,7 +4788,7 @@ class AccumuloProxy_renameTable_args {
 
   bool operator == (const AccumuloProxy_renameTable_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(oldTableName == rhs.oldTableName))
       return false;
@@ -4938,7 +4813,7 @@ class AccumuloProxy_renameTable_pargs {
 
 
   virtual ~AccumuloProxy_renameTable_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* oldTableName;
   const std::string* newTableName;
 
@@ -5026,8 +4901,8 @@ class AccumuloProxy_renameTable_presult {
 };
 
 typedef struct _AccumuloProxy_setLocalityGroups_args__isset {
-  _AccumuloProxy_setLocalityGroups_args__isset() : login(false), tableName(false), groups(false) {}
-  bool login :1;
+  _AccumuloProxy_setLocalityGroups_args__isset() : sharedSecret(false), tableName(false), groups(false) {}
+  bool sharedSecret :1;
   bool tableName :1;
   bool groups :1;
 } _AccumuloProxy_setLocalityGroups_args__isset;
@@ -5038,18 +4913,18 @@ class AccumuloProxy_setLocalityGroups_args {
   AccumuloProxy_setLocalityGroups_args(const AccumuloProxy_setLocalityGroups_args&);
   AccumuloProxy_setLocalityGroups_args& operator=(const AccumuloProxy_setLocalityGroups_args&);
   AccumuloProxy_setLocalityGroups_args() noexcept
-                                       : login(),
+                                       : sharedSecret(),
                                          tableName() {
   }
 
   virtual ~AccumuloProxy_setLocalityGroups_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string tableName;
   std::map<std::string, std::set<std::string> >  groups;
 
   _AccumuloProxy_setLocalityGroups_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_tableName(const std::string& val);
 
@@ -5057,7 +4932,7 @@ class AccumuloProxy_setLocalityGroups_args {
 
   bool operator == (const AccumuloProxy_setLocalityGroups_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(tableName == rhs.tableName))
       return false;
@@ -5082,7 +4957,7 @@ class AccumuloProxy_setLocalityGroups_pargs {
 
 
   virtual ~AccumuloProxy_setLocalityGroups_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* tableName;
   const std::map<std::string, std::set<std::string> > * groups;
 
@@ -5162,8 +5037,8 @@ class AccumuloProxy_setLocalityGroups_presult {
 };
 
 typedef struct _AccumuloProxy_setTableProperty_args__isset {
-  _AccumuloProxy_setTableProperty_args__isset() : login(false), tableName(false), property(false), value(false) {}
-  bool login :1;
+  _AccumuloProxy_setTableProperty_args__isset() : sharedSecret(false), tableName(false), property(false), value(false) {}
+  bool sharedSecret :1;
   bool tableName :1;
   bool property :1;
   bool value :1;
@@ -5175,21 +5050,21 @@ class AccumuloProxy_setTableProperty_args {
   AccumuloProxy_setTableProperty_args(const AccumuloProxy_setTableProperty_args&);
   AccumuloProxy_setTableProperty_args& operator=(const AccumuloProxy_setTableProperty_args&);
   AccumuloProxy_setTableProperty_args() noexcept
-                                      : login(),
+                                      : sharedSecret(),
                                         tableName(),
                                         property(),
                                         value() {
   }
 
   virtual ~AccumuloProxy_setTableProperty_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string tableName;
   std::string property;
   std::string value;
 
   _AccumuloProxy_setTableProperty_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_tableName(const std::string& val);
 
@@ -5199,7 +5074,7 @@ class AccumuloProxy_setTableProperty_args {
 
   bool operator == (const AccumuloProxy_setTableProperty_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(tableName == rhs.tableName))
       return false;
@@ -5226,7 +5101,7 @@ class AccumuloProxy_setTableProperty_pargs {
 
 
   virtual ~AccumuloProxy_setTableProperty_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* tableName;
   const std::string* property;
   const std::string* value;
@@ -5307,8 +5182,8 @@ class AccumuloProxy_setTableProperty_presult {
 };
 
 typedef struct _AccumuloProxy_splitRangeByTablets_args__isset {
-  _AccumuloProxy_splitRangeByTablets_args__isset() : login(false), tableName(false), range(false), maxSplits(false) {}
-  bool login :1;
+  _AccumuloProxy_splitRangeByTablets_args__isset() : sharedSecret(false), tableName(false), range(false), maxSplits(false) {}
+  bool sharedSecret :1;
   bool tableName :1;
   bool range :1;
   bool maxSplits :1;
@@ -5320,20 +5195,20 @@ class AccumuloProxy_splitRangeByTablets_args {
   AccumuloProxy_splitRangeByTablets_args(const AccumuloProxy_splitRangeByTablets_args&);
   AccumuloProxy_splitRangeByTablets_args& operator=(const AccumuloProxy_splitRangeByTablets_args&);
   AccumuloProxy_splitRangeByTablets_args() noexcept
-                                         : login(),
+                                         : sharedSecret(),
                                            tableName(),
                                            maxSplits(0) {
   }
 
   virtual ~AccumuloProxy_splitRangeByTablets_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string tableName;
   Range range;
   int32_t maxSplits;
 
   _AccumuloProxy_splitRangeByTablets_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_tableName(const std::string& val);
 
@@ -5343,7 +5218,7 @@ class AccumuloProxy_splitRangeByTablets_args {
 
   bool operator == (const AccumuloProxy_splitRangeByTablets_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(tableName == rhs.tableName))
       return false;
@@ -5370,7 +5245,7 @@ class AccumuloProxy_splitRangeByTablets_pargs {
 
 
   virtual ~AccumuloProxy_splitRangeByTablets_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* tableName;
   const Range* range;
   const int32_t* maxSplits;
@@ -5459,8 +5334,8 @@ class AccumuloProxy_splitRangeByTablets_presult {
 };
 
 typedef struct _AccumuloProxy_tableExists_args__isset {
-  _AccumuloProxy_tableExists_args__isset() : login(false), tableName(false) {}
-  bool login :1;
+  _AccumuloProxy_tableExists_args__isset() : sharedSecret(false), tableName(false) {}
+  bool sharedSecret :1;
   bool tableName :1;
 } _AccumuloProxy_tableExists_args__isset;
 
@@ -5470,23 +5345,23 @@ class AccumuloProxy_tableExists_args {
   AccumuloProxy_tableExists_args(const AccumuloProxy_tableExists_args&);
   AccumuloProxy_tableExists_args& operator=(const AccumuloProxy_tableExists_args&);
   AccumuloProxy_tableExists_args() noexcept
-                                 : login(),
+                                 : sharedSecret(),
                                    tableName() {
   }
 
   virtual ~AccumuloProxy_tableExists_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string tableName;
 
   _AccumuloProxy_tableExists_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_tableName(const std::string& val);
 
   bool operator == (const AccumuloProxy_tableExists_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(tableName == rhs.tableName))
       return false;
@@ -5509,7 +5384,7 @@ class AccumuloProxy_tableExists_pargs {
 
 
   virtual ~AccumuloProxy_tableExists_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* tableName;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -5573,8 +5448,8 @@ class AccumuloProxy_tableExists_presult {
 };
 
 typedef struct _AccumuloProxy_tableIdMap_args__isset {
-  _AccumuloProxy_tableIdMap_args__isset() : login(false) {}
-  bool login :1;
+  _AccumuloProxy_tableIdMap_args__isset() : sharedSecret(false) {}
+  bool sharedSecret :1;
 } _AccumuloProxy_tableIdMap_args__isset;
 
 class AccumuloProxy_tableIdMap_args {
@@ -5583,19 +5458,19 @@ class AccumuloProxy_tableIdMap_args {
   AccumuloProxy_tableIdMap_args(const AccumuloProxy_tableIdMap_args&);
   AccumuloProxy_tableIdMap_args& operator=(const AccumuloProxy_tableIdMap_args&);
   AccumuloProxy_tableIdMap_args() noexcept
-                                : login() {
+                                : sharedSecret() {
   }
 
   virtual ~AccumuloProxy_tableIdMap_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
 
   _AccumuloProxy_tableIdMap_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   bool operator == (const AccumuloProxy_tableIdMap_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     return true;
   }
@@ -5616,7 +5491,7 @@ class AccumuloProxy_tableIdMap_pargs {
 
 
   virtual ~AccumuloProxy_tableIdMap_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -5678,8 +5553,8 @@ class AccumuloProxy_tableIdMap_presult {
 };
 
 typedef struct _AccumuloProxy_testTableClassLoad_args__isset {
-  _AccumuloProxy_testTableClassLoad_args__isset() : login(false), tableName(false), className(false), asTypeName(false) {}
-  bool login :1;
+  _AccumuloProxy_testTableClassLoad_args__isset() : sharedSecret(false), tableName(false), className(false), asTypeName(false) {}
+  bool sharedSecret :1;
   bool tableName :1;
   bool className :1;
   bool asTypeName :1;
@@ -5691,21 +5566,21 @@ class AccumuloProxy_testTableClassLoad_args {
   AccumuloProxy_testTableClassLoad_args(const AccumuloProxy_testTableClassLoad_args&);
   AccumuloProxy_testTableClassLoad_args& operator=(const AccumuloProxy_testTableClassLoad_args&);
   AccumuloProxy_testTableClassLoad_args() noexcept
-                                        : login(),
+                                        : sharedSecret(),
                                           tableName(),
                                           className(),
                                           asTypeName() {
   }
 
   virtual ~AccumuloProxy_testTableClassLoad_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string tableName;
   std::string className;
   std::string asTypeName;
 
   _AccumuloProxy_testTableClassLoad_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_tableName(const std::string& val);
 
@@ -5715,7 +5590,7 @@ class AccumuloProxy_testTableClassLoad_args {
 
   bool operator == (const AccumuloProxy_testTableClassLoad_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(tableName == rhs.tableName))
       return false;
@@ -5742,7 +5617,7 @@ class AccumuloProxy_testTableClassLoad_pargs {
 
 
   virtual ~AccumuloProxy_testTableClassLoad_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* tableName;
   const std::string* className;
   const std::string* asTypeName;
@@ -5832,8 +5707,8 @@ class AccumuloProxy_testTableClassLoad_presult {
 };
 
 typedef struct _AccumuloProxy_pingTabletServer_args__isset {
-  _AccumuloProxy_pingTabletServer_args__isset() : login(false), tserver(false) {}
-  bool login :1;
+  _AccumuloProxy_pingTabletServer_args__isset() : sharedSecret(false), tserver(false) {}
+  bool sharedSecret :1;
   bool tserver :1;
 } _AccumuloProxy_pingTabletServer_args__isset;
 
@@ -5843,23 +5718,23 @@ class AccumuloProxy_pingTabletServer_args {
   AccumuloProxy_pingTabletServer_args(const AccumuloProxy_pingTabletServer_args&);
   AccumuloProxy_pingTabletServer_args& operator=(const AccumuloProxy_pingTabletServer_args&);
   AccumuloProxy_pingTabletServer_args() noexcept
-                                      : login(),
+                                      : sharedSecret(),
                                         tserver() {
   }
 
   virtual ~AccumuloProxy_pingTabletServer_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string tserver;
 
   _AccumuloProxy_pingTabletServer_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_tserver(const std::string& val);
 
   bool operator == (const AccumuloProxy_pingTabletServer_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(tserver == rhs.tserver))
       return false;
@@ -5882,7 +5757,7 @@ class AccumuloProxy_pingTabletServer_pargs {
 
 
   virtual ~AccumuloProxy_pingTabletServer_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* tserver;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -5953,8 +5828,8 @@ class AccumuloProxy_pingTabletServer_presult {
 };
 
 typedef struct _AccumuloProxy_getActiveScans_args__isset {
-  _AccumuloProxy_getActiveScans_args__isset() : login(false), tserver(false) {}
-  bool login :1;
+  _AccumuloProxy_getActiveScans_args__isset() : sharedSecret(false), tserver(false) {}
+  bool sharedSecret :1;
   bool tserver :1;
 } _AccumuloProxy_getActiveScans_args__isset;
 
@@ -5964,23 +5839,23 @@ class AccumuloProxy_getActiveScans_args {
   AccumuloProxy_getActiveScans_args(const AccumuloProxy_getActiveScans_args&);
   AccumuloProxy_getActiveScans_args& operator=(const AccumuloProxy_getActiveScans_args&);
   AccumuloProxy_getActiveScans_args() noexcept
-                                    : login(),
+                                    : sharedSecret(),
                                       tserver() {
   }
 
   virtual ~AccumuloProxy_getActiveScans_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string tserver;
 
   _AccumuloProxy_getActiveScans_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_tserver(const std::string& val);
 
   bool operator == (const AccumuloProxy_getActiveScans_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(tserver == rhs.tserver))
       return false;
@@ -6003,7 +5878,7 @@ class AccumuloProxy_getActiveScans_pargs {
 
 
   virtual ~AccumuloProxy_getActiveScans_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* tserver;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -6082,8 +5957,8 @@ class AccumuloProxy_getActiveScans_presult {
 };
 
 typedef struct _AccumuloProxy_getActiveCompactions_args__isset {
-  _AccumuloProxy_getActiveCompactions_args__isset() : login(false), tserver(false) {}
-  bool login :1;
+  _AccumuloProxy_getActiveCompactions_args__isset() : sharedSecret(false), tserver(false) {}
+  bool sharedSecret :1;
   bool tserver :1;
 } _AccumuloProxy_getActiveCompactions_args__isset;
 
@@ -6093,23 +5968,23 @@ class AccumuloProxy_getActiveCompactions_args {
   AccumuloProxy_getActiveCompactions_args(const AccumuloProxy_getActiveCompactions_args&);
   AccumuloProxy_getActiveCompactions_args& operator=(const AccumuloProxy_getActiveCompactions_args&);
   AccumuloProxy_getActiveCompactions_args() noexcept
-                                          : login(),
+                                          : sharedSecret(),
                                             tserver() {
   }
 
   virtual ~AccumuloProxy_getActiveCompactions_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string tserver;
 
   _AccumuloProxy_getActiveCompactions_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_tserver(const std::string& val);
 
   bool operator == (const AccumuloProxy_getActiveCompactions_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(tserver == rhs.tserver))
       return false;
@@ -6132,7 +6007,7 @@ class AccumuloProxy_getActiveCompactions_pargs {
 
 
   virtual ~AccumuloProxy_getActiveCompactions_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* tserver;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -6211,8 +6086,8 @@ class AccumuloProxy_getActiveCompactions_presult {
 };
 
 typedef struct _AccumuloProxy_getSiteConfiguration_args__isset {
-  _AccumuloProxy_getSiteConfiguration_args__isset() : login(false) {}
-  bool login :1;
+  _AccumuloProxy_getSiteConfiguration_args__isset() : sharedSecret(false) {}
+  bool sharedSecret :1;
 } _AccumuloProxy_getSiteConfiguration_args__isset;
 
 class AccumuloProxy_getSiteConfiguration_args {
@@ -6221,19 +6096,19 @@ class AccumuloProxy_getSiteConfiguration_args {
   AccumuloProxy_getSiteConfiguration_args(const AccumuloProxy_getSiteConfiguration_args&);
   AccumuloProxy_getSiteConfiguration_args& operator=(const AccumuloProxy_getSiteConfiguration_args&);
   AccumuloProxy_getSiteConfiguration_args() noexcept
-                                          : login() {
+                                          : sharedSecret() {
   }
 
   virtual ~AccumuloProxy_getSiteConfiguration_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
 
   _AccumuloProxy_getSiteConfiguration_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   bool operator == (const AccumuloProxy_getSiteConfiguration_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     return true;
   }
@@ -6254,7 +6129,7 @@ class AccumuloProxy_getSiteConfiguration_pargs {
 
 
   virtual ~AccumuloProxy_getSiteConfiguration_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -6332,8 +6207,8 @@ class AccumuloProxy_getSiteConfiguration_presult {
 };
 
 typedef struct _AccumuloProxy_getSystemConfiguration_args__isset {
-  _AccumuloProxy_getSystemConfiguration_args__isset() : login(false) {}
-  bool login :1;
+  _AccumuloProxy_getSystemConfiguration_args__isset() : sharedSecret(false) {}
+  bool sharedSecret :1;
 } _AccumuloProxy_getSystemConfiguration_args__isset;
 
 class AccumuloProxy_getSystemConfiguration_args {
@@ -6342,19 +6217,19 @@ class AccumuloProxy_getSystemConfiguration_args {
   AccumuloProxy_getSystemConfiguration_args(const AccumuloProxy_getSystemConfiguration_args&);
   AccumuloProxy_getSystemConfiguration_args& operator=(const AccumuloProxy_getSystemConfiguration_args&);
   AccumuloProxy_getSystemConfiguration_args() noexcept
-                                            : login() {
+                                            : sharedSecret() {
   }
 
   virtual ~AccumuloProxy_getSystemConfiguration_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
 
   _AccumuloProxy_getSystemConfiguration_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   bool operator == (const AccumuloProxy_getSystemConfiguration_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     return true;
   }
@@ -6375,7 +6250,7 @@ class AccumuloProxy_getSystemConfiguration_pargs {
 
 
   virtual ~AccumuloProxy_getSystemConfiguration_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -6453,8 +6328,8 @@ class AccumuloProxy_getSystemConfiguration_presult {
 };
 
 typedef struct _AccumuloProxy_getTabletServers_args__isset {
-  _AccumuloProxy_getTabletServers_args__isset() : login(false) {}
-  bool login :1;
+  _AccumuloProxy_getTabletServers_args__isset() : sharedSecret(false) {}
+  bool sharedSecret :1;
 } _AccumuloProxy_getTabletServers_args__isset;
 
 class AccumuloProxy_getTabletServers_args {
@@ -6463,19 +6338,19 @@ class AccumuloProxy_getTabletServers_args {
   AccumuloProxy_getTabletServers_args(const AccumuloProxy_getTabletServers_args&);
   AccumuloProxy_getTabletServers_args& operator=(const AccumuloProxy_getTabletServers_args&);
   AccumuloProxy_getTabletServers_args() noexcept
-                                      : login() {
+                                      : sharedSecret() {
   }
 
   virtual ~AccumuloProxy_getTabletServers_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
 
   _AccumuloProxy_getTabletServers_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   bool operator == (const AccumuloProxy_getTabletServers_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     return true;
   }
@@ -6496,7 +6371,7 @@ class AccumuloProxy_getTabletServers_pargs {
 
 
   virtual ~AccumuloProxy_getTabletServers_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -6558,8 +6433,8 @@ class AccumuloProxy_getTabletServers_presult {
 };
 
 typedef struct _AccumuloProxy_removeProperty_args__isset {
-  _AccumuloProxy_removeProperty_args__isset() : login(false), property(false) {}
-  bool login :1;
+  _AccumuloProxy_removeProperty_args__isset() : sharedSecret(false), property(false) {}
+  bool sharedSecret :1;
   bool property :1;
 } _AccumuloProxy_removeProperty_args__isset;
 
@@ -6569,23 +6444,23 @@ class AccumuloProxy_removeProperty_args {
   AccumuloProxy_removeProperty_args(const AccumuloProxy_removeProperty_args&);
   AccumuloProxy_removeProperty_args& operator=(const AccumuloProxy_removeProperty_args&);
   AccumuloProxy_removeProperty_args() noexcept
-                                    : login(),
+                                    : sharedSecret(),
                                       property() {
   }
 
   virtual ~AccumuloProxy_removeProperty_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string property;
 
   _AccumuloProxy_removeProperty_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_property(const std::string& val);
 
   bool operator == (const AccumuloProxy_removeProperty_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(property == rhs.property))
       return false;
@@ -6608,7 +6483,7 @@ class AccumuloProxy_removeProperty_pargs {
 
 
   virtual ~AccumuloProxy_removeProperty_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* property;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -6679,8 +6554,8 @@ class AccumuloProxy_removeProperty_presult {
 };
 
 typedef struct _AccumuloProxy_setProperty_args__isset {
-  _AccumuloProxy_setProperty_args__isset() : login(false), property(false), value(false) {}
-  bool login :1;
+  _AccumuloProxy_setProperty_args__isset() : sharedSecret(false), property(false), value(false) {}
+  bool sharedSecret :1;
   bool property :1;
   bool value :1;
 } _AccumuloProxy_setProperty_args__isset;
@@ -6691,19 +6566,19 @@ class AccumuloProxy_setProperty_args {
   AccumuloProxy_setProperty_args(const AccumuloProxy_setProperty_args&);
   AccumuloProxy_setProperty_args& operator=(const AccumuloProxy_setProperty_args&);
   AccumuloProxy_setProperty_args() noexcept
-                                 : login(),
+                                 : sharedSecret(),
                                    property(),
                                    value() {
   }
 
   virtual ~AccumuloProxy_setProperty_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string property;
   std::string value;
 
   _AccumuloProxy_setProperty_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_property(const std::string& val);
 
@@ -6711,7 +6586,7 @@ class AccumuloProxy_setProperty_args {
 
   bool operator == (const AccumuloProxy_setProperty_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(property == rhs.property))
       return false;
@@ -6736,7 +6611,7 @@ class AccumuloProxy_setProperty_pargs {
 
 
   virtual ~AccumuloProxy_setProperty_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* property;
   const std::string* value;
 
@@ -6808,8 +6683,8 @@ class AccumuloProxy_setProperty_presult {
 };
 
 typedef struct _AccumuloProxy_testClassLoad_args__isset {
-  _AccumuloProxy_testClassLoad_args__isset() : login(false), className(false), asTypeName(false) {}
-  bool login :1;
+  _AccumuloProxy_testClassLoad_args__isset() : sharedSecret(false), className(false), asTypeName(false) {}
+  bool sharedSecret :1;
   bool className :1;
   bool asTypeName :1;
 } _AccumuloProxy_testClassLoad_args__isset;
@@ -6820,19 +6695,19 @@ class AccumuloProxy_testClassLoad_args {
   AccumuloProxy_testClassLoad_args(const AccumuloProxy_testClassLoad_args&);
   AccumuloProxy_testClassLoad_args& operator=(const AccumuloProxy_testClassLoad_args&);
   AccumuloProxy_testClassLoad_args() noexcept
-                                   : login(),
+                                   : sharedSecret(),
                                      className(),
                                      asTypeName() {
   }
 
   virtual ~AccumuloProxy_testClassLoad_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string className;
   std::string asTypeName;
 
   _AccumuloProxy_testClassLoad_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_className(const std::string& val);
 
@@ -6840,7 +6715,7 @@ class AccumuloProxy_testClassLoad_args {
 
   bool operator == (const AccumuloProxy_testClassLoad_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(className == rhs.className))
       return false;
@@ -6865,7 +6740,7 @@ class AccumuloProxy_testClassLoad_pargs {
 
 
   virtual ~AccumuloProxy_testClassLoad_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* className;
   const std::string* asTypeName;
 
@@ -6946,8 +6821,8 @@ class AccumuloProxy_testClassLoad_presult {
 };
 
 typedef struct _AccumuloProxy_authenticateUser_args__isset {
-  _AccumuloProxy_authenticateUser_args__isset() : login(false), user(false), properties(false) {}
-  bool login :1;
+  _AccumuloProxy_authenticateUser_args__isset() : sharedSecret(false), user(false), properties(false) {}
+  bool sharedSecret :1;
   bool user :1;
   bool properties :1;
 } _AccumuloProxy_authenticateUser_args__isset;
@@ -6958,18 +6833,18 @@ class AccumuloProxy_authenticateUser_args {
   AccumuloProxy_authenticateUser_args(const AccumuloProxy_authenticateUser_args&);
   AccumuloProxy_authenticateUser_args& operator=(const AccumuloProxy_authenticateUser_args&);
   AccumuloProxy_authenticateUser_args() noexcept
-                                      : login(),
+                                      : sharedSecret(),
                                         user() {
   }
 
   virtual ~AccumuloProxy_authenticateUser_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string user;
   std::map<std::string, std::string>  properties;
 
   _AccumuloProxy_authenticateUser_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_user(const std::string& val);
 
@@ -6977,7 +6852,7 @@ class AccumuloProxy_authenticateUser_args {
 
   bool operator == (const AccumuloProxy_authenticateUser_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(user == rhs.user))
       return false;
@@ -7002,7 +6877,7 @@ class AccumuloProxy_authenticateUser_pargs {
 
 
   virtual ~AccumuloProxy_authenticateUser_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* user;
   const std::map<std::string, std::string> * properties;
 
@@ -7083,8 +6958,8 @@ class AccumuloProxy_authenticateUser_presult {
 };
 
 typedef struct _AccumuloProxy_changeUserAuthorizations_args__isset {
-  _AccumuloProxy_changeUserAuthorizations_args__isset() : login(false), user(false), authorizations(false) {}
-  bool login :1;
+  _AccumuloProxy_changeUserAuthorizations_args__isset() : sharedSecret(false), user(false), authorizations(false) {}
+  bool sharedSecret :1;
   bool user :1;
   bool authorizations :1;
 } _AccumuloProxy_changeUserAuthorizations_args__isset;
@@ -7095,18 +6970,18 @@ class AccumuloProxy_changeUserAuthorizations_args {
   AccumuloProxy_changeUserAuthorizations_args(const AccumuloProxy_changeUserAuthorizations_args&);
   AccumuloProxy_changeUserAuthorizations_args& operator=(const AccumuloProxy_changeUserAuthorizations_args&);
   AccumuloProxy_changeUserAuthorizations_args() noexcept
-                                              : login(),
+                                              : sharedSecret(),
                                                 user() {
   }
 
   virtual ~AccumuloProxy_changeUserAuthorizations_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string user;
   std::set<std::string>  authorizations;
 
   _AccumuloProxy_changeUserAuthorizations_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_user(const std::string& val);
 
@@ -7114,7 +6989,7 @@ class AccumuloProxy_changeUserAuthorizations_args {
 
   bool operator == (const AccumuloProxy_changeUserAuthorizations_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(user == rhs.user))
       return false;
@@ -7139,7 +7014,7 @@ class AccumuloProxy_changeUserAuthorizations_pargs {
 
 
   virtual ~AccumuloProxy_changeUserAuthorizations_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* user;
   const std::set<std::string> * authorizations;
 
@@ -7211,8 +7086,8 @@ class AccumuloProxy_changeUserAuthorizations_presult {
 };
 
 typedef struct _AccumuloProxy_changeLocalUserPassword_args__isset {
-  _AccumuloProxy_changeLocalUserPassword_args__isset() : login(false), user(false), password(false) {}
-  bool login :1;
+  _AccumuloProxy_changeLocalUserPassword_args__isset() : sharedSecret(false), user(false), password(false) {}
+  bool sharedSecret :1;
   bool user :1;
   bool password :1;
 } _AccumuloProxy_changeLocalUserPassword_args__isset;
@@ -7223,19 +7098,19 @@ class AccumuloProxy_changeLocalUserPassword_args {
   AccumuloProxy_changeLocalUserPassword_args(const AccumuloProxy_changeLocalUserPassword_args&);
   AccumuloProxy_changeLocalUserPassword_args& operator=(const AccumuloProxy_changeLocalUserPassword_args&);
   AccumuloProxy_changeLocalUserPassword_args() noexcept
-                                             : login(),
+                                             : sharedSecret(),
                                                user(),
                                                password() {
   }
 
   virtual ~AccumuloProxy_changeLocalUserPassword_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string user;
   std::string password;
 
   _AccumuloProxy_changeLocalUserPassword_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_user(const std::string& val);
 
@@ -7243,7 +7118,7 @@ class AccumuloProxy_changeLocalUserPassword_args {
 
   bool operator == (const AccumuloProxy_changeLocalUserPassword_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(user == rhs.user))
       return false;
@@ -7268,7 +7143,7 @@ class AccumuloProxy_changeLocalUserPassword_pargs {
 
 
   virtual ~AccumuloProxy_changeLocalUserPassword_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* user;
   const std::string* password;
 
@@ -7340,8 +7215,8 @@ class AccumuloProxy_changeLocalUserPassword_presult {
 };
 
 typedef struct _AccumuloProxy_createLocalUser_args__isset {
-  _AccumuloProxy_createLocalUser_args__isset() : login(false), user(false), password(false) {}
-  bool login :1;
+  _AccumuloProxy_createLocalUser_args__isset() : sharedSecret(false), user(false), password(false) {}
+  bool sharedSecret :1;
   bool user :1;
   bool password :1;
 } _AccumuloProxy_createLocalUser_args__isset;
@@ -7352,19 +7227,19 @@ class AccumuloProxy_createLocalUser_args {
   AccumuloProxy_createLocalUser_args(const AccumuloProxy_createLocalUser_args&);
   AccumuloProxy_createLocalUser_args& operator=(const AccumuloProxy_createLocalUser_args&);
   AccumuloProxy_createLocalUser_args() noexcept
-                                     : login(),
+                                     : sharedSecret(),
                                        user(),
                                        password() {
   }
 
   virtual ~AccumuloProxy_createLocalUser_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string user;
   std::string password;
 
   _AccumuloProxy_createLocalUser_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_user(const std::string& val);
 
@@ -7372,7 +7247,7 @@ class AccumuloProxy_createLocalUser_args {
 
   bool operator == (const AccumuloProxy_createLocalUser_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(user == rhs.user))
       return false;
@@ -7397,7 +7272,7 @@ class AccumuloProxy_createLocalUser_pargs {
 
 
   virtual ~AccumuloProxy_createLocalUser_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* user;
   const std::string* password;
 
@@ -7469,8 +7344,8 @@ class AccumuloProxy_createLocalUser_presult {
 };
 
 typedef struct _AccumuloProxy_dropLocalUser_args__isset {
-  _AccumuloProxy_dropLocalUser_args__isset() : login(false), user(false) {}
-  bool login :1;
+  _AccumuloProxy_dropLocalUser_args__isset() : sharedSecret(false), user(false) {}
+  bool sharedSecret :1;
   bool user :1;
 } _AccumuloProxy_dropLocalUser_args__isset;
 
@@ -7480,23 +7355,23 @@ class AccumuloProxy_dropLocalUser_args {
   AccumuloProxy_dropLocalUser_args(const AccumuloProxy_dropLocalUser_args&);
   AccumuloProxy_dropLocalUser_args& operator=(const AccumuloProxy_dropLocalUser_args&);
   AccumuloProxy_dropLocalUser_args() noexcept
-                                   : login(),
+                                   : sharedSecret(),
                                      user() {
   }
 
   virtual ~AccumuloProxy_dropLocalUser_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string user;
 
   _AccumuloProxy_dropLocalUser_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_user(const std::string& val);
 
   bool operator == (const AccumuloProxy_dropLocalUser_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(user == rhs.user))
       return false;
@@ -7519,7 +7394,7 @@ class AccumuloProxy_dropLocalUser_pargs {
 
 
   virtual ~AccumuloProxy_dropLocalUser_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* user;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -7590,8 +7465,8 @@ class AccumuloProxy_dropLocalUser_presult {
 };
 
 typedef struct _AccumuloProxy_getUserAuthorizations_args__isset {
-  _AccumuloProxy_getUserAuthorizations_args__isset() : login(false), user(false) {}
-  bool login :1;
+  _AccumuloProxy_getUserAuthorizations_args__isset() : sharedSecret(false), user(false) {}
+  bool sharedSecret :1;
   bool user :1;
 } _AccumuloProxy_getUserAuthorizations_args__isset;
 
@@ -7601,23 +7476,23 @@ class AccumuloProxy_getUserAuthorizations_args {
   AccumuloProxy_getUserAuthorizations_args(const AccumuloProxy_getUserAuthorizations_args&);
   AccumuloProxy_getUserAuthorizations_args& operator=(const AccumuloProxy_getUserAuthorizations_args&);
   AccumuloProxy_getUserAuthorizations_args() noexcept
-                                           : login(),
+                                           : sharedSecret(),
                                              user() {
   }
 
   virtual ~AccumuloProxy_getUserAuthorizations_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string user;
 
   _AccumuloProxy_getUserAuthorizations_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_user(const std::string& val);
 
   bool operator == (const AccumuloProxy_getUserAuthorizations_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(user == rhs.user))
       return false;
@@ -7640,7 +7515,7 @@ class AccumuloProxy_getUserAuthorizations_pargs {
 
 
   virtual ~AccumuloProxy_getUserAuthorizations_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* user;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -7719,8 +7594,8 @@ class AccumuloProxy_getUserAuthorizations_presult {
 };
 
 typedef struct _AccumuloProxy_grantSystemPermission_args__isset {
-  _AccumuloProxy_grantSystemPermission_args__isset() : login(false), user(false), perm(false) {}
-  bool login :1;
+  _AccumuloProxy_grantSystemPermission_args__isset() : sharedSecret(false), user(false), perm(false) {}
+  bool sharedSecret :1;
   bool user :1;
   bool perm :1;
 } _AccumuloProxy_grantSystemPermission_args__isset;
@@ -7731,13 +7606,13 @@ class AccumuloProxy_grantSystemPermission_args {
   AccumuloProxy_grantSystemPermission_args(const AccumuloProxy_grantSystemPermission_args&);
   AccumuloProxy_grantSystemPermission_args& operator=(const AccumuloProxy_grantSystemPermission_args&);
   AccumuloProxy_grantSystemPermission_args() noexcept
-                                           : login(),
+                                           : sharedSecret(),
                                              user(),
                                              perm(static_cast<SystemPermission::type>(0)) {
   }
 
   virtual ~AccumuloProxy_grantSystemPermission_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string user;
   /**
    * 
@@ -7747,7 +7622,7 @@ class AccumuloProxy_grantSystemPermission_args {
 
   _AccumuloProxy_grantSystemPermission_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_user(const std::string& val);
 
@@ -7755,7 +7630,7 @@ class AccumuloProxy_grantSystemPermission_args {
 
   bool operator == (const AccumuloProxy_grantSystemPermission_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(user == rhs.user))
       return false;
@@ -7780,7 +7655,7 @@ class AccumuloProxy_grantSystemPermission_pargs {
 
 
   virtual ~AccumuloProxy_grantSystemPermission_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* user;
   /**
    * 
@@ -7856,8 +7731,8 @@ class AccumuloProxy_grantSystemPermission_presult {
 };
 
 typedef struct _AccumuloProxy_grantTablePermission_args__isset {
-  _AccumuloProxy_grantTablePermission_args__isset() : login(false), user(false), table(false), perm(false) {}
-  bool login :1;
+  _AccumuloProxy_grantTablePermission_args__isset() : sharedSecret(false), user(false), table(false), perm(false) {}
+  bool sharedSecret :1;
   bool user :1;
   bool table :1;
   bool perm :1;
@@ -7869,14 +7744,14 @@ class AccumuloProxy_grantTablePermission_args {
   AccumuloProxy_grantTablePermission_args(const AccumuloProxy_grantTablePermission_args&);
   AccumuloProxy_grantTablePermission_args& operator=(const AccumuloProxy_grantTablePermission_args&);
   AccumuloProxy_grantTablePermission_args() noexcept
-                                          : login(),
+                                          : sharedSecret(),
                                             user(),
                                             table(),
                                             perm(static_cast<TablePermission::type>(0)) {
   }
 
   virtual ~AccumuloProxy_grantTablePermission_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string user;
   std::string table;
   /**
@@ -7887,7 +7762,7 @@ class AccumuloProxy_grantTablePermission_args {
 
   _AccumuloProxy_grantTablePermission_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_user(const std::string& val);
 
@@ -7897,7 +7772,7 @@ class AccumuloProxy_grantTablePermission_args {
 
   bool operator == (const AccumuloProxy_grantTablePermission_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(user == rhs.user))
       return false;
@@ -7924,7 +7799,7 @@ class AccumuloProxy_grantTablePermission_pargs {
 
 
   virtual ~AccumuloProxy_grantTablePermission_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* user;
   const std::string* table;
   /**
@@ -8009,8 +7884,8 @@ class AccumuloProxy_grantTablePermission_presult {
 };
 
 typedef struct _AccumuloProxy_hasSystemPermission_args__isset {
-  _AccumuloProxy_hasSystemPermission_args__isset() : login(false), user(false), perm(false) {}
-  bool login :1;
+  _AccumuloProxy_hasSystemPermission_args__isset() : sharedSecret(false), user(false), perm(false) {}
+  bool sharedSecret :1;
   bool user :1;
   bool perm :1;
 } _AccumuloProxy_hasSystemPermission_args__isset;
@@ -8021,13 +7896,13 @@ class AccumuloProxy_hasSystemPermission_args {
   AccumuloProxy_hasSystemPermission_args(const AccumuloProxy_hasSystemPermission_args&);
   AccumuloProxy_hasSystemPermission_args& operator=(const AccumuloProxy_hasSystemPermission_args&);
   AccumuloProxy_hasSystemPermission_args() noexcept
-                                         : login(),
+                                         : sharedSecret(),
                                            user(),
                                            perm(static_cast<SystemPermission::type>(0)) {
   }
 
   virtual ~AccumuloProxy_hasSystemPermission_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string user;
   /**
    * 
@@ -8037,7 +7912,7 @@ class AccumuloProxy_hasSystemPermission_args {
 
   _AccumuloProxy_hasSystemPermission_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_user(const std::string& val);
 
@@ -8045,7 +7920,7 @@ class AccumuloProxy_hasSystemPermission_args {
 
   bool operator == (const AccumuloProxy_hasSystemPermission_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(user == rhs.user))
       return false;
@@ -8070,7 +7945,7 @@ class AccumuloProxy_hasSystemPermission_pargs {
 
 
   virtual ~AccumuloProxy_hasSystemPermission_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* user;
   /**
    * 
@@ -8155,8 +8030,8 @@ class AccumuloProxy_hasSystemPermission_presult {
 };
 
 typedef struct _AccumuloProxy_hasTablePermission_args__isset {
-  _AccumuloProxy_hasTablePermission_args__isset() : login(false), user(false), table(false), perm(false) {}
-  bool login :1;
+  _AccumuloProxy_hasTablePermission_args__isset() : sharedSecret(false), user(false), table(false), perm(false) {}
+  bool sharedSecret :1;
   bool user :1;
   bool table :1;
   bool perm :1;
@@ -8168,14 +8043,14 @@ class AccumuloProxy_hasTablePermission_args {
   AccumuloProxy_hasTablePermission_args(const AccumuloProxy_hasTablePermission_args&);
   AccumuloProxy_hasTablePermission_args& operator=(const AccumuloProxy_hasTablePermission_args&);
   AccumuloProxy_hasTablePermission_args() noexcept
-                                        : login(),
+                                        : sharedSecret(),
                                           user(),
                                           table(),
                                           perm(static_cast<TablePermission::type>(0)) {
   }
 
   virtual ~AccumuloProxy_hasTablePermission_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string user;
   std::string table;
   /**
@@ -8186,7 +8061,7 @@ class AccumuloProxy_hasTablePermission_args {
 
   _AccumuloProxy_hasTablePermission_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_user(const std::string& val);
 
@@ -8196,7 +8071,7 @@ class AccumuloProxy_hasTablePermission_args {
 
   bool operator == (const AccumuloProxy_hasTablePermission_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(user == rhs.user))
       return false;
@@ -8223,7 +8098,7 @@ class AccumuloProxy_hasTablePermission_pargs {
 
 
   virtual ~AccumuloProxy_hasTablePermission_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* user;
   const std::string* table;
   /**
@@ -8317,8 +8192,8 @@ class AccumuloProxy_hasTablePermission_presult {
 };
 
 typedef struct _AccumuloProxy_listLocalUsers_args__isset {
-  _AccumuloProxy_listLocalUsers_args__isset() : login(false) {}
-  bool login :1;
+  _AccumuloProxy_listLocalUsers_args__isset() : sharedSecret(false) {}
+  bool sharedSecret :1;
 } _AccumuloProxy_listLocalUsers_args__isset;
 
 class AccumuloProxy_listLocalUsers_args {
@@ -8327,19 +8202,19 @@ class AccumuloProxy_listLocalUsers_args {
   AccumuloProxy_listLocalUsers_args(const AccumuloProxy_listLocalUsers_args&);
   AccumuloProxy_listLocalUsers_args& operator=(const AccumuloProxy_listLocalUsers_args&);
   AccumuloProxy_listLocalUsers_args() noexcept
-                                    : login() {
+                                    : sharedSecret() {
   }
 
   virtual ~AccumuloProxy_listLocalUsers_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
 
   _AccumuloProxy_listLocalUsers_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   bool operator == (const AccumuloProxy_listLocalUsers_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     return true;
   }
@@ -8360,7 +8235,7 @@ class AccumuloProxy_listLocalUsers_pargs {
 
 
   virtual ~AccumuloProxy_listLocalUsers_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -8446,8 +8321,8 @@ class AccumuloProxy_listLocalUsers_presult {
 };
 
 typedef struct _AccumuloProxy_revokeSystemPermission_args__isset {
-  _AccumuloProxy_revokeSystemPermission_args__isset() : login(false), user(false), perm(false) {}
-  bool login :1;
+  _AccumuloProxy_revokeSystemPermission_args__isset() : sharedSecret(false), user(false), perm(false) {}
+  bool sharedSecret :1;
   bool user :1;
   bool perm :1;
 } _AccumuloProxy_revokeSystemPermission_args__isset;
@@ -8458,13 +8333,13 @@ class AccumuloProxy_revokeSystemPermission_args {
   AccumuloProxy_revokeSystemPermission_args(const AccumuloProxy_revokeSystemPermission_args&);
   AccumuloProxy_revokeSystemPermission_args& operator=(const AccumuloProxy_revokeSystemPermission_args&);
   AccumuloProxy_revokeSystemPermission_args() noexcept
-                                            : login(),
+                                            : sharedSecret(),
                                               user(),
                                               perm(static_cast<SystemPermission::type>(0)) {
   }
 
   virtual ~AccumuloProxy_revokeSystemPermission_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string user;
   /**
    * 
@@ -8474,7 +8349,7 @@ class AccumuloProxy_revokeSystemPermission_args {
 
   _AccumuloProxy_revokeSystemPermission_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_user(const std::string& val);
 
@@ -8482,7 +8357,7 @@ class AccumuloProxy_revokeSystemPermission_args {
 
   bool operator == (const AccumuloProxy_revokeSystemPermission_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(user == rhs.user))
       return false;
@@ -8507,7 +8382,7 @@ class AccumuloProxy_revokeSystemPermission_pargs {
 
 
   virtual ~AccumuloProxy_revokeSystemPermission_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* user;
   /**
    * 
@@ -8583,8 +8458,8 @@ class AccumuloProxy_revokeSystemPermission_presult {
 };
 
 typedef struct _AccumuloProxy_revokeTablePermission_args__isset {
-  _AccumuloProxy_revokeTablePermission_args__isset() : login(false), user(false), table(false), perm(false) {}
-  bool login :1;
+  _AccumuloProxy_revokeTablePermission_args__isset() : sharedSecret(false), user(false), table(false), perm(false) {}
+  bool sharedSecret :1;
   bool user :1;
   bool table :1;
   bool perm :1;
@@ -8596,14 +8471,14 @@ class AccumuloProxy_revokeTablePermission_args {
   AccumuloProxy_revokeTablePermission_args(const AccumuloProxy_revokeTablePermission_args&);
   AccumuloProxy_revokeTablePermission_args& operator=(const AccumuloProxy_revokeTablePermission_args&);
   AccumuloProxy_revokeTablePermission_args() noexcept
-                                           : login(),
+                                           : sharedSecret(),
                                              user(),
                                              table(),
                                              perm(static_cast<TablePermission::type>(0)) {
   }
 
   virtual ~AccumuloProxy_revokeTablePermission_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string user;
   std::string table;
   /**
@@ -8614,7 +8489,7 @@ class AccumuloProxy_revokeTablePermission_args {
 
   _AccumuloProxy_revokeTablePermission_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_user(const std::string& val);
 
@@ -8624,7 +8499,7 @@ class AccumuloProxy_revokeTablePermission_args {
 
   bool operator == (const AccumuloProxy_revokeTablePermission_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(user == rhs.user))
       return false;
@@ -8651,7 +8526,7 @@ class AccumuloProxy_revokeTablePermission_pargs {
 
 
   virtual ~AccumuloProxy_revokeTablePermission_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* user;
   const std::string* table;
   /**
@@ -8736,8 +8611,8 @@ class AccumuloProxy_revokeTablePermission_presult {
 };
 
 typedef struct _AccumuloProxy_grantNamespacePermission_args__isset {
-  _AccumuloProxy_grantNamespacePermission_args__isset() : login(false), user(false), namespaceName(false), perm(false) {}
-  bool login :1;
+  _AccumuloProxy_grantNamespacePermission_args__isset() : sharedSecret(false), user(false), namespaceName(false), perm(false) {}
+  bool sharedSecret :1;
   bool user :1;
   bool namespaceName :1;
   bool perm :1;
@@ -8749,14 +8624,14 @@ class AccumuloProxy_grantNamespacePermission_args {
   AccumuloProxy_grantNamespacePermission_args(const AccumuloProxy_grantNamespacePermission_args&);
   AccumuloProxy_grantNamespacePermission_args& operator=(const AccumuloProxy_grantNamespacePermission_args&);
   AccumuloProxy_grantNamespacePermission_args() noexcept
-                                              : login(),
+                                              : sharedSecret(),
                                                 user(),
                                                 namespaceName(),
                                                 perm(static_cast<NamespacePermission::type>(0)) {
   }
 
   virtual ~AccumuloProxy_grantNamespacePermission_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string user;
   std::string namespaceName;
   /**
@@ -8767,7 +8642,7 @@ class AccumuloProxy_grantNamespacePermission_args {
 
   _AccumuloProxy_grantNamespacePermission_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_user(const std::string& val);
 
@@ -8777,7 +8652,7 @@ class AccumuloProxy_grantNamespacePermission_args {
 
   bool operator == (const AccumuloProxy_grantNamespacePermission_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(user == rhs.user))
       return false;
@@ -8804,7 +8679,7 @@ class AccumuloProxy_grantNamespacePermission_pargs {
 
 
   virtual ~AccumuloProxy_grantNamespacePermission_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* user;
   const std::string* namespaceName;
   /**
@@ -8881,8 +8756,8 @@ class AccumuloProxy_grantNamespacePermission_presult {
 };
 
 typedef struct _AccumuloProxy_hasNamespacePermission_args__isset {
-  _AccumuloProxy_hasNamespacePermission_args__isset() : login(false), user(false), namespaceName(false), perm(false) {}
-  bool login :1;
+  _AccumuloProxy_hasNamespacePermission_args__isset() : sharedSecret(false), user(false), namespaceName(false), perm(false) {}
+  bool sharedSecret :1;
   bool user :1;
   bool namespaceName :1;
   bool perm :1;
@@ -8894,14 +8769,14 @@ class AccumuloProxy_hasNamespacePermission_args {
   AccumuloProxy_hasNamespacePermission_args(const AccumuloProxy_hasNamespacePermission_args&);
   AccumuloProxy_hasNamespacePermission_args& operator=(const AccumuloProxy_hasNamespacePermission_args&);
   AccumuloProxy_hasNamespacePermission_args() noexcept
-                                            : login(),
+                                            : sharedSecret(),
                                               user(),
                                               namespaceName(),
                                               perm(static_cast<NamespacePermission::type>(0)) {
   }
 
   virtual ~AccumuloProxy_hasNamespacePermission_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string user;
   std::string namespaceName;
   /**
@@ -8912,7 +8787,7 @@ class AccumuloProxy_hasNamespacePermission_args {
 
   _AccumuloProxy_hasNamespacePermission_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_user(const std::string& val);
 
@@ -8922,7 +8797,7 @@ class AccumuloProxy_hasNamespacePermission_args {
 
   bool operator == (const AccumuloProxy_hasNamespacePermission_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(user == rhs.user))
       return false;
@@ -8949,7 +8824,7 @@ class AccumuloProxy_hasNamespacePermission_pargs {
 
 
   virtual ~AccumuloProxy_hasNamespacePermission_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* user;
   const std::string* namespaceName;
   /**
@@ -9035,8 +8910,8 @@ class AccumuloProxy_hasNamespacePermission_presult {
 };
 
 typedef struct _AccumuloProxy_revokeNamespacePermission_args__isset {
-  _AccumuloProxy_revokeNamespacePermission_args__isset() : login(false), user(false), namespaceName(false), perm(false) {}
-  bool login :1;
+  _AccumuloProxy_revokeNamespacePermission_args__isset() : sharedSecret(false), user(false), namespaceName(false), perm(false) {}
+  bool sharedSecret :1;
   bool user :1;
   bool namespaceName :1;
   bool perm :1;
@@ -9048,14 +8923,14 @@ class AccumuloProxy_revokeNamespacePermission_args {
   AccumuloProxy_revokeNamespacePermission_args(const AccumuloProxy_revokeNamespacePermission_args&);
   AccumuloProxy_revokeNamespacePermission_args& operator=(const AccumuloProxy_revokeNamespacePermission_args&);
   AccumuloProxy_revokeNamespacePermission_args() noexcept
-                                               : login(),
+                                               : sharedSecret(),
                                                  user(),
                                                  namespaceName(),
                                                  perm(static_cast<NamespacePermission::type>(0)) {
   }
 
   virtual ~AccumuloProxy_revokeNamespacePermission_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string user;
   std::string namespaceName;
   /**
@@ -9066,7 +8941,7 @@ class AccumuloProxy_revokeNamespacePermission_args {
 
   _AccumuloProxy_revokeNamespacePermission_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_user(const std::string& val);
 
@@ -9076,7 +8951,7 @@ class AccumuloProxy_revokeNamespacePermission_args {
 
   bool operator == (const AccumuloProxy_revokeNamespacePermission_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(user == rhs.user))
       return false;
@@ -9103,7 +8978,7 @@ class AccumuloProxy_revokeNamespacePermission_pargs {
 
 
   virtual ~AccumuloProxy_revokeNamespacePermission_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* user;
   const std::string* namespaceName;
   /**
@@ -9180,8 +9055,8 @@ class AccumuloProxy_revokeNamespacePermission_presult {
 };
 
 typedef struct _AccumuloProxy_createBatchScanner_args__isset {
-  _AccumuloProxy_createBatchScanner_args__isset() : login(false), tableName(false), options(false) {}
-  bool login :1;
+  _AccumuloProxy_createBatchScanner_args__isset() : sharedSecret(false), tableName(false), options(false) {}
+  bool sharedSecret :1;
   bool tableName :1;
   bool options :1;
 } _AccumuloProxy_createBatchScanner_args__isset;
@@ -9192,18 +9067,18 @@ class AccumuloProxy_createBatchScanner_args {
   AccumuloProxy_createBatchScanner_args(const AccumuloProxy_createBatchScanner_args&);
   AccumuloProxy_createBatchScanner_args& operator=(const AccumuloProxy_createBatchScanner_args&);
   AccumuloProxy_createBatchScanner_args() noexcept
-                                        : login(),
+                                        : sharedSecret(),
                                           tableName() {
   }
 
   virtual ~AccumuloProxy_createBatchScanner_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string tableName;
   BatchScanOptions options;
 
   _AccumuloProxy_createBatchScanner_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_tableName(const std::string& val);
 
@@ -9211,7 +9086,7 @@ class AccumuloProxy_createBatchScanner_args {
 
   bool operator == (const AccumuloProxy_createBatchScanner_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(tableName == rhs.tableName))
       return false;
@@ -9236,7 +9111,7 @@ class AccumuloProxy_createBatchScanner_pargs {
 
 
   virtual ~AccumuloProxy_createBatchScanner_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* tableName;
   const BatchScanOptions* options;
 
@@ -9325,8 +9200,8 @@ class AccumuloProxy_createBatchScanner_presult {
 };
 
 typedef struct _AccumuloProxy_createScanner_args__isset {
-  _AccumuloProxy_createScanner_args__isset() : login(false), tableName(false), options(false) {}
-  bool login :1;
+  _AccumuloProxy_createScanner_args__isset() : sharedSecret(false), tableName(false), options(false) {}
+  bool sharedSecret :1;
   bool tableName :1;
   bool options :1;
 } _AccumuloProxy_createScanner_args__isset;
@@ -9337,18 +9212,18 @@ class AccumuloProxy_createScanner_args {
   AccumuloProxy_createScanner_args(const AccumuloProxy_createScanner_args&);
   AccumuloProxy_createScanner_args& operator=(const AccumuloProxy_createScanner_args&);
   AccumuloProxy_createScanner_args() noexcept
-                                   : login(),
+                                   : sharedSecret(),
                                      tableName() {
   }
 
   virtual ~AccumuloProxy_createScanner_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string tableName;
   ScanOptions options;
 
   _AccumuloProxy_createScanner_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_tableName(const std::string& val);
 
@@ -9356,7 +9231,7 @@ class AccumuloProxy_createScanner_args {
 
   bool operator == (const AccumuloProxy_createScanner_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(tableName == rhs.tableName))
       return false;
@@ -9381,7 +9256,7 @@ class AccumuloProxy_createScanner_pargs {
 
 
   virtual ~AccumuloProxy_createScanner_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* tableName;
   const ScanOptions* options;
 
@@ -9955,8 +9830,8 @@ class AccumuloProxy_closeScanner_presult {
 };
 
 typedef struct _AccumuloProxy_updateAndFlush_args__isset {
-  _AccumuloProxy_updateAndFlush_args__isset() : login(false), tableName(false), cells(false) {}
-  bool login :1;
+  _AccumuloProxy_updateAndFlush_args__isset() : sharedSecret(false), tableName(false), cells(false) {}
+  bool sharedSecret :1;
   bool tableName :1;
   bool cells :1;
 } _AccumuloProxy_updateAndFlush_args__isset;
@@ -9967,18 +9842,18 @@ class AccumuloProxy_updateAndFlush_args {
   AccumuloProxy_updateAndFlush_args(const AccumuloProxy_updateAndFlush_args&);
   AccumuloProxy_updateAndFlush_args& operator=(const AccumuloProxy_updateAndFlush_args&);
   AccumuloProxy_updateAndFlush_args() noexcept
-                                    : login(),
+                                    : sharedSecret(),
                                       tableName() {
   }
 
   virtual ~AccumuloProxy_updateAndFlush_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string tableName;
   std::map<std::string, std::vector<ColumnUpdate> >  cells;
 
   _AccumuloProxy_updateAndFlush_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_tableName(const std::string& val);
 
@@ -9986,7 +9861,7 @@ class AccumuloProxy_updateAndFlush_args {
 
   bool operator == (const AccumuloProxy_updateAndFlush_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(tableName == rhs.tableName))
       return false;
@@ -10011,7 +9886,7 @@ class AccumuloProxy_updateAndFlush_pargs {
 
 
   virtual ~AccumuloProxy_updateAndFlush_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* tableName;
   const std::map<std::string, std::vector<ColumnUpdate> > * cells;
 
@@ -10099,8 +9974,8 @@ class AccumuloProxy_updateAndFlush_presult {
 };
 
 typedef struct _AccumuloProxy_createWriter_args__isset {
-  _AccumuloProxy_createWriter_args__isset() : login(false), tableName(false), opts(false) {}
-  bool login :1;
+  _AccumuloProxy_createWriter_args__isset() : sharedSecret(false), tableName(false), opts(false) {}
+  bool sharedSecret :1;
   bool tableName :1;
   bool opts :1;
 } _AccumuloProxy_createWriter_args__isset;
@@ -10111,18 +9986,18 @@ class AccumuloProxy_createWriter_args {
   AccumuloProxy_createWriter_args(const AccumuloProxy_createWriter_args&);
   AccumuloProxy_createWriter_args& operator=(const AccumuloProxy_createWriter_args&);
   AccumuloProxy_createWriter_args() noexcept
-                                  : login(),
+                                  : sharedSecret(),
                                     tableName() {
   }
 
   virtual ~AccumuloProxy_createWriter_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string tableName;
   WriterOptions opts;
 
   _AccumuloProxy_createWriter_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_tableName(const std::string& val);
 
@@ -10130,7 +10005,7 @@ class AccumuloProxy_createWriter_args {
 
   bool operator == (const AccumuloProxy_createWriter_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(tableName == rhs.tableName))
       return false;
@@ -10155,7 +10030,7 @@ class AccumuloProxy_createWriter_pargs {
 
 
   virtual ~AccumuloProxy_createWriter_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* tableName;
   const WriterOptions* opts;
 
@@ -10527,8 +10402,8 @@ class AccumuloProxy_closeWriter_presult {
 };
 
 typedef struct _AccumuloProxy_updateRowConditionally_args__isset {
-  _AccumuloProxy_updateRowConditionally_args__isset() : login(false), tableName(false), row(false), updates(false) {}
-  bool login :1;
+  _AccumuloProxy_updateRowConditionally_args__isset() : sharedSecret(false), tableName(false), row(false), updates(false) {}
+  bool sharedSecret :1;
   bool tableName :1;
   bool row :1;
   bool updates :1;
@@ -10540,20 +10415,20 @@ class AccumuloProxy_updateRowConditionally_args {
   AccumuloProxy_updateRowConditionally_args(const AccumuloProxy_updateRowConditionally_args&);
   AccumuloProxy_updateRowConditionally_args& operator=(const AccumuloProxy_updateRowConditionally_args&);
   AccumuloProxy_updateRowConditionally_args() noexcept
-                                            : login(),
+                                            : sharedSecret(),
                                               tableName(),
                                               row() {
   }
 
   virtual ~AccumuloProxy_updateRowConditionally_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string tableName;
   std::string row;
   ConditionalUpdates updates;
 
   _AccumuloProxy_updateRowConditionally_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_tableName(const std::string& val);
 
@@ -10563,7 +10438,7 @@ class AccumuloProxy_updateRowConditionally_args {
 
   bool operator == (const AccumuloProxy_updateRowConditionally_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(tableName == rhs.tableName))
       return false;
@@ -10590,7 +10465,7 @@ class AccumuloProxy_updateRowConditionally_pargs {
 
 
   virtual ~AccumuloProxy_updateRowConditionally_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* tableName;
   const std::string* row;
   const ConditionalUpdates* updates;
@@ -10688,8 +10563,8 @@ class AccumuloProxy_updateRowConditionally_presult {
 };
 
 typedef struct _AccumuloProxy_createConditionalWriter_args__isset {
-  _AccumuloProxy_createConditionalWriter_args__isset() : login(false), tableName(false), options(false) {}
-  bool login :1;
+  _AccumuloProxy_createConditionalWriter_args__isset() : sharedSecret(false), tableName(false), options(false) {}
+  bool sharedSecret :1;
   bool tableName :1;
   bool options :1;
 } _AccumuloProxy_createConditionalWriter_args__isset;
@@ -10700,18 +10575,18 @@ class AccumuloProxy_createConditionalWriter_args {
   AccumuloProxy_createConditionalWriter_args(const AccumuloProxy_createConditionalWriter_args&);
   AccumuloProxy_createConditionalWriter_args& operator=(const AccumuloProxy_createConditionalWriter_args&);
   AccumuloProxy_createConditionalWriter_args() noexcept
-                                             : login(),
+                                             : sharedSecret(),
                                                tableName() {
   }
 
   virtual ~AccumuloProxy_createConditionalWriter_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string tableName;
   ConditionalWriterOptions options;
 
   _AccumuloProxy_createConditionalWriter_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_tableName(const std::string& val);
 
@@ -10719,7 +10594,7 @@ class AccumuloProxy_createConditionalWriter_args {
 
   bool operator == (const AccumuloProxy_createConditionalWriter_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(tableName == rhs.tableName))
       return false;
@@ -10744,7 +10619,7 @@ class AccumuloProxy_createConditionalWriter_pargs {
 
 
   virtual ~AccumuloProxy_createConditionalWriter_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* tableName;
   const ConditionalWriterOptions* options;
 
@@ -11467,8 +11342,8 @@ class AccumuloProxy_defaultNamespace_presult {
 };
 
 typedef struct _AccumuloProxy_listNamespaces_args__isset {
-  _AccumuloProxy_listNamespaces_args__isset() : login(false) {}
-  bool login :1;
+  _AccumuloProxy_listNamespaces_args__isset() : sharedSecret(false) {}
+  bool sharedSecret :1;
 } _AccumuloProxy_listNamespaces_args__isset;
 
 class AccumuloProxy_listNamespaces_args {
@@ -11477,19 +11352,19 @@ class AccumuloProxy_listNamespaces_args {
   AccumuloProxy_listNamespaces_args(const AccumuloProxy_listNamespaces_args&);
   AccumuloProxy_listNamespaces_args& operator=(const AccumuloProxy_listNamespaces_args&);
   AccumuloProxy_listNamespaces_args() noexcept
-                                    : login() {
+                                    : sharedSecret() {
   }
 
   virtual ~AccumuloProxy_listNamespaces_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
 
   _AccumuloProxy_listNamespaces_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   bool operator == (const AccumuloProxy_listNamespaces_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     return true;
   }
@@ -11510,7 +11385,7 @@ class AccumuloProxy_listNamespaces_pargs {
 
 
   virtual ~AccumuloProxy_listNamespaces_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -11588,8 +11463,8 @@ class AccumuloProxy_listNamespaces_presult {
 };
 
 typedef struct _AccumuloProxy_namespaceExists_args__isset {
-  _AccumuloProxy_namespaceExists_args__isset() : login(false), namespaceName(false) {}
-  bool login :1;
+  _AccumuloProxy_namespaceExists_args__isset() : sharedSecret(false), namespaceName(false) {}
+  bool sharedSecret :1;
   bool namespaceName :1;
 } _AccumuloProxy_namespaceExists_args__isset;
 
@@ -11599,23 +11474,23 @@ class AccumuloProxy_namespaceExists_args {
   AccumuloProxy_namespaceExists_args(const AccumuloProxy_namespaceExists_args&);
   AccumuloProxy_namespaceExists_args& operator=(const AccumuloProxy_namespaceExists_args&);
   AccumuloProxy_namespaceExists_args() noexcept
-                                     : login(),
+                                     : sharedSecret(),
                                        namespaceName() {
   }
 
   virtual ~AccumuloProxy_namespaceExists_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string namespaceName;
 
   _AccumuloProxy_namespaceExists_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_namespaceName(const std::string& val);
 
   bool operator == (const AccumuloProxy_namespaceExists_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(namespaceName == rhs.namespaceName))
       return false;
@@ -11638,7 +11513,7 @@ class AccumuloProxy_namespaceExists_pargs {
 
 
   virtual ~AccumuloProxy_namespaceExists_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* namespaceName;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -11718,8 +11593,8 @@ class AccumuloProxy_namespaceExists_presult {
 };
 
 typedef struct _AccumuloProxy_createNamespace_args__isset {
-  _AccumuloProxy_createNamespace_args__isset() : login(false), namespaceName(false) {}
-  bool login :1;
+  _AccumuloProxy_createNamespace_args__isset() : sharedSecret(false), namespaceName(false) {}
+  bool sharedSecret :1;
   bool namespaceName :1;
 } _AccumuloProxy_createNamespace_args__isset;
 
@@ -11729,23 +11604,23 @@ class AccumuloProxy_createNamespace_args {
   AccumuloProxy_createNamespace_args(const AccumuloProxy_createNamespace_args&);
   AccumuloProxy_createNamespace_args& operator=(const AccumuloProxy_createNamespace_args&);
   AccumuloProxy_createNamespace_args() noexcept
-                                     : login(),
+                                     : sharedSecret(),
                                        namespaceName() {
   }
 
   virtual ~AccumuloProxy_createNamespace_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string namespaceName;
 
   _AccumuloProxy_createNamespace_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_namespaceName(const std::string& val);
 
   bool operator == (const AccumuloProxy_createNamespace_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(namespaceName == rhs.namespaceName))
       return false;
@@ -11768,7 +11643,7 @@ class AccumuloProxy_createNamespace_pargs {
 
 
   virtual ~AccumuloProxy_createNamespace_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* namespaceName;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -11847,8 +11722,8 @@ class AccumuloProxy_createNamespace_presult {
 };
 
 typedef struct _AccumuloProxy_deleteNamespace_args__isset {
-  _AccumuloProxy_deleteNamespace_args__isset() : login(false), namespaceName(false) {}
-  bool login :1;
+  _AccumuloProxy_deleteNamespace_args__isset() : sharedSecret(false), namespaceName(false) {}
+  bool sharedSecret :1;
   bool namespaceName :1;
 } _AccumuloProxy_deleteNamespace_args__isset;
 
@@ -11858,23 +11733,23 @@ class AccumuloProxy_deleteNamespace_args {
   AccumuloProxy_deleteNamespace_args(const AccumuloProxy_deleteNamespace_args&);
   AccumuloProxy_deleteNamespace_args& operator=(const AccumuloProxy_deleteNamespace_args&);
   AccumuloProxy_deleteNamespace_args() noexcept
-                                     : login(),
+                                     : sharedSecret(),
                                        namespaceName() {
   }
 
   virtual ~AccumuloProxy_deleteNamespace_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string namespaceName;
 
   _AccumuloProxy_deleteNamespace_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_namespaceName(const std::string& val);
 
   bool operator == (const AccumuloProxy_deleteNamespace_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(namespaceName == rhs.namespaceName))
       return false;
@@ -11897,7 +11772,7 @@ class AccumuloProxy_deleteNamespace_pargs {
 
 
   virtual ~AccumuloProxy_deleteNamespace_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* namespaceName;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -11984,8 +11859,8 @@ class AccumuloProxy_deleteNamespace_presult {
 };
 
 typedef struct _AccumuloProxy_renameNamespace_args__isset {
-  _AccumuloProxy_renameNamespace_args__isset() : login(false), oldNamespaceName(false), newNamespaceName(false) {}
-  bool login :1;
+  _AccumuloProxy_renameNamespace_args__isset() : sharedSecret(false), oldNamespaceName(false), newNamespaceName(false) {}
+  bool sharedSecret :1;
   bool oldNamespaceName :1;
   bool newNamespaceName :1;
 } _AccumuloProxy_renameNamespace_args__isset;
@@ -11996,19 +11871,19 @@ class AccumuloProxy_renameNamespace_args {
   AccumuloProxy_renameNamespace_args(const AccumuloProxy_renameNamespace_args&);
   AccumuloProxy_renameNamespace_args& operator=(const AccumuloProxy_renameNamespace_args&);
   AccumuloProxy_renameNamespace_args() noexcept
-                                     : login(),
+                                     : sharedSecret(),
                                        oldNamespaceName(),
                                        newNamespaceName() {
   }
 
   virtual ~AccumuloProxy_renameNamespace_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string oldNamespaceName;
   std::string newNamespaceName;
 
   _AccumuloProxy_renameNamespace_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_oldNamespaceName(const std::string& val);
 
@@ -12016,7 +11891,7 @@ class AccumuloProxy_renameNamespace_args {
 
   bool operator == (const AccumuloProxy_renameNamespace_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(oldNamespaceName == rhs.oldNamespaceName))
       return false;
@@ -12041,7 +11916,7 @@ class AccumuloProxy_renameNamespace_pargs {
 
 
   virtual ~AccumuloProxy_renameNamespace_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* oldNamespaceName;
   const std::string* newNamespaceName;
 
@@ -12129,8 +12004,8 @@ class AccumuloProxy_renameNamespace_presult {
 };
 
 typedef struct _AccumuloProxy_setNamespaceProperty_args__isset {
-  _AccumuloProxy_setNamespaceProperty_args__isset() : login(false), namespaceName(false), property(false), value(false) {}
-  bool login :1;
+  _AccumuloProxy_setNamespaceProperty_args__isset() : sharedSecret(false), namespaceName(false), property(false), value(false) {}
+  bool sharedSecret :1;
   bool namespaceName :1;
   bool property :1;
   bool value :1;
@@ -12142,21 +12017,21 @@ class AccumuloProxy_setNamespaceProperty_args {
   AccumuloProxy_setNamespaceProperty_args(const AccumuloProxy_setNamespaceProperty_args&);
   AccumuloProxy_setNamespaceProperty_args& operator=(const AccumuloProxy_setNamespaceProperty_args&);
   AccumuloProxy_setNamespaceProperty_args() noexcept
-                                          : login(),
+                                          : sharedSecret(),
                                             namespaceName(),
                                             property(),
                                             value() {
   }
 
   virtual ~AccumuloProxy_setNamespaceProperty_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string namespaceName;
   std::string property;
   std::string value;
 
   _AccumuloProxy_setNamespaceProperty_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_namespaceName(const std::string& val);
 
@@ -12166,7 +12041,7 @@ class AccumuloProxy_setNamespaceProperty_args {
 
   bool operator == (const AccumuloProxy_setNamespaceProperty_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(namespaceName == rhs.namespaceName))
       return false;
@@ -12193,7 +12068,7 @@ class AccumuloProxy_setNamespaceProperty_pargs {
 
 
   virtual ~AccumuloProxy_setNamespaceProperty_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* namespaceName;
   const std::string* property;
   const std::string* value;
@@ -12274,8 +12149,8 @@ class AccumuloProxy_setNamespaceProperty_presult {
 };
 
 typedef struct _AccumuloProxy_removeNamespaceProperty_args__isset {
-  _AccumuloProxy_removeNamespaceProperty_args__isset() : login(false), namespaceName(false), property(false) {}
-  bool login :1;
+  _AccumuloProxy_removeNamespaceProperty_args__isset() : sharedSecret(false), namespaceName(false), property(false) {}
+  bool sharedSecret :1;
   bool namespaceName :1;
   bool property :1;
 } _AccumuloProxy_removeNamespaceProperty_args__isset;
@@ -12286,19 +12161,19 @@ class AccumuloProxy_removeNamespaceProperty_args {
   AccumuloProxy_removeNamespaceProperty_args(const AccumuloProxy_removeNamespaceProperty_args&);
   AccumuloProxy_removeNamespaceProperty_args& operator=(const AccumuloProxy_removeNamespaceProperty_args&);
   AccumuloProxy_removeNamespaceProperty_args() noexcept
-                                             : login(),
+                                             : sharedSecret(),
                                                namespaceName(),
                                                property() {
   }
 
   virtual ~AccumuloProxy_removeNamespaceProperty_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string namespaceName;
   std::string property;
 
   _AccumuloProxy_removeNamespaceProperty_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_namespaceName(const std::string& val);
 
@@ -12306,7 +12181,7 @@ class AccumuloProxy_removeNamespaceProperty_args {
 
   bool operator == (const AccumuloProxy_removeNamespaceProperty_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(namespaceName == rhs.namespaceName))
       return false;
@@ -12331,7 +12206,7 @@ class AccumuloProxy_removeNamespaceProperty_pargs {
 
 
   virtual ~AccumuloProxy_removeNamespaceProperty_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* namespaceName;
   const std::string* property;
 
@@ -12411,8 +12286,8 @@ class AccumuloProxy_removeNamespaceProperty_presult {
 };
 
 typedef struct _AccumuloProxy_getNamespaceProperties_args__isset {
-  _AccumuloProxy_getNamespaceProperties_args__isset() : login(false), namespaceName(false) {}
-  bool login :1;
+  _AccumuloProxy_getNamespaceProperties_args__isset() : sharedSecret(false), namespaceName(false) {}
+  bool sharedSecret :1;
   bool namespaceName :1;
 } _AccumuloProxy_getNamespaceProperties_args__isset;
 
@@ -12422,23 +12297,23 @@ class AccumuloProxy_getNamespaceProperties_args {
   AccumuloProxy_getNamespaceProperties_args(const AccumuloProxy_getNamespaceProperties_args&);
   AccumuloProxy_getNamespaceProperties_args& operator=(const AccumuloProxy_getNamespaceProperties_args&);
   AccumuloProxy_getNamespaceProperties_args() noexcept
-                                            : login(),
+                                            : sharedSecret(),
                                               namespaceName() {
   }
 
   virtual ~AccumuloProxy_getNamespaceProperties_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string namespaceName;
 
   _AccumuloProxy_getNamespaceProperties_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_namespaceName(const std::string& val);
 
   bool operator == (const AccumuloProxy_getNamespaceProperties_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(namespaceName == rhs.namespaceName))
       return false;
@@ -12461,7 +12336,7 @@ class AccumuloProxy_getNamespaceProperties_pargs {
 
 
   virtual ~AccumuloProxy_getNamespaceProperties_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* namespaceName;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -12548,8 +12423,8 @@ class AccumuloProxy_getNamespaceProperties_presult {
 };
 
 typedef struct _AccumuloProxy_namespaceIdMap_args__isset {
-  _AccumuloProxy_namespaceIdMap_args__isset() : login(false) {}
-  bool login :1;
+  _AccumuloProxy_namespaceIdMap_args__isset() : sharedSecret(false) {}
+  bool sharedSecret :1;
 } _AccumuloProxy_namespaceIdMap_args__isset;
 
 class AccumuloProxy_namespaceIdMap_args {
@@ -12558,19 +12433,19 @@ class AccumuloProxy_namespaceIdMap_args {
   AccumuloProxy_namespaceIdMap_args(const AccumuloProxy_namespaceIdMap_args&);
   AccumuloProxy_namespaceIdMap_args& operator=(const AccumuloProxy_namespaceIdMap_args&);
   AccumuloProxy_namespaceIdMap_args() noexcept
-                                    : login() {
+                                    : sharedSecret() {
   }
 
   virtual ~AccumuloProxy_namespaceIdMap_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
 
   _AccumuloProxy_namespaceIdMap_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   bool operator == (const AccumuloProxy_namespaceIdMap_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     return true;
   }
@@ -12591,7 +12466,7 @@ class AccumuloProxy_namespaceIdMap_pargs {
 
 
   virtual ~AccumuloProxy_namespaceIdMap_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -12669,8 +12544,8 @@ class AccumuloProxy_namespaceIdMap_presult {
 };
 
 typedef struct _AccumuloProxy_attachNamespaceIterator_args__isset {
-  _AccumuloProxy_attachNamespaceIterator_args__isset() : login(false), namespaceName(false), setting(false), scopes(false) {}
-  bool login :1;
+  _AccumuloProxy_attachNamespaceIterator_args__isset() : sharedSecret(false), namespaceName(false), setting(false), scopes(false) {}
+  bool sharedSecret :1;
   bool namespaceName :1;
   bool setting :1;
   bool scopes :1;
@@ -12682,19 +12557,19 @@ class AccumuloProxy_attachNamespaceIterator_args {
   AccumuloProxy_attachNamespaceIterator_args(const AccumuloProxy_attachNamespaceIterator_args&);
   AccumuloProxy_attachNamespaceIterator_args& operator=(const AccumuloProxy_attachNamespaceIterator_args&);
   AccumuloProxy_attachNamespaceIterator_args() noexcept
-                                             : login(),
+                                             : sharedSecret(),
                                                namespaceName() {
   }
 
   virtual ~AccumuloProxy_attachNamespaceIterator_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string namespaceName;
   IteratorSetting setting;
   std::set<IteratorScope::type>  scopes;
 
   _AccumuloProxy_attachNamespaceIterator_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_namespaceName(const std::string& val);
 
@@ -12704,7 +12579,7 @@ class AccumuloProxy_attachNamespaceIterator_args {
 
   bool operator == (const AccumuloProxy_attachNamespaceIterator_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(namespaceName == rhs.namespaceName))
       return false;
@@ -12731,7 +12606,7 @@ class AccumuloProxy_attachNamespaceIterator_pargs {
 
 
   virtual ~AccumuloProxy_attachNamespaceIterator_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* namespaceName;
   const IteratorSetting* setting;
   const std::set<IteratorScope::type> * scopes;
@@ -12812,8 +12687,8 @@ class AccumuloProxy_attachNamespaceIterator_presult {
 };
 
 typedef struct _AccumuloProxy_removeNamespaceIterator_args__isset {
-  _AccumuloProxy_removeNamespaceIterator_args__isset() : login(false), namespaceName(false), name(false), scopes(false) {}
-  bool login :1;
+  _AccumuloProxy_removeNamespaceIterator_args__isset() : sharedSecret(false), namespaceName(false), name(false), scopes(false) {}
+  bool sharedSecret :1;
   bool namespaceName :1;
   bool name :1;
   bool scopes :1;
@@ -12825,20 +12700,20 @@ class AccumuloProxy_removeNamespaceIterator_args {
   AccumuloProxy_removeNamespaceIterator_args(const AccumuloProxy_removeNamespaceIterator_args&);
   AccumuloProxy_removeNamespaceIterator_args& operator=(const AccumuloProxy_removeNamespaceIterator_args&);
   AccumuloProxy_removeNamespaceIterator_args() noexcept
-                                             : login(),
+                                             : sharedSecret(),
                                                namespaceName(),
                                                name() {
   }
 
   virtual ~AccumuloProxy_removeNamespaceIterator_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string namespaceName;
   std::string name;
   std::set<IteratorScope::type>  scopes;
 
   _AccumuloProxy_removeNamespaceIterator_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_namespaceName(const std::string& val);
 
@@ -12848,7 +12723,7 @@ class AccumuloProxy_removeNamespaceIterator_args {
 
   bool operator == (const AccumuloProxy_removeNamespaceIterator_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(namespaceName == rhs.namespaceName))
       return false;
@@ -12875,7 +12750,7 @@ class AccumuloProxy_removeNamespaceIterator_pargs {
 
 
   virtual ~AccumuloProxy_removeNamespaceIterator_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* namespaceName;
   const std::string* name;
   const std::set<IteratorScope::type> * scopes;
@@ -12956,8 +12831,8 @@ class AccumuloProxy_removeNamespaceIterator_presult {
 };
 
 typedef struct _AccumuloProxy_getNamespaceIteratorSetting_args__isset {
-  _AccumuloProxy_getNamespaceIteratorSetting_args__isset() : login(false), namespaceName(false), name(false), scope(false) {}
-  bool login :1;
+  _AccumuloProxy_getNamespaceIteratorSetting_args__isset() : sharedSecret(false), namespaceName(false), name(false), scope(false) {}
+  bool sharedSecret :1;
   bool namespaceName :1;
   bool name :1;
   bool scope :1;
@@ -12969,14 +12844,14 @@ class AccumuloProxy_getNamespaceIteratorSetting_args {
   AccumuloProxy_getNamespaceIteratorSetting_args(const AccumuloProxy_getNamespaceIteratorSetting_args&);
   AccumuloProxy_getNamespaceIteratorSetting_args& operator=(const AccumuloProxy_getNamespaceIteratorSetting_args&);
   AccumuloProxy_getNamespaceIteratorSetting_args() noexcept
-                                                 : login(),
+                                                 : sharedSecret(),
                                                    namespaceName(),
                                                    name(),
                                                    scope(static_cast<IteratorScope::type>(0)) {
   }
 
   virtual ~AccumuloProxy_getNamespaceIteratorSetting_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string namespaceName;
   std::string name;
   /**
@@ -12987,7 +12862,7 @@ class AccumuloProxy_getNamespaceIteratorSetting_args {
 
   _AccumuloProxy_getNamespaceIteratorSetting_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_namespaceName(const std::string& val);
 
@@ -12997,7 +12872,7 @@ class AccumuloProxy_getNamespaceIteratorSetting_args {
 
   bool operator == (const AccumuloProxy_getNamespaceIteratorSetting_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(namespaceName == rhs.namespaceName))
       return false;
@@ -13024,7 +12899,7 @@ class AccumuloProxy_getNamespaceIteratorSetting_pargs {
 
 
   virtual ~AccumuloProxy_getNamespaceIteratorSetting_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* namespaceName;
   const std::string* name;
   /**
@@ -13117,8 +12992,8 @@ class AccumuloProxy_getNamespaceIteratorSetting_presult {
 };
 
 typedef struct _AccumuloProxy_listNamespaceIterators_args__isset {
-  _AccumuloProxy_listNamespaceIterators_args__isset() : login(false), namespaceName(false) {}
-  bool login :1;
+  _AccumuloProxy_listNamespaceIterators_args__isset() : sharedSecret(false), namespaceName(false) {}
+  bool sharedSecret :1;
   bool namespaceName :1;
 } _AccumuloProxy_listNamespaceIterators_args__isset;
 
@@ -13128,23 +13003,23 @@ class AccumuloProxy_listNamespaceIterators_args {
   AccumuloProxy_listNamespaceIterators_args(const AccumuloProxy_listNamespaceIterators_args&);
   AccumuloProxy_listNamespaceIterators_args& operator=(const AccumuloProxy_listNamespaceIterators_args&);
   AccumuloProxy_listNamespaceIterators_args() noexcept
-                                            : login(),
+                                            : sharedSecret(),
                                               namespaceName() {
   }
 
   virtual ~AccumuloProxy_listNamespaceIterators_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string namespaceName;
 
   _AccumuloProxy_listNamespaceIterators_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_namespaceName(const std::string& val);
 
   bool operator == (const AccumuloProxy_listNamespaceIterators_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(namespaceName == rhs.namespaceName))
       return false;
@@ -13167,7 +13042,7 @@ class AccumuloProxy_listNamespaceIterators_pargs {
 
 
   virtual ~AccumuloProxy_listNamespaceIterators_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* namespaceName;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -13254,8 +13129,8 @@ class AccumuloProxy_listNamespaceIterators_presult {
 };
 
 typedef struct _AccumuloProxy_checkNamespaceIteratorConflicts_args__isset {
-  _AccumuloProxy_checkNamespaceIteratorConflicts_args__isset() : login(false), namespaceName(false), setting(false), scopes(false) {}
-  bool login :1;
+  _AccumuloProxy_checkNamespaceIteratorConflicts_args__isset() : sharedSecret(false), namespaceName(false), setting(false), scopes(false) {}
+  bool sharedSecret :1;
   bool namespaceName :1;
   bool setting :1;
   bool scopes :1;
@@ -13267,19 +13142,19 @@ class AccumuloProxy_checkNamespaceIteratorConflicts_args {
   AccumuloProxy_checkNamespaceIteratorConflicts_args(const AccumuloProxy_checkNamespaceIteratorConflicts_args&);
   AccumuloProxy_checkNamespaceIteratorConflicts_args& operator=(const AccumuloProxy_checkNamespaceIteratorConflicts_args&);
   AccumuloProxy_checkNamespaceIteratorConflicts_args() noexcept
-                                                     : login(),
+                                                     : sharedSecret(),
                                                        namespaceName() {
   }
 
   virtual ~AccumuloProxy_checkNamespaceIteratorConflicts_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string namespaceName;
   IteratorSetting setting;
   std::set<IteratorScope::type>  scopes;
 
   _AccumuloProxy_checkNamespaceIteratorConflicts_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_namespaceName(const std::string& val);
 
@@ -13289,7 +13164,7 @@ class AccumuloProxy_checkNamespaceIteratorConflicts_args {
 
   bool operator == (const AccumuloProxy_checkNamespaceIteratorConflicts_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(namespaceName == rhs.namespaceName))
       return false;
@@ -13316,7 +13191,7 @@ class AccumuloProxy_checkNamespaceIteratorConflicts_pargs {
 
 
   virtual ~AccumuloProxy_checkNamespaceIteratorConflicts_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* namespaceName;
   const IteratorSetting* setting;
   const std::set<IteratorScope::type> * scopes;
@@ -13397,8 +13272,8 @@ class AccumuloProxy_checkNamespaceIteratorConflicts_presult {
 };
 
 typedef struct _AccumuloProxy_addNamespaceConstraint_args__isset {
-  _AccumuloProxy_addNamespaceConstraint_args__isset() : login(false), namespaceName(false), constraintClassName(false) {}
-  bool login :1;
+  _AccumuloProxy_addNamespaceConstraint_args__isset() : sharedSecret(false), namespaceName(false), constraintClassName(false) {}
+  bool sharedSecret :1;
   bool namespaceName :1;
   bool constraintClassName :1;
 } _AccumuloProxy_addNamespaceConstraint_args__isset;
@@ -13409,19 +13284,19 @@ class AccumuloProxy_addNamespaceConstraint_args {
   AccumuloProxy_addNamespaceConstraint_args(const AccumuloProxy_addNamespaceConstraint_args&);
   AccumuloProxy_addNamespaceConstraint_args& operator=(const AccumuloProxy_addNamespaceConstraint_args&);
   AccumuloProxy_addNamespaceConstraint_args() noexcept
-                                            : login(),
+                                            : sharedSecret(),
                                               namespaceName(),
                                               constraintClassName() {
   }
 
   virtual ~AccumuloProxy_addNamespaceConstraint_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string namespaceName;
   std::string constraintClassName;
 
   _AccumuloProxy_addNamespaceConstraint_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_namespaceName(const std::string& val);
 
@@ -13429,7 +13304,7 @@ class AccumuloProxy_addNamespaceConstraint_args {
 
   bool operator == (const AccumuloProxy_addNamespaceConstraint_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(namespaceName == rhs.namespaceName))
       return false;
@@ -13454,7 +13329,7 @@ class AccumuloProxy_addNamespaceConstraint_pargs {
 
 
   virtual ~AccumuloProxy_addNamespaceConstraint_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* namespaceName;
   const std::string* constraintClassName;
 
@@ -13543,8 +13418,8 @@ class AccumuloProxy_addNamespaceConstraint_presult {
 };
 
 typedef struct _AccumuloProxy_removeNamespaceConstraint_args__isset {
-  _AccumuloProxy_removeNamespaceConstraint_args__isset() : login(false), namespaceName(false), id(false) {}
-  bool login :1;
+  _AccumuloProxy_removeNamespaceConstraint_args__isset() : sharedSecret(false), namespaceName(false), id(false) {}
+  bool sharedSecret :1;
   bool namespaceName :1;
   bool id :1;
 } _AccumuloProxy_removeNamespaceConstraint_args__isset;
@@ -13555,19 +13430,19 @@ class AccumuloProxy_removeNamespaceConstraint_args {
   AccumuloProxy_removeNamespaceConstraint_args(const AccumuloProxy_removeNamespaceConstraint_args&);
   AccumuloProxy_removeNamespaceConstraint_args& operator=(const AccumuloProxy_removeNamespaceConstraint_args&);
   AccumuloProxy_removeNamespaceConstraint_args() noexcept
-                                               : login(),
+                                               : sharedSecret(),
                                                  namespaceName(),
                                                  id(0) {
   }
 
   virtual ~AccumuloProxy_removeNamespaceConstraint_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string namespaceName;
   int32_t id;
 
   _AccumuloProxy_removeNamespaceConstraint_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_namespaceName(const std::string& val);
 
@@ -13575,7 +13450,7 @@ class AccumuloProxy_removeNamespaceConstraint_args {
 
   bool operator == (const AccumuloProxy_removeNamespaceConstraint_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(namespaceName == rhs.namespaceName))
       return false;
@@ -13600,7 +13475,7 @@ class AccumuloProxy_removeNamespaceConstraint_pargs {
 
 
   virtual ~AccumuloProxy_removeNamespaceConstraint_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* namespaceName;
   const int32_t* id;
 
@@ -13680,8 +13555,8 @@ class AccumuloProxy_removeNamespaceConstraint_presult {
 };
 
 typedef struct _AccumuloProxy_listNamespaceConstraints_args__isset {
-  _AccumuloProxy_listNamespaceConstraints_args__isset() : login(false), namespaceName(false) {}
-  bool login :1;
+  _AccumuloProxy_listNamespaceConstraints_args__isset() : sharedSecret(false), namespaceName(false) {}
+  bool sharedSecret :1;
   bool namespaceName :1;
 } _AccumuloProxy_listNamespaceConstraints_args__isset;
 
@@ -13691,23 +13566,23 @@ class AccumuloProxy_listNamespaceConstraints_args {
   AccumuloProxy_listNamespaceConstraints_args(const AccumuloProxy_listNamespaceConstraints_args&);
   AccumuloProxy_listNamespaceConstraints_args& operator=(const AccumuloProxy_listNamespaceConstraints_args&);
   AccumuloProxy_listNamespaceConstraints_args() noexcept
-                                              : login(),
+                                              : sharedSecret(),
                                                 namespaceName() {
   }
 
   virtual ~AccumuloProxy_listNamespaceConstraints_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string namespaceName;
 
   _AccumuloProxy_listNamespaceConstraints_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_namespaceName(const std::string& val);
 
   bool operator == (const AccumuloProxy_listNamespaceConstraints_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(namespaceName == rhs.namespaceName))
       return false;
@@ -13730,7 +13605,7 @@ class AccumuloProxy_listNamespaceConstraints_pargs {
 
 
   virtual ~AccumuloProxy_listNamespaceConstraints_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* namespaceName;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -13817,8 +13692,8 @@ class AccumuloProxy_listNamespaceConstraints_presult {
 };
 
 typedef struct _AccumuloProxy_testNamespaceClassLoad_args__isset {
-  _AccumuloProxy_testNamespaceClassLoad_args__isset() : login(false), namespaceName(false), className(false), asTypeName(false) {}
-  bool login :1;
+  _AccumuloProxy_testNamespaceClassLoad_args__isset() : sharedSecret(false), namespaceName(false), className(false), asTypeName(false) {}
+  bool sharedSecret :1;
   bool namespaceName :1;
   bool className :1;
   bool asTypeName :1;
@@ -13830,21 +13705,21 @@ class AccumuloProxy_testNamespaceClassLoad_args {
   AccumuloProxy_testNamespaceClassLoad_args(const AccumuloProxy_testNamespaceClassLoad_args&);
   AccumuloProxy_testNamespaceClassLoad_args& operator=(const AccumuloProxy_testNamespaceClassLoad_args&);
   AccumuloProxy_testNamespaceClassLoad_args() noexcept
-                                            : login(),
+                                            : sharedSecret(),
                                               namespaceName(),
                                               className(),
                                               asTypeName() {
   }
 
   virtual ~AccumuloProxy_testNamespaceClassLoad_args() noexcept;
-  std::string login;
+  std::string sharedSecret;
   std::string namespaceName;
   std::string className;
   std::string asTypeName;
 
   _AccumuloProxy_testNamespaceClassLoad_args__isset __isset;
 
-  void __set_login(const std::string& val);
+  void __set_sharedSecret(const std::string& val);
 
   void __set_namespaceName(const std::string& val);
 
@@ -13854,7 +13729,7 @@ class AccumuloProxy_testNamespaceClassLoad_args {
 
   bool operator == (const AccumuloProxy_testNamespaceClassLoad_args & rhs) const
   {
-    if (!(login == rhs.login))
+    if (!(sharedSecret == rhs.sharedSecret))
       return false;
     if (!(namespaceName == rhs.namespaceName))
       return false;
@@ -13881,7 +13756,7 @@ class AccumuloProxy_testNamespaceClassLoad_pargs {
 
 
   virtual ~AccumuloProxy_testNamespaceClassLoad_pargs() noexcept;
-  const std::string* login;
+  const std::string* sharedSecret;
   const std::string* namespaceName;
   const std::string* className;
   const std::string* asTypeName;
@@ -13995,200 +13870,197 @@ class AccumuloProxyClient : virtual public AccumuloProxyIf {
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  void login(std::string& _return, const std::string& principal, const std::map<std::string, std::string> & loginProperties) override;
-  void send_login(const std::string& principal, const std::map<std::string, std::string> & loginProperties);
-  void recv_login(std::string& _return);
-  int32_t addConstraint(const std::string& login, const std::string& tableName, const std::string& constraintClassName) override;
-  void send_addConstraint(const std::string& login, const std::string& tableName, const std::string& constraintClassName);
+  int32_t addConstraint(const std::string& sharedSecret, const std::string& tableName, const std::string& constraintClassName) override;
+  void send_addConstraint(const std::string& sharedSecret, const std::string& tableName, const std::string& constraintClassName);
   int32_t recv_addConstraint();
-  void addSplits(const std::string& login, const std::string& tableName, const std::set<std::string> & splits) override;
-  void send_addSplits(const std::string& login, const std::string& tableName, const std::set<std::string> & splits);
+  void addSplits(const std::string& sharedSecret, const std::string& tableName, const std::set<std::string> & splits) override;
+  void send_addSplits(const std::string& sharedSecret, const std::string& tableName, const std::set<std::string> & splits);
   void recv_addSplits();
-  void attachIterator(const std::string& login, const std::string& tableName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes) override;
-  void send_attachIterator(const std::string& login, const std::string& tableName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes);
+  void attachIterator(const std::string& sharedSecret, const std::string& tableName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes) override;
+  void send_attachIterator(const std::string& sharedSecret, const std::string& tableName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes);
   void recv_attachIterator();
-  void checkIteratorConflicts(const std::string& login, const std::string& tableName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes) override;
-  void send_checkIteratorConflicts(const std::string& login, const std::string& tableName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes);
+  void checkIteratorConflicts(const std::string& sharedSecret, const std::string& tableName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes) override;
+  void send_checkIteratorConflicts(const std::string& sharedSecret, const std::string& tableName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes);
   void recv_checkIteratorConflicts();
-  void clearLocatorCache(const std::string& login, const std::string& tableName) override;
-  void send_clearLocatorCache(const std::string& login, const std::string& tableName);
+  void clearLocatorCache(const std::string& sharedSecret, const std::string& tableName) override;
+  void send_clearLocatorCache(const std::string& sharedSecret, const std::string& tableName);
   void recv_clearLocatorCache();
-  void cloneTable(const std::string& login, const std::string& tableName, const std::string& newTableName, const bool flush, const std::map<std::string, std::string> & propertiesToSet, const std::set<std::string> & propertiesToExclude) override;
-  void send_cloneTable(const std::string& login, const std::string& tableName, const std::string& newTableName, const bool flush, const std::map<std::string, std::string> & propertiesToSet, const std::set<std::string> & propertiesToExclude);
+  void cloneTable(const std::string& sharedSecret, const std::string& tableName, const std::string& newTableName, const bool flush, const std::map<std::string, std::string> & propertiesToSet, const std::set<std::string> & propertiesToExclude) override;
+  void send_cloneTable(const std::string& sharedSecret, const std::string& tableName, const std::string& newTableName, const bool flush, const std::map<std::string, std::string> & propertiesToSet, const std::set<std::string> & propertiesToExclude);
   void recv_cloneTable();
-  void compactTable(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow, const std::vector<IteratorSetting> & iterators, const bool flush, const bool wait, const PluginConfig& selectorConfig, const PluginConfig& configurerConfig) override;
-  void send_compactTable(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow, const std::vector<IteratorSetting> & iterators, const bool flush, const bool wait, const PluginConfig& selectorConfig, const PluginConfig& configurerConfig);
+  void compactTable(const std::string& sharedSecret, const std::string& tableName, const std::string& startRow, const std::string& endRow, const std::vector<IteratorSetting> & iterators, const bool flush, const bool wait, const PluginConfig& selectorConfig, const PluginConfig& configurerConfig) override;
+  void send_compactTable(const std::string& sharedSecret, const std::string& tableName, const std::string& startRow, const std::string& endRow, const std::vector<IteratorSetting> & iterators, const bool flush, const bool wait, const PluginConfig& selectorConfig, const PluginConfig& configurerConfig);
   void recv_compactTable();
-  void cancelCompaction(const std::string& login, const std::string& tableName) override;
-  void send_cancelCompaction(const std::string& login, const std::string& tableName);
+  void cancelCompaction(const std::string& sharedSecret, const std::string& tableName) override;
+  void send_cancelCompaction(const std::string& sharedSecret, const std::string& tableName);
   void recv_cancelCompaction();
-  void createTable(const std::string& login, const std::string& tableName, const bool versioningIter, const TimeType::type type) override;
-  void send_createTable(const std::string& login, const std::string& tableName, const bool versioningIter, const TimeType::type type);
+  void createTable(const std::string& sharedSecret, const std::string& tableName, const bool versioningIter, const TimeType::type type) override;
+  void send_createTable(const std::string& sharedSecret, const std::string& tableName, const bool versioningIter, const TimeType::type type);
   void recv_createTable();
-  void deleteTable(const std::string& login, const std::string& tableName) override;
-  void send_deleteTable(const std::string& login, const std::string& tableName);
+  void deleteTable(const std::string& sharedSecret, const std::string& tableName) override;
+  void send_deleteTable(const std::string& sharedSecret, const std::string& tableName);
   void recv_deleteTable();
-  void deleteRows(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow) override;
-  void send_deleteRows(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow);
+  void deleteRows(const std::string& sharedSecret, const std::string& tableName, const std::string& startRow, const std::string& endRow) override;
+  void send_deleteRows(const std::string& sharedSecret, const std::string& tableName, const std::string& startRow, const std::string& endRow);
   void recv_deleteRows();
-  void exportTable(const std::string& login, const std::string& tableName, const std::string& exportDir) override;
-  void send_exportTable(const std::string& login, const std::string& tableName, const std::string& exportDir);
+  void exportTable(const std::string& sharedSecret, const std::string& tableName, const std::string& exportDir) override;
+  void send_exportTable(const std::string& sharedSecret, const std::string& tableName, const std::string& exportDir);
   void recv_exportTable();
-  void flushTable(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow, const bool wait) override;
-  void send_flushTable(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow, const bool wait);
+  void flushTable(const std::string& sharedSecret, const std::string& tableName, const std::string& startRow, const std::string& endRow, const bool wait) override;
+  void send_flushTable(const std::string& sharedSecret, const std::string& tableName, const std::string& startRow, const std::string& endRow, const bool wait);
   void recv_flushTable();
-  void getDiskUsage(std::vector<DiskUsage> & _return, const std::string& login, const std::set<std::string> & tables) override;
-  void send_getDiskUsage(const std::string& login, const std::set<std::string> & tables);
+  void getDiskUsage(std::vector<DiskUsage> & _return, const std::string& sharedSecret, const std::set<std::string> & tables) override;
+  void send_getDiskUsage(const std::string& sharedSecret, const std::set<std::string> & tables);
   void recv_getDiskUsage(std::vector<DiskUsage> & _return);
-  void getLocalityGroups(std::map<std::string, std::set<std::string> > & _return, const std::string& login, const std::string& tableName) override;
-  void send_getLocalityGroups(const std::string& login, const std::string& tableName);
+  void getLocalityGroups(std::map<std::string, std::set<std::string> > & _return, const std::string& sharedSecret, const std::string& tableName) override;
+  void send_getLocalityGroups(const std::string& sharedSecret, const std::string& tableName);
   void recv_getLocalityGroups(std::map<std::string, std::set<std::string> > & _return);
-  void getIteratorSetting(IteratorSetting& _return, const std::string& login, const std::string& tableName, const std::string& iteratorName, const IteratorScope::type scope) override;
-  void send_getIteratorSetting(const std::string& login, const std::string& tableName, const std::string& iteratorName, const IteratorScope::type scope);
+  void getIteratorSetting(IteratorSetting& _return, const std::string& sharedSecret, const std::string& tableName, const std::string& iteratorName, const IteratorScope::type scope) override;
+  void send_getIteratorSetting(const std::string& sharedSecret, const std::string& tableName, const std::string& iteratorName, const IteratorScope::type scope);
   void recv_getIteratorSetting(IteratorSetting& _return);
-  void getMaxRow(std::string& _return, const std::string& login, const std::string& tableName, const std::set<std::string> & auths, const std::string& startRow, const bool startInclusive, const std::string& endRow, const bool endInclusive) override;
-  void send_getMaxRow(const std::string& login, const std::string& tableName, const std::set<std::string> & auths, const std::string& startRow, const bool startInclusive, const std::string& endRow, const bool endInclusive);
+  void getMaxRow(std::string& _return, const std::string& sharedSecret, const std::string& tableName, const std::set<std::string> & auths, const std::string& startRow, const bool startInclusive, const std::string& endRow, const bool endInclusive) override;
+  void send_getMaxRow(const std::string& sharedSecret, const std::string& tableName, const std::set<std::string> & auths, const std::string& startRow, const bool startInclusive, const std::string& endRow, const bool endInclusive);
   void recv_getMaxRow(std::string& _return);
-  void getTableProperties(std::map<std::string, std::string> & _return, const std::string& login, const std::string& tableName) override;
-  void send_getTableProperties(const std::string& login, const std::string& tableName);
+  void getTableProperties(std::map<std::string, std::string> & _return, const std::string& sharedSecret, const std::string& tableName) override;
+  void send_getTableProperties(const std::string& sharedSecret, const std::string& tableName);
   void recv_getTableProperties(std::map<std::string, std::string> & _return);
-  void importDirectory(const std::string& login, const std::string& tableName, const std::string& importDir, const std::string& failureDir, const bool setTime) override;
-  void send_importDirectory(const std::string& login, const std::string& tableName, const std::string& importDir, const std::string& failureDir, const bool setTime);
+  void importDirectory(const std::string& sharedSecret, const std::string& tableName, const std::string& importDir, const std::string& failureDir, const bool setTime) override;
+  void send_importDirectory(const std::string& sharedSecret, const std::string& tableName, const std::string& importDir, const std::string& failureDir, const bool setTime);
   void recv_importDirectory();
-  void importTable(const std::string& login, const std::string& tableName, const std::string& importDir) override;
-  void send_importTable(const std::string& login, const std::string& tableName, const std::string& importDir);
+  void importTable(const std::string& sharedSecret, const std::string& tableName, const std::string& importDir) override;
+  void send_importTable(const std::string& sharedSecret, const std::string& tableName, const std::string& importDir);
   void recv_importTable();
-  void listSplits(std::vector<std::string> & _return, const std::string& login, const std::string& tableName, const int32_t maxSplits) override;
-  void send_listSplits(const std::string& login, const std::string& tableName, const int32_t maxSplits);
+  void listSplits(std::vector<std::string> & _return, const std::string& sharedSecret, const std::string& tableName, const int32_t maxSplits) override;
+  void send_listSplits(const std::string& sharedSecret, const std::string& tableName, const int32_t maxSplits);
   void recv_listSplits(std::vector<std::string> & _return);
-  void listTables(std::set<std::string> & _return, const std::string& login) override;
-  void send_listTables(const std::string& login);
+  void listTables(std::set<std::string> & _return, const std::string& sharedSecret) override;
+  void send_listTables(const std::string& sharedSecret);
   void recv_listTables(std::set<std::string> & _return);
-  void listIterators(std::map<std::string, std::set<IteratorScope::type> > & _return, const std::string& login, const std::string& tableName) override;
-  void send_listIterators(const std::string& login, const std::string& tableName);
+  void listIterators(std::map<std::string, std::set<IteratorScope::type> > & _return, const std::string& sharedSecret, const std::string& tableName) override;
+  void send_listIterators(const std::string& sharedSecret, const std::string& tableName);
   void recv_listIterators(std::map<std::string, std::set<IteratorScope::type> > & _return);
-  void listConstraints(std::map<std::string, int32_t> & _return, const std::string& login, const std::string& tableName) override;
-  void send_listConstraints(const std::string& login, const std::string& tableName);
+  void listConstraints(std::map<std::string, int32_t> & _return, const std::string& sharedSecret, const std::string& tableName) override;
+  void send_listConstraints(const std::string& sharedSecret, const std::string& tableName);
   void recv_listConstraints(std::map<std::string, int32_t> & _return);
-  void mergeTablets(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow) override;
-  void send_mergeTablets(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow);
+  void mergeTablets(const std::string& sharedSecret, const std::string& tableName, const std::string& startRow, const std::string& endRow) override;
+  void send_mergeTablets(const std::string& sharedSecret, const std::string& tableName, const std::string& startRow, const std::string& endRow);
   void recv_mergeTablets();
-  void offlineTable(const std::string& login, const std::string& tableName, const bool wait) override;
-  void send_offlineTable(const std::string& login, const std::string& tableName, const bool wait);
+  void offlineTable(const std::string& sharedSecret, const std::string& tableName, const bool wait) override;
+  void send_offlineTable(const std::string& sharedSecret, const std::string& tableName, const bool wait);
   void recv_offlineTable();
-  void onlineTable(const std::string& login, const std::string& tableName, const bool wait) override;
-  void send_onlineTable(const std::string& login, const std::string& tableName, const bool wait);
+  void onlineTable(const std::string& sharedSecret, const std::string& tableName, const bool wait) override;
+  void send_onlineTable(const std::string& sharedSecret, const std::string& tableName, const bool wait);
   void recv_onlineTable();
-  void removeConstraint(const std::string& login, const std::string& tableName, const int32_t constraint) override;
-  void send_removeConstraint(const std::string& login, const std::string& tableName, const int32_t constraint);
+  void removeConstraint(const std::string& sharedSecret, const std::string& tableName, const int32_t constraint) override;
+  void send_removeConstraint(const std::string& sharedSecret, const std::string& tableName, const int32_t constraint);
   void recv_removeConstraint();
-  void removeIterator(const std::string& login, const std::string& tableName, const std::string& iterName, const std::set<IteratorScope::type> & scopes) override;
-  void send_removeIterator(const std::string& login, const std::string& tableName, const std::string& iterName, const std::set<IteratorScope::type> & scopes);
+  void removeIterator(const std::string& sharedSecret, const std::string& tableName, const std::string& iterName, const std::set<IteratorScope::type> & scopes) override;
+  void send_removeIterator(const std::string& sharedSecret, const std::string& tableName, const std::string& iterName, const std::set<IteratorScope::type> & scopes);
   void recv_removeIterator();
-  void removeTableProperty(const std::string& login, const std::string& tableName, const std::string& property) override;
-  void send_removeTableProperty(const std::string& login, const std::string& tableName, const std::string& property);
+  void removeTableProperty(const std::string& sharedSecret, const std::string& tableName, const std::string& property) override;
+  void send_removeTableProperty(const std::string& sharedSecret, const std::string& tableName, const std::string& property);
   void recv_removeTableProperty();
-  void renameTable(const std::string& login, const std::string& oldTableName, const std::string& newTableName) override;
-  void send_renameTable(const std::string& login, const std::string& oldTableName, const std::string& newTableName);
+  void renameTable(const std::string& sharedSecret, const std::string& oldTableName, const std::string& newTableName) override;
+  void send_renameTable(const std::string& sharedSecret, const std::string& oldTableName, const std::string& newTableName);
   void recv_renameTable();
-  void setLocalityGroups(const std::string& login, const std::string& tableName, const std::map<std::string, std::set<std::string> > & groups) override;
-  void send_setLocalityGroups(const std::string& login, const std::string& tableName, const std::map<std::string, std::set<std::string> > & groups);
+  void setLocalityGroups(const std::string& sharedSecret, const std::string& tableName, const std::map<std::string, std::set<std::string> > & groups) override;
+  void send_setLocalityGroups(const std::string& sharedSecret, const std::string& tableName, const std::map<std::string, std::set<std::string> > & groups);
   void recv_setLocalityGroups();
-  void setTableProperty(const std::string& login, const std::string& tableName, const std::string& property, const std::string& value) override;
-  void send_setTableProperty(const std::string& login, const std::string& tableName, const std::string& property, const std::string& value);
+  void setTableProperty(const std::string& sharedSecret, const std::string& tableName, const std::string& property, const std::string& value) override;
+  void send_setTableProperty(const std::string& sharedSecret, const std::string& tableName, const std::string& property, const std::string& value);
   void recv_setTableProperty();
-  void splitRangeByTablets(std::set<Range> & _return, const std::string& login, const std::string& tableName, const Range& range, const int32_t maxSplits) override;
-  void send_splitRangeByTablets(const std::string& login, const std::string& tableName, const Range& range, const int32_t maxSplits);
+  void splitRangeByTablets(std::set<Range> & _return, const std::string& sharedSecret, const std::string& tableName, const Range& range, const int32_t maxSplits) override;
+  void send_splitRangeByTablets(const std::string& sharedSecret, const std::string& tableName, const Range& range, const int32_t maxSplits);
   void recv_splitRangeByTablets(std::set<Range> & _return);
-  bool tableExists(const std::string& login, const std::string& tableName) override;
-  void send_tableExists(const std::string& login, const std::string& tableName);
+  bool tableExists(const std::string& sharedSecret, const std::string& tableName) override;
+  void send_tableExists(const std::string& sharedSecret, const std::string& tableName);
   bool recv_tableExists();
-  void tableIdMap(std::map<std::string, std::string> & _return, const std::string& login) override;
-  void send_tableIdMap(const std::string& login);
+  void tableIdMap(std::map<std::string, std::string> & _return, const std::string& sharedSecret) override;
+  void send_tableIdMap(const std::string& sharedSecret);
   void recv_tableIdMap(std::map<std::string, std::string> & _return);
-  bool testTableClassLoad(const std::string& login, const std::string& tableName, const std::string& className, const std::string& asTypeName) override;
-  void send_testTableClassLoad(const std::string& login, const std::string& tableName, const std::string& className, const std::string& asTypeName);
+  bool testTableClassLoad(const std::string& sharedSecret, const std::string& tableName, const std::string& className, const std::string& asTypeName) override;
+  void send_testTableClassLoad(const std::string& sharedSecret, const std::string& tableName, const std::string& className, const std::string& asTypeName);
   bool recv_testTableClassLoad();
-  void pingTabletServer(const std::string& login, const std::string& tserver) override;
-  void send_pingTabletServer(const std::string& login, const std::string& tserver);
+  void pingTabletServer(const std::string& sharedSecret, const std::string& tserver) override;
+  void send_pingTabletServer(const std::string& sharedSecret, const std::string& tserver);
   void recv_pingTabletServer();
-  void getActiveScans(std::vector<ActiveScan> & _return, const std::string& login, const std::string& tserver) override;
-  void send_getActiveScans(const std::string& login, const std::string& tserver);
+  void getActiveScans(std::vector<ActiveScan> & _return, const std::string& sharedSecret, const std::string& tserver) override;
+  void send_getActiveScans(const std::string& sharedSecret, const std::string& tserver);
   void recv_getActiveScans(std::vector<ActiveScan> & _return);
-  void getActiveCompactions(std::vector<ActiveCompaction> & _return, const std::string& login, const std::string& tserver) override;
-  void send_getActiveCompactions(const std::string& login, const std::string& tserver);
+  void getActiveCompactions(std::vector<ActiveCompaction> & _return, const std::string& sharedSecret, const std::string& tserver) override;
+  void send_getActiveCompactions(const std::string& sharedSecret, const std::string& tserver);
   void recv_getActiveCompactions(std::vector<ActiveCompaction> & _return);
-  void getSiteConfiguration(std::map<std::string, std::string> & _return, const std::string& login) override;
-  void send_getSiteConfiguration(const std::string& login);
+  void getSiteConfiguration(std::map<std::string, std::string> & _return, const std::string& sharedSecret) override;
+  void send_getSiteConfiguration(const std::string& sharedSecret);
   void recv_getSiteConfiguration(std::map<std::string, std::string> & _return);
-  void getSystemConfiguration(std::map<std::string, std::string> & _return, const std::string& login) override;
-  void send_getSystemConfiguration(const std::string& login);
+  void getSystemConfiguration(std::map<std::string, std::string> & _return, const std::string& sharedSecret) override;
+  void send_getSystemConfiguration(const std::string& sharedSecret);
   void recv_getSystemConfiguration(std::map<std::string, std::string> & _return);
-  void getTabletServers(std::vector<std::string> & _return, const std::string& login) override;
-  void send_getTabletServers(const std::string& login);
+  void getTabletServers(std::vector<std::string> & _return, const std::string& sharedSecret) override;
+  void send_getTabletServers(const std::string& sharedSecret);
   void recv_getTabletServers(std::vector<std::string> & _return);
-  void removeProperty(const std::string& login, const std::string& property) override;
-  void send_removeProperty(const std::string& login, const std::string& property);
+  void removeProperty(const std::string& sharedSecret, const std::string& property) override;
+  void send_removeProperty(const std::string& sharedSecret, const std::string& property);
   void recv_removeProperty();
-  void setProperty(const std::string& login, const std::string& property, const std::string& value) override;
-  void send_setProperty(const std::string& login, const std::string& property, const std::string& value);
+  void setProperty(const std::string& sharedSecret, const std::string& property, const std::string& value) override;
+  void send_setProperty(const std::string& sharedSecret, const std::string& property, const std::string& value);
   void recv_setProperty();
-  bool testClassLoad(const std::string& login, const std::string& className, const std::string& asTypeName) override;
-  void send_testClassLoad(const std::string& login, const std::string& className, const std::string& asTypeName);
+  bool testClassLoad(const std::string& sharedSecret, const std::string& className, const std::string& asTypeName) override;
+  void send_testClassLoad(const std::string& sharedSecret, const std::string& className, const std::string& asTypeName);
   bool recv_testClassLoad();
-  bool authenticateUser(const std::string& login, const std::string& user, const std::map<std::string, std::string> & properties) override;
-  void send_authenticateUser(const std::string& login, const std::string& user, const std::map<std::string, std::string> & properties);
+  bool authenticateUser(const std::string& sharedSecret, const std::string& user, const std::map<std::string, std::string> & properties) override;
+  void send_authenticateUser(const std::string& sharedSecret, const std::string& user, const std::map<std::string, std::string> & properties);
   bool recv_authenticateUser();
-  void changeUserAuthorizations(const std::string& login, const std::string& user, const std::set<std::string> & authorizations) override;
-  void send_changeUserAuthorizations(const std::string& login, const std::string& user, const std::set<std::string> & authorizations);
+  void changeUserAuthorizations(const std::string& sharedSecret, const std::string& user, const std::set<std::string> & authorizations) override;
+  void send_changeUserAuthorizations(const std::string& sharedSecret, const std::string& user, const std::set<std::string> & authorizations);
   void recv_changeUserAuthorizations();
-  void changeLocalUserPassword(const std::string& login, const std::string& user, const std::string& password) override;
-  void send_changeLocalUserPassword(const std::string& login, const std::string& user, const std::string& password);
+  void changeLocalUserPassword(const std::string& sharedSecret, const std::string& user, const std::string& password) override;
+  void send_changeLocalUserPassword(const std::string& sharedSecret, const std::string& user, const std::string& password);
   void recv_changeLocalUserPassword();
-  void createLocalUser(const std::string& login, const std::string& user, const std::string& password) override;
-  void send_createLocalUser(const std::string& login, const std::string& user, const std::string& password);
+  void createLocalUser(const std::string& sharedSecret, const std::string& user, const std::string& password) override;
+  void send_createLocalUser(const std::string& sharedSecret, const std::string& user, const std::string& password);
   void recv_createLocalUser();
-  void dropLocalUser(const std::string& login, const std::string& user) override;
-  void send_dropLocalUser(const std::string& login, const std::string& user);
+  void dropLocalUser(const std::string& sharedSecret, const std::string& user) override;
+  void send_dropLocalUser(const std::string& sharedSecret, const std::string& user);
   void recv_dropLocalUser();
-  void getUserAuthorizations(std::vector<std::string> & _return, const std::string& login, const std::string& user) override;
-  void send_getUserAuthorizations(const std::string& login, const std::string& user);
+  void getUserAuthorizations(std::vector<std::string> & _return, const std::string& sharedSecret, const std::string& user) override;
+  void send_getUserAuthorizations(const std::string& sharedSecret, const std::string& user);
   void recv_getUserAuthorizations(std::vector<std::string> & _return);
-  void grantSystemPermission(const std::string& login, const std::string& user, const SystemPermission::type perm) override;
-  void send_grantSystemPermission(const std::string& login, const std::string& user, const SystemPermission::type perm);
+  void grantSystemPermission(const std::string& sharedSecret, const std::string& user, const SystemPermission::type perm) override;
+  void send_grantSystemPermission(const std::string& sharedSecret, const std::string& user, const SystemPermission::type perm);
   void recv_grantSystemPermission();
-  void grantTablePermission(const std::string& login, const std::string& user, const std::string& table, const TablePermission::type perm) override;
-  void send_grantTablePermission(const std::string& login, const std::string& user, const std::string& table, const TablePermission::type perm);
+  void grantTablePermission(const std::string& sharedSecret, const std::string& user, const std::string& table, const TablePermission::type perm) override;
+  void send_grantTablePermission(const std::string& sharedSecret, const std::string& user, const std::string& table, const TablePermission::type perm);
   void recv_grantTablePermission();
-  bool hasSystemPermission(const std::string& login, const std::string& user, const SystemPermission::type perm) override;
-  void send_hasSystemPermission(const std::string& login, const std::string& user, const SystemPermission::type perm);
+  bool hasSystemPermission(const std::string& sharedSecret, const std::string& user, const SystemPermission::type perm) override;
+  void send_hasSystemPermission(const std::string& sharedSecret, const std::string& user, const SystemPermission::type perm);
   bool recv_hasSystemPermission();
-  bool hasTablePermission(const std::string& login, const std::string& user, const std::string& table, const TablePermission::type perm) override;
-  void send_hasTablePermission(const std::string& login, const std::string& user, const std::string& table, const TablePermission::type perm);
+  bool hasTablePermission(const std::string& sharedSecret, const std::string& user, const std::string& table, const TablePermission::type perm) override;
+  void send_hasTablePermission(const std::string& sharedSecret, const std::string& user, const std::string& table, const TablePermission::type perm);
   bool recv_hasTablePermission();
-  void listLocalUsers(std::set<std::string> & _return, const std::string& login) override;
-  void send_listLocalUsers(const std::string& login);
+  void listLocalUsers(std::set<std::string> & _return, const std::string& sharedSecret) override;
+  void send_listLocalUsers(const std::string& sharedSecret);
   void recv_listLocalUsers(std::set<std::string> & _return);
-  void revokeSystemPermission(const std::string& login, const std::string& user, const SystemPermission::type perm) override;
-  void send_revokeSystemPermission(const std::string& login, const std::string& user, const SystemPermission::type perm);
+  void revokeSystemPermission(const std::string& sharedSecret, const std::string& user, const SystemPermission::type perm) override;
+  void send_revokeSystemPermission(const std::string& sharedSecret, const std::string& user, const SystemPermission::type perm);
   void recv_revokeSystemPermission();
-  void revokeTablePermission(const std::string& login, const std::string& user, const std::string& table, const TablePermission::type perm) override;
-  void send_revokeTablePermission(const std::string& login, const std::string& user, const std::string& table, const TablePermission::type perm);
+  void revokeTablePermission(const std::string& sharedSecret, const std::string& user, const std::string& table, const TablePermission::type perm) override;
+  void send_revokeTablePermission(const std::string& sharedSecret, const std::string& user, const std::string& table, const TablePermission::type perm);
   void recv_revokeTablePermission();
-  void grantNamespacePermission(const std::string& login, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm) override;
-  void send_grantNamespacePermission(const std::string& login, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm);
+  void grantNamespacePermission(const std::string& sharedSecret, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm) override;
+  void send_grantNamespacePermission(const std::string& sharedSecret, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm);
   void recv_grantNamespacePermission();
-  bool hasNamespacePermission(const std::string& login, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm) override;
-  void send_hasNamespacePermission(const std::string& login, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm);
+  bool hasNamespacePermission(const std::string& sharedSecret, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm) override;
+  void send_hasNamespacePermission(const std::string& sharedSecret, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm);
   bool recv_hasNamespacePermission();
-  void revokeNamespacePermission(const std::string& login, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm) override;
-  void send_revokeNamespacePermission(const std::string& login, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm);
+  void revokeNamespacePermission(const std::string& sharedSecret, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm) override;
+  void send_revokeNamespacePermission(const std::string& sharedSecret, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm);
   void recv_revokeNamespacePermission();
-  void createBatchScanner(std::string& _return, const std::string& login, const std::string& tableName, const BatchScanOptions& options) override;
-  void send_createBatchScanner(const std::string& login, const std::string& tableName, const BatchScanOptions& options);
+  void createBatchScanner(std::string& _return, const std::string& sharedSecret, const std::string& tableName, const BatchScanOptions& options) override;
+  void send_createBatchScanner(const std::string& sharedSecret, const std::string& tableName, const BatchScanOptions& options);
   void recv_createBatchScanner(std::string& _return);
-  void createScanner(std::string& _return, const std::string& login, const std::string& tableName, const ScanOptions& options) override;
-  void send_createScanner(const std::string& login, const std::string& tableName, const ScanOptions& options);
+  void createScanner(std::string& _return, const std::string& sharedSecret, const std::string& tableName, const ScanOptions& options) override;
+  void send_createScanner(const std::string& sharedSecret, const std::string& tableName, const ScanOptions& options);
   void recv_createScanner(std::string& _return);
   bool hasNext(const std::string& scanner) override;
   void send_hasNext(const std::string& scanner);
@@ -14202,11 +14074,11 @@ class AccumuloProxyClient : virtual public AccumuloProxyIf {
   void closeScanner(const std::string& scanner) override;
   void send_closeScanner(const std::string& scanner);
   void recv_closeScanner();
-  void updateAndFlush(const std::string& login, const std::string& tableName, const std::map<std::string, std::vector<ColumnUpdate> > & cells) override;
-  void send_updateAndFlush(const std::string& login, const std::string& tableName, const std::map<std::string, std::vector<ColumnUpdate> > & cells);
+  void updateAndFlush(const std::string& sharedSecret, const std::string& tableName, const std::map<std::string, std::vector<ColumnUpdate> > & cells) override;
+  void send_updateAndFlush(const std::string& sharedSecret, const std::string& tableName, const std::map<std::string, std::vector<ColumnUpdate> > & cells);
   void recv_updateAndFlush();
-  void createWriter(std::string& _return, const std::string& login, const std::string& tableName, const WriterOptions& opts) override;
-  void send_createWriter(const std::string& login, const std::string& tableName, const WriterOptions& opts);
+  void createWriter(std::string& _return, const std::string& sharedSecret, const std::string& tableName, const WriterOptions& opts) override;
+  void send_createWriter(const std::string& sharedSecret, const std::string& tableName, const WriterOptions& opts);
   void recv_createWriter(std::string& _return);
   void update(const std::string& writer, const std::map<std::string, std::vector<ColumnUpdate> > & cells) override;
   void send_update(const std::string& writer, const std::map<std::string, std::vector<ColumnUpdate> > & cells);
@@ -14216,11 +14088,11 @@ class AccumuloProxyClient : virtual public AccumuloProxyIf {
   void closeWriter(const std::string& writer) override;
   void send_closeWriter(const std::string& writer);
   void recv_closeWriter();
-  ConditionalStatus::type updateRowConditionally(const std::string& login, const std::string& tableName, const std::string& row, const ConditionalUpdates& updates) override;
-  void send_updateRowConditionally(const std::string& login, const std::string& tableName, const std::string& row, const ConditionalUpdates& updates);
+  ConditionalStatus::type updateRowConditionally(const std::string& sharedSecret, const std::string& tableName, const std::string& row, const ConditionalUpdates& updates) override;
+  void send_updateRowConditionally(const std::string& sharedSecret, const std::string& tableName, const std::string& row, const ConditionalUpdates& updates);
   ConditionalStatus::type recv_updateRowConditionally();
-  void createConditionalWriter(std::string& _return, const std::string& login, const std::string& tableName, const ConditionalWriterOptions& options) override;
-  void send_createConditionalWriter(const std::string& login, const std::string& tableName, const ConditionalWriterOptions& options);
+  void createConditionalWriter(std::string& _return, const std::string& sharedSecret, const std::string& tableName, const ConditionalWriterOptions& options) override;
+  void send_createConditionalWriter(const std::string& sharedSecret, const std::string& tableName, const ConditionalWriterOptions& options);
   void recv_createConditionalWriter(std::string& _return);
   void updateRowsConditionally(std::map<std::string, ConditionalStatus::type> & _return, const std::string& conditionalWriter, const std::map<std::string, ConditionalUpdates> & updates) override;
   void send_updateRowsConditionally(const std::string& conditionalWriter, const std::map<std::string, ConditionalUpdates> & updates);
@@ -14240,59 +14112,59 @@ class AccumuloProxyClient : virtual public AccumuloProxyIf {
   void defaultNamespace(std::string& _return) override;
   void send_defaultNamespace();
   void recv_defaultNamespace(std::string& _return);
-  void listNamespaces(std::vector<std::string> & _return, const std::string& login) override;
-  void send_listNamespaces(const std::string& login);
+  void listNamespaces(std::vector<std::string> & _return, const std::string& sharedSecret) override;
+  void send_listNamespaces(const std::string& sharedSecret);
   void recv_listNamespaces(std::vector<std::string> & _return);
-  bool namespaceExists(const std::string& login, const std::string& namespaceName) override;
-  void send_namespaceExists(const std::string& login, const std::string& namespaceName);
+  bool namespaceExists(const std::string& sharedSecret, const std::string& namespaceName) override;
+  void send_namespaceExists(const std::string& sharedSecret, const std::string& namespaceName);
   bool recv_namespaceExists();
-  void createNamespace(const std::string& login, const std::string& namespaceName) override;
-  void send_createNamespace(const std::string& login, const std::string& namespaceName);
+  void createNamespace(const std::string& sharedSecret, const std::string& namespaceName) override;
+  void send_createNamespace(const std::string& sharedSecret, const std::string& namespaceName);
   void recv_createNamespace();
-  void deleteNamespace(const std::string& login, const std::string& namespaceName) override;
-  void send_deleteNamespace(const std::string& login, const std::string& namespaceName);
+  void deleteNamespace(const std::string& sharedSecret, const std::string& namespaceName) override;
+  void send_deleteNamespace(const std::string& sharedSecret, const std::string& namespaceName);
   void recv_deleteNamespace();
-  void renameNamespace(const std::string& login, const std::string& oldNamespaceName, const std::string& newNamespaceName) override;
-  void send_renameNamespace(const std::string& login, const std::string& oldNamespaceName, const std::string& newNamespaceName);
+  void renameNamespace(const std::string& sharedSecret, const std::string& oldNamespaceName, const std::string& newNamespaceName) override;
+  void send_renameNamespace(const std::string& sharedSecret, const std::string& oldNamespaceName, const std::string& newNamespaceName);
   void recv_renameNamespace();
-  void setNamespaceProperty(const std::string& login, const std::string& namespaceName, const std::string& property, const std::string& value) override;
-  void send_setNamespaceProperty(const std::string& login, const std::string& namespaceName, const std::string& property, const std::string& value);
+  void setNamespaceProperty(const std::string& sharedSecret, const std::string& namespaceName, const std::string& property, const std::string& value) override;
+  void send_setNamespaceProperty(const std::string& sharedSecret, const std::string& namespaceName, const std::string& property, const std::string& value);
   void recv_setNamespaceProperty();
-  void removeNamespaceProperty(const std::string& login, const std::string& namespaceName, const std::string& property) override;
-  void send_removeNamespaceProperty(const std::string& login, const std::string& namespaceName, const std::string& property);
+  void removeNamespaceProperty(const std::string& sharedSecret, const std::string& namespaceName, const std::string& property) override;
+  void send_removeNamespaceProperty(const std::string& sharedSecret, const std::string& namespaceName, const std::string& property);
   void recv_removeNamespaceProperty();
-  void getNamespaceProperties(std::map<std::string, std::string> & _return, const std::string& login, const std::string& namespaceName) override;
-  void send_getNamespaceProperties(const std::string& login, const std::string& namespaceName);
+  void getNamespaceProperties(std::map<std::string, std::string> & _return, const std::string& sharedSecret, const std::string& namespaceName) override;
+  void send_getNamespaceProperties(const std::string& sharedSecret, const std::string& namespaceName);
   void recv_getNamespaceProperties(std::map<std::string, std::string> & _return);
-  void namespaceIdMap(std::map<std::string, std::string> & _return, const std::string& login) override;
-  void send_namespaceIdMap(const std::string& login);
+  void namespaceIdMap(std::map<std::string, std::string> & _return, const std::string& sharedSecret) override;
+  void send_namespaceIdMap(const std::string& sharedSecret);
   void recv_namespaceIdMap(std::map<std::string, std::string> & _return);
-  void attachNamespaceIterator(const std::string& login, const std::string& namespaceName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes) override;
-  void send_attachNamespaceIterator(const std::string& login, const std::string& namespaceName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes);
+  void attachNamespaceIterator(const std::string& sharedSecret, const std::string& namespaceName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes) override;
+  void send_attachNamespaceIterator(const std::string& sharedSecret, const std::string& namespaceName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes);
   void recv_attachNamespaceIterator();
-  void removeNamespaceIterator(const std::string& login, const std::string& namespaceName, const std::string& name, const std::set<IteratorScope::type> & scopes) override;
-  void send_removeNamespaceIterator(const std::string& login, const std::string& namespaceName, const std::string& name, const std::set<IteratorScope::type> & scopes);
+  void removeNamespaceIterator(const std::string& sharedSecret, const std::string& namespaceName, const std::string& name, const std::set<IteratorScope::type> & scopes) override;
+  void send_removeNamespaceIterator(const std::string& sharedSecret, const std::string& namespaceName, const std::string& name, const std::set<IteratorScope::type> & scopes);
   void recv_removeNamespaceIterator();
-  void getNamespaceIteratorSetting(IteratorSetting& _return, const std::string& login, const std::string& namespaceName, const std::string& name, const IteratorScope::type scope) override;
-  void send_getNamespaceIteratorSetting(const std::string& login, const std::string& namespaceName, const std::string& name, const IteratorScope::type scope);
+  void getNamespaceIteratorSetting(IteratorSetting& _return, const std::string& sharedSecret, const std::string& namespaceName, const std::string& name, const IteratorScope::type scope) override;
+  void send_getNamespaceIteratorSetting(const std::string& sharedSecret, const std::string& namespaceName, const std::string& name, const IteratorScope::type scope);
   void recv_getNamespaceIteratorSetting(IteratorSetting& _return);
-  void listNamespaceIterators(std::map<std::string, std::set<IteratorScope::type> > & _return, const std::string& login, const std::string& namespaceName) override;
-  void send_listNamespaceIterators(const std::string& login, const std::string& namespaceName);
+  void listNamespaceIterators(std::map<std::string, std::set<IteratorScope::type> > & _return, const std::string& sharedSecret, const std::string& namespaceName) override;
+  void send_listNamespaceIterators(const std::string& sharedSecret, const std::string& namespaceName);
   void recv_listNamespaceIterators(std::map<std::string, std::set<IteratorScope::type> > & _return);
-  void checkNamespaceIteratorConflicts(const std::string& login, const std::string& namespaceName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes) override;
-  void send_checkNamespaceIteratorConflicts(const std::string& login, const std::string& namespaceName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes);
+  void checkNamespaceIteratorConflicts(const std::string& sharedSecret, const std::string& namespaceName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes) override;
+  void send_checkNamespaceIteratorConflicts(const std::string& sharedSecret, const std::string& namespaceName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes);
   void recv_checkNamespaceIteratorConflicts();
-  int32_t addNamespaceConstraint(const std::string& login, const std::string& namespaceName, const std::string& constraintClassName) override;
-  void send_addNamespaceConstraint(const std::string& login, const std::string& namespaceName, const std::string& constraintClassName);
+  int32_t addNamespaceConstraint(const std::string& sharedSecret, const std::string& namespaceName, const std::string& constraintClassName) override;
+  void send_addNamespaceConstraint(const std::string& sharedSecret, const std::string& namespaceName, const std::string& constraintClassName);
   int32_t recv_addNamespaceConstraint();
-  void removeNamespaceConstraint(const std::string& login, const std::string& namespaceName, const int32_t id) override;
-  void send_removeNamespaceConstraint(const std::string& login, const std::string& namespaceName, const int32_t id);
+  void removeNamespaceConstraint(const std::string& sharedSecret, const std::string& namespaceName, const int32_t id) override;
+  void send_removeNamespaceConstraint(const std::string& sharedSecret, const std::string& namespaceName, const int32_t id);
   void recv_removeNamespaceConstraint();
-  void listNamespaceConstraints(std::map<std::string, int32_t> & _return, const std::string& login, const std::string& namespaceName) override;
-  void send_listNamespaceConstraints(const std::string& login, const std::string& namespaceName);
+  void listNamespaceConstraints(std::map<std::string, int32_t> & _return, const std::string& sharedSecret, const std::string& namespaceName) override;
+  void send_listNamespaceConstraints(const std::string& sharedSecret, const std::string& namespaceName);
   void recv_listNamespaceConstraints(std::map<std::string, int32_t> & _return);
-  bool testNamespaceClassLoad(const std::string& login, const std::string& namespaceName, const std::string& className, const std::string& asTypeName) override;
-  void send_testNamespaceClassLoad(const std::string& login, const std::string& namespaceName, const std::string& className, const std::string& asTypeName);
+  bool testNamespaceClassLoad(const std::string& sharedSecret, const std::string& namespaceName, const std::string& className, const std::string& asTypeName) override;
+  void send_testNamespaceClassLoad(const std::string& sharedSecret, const std::string& namespaceName, const std::string& className, const std::string& asTypeName);
   bool recv_testNamespaceClassLoad();
  protected:
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
@@ -14309,7 +14181,6 @@ class AccumuloProxyProcessor : public ::apache::thrift::TDispatchProcessor {
   typedef  void (AccumuloProxyProcessor::*ProcessFunction)(int32_t, ::apache::thrift::protocol::TProtocol*, ::apache::thrift::protocol::TProtocol*, void*);
   typedef std::map<std::string, ProcessFunction> ProcessMap;
   ProcessMap processMap_;
-  void process_login(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_addConstraint(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_addSplits(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_attachIterator(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -14412,7 +14283,6 @@ class AccumuloProxyProcessor : public ::apache::thrift::TDispatchProcessor {
  public:
   AccumuloProxyProcessor(::std::shared_ptr<AccumuloProxyIf> iface) :
     iface_(iface) {
-    processMap_["login"] = &AccumuloProxyProcessor::process_login;
     processMap_["addConstraint"] = &AccumuloProxyProcessor::process_addConstraint;
     processMap_["addSplits"] = &AccumuloProxyProcessor::process_addSplits;
     processMap_["attachIterator"] = &AccumuloProxyProcessor::process_attachIterator;
@@ -14540,609 +14410,599 @@ class AccumuloProxyMultiface : virtual public AccumuloProxyIf {
     ifaces_.push_back(iface);
   }
  public:
-  void login(std::string& _return, const std::string& principal, const std::map<std::string, std::string> & loginProperties) override {
+  int32_t addConstraint(const std::string& sharedSecret, const std::string& tableName, const std::string& constraintClassName) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->login(_return, principal, loginProperties);
+      ifaces_[i]->addConstraint(sharedSecret, tableName, constraintClassName);
     }
-    ifaces_[i]->login(_return, principal, loginProperties);
+    return ifaces_[i]->addConstraint(sharedSecret, tableName, constraintClassName);
+  }
+
+  void addSplits(const std::string& sharedSecret, const std::string& tableName, const std::set<std::string> & splits) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->addSplits(sharedSecret, tableName, splits);
+    }
+    ifaces_[i]->addSplits(sharedSecret, tableName, splits);
+  }
+
+  void attachIterator(const std::string& sharedSecret, const std::string& tableName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->attachIterator(sharedSecret, tableName, setting, scopes);
+    }
+    ifaces_[i]->attachIterator(sharedSecret, tableName, setting, scopes);
+  }
+
+  void checkIteratorConflicts(const std::string& sharedSecret, const std::string& tableName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->checkIteratorConflicts(sharedSecret, tableName, setting, scopes);
+    }
+    ifaces_[i]->checkIteratorConflicts(sharedSecret, tableName, setting, scopes);
+  }
+
+  void clearLocatorCache(const std::string& sharedSecret, const std::string& tableName) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->clearLocatorCache(sharedSecret, tableName);
+    }
+    ifaces_[i]->clearLocatorCache(sharedSecret, tableName);
+  }
+
+  void cloneTable(const std::string& sharedSecret, const std::string& tableName, const std::string& newTableName, const bool flush, const std::map<std::string, std::string> & propertiesToSet, const std::set<std::string> & propertiesToExclude) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->cloneTable(sharedSecret, tableName, newTableName, flush, propertiesToSet, propertiesToExclude);
+    }
+    ifaces_[i]->cloneTable(sharedSecret, tableName, newTableName, flush, propertiesToSet, propertiesToExclude);
+  }
+
+  void compactTable(const std::string& sharedSecret, const std::string& tableName, const std::string& startRow, const std::string& endRow, const std::vector<IteratorSetting> & iterators, const bool flush, const bool wait, const PluginConfig& selectorConfig, const PluginConfig& configurerConfig) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->compactTable(sharedSecret, tableName, startRow, endRow, iterators, flush, wait, selectorConfig, configurerConfig);
+    }
+    ifaces_[i]->compactTable(sharedSecret, tableName, startRow, endRow, iterators, flush, wait, selectorConfig, configurerConfig);
+  }
+
+  void cancelCompaction(const std::string& sharedSecret, const std::string& tableName) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->cancelCompaction(sharedSecret, tableName);
+    }
+    ifaces_[i]->cancelCompaction(sharedSecret, tableName);
+  }
+
+  void createTable(const std::string& sharedSecret, const std::string& tableName, const bool versioningIter, const TimeType::type type) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->createTable(sharedSecret, tableName, versioningIter, type);
+    }
+    ifaces_[i]->createTable(sharedSecret, tableName, versioningIter, type);
+  }
+
+  void deleteTable(const std::string& sharedSecret, const std::string& tableName) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->deleteTable(sharedSecret, tableName);
+    }
+    ifaces_[i]->deleteTable(sharedSecret, tableName);
+  }
+
+  void deleteRows(const std::string& sharedSecret, const std::string& tableName, const std::string& startRow, const std::string& endRow) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->deleteRows(sharedSecret, tableName, startRow, endRow);
+    }
+    ifaces_[i]->deleteRows(sharedSecret, tableName, startRow, endRow);
+  }
+
+  void exportTable(const std::string& sharedSecret, const std::string& tableName, const std::string& exportDir) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->exportTable(sharedSecret, tableName, exportDir);
+    }
+    ifaces_[i]->exportTable(sharedSecret, tableName, exportDir);
+  }
+
+  void flushTable(const std::string& sharedSecret, const std::string& tableName, const std::string& startRow, const std::string& endRow, const bool wait) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->flushTable(sharedSecret, tableName, startRow, endRow, wait);
+    }
+    ifaces_[i]->flushTable(sharedSecret, tableName, startRow, endRow, wait);
+  }
+
+  void getDiskUsage(std::vector<DiskUsage> & _return, const std::string& sharedSecret, const std::set<std::string> & tables) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->getDiskUsage(_return, sharedSecret, tables);
+    }
+    ifaces_[i]->getDiskUsage(_return, sharedSecret, tables);
     return;
   }
 
-  int32_t addConstraint(const std::string& login, const std::string& tableName, const std::string& constraintClassName) override {
+  void getLocalityGroups(std::map<std::string, std::set<std::string> > & _return, const std::string& sharedSecret, const std::string& tableName) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->addConstraint(login, tableName, constraintClassName);
+      ifaces_[i]->getLocalityGroups(_return, sharedSecret, tableName);
     }
-    return ifaces_[i]->addConstraint(login, tableName, constraintClassName);
-  }
-
-  void addSplits(const std::string& login, const std::string& tableName, const std::set<std::string> & splits) override {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->addSplits(login, tableName, splits);
-    }
-    ifaces_[i]->addSplits(login, tableName, splits);
-  }
-
-  void attachIterator(const std::string& login, const std::string& tableName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes) override {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->attachIterator(login, tableName, setting, scopes);
-    }
-    ifaces_[i]->attachIterator(login, tableName, setting, scopes);
-  }
-
-  void checkIteratorConflicts(const std::string& login, const std::string& tableName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes) override {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->checkIteratorConflicts(login, tableName, setting, scopes);
-    }
-    ifaces_[i]->checkIteratorConflicts(login, tableName, setting, scopes);
-  }
-
-  void clearLocatorCache(const std::string& login, const std::string& tableName) override {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->clearLocatorCache(login, tableName);
-    }
-    ifaces_[i]->clearLocatorCache(login, tableName);
-  }
-
-  void cloneTable(const std::string& login, const std::string& tableName, const std::string& newTableName, const bool flush, const std::map<std::string, std::string> & propertiesToSet, const std::set<std::string> & propertiesToExclude) override {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->cloneTable(login, tableName, newTableName, flush, propertiesToSet, propertiesToExclude);
-    }
-    ifaces_[i]->cloneTable(login, tableName, newTableName, flush, propertiesToSet, propertiesToExclude);
-  }
-
-  void compactTable(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow, const std::vector<IteratorSetting> & iterators, const bool flush, const bool wait, const PluginConfig& selectorConfig, const PluginConfig& configurerConfig) override {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->compactTable(login, tableName, startRow, endRow, iterators, flush, wait, selectorConfig, configurerConfig);
-    }
-    ifaces_[i]->compactTable(login, tableName, startRow, endRow, iterators, flush, wait, selectorConfig, configurerConfig);
-  }
-
-  void cancelCompaction(const std::string& login, const std::string& tableName) override {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->cancelCompaction(login, tableName);
-    }
-    ifaces_[i]->cancelCompaction(login, tableName);
-  }
-
-  void createTable(const std::string& login, const std::string& tableName, const bool versioningIter, const TimeType::type type) override {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->createTable(login, tableName, versioningIter, type);
-    }
-    ifaces_[i]->createTable(login, tableName, versioningIter, type);
-  }
-
-  void deleteTable(const std::string& login, const std::string& tableName) override {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->deleteTable(login, tableName);
-    }
-    ifaces_[i]->deleteTable(login, tableName);
-  }
-
-  void deleteRows(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow) override {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->deleteRows(login, tableName, startRow, endRow);
-    }
-    ifaces_[i]->deleteRows(login, tableName, startRow, endRow);
-  }
-
-  void exportTable(const std::string& login, const std::string& tableName, const std::string& exportDir) override {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->exportTable(login, tableName, exportDir);
-    }
-    ifaces_[i]->exportTable(login, tableName, exportDir);
-  }
-
-  void flushTable(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow, const bool wait) override {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->flushTable(login, tableName, startRow, endRow, wait);
-    }
-    ifaces_[i]->flushTable(login, tableName, startRow, endRow, wait);
-  }
-
-  void getDiskUsage(std::vector<DiskUsage> & _return, const std::string& login, const std::set<std::string> & tables) override {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->getDiskUsage(_return, login, tables);
-    }
-    ifaces_[i]->getDiskUsage(_return, login, tables);
+    ifaces_[i]->getLocalityGroups(_return, sharedSecret, tableName);
     return;
   }
 
-  void getLocalityGroups(std::map<std::string, std::set<std::string> > & _return, const std::string& login, const std::string& tableName) override {
+  void getIteratorSetting(IteratorSetting& _return, const std::string& sharedSecret, const std::string& tableName, const std::string& iteratorName, const IteratorScope::type scope) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->getLocalityGroups(_return, login, tableName);
+      ifaces_[i]->getIteratorSetting(_return, sharedSecret, tableName, iteratorName, scope);
     }
-    ifaces_[i]->getLocalityGroups(_return, login, tableName);
+    ifaces_[i]->getIteratorSetting(_return, sharedSecret, tableName, iteratorName, scope);
     return;
   }
 
-  void getIteratorSetting(IteratorSetting& _return, const std::string& login, const std::string& tableName, const std::string& iteratorName, const IteratorScope::type scope) override {
+  void getMaxRow(std::string& _return, const std::string& sharedSecret, const std::string& tableName, const std::set<std::string> & auths, const std::string& startRow, const bool startInclusive, const std::string& endRow, const bool endInclusive) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->getIteratorSetting(_return, login, tableName, iteratorName, scope);
+      ifaces_[i]->getMaxRow(_return, sharedSecret, tableName, auths, startRow, startInclusive, endRow, endInclusive);
     }
-    ifaces_[i]->getIteratorSetting(_return, login, tableName, iteratorName, scope);
+    ifaces_[i]->getMaxRow(_return, sharedSecret, tableName, auths, startRow, startInclusive, endRow, endInclusive);
     return;
   }
 
-  void getMaxRow(std::string& _return, const std::string& login, const std::string& tableName, const std::set<std::string> & auths, const std::string& startRow, const bool startInclusive, const std::string& endRow, const bool endInclusive) override {
+  void getTableProperties(std::map<std::string, std::string> & _return, const std::string& sharedSecret, const std::string& tableName) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->getMaxRow(_return, login, tableName, auths, startRow, startInclusive, endRow, endInclusive);
+      ifaces_[i]->getTableProperties(_return, sharedSecret, tableName);
     }
-    ifaces_[i]->getMaxRow(_return, login, tableName, auths, startRow, startInclusive, endRow, endInclusive);
+    ifaces_[i]->getTableProperties(_return, sharedSecret, tableName);
     return;
   }
 
-  void getTableProperties(std::map<std::string, std::string> & _return, const std::string& login, const std::string& tableName) override {
+  void importDirectory(const std::string& sharedSecret, const std::string& tableName, const std::string& importDir, const std::string& failureDir, const bool setTime) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->getTableProperties(_return, login, tableName);
+      ifaces_[i]->importDirectory(sharedSecret, tableName, importDir, failureDir, setTime);
     }
-    ifaces_[i]->getTableProperties(_return, login, tableName);
+    ifaces_[i]->importDirectory(sharedSecret, tableName, importDir, failureDir, setTime);
+  }
+
+  void importTable(const std::string& sharedSecret, const std::string& tableName, const std::string& importDir) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->importTable(sharedSecret, tableName, importDir);
+    }
+    ifaces_[i]->importTable(sharedSecret, tableName, importDir);
+  }
+
+  void listSplits(std::vector<std::string> & _return, const std::string& sharedSecret, const std::string& tableName, const int32_t maxSplits) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->listSplits(_return, sharedSecret, tableName, maxSplits);
+    }
+    ifaces_[i]->listSplits(_return, sharedSecret, tableName, maxSplits);
     return;
   }
 
-  void importDirectory(const std::string& login, const std::string& tableName, const std::string& importDir, const std::string& failureDir, const bool setTime) override {
+  void listTables(std::set<std::string> & _return, const std::string& sharedSecret) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->importDirectory(login, tableName, importDir, failureDir, setTime);
+      ifaces_[i]->listTables(_return, sharedSecret);
     }
-    ifaces_[i]->importDirectory(login, tableName, importDir, failureDir, setTime);
-  }
-
-  void importTable(const std::string& login, const std::string& tableName, const std::string& importDir) override {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->importTable(login, tableName, importDir);
-    }
-    ifaces_[i]->importTable(login, tableName, importDir);
-  }
-
-  void listSplits(std::vector<std::string> & _return, const std::string& login, const std::string& tableName, const int32_t maxSplits) override {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->listSplits(_return, login, tableName, maxSplits);
-    }
-    ifaces_[i]->listSplits(_return, login, tableName, maxSplits);
+    ifaces_[i]->listTables(_return, sharedSecret);
     return;
   }
 
-  void listTables(std::set<std::string> & _return, const std::string& login) override {
+  void listIterators(std::map<std::string, std::set<IteratorScope::type> > & _return, const std::string& sharedSecret, const std::string& tableName) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->listTables(_return, login);
+      ifaces_[i]->listIterators(_return, sharedSecret, tableName);
     }
-    ifaces_[i]->listTables(_return, login);
+    ifaces_[i]->listIterators(_return, sharedSecret, tableName);
     return;
   }
 
-  void listIterators(std::map<std::string, std::set<IteratorScope::type> > & _return, const std::string& login, const std::string& tableName) override {
+  void listConstraints(std::map<std::string, int32_t> & _return, const std::string& sharedSecret, const std::string& tableName) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->listIterators(_return, login, tableName);
+      ifaces_[i]->listConstraints(_return, sharedSecret, tableName);
     }
-    ifaces_[i]->listIterators(_return, login, tableName);
+    ifaces_[i]->listConstraints(_return, sharedSecret, tableName);
     return;
   }
 
-  void listConstraints(std::map<std::string, int32_t> & _return, const std::string& login, const std::string& tableName) override {
+  void mergeTablets(const std::string& sharedSecret, const std::string& tableName, const std::string& startRow, const std::string& endRow) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->listConstraints(_return, login, tableName);
+      ifaces_[i]->mergeTablets(sharedSecret, tableName, startRow, endRow);
     }
-    ifaces_[i]->listConstraints(_return, login, tableName);
+    ifaces_[i]->mergeTablets(sharedSecret, tableName, startRow, endRow);
+  }
+
+  void offlineTable(const std::string& sharedSecret, const std::string& tableName, const bool wait) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->offlineTable(sharedSecret, tableName, wait);
+    }
+    ifaces_[i]->offlineTable(sharedSecret, tableName, wait);
+  }
+
+  void onlineTable(const std::string& sharedSecret, const std::string& tableName, const bool wait) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->onlineTable(sharedSecret, tableName, wait);
+    }
+    ifaces_[i]->onlineTable(sharedSecret, tableName, wait);
+  }
+
+  void removeConstraint(const std::string& sharedSecret, const std::string& tableName, const int32_t constraint) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->removeConstraint(sharedSecret, tableName, constraint);
+    }
+    ifaces_[i]->removeConstraint(sharedSecret, tableName, constraint);
+  }
+
+  void removeIterator(const std::string& sharedSecret, const std::string& tableName, const std::string& iterName, const std::set<IteratorScope::type> & scopes) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->removeIterator(sharedSecret, tableName, iterName, scopes);
+    }
+    ifaces_[i]->removeIterator(sharedSecret, tableName, iterName, scopes);
+  }
+
+  void removeTableProperty(const std::string& sharedSecret, const std::string& tableName, const std::string& property) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->removeTableProperty(sharedSecret, tableName, property);
+    }
+    ifaces_[i]->removeTableProperty(sharedSecret, tableName, property);
+  }
+
+  void renameTable(const std::string& sharedSecret, const std::string& oldTableName, const std::string& newTableName) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->renameTable(sharedSecret, oldTableName, newTableName);
+    }
+    ifaces_[i]->renameTable(sharedSecret, oldTableName, newTableName);
+  }
+
+  void setLocalityGroups(const std::string& sharedSecret, const std::string& tableName, const std::map<std::string, std::set<std::string> > & groups) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->setLocalityGroups(sharedSecret, tableName, groups);
+    }
+    ifaces_[i]->setLocalityGroups(sharedSecret, tableName, groups);
+  }
+
+  void setTableProperty(const std::string& sharedSecret, const std::string& tableName, const std::string& property, const std::string& value) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->setTableProperty(sharedSecret, tableName, property, value);
+    }
+    ifaces_[i]->setTableProperty(sharedSecret, tableName, property, value);
+  }
+
+  void splitRangeByTablets(std::set<Range> & _return, const std::string& sharedSecret, const std::string& tableName, const Range& range, const int32_t maxSplits) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->splitRangeByTablets(_return, sharedSecret, tableName, range, maxSplits);
+    }
+    ifaces_[i]->splitRangeByTablets(_return, sharedSecret, tableName, range, maxSplits);
     return;
   }
 
-  void mergeTablets(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow) override {
+  bool tableExists(const std::string& sharedSecret, const std::string& tableName) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->mergeTablets(login, tableName, startRow, endRow);
+      ifaces_[i]->tableExists(sharedSecret, tableName);
     }
-    ifaces_[i]->mergeTablets(login, tableName, startRow, endRow);
+    return ifaces_[i]->tableExists(sharedSecret, tableName);
   }
 
-  void offlineTable(const std::string& login, const std::string& tableName, const bool wait) override {
+  void tableIdMap(std::map<std::string, std::string> & _return, const std::string& sharedSecret) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->offlineTable(login, tableName, wait);
+      ifaces_[i]->tableIdMap(_return, sharedSecret);
     }
-    ifaces_[i]->offlineTable(login, tableName, wait);
-  }
-
-  void onlineTable(const std::string& login, const std::string& tableName, const bool wait) override {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->onlineTable(login, tableName, wait);
-    }
-    ifaces_[i]->onlineTable(login, tableName, wait);
-  }
-
-  void removeConstraint(const std::string& login, const std::string& tableName, const int32_t constraint) override {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->removeConstraint(login, tableName, constraint);
-    }
-    ifaces_[i]->removeConstraint(login, tableName, constraint);
-  }
-
-  void removeIterator(const std::string& login, const std::string& tableName, const std::string& iterName, const std::set<IteratorScope::type> & scopes) override {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->removeIterator(login, tableName, iterName, scopes);
-    }
-    ifaces_[i]->removeIterator(login, tableName, iterName, scopes);
-  }
-
-  void removeTableProperty(const std::string& login, const std::string& tableName, const std::string& property) override {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->removeTableProperty(login, tableName, property);
-    }
-    ifaces_[i]->removeTableProperty(login, tableName, property);
-  }
-
-  void renameTable(const std::string& login, const std::string& oldTableName, const std::string& newTableName) override {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->renameTable(login, oldTableName, newTableName);
-    }
-    ifaces_[i]->renameTable(login, oldTableName, newTableName);
-  }
-
-  void setLocalityGroups(const std::string& login, const std::string& tableName, const std::map<std::string, std::set<std::string> > & groups) override {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->setLocalityGroups(login, tableName, groups);
-    }
-    ifaces_[i]->setLocalityGroups(login, tableName, groups);
-  }
-
-  void setTableProperty(const std::string& login, const std::string& tableName, const std::string& property, const std::string& value) override {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->setTableProperty(login, tableName, property, value);
-    }
-    ifaces_[i]->setTableProperty(login, tableName, property, value);
-  }
-
-  void splitRangeByTablets(std::set<Range> & _return, const std::string& login, const std::string& tableName, const Range& range, const int32_t maxSplits) override {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->splitRangeByTablets(_return, login, tableName, range, maxSplits);
-    }
-    ifaces_[i]->splitRangeByTablets(_return, login, tableName, range, maxSplits);
+    ifaces_[i]->tableIdMap(_return, sharedSecret);
     return;
   }
 
-  bool tableExists(const std::string& login, const std::string& tableName) override {
+  bool testTableClassLoad(const std::string& sharedSecret, const std::string& tableName, const std::string& className, const std::string& asTypeName) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->tableExists(login, tableName);
+      ifaces_[i]->testTableClassLoad(sharedSecret, tableName, className, asTypeName);
     }
-    return ifaces_[i]->tableExists(login, tableName);
+    return ifaces_[i]->testTableClassLoad(sharedSecret, tableName, className, asTypeName);
   }
 
-  void tableIdMap(std::map<std::string, std::string> & _return, const std::string& login) override {
+  void pingTabletServer(const std::string& sharedSecret, const std::string& tserver) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->tableIdMap(_return, login);
+      ifaces_[i]->pingTabletServer(sharedSecret, tserver);
     }
-    ifaces_[i]->tableIdMap(_return, login);
+    ifaces_[i]->pingTabletServer(sharedSecret, tserver);
+  }
+
+  void getActiveScans(std::vector<ActiveScan> & _return, const std::string& sharedSecret, const std::string& tserver) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->getActiveScans(_return, sharedSecret, tserver);
+    }
+    ifaces_[i]->getActiveScans(_return, sharedSecret, tserver);
     return;
   }
 
-  bool testTableClassLoad(const std::string& login, const std::string& tableName, const std::string& className, const std::string& asTypeName) override {
+  void getActiveCompactions(std::vector<ActiveCompaction> & _return, const std::string& sharedSecret, const std::string& tserver) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->testTableClassLoad(login, tableName, className, asTypeName);
+      ifaces_[i]->getActiveCompactions(_return, sharedSecret, tserver);
     }
-    return ifaces_[i]->testTableClassLoad(login, tableName, className, asTypeName);
-  }
-
-  void pingTabletServer(const std::string& login, const std::string& tserver) override {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->pingTabletServer(login, tserver);
-    }
-    ifaces_[i]->pingTabletServer(login, tserver);
-  }
-
-  void getActiveScans(std::vector<ActiveScan> & _return, const std::string& login, const std::string& tserver) override {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->getActiveScans(_return, login, tserver);
-    }
-    ifaces_[i]->getActiveScans(_return, login, tserver);
+    ifaces_[i]->getActiveCompactions(_return, sharedSecret, tserver);
     return;
   }
 
-  void getActiveCompactions(std::vector<ActiveCompaction> & _return, const std::string& login, const std::string& tserver) override {
+  void getSiteConfiguration(std::map<std::string, std::string> & _return, const std::string& sharedSecret) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->getActiveCompactions(_return, login, tserver);
+      ifaces_[i]->getSiteConfiguration(_return, sharedSecret);
     }
-    ifaces_[i]->getActiveCompactions(_return, login, tserver);
+    ifaces_[i]->getSiteConfiguration(_return, sharedSecret);
     return;
   }
 
-  void getSiteConfiguration(std::map<std::string, std::string> & _return, const std::string& login) override {
+  void getSystemConfiguration(std::map<std::string, std::string> & _return, const std::string& sharedSecret) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->getSiteConfiguration(_return, login);
+      ifaces_[i]->getSystemConfiguration(_return, sharedSecret);
     }
-    ifaces_[i]->getSiteConfiguration(_return, login);
+    ifaces_[i]->getSystemConfiguration(_return, sharedSecret);
     return;
   }
 
-  void getSystemConfiguration(std::map<std::string, std::string> & _return, const std::string& login) override {
+  void getTabletServers(std::vector<std::string> & _return, const std::string& sharedSecret) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->getSystemConfiguration(_return, login);
+      ifaces_[i]->getTabletServers(_return, sharedSecret);
     }
-    ifaces_[i]->getSystemConfiguration(_return, login);
+    ifaces_[i]->getTabletServers(_return, sharedSecret);
     return;
   }
 
-  void getTabletServers(std::vector<std::string> & _return, const std::string& login) override {
+  void removeProperty(const std::string& sharedSecret, const std::string& property) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->getTabletServers(_return, login);
+      ifaces_[i]->removeProperty(sharedSecret, property);
     }
-    ifaces_[i]->getTabletServers(_return, login);
+    ifaces_[i]->removeProperty(sharedSecret, property);
+  }
+
+  void setProperty(const std::string& sharedSecret, const std::string& property, const std::string& value) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->setProperty(sharedSecret, property, value);
+    }
+    ifaces_[i]->setProperty(sharedSecret, property, value);
+  }
+
+  bool testClassLoad(const std::string& sharedSecret, const std::string& className, const std::string& asTypeName) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->testClassLoad(sharedSecret, className, asTypeName);
+    }
+    return ifaces_[i]->testClassLoad(sharedSecret, className, asTypeName);
+  }
+
+  bool authenticateUser(const std::string& sharedSecret, const std::string& user, const std::map<std::string, std::string> & properties) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->authenticateUser(sharedSecret, user, properties);
+    }
+    return ifaces_[i]->authenticateUser(sharedSecret, user, properties);
+  }
+
+  void changeUserAuthorizations(const std::string& sharedSecret, const std::string& user, const std::set<std::string> & authorizations) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->changeUserAuthorizations(sharedSecret, user, authorizations);
+    }
+    ifaces_[i]->changeUserAuthorizations(sharedSecret, user, authorizations);
+  }
+
+  void changeLocalUserPassword(const std::string& sharedSecret, const std::string& user, const std::string& password) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->changeLocalUserPassword(sharedSecret, user, password);
+    }
+    ifaces_[i]->changeLocalUserPassword(sharedSecret, user, password);
+  }
+
+  void createLocalUser(const std::string& sharedSecret, const std::string& user, const std::string& password) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->createLocalUser(sharedSecret, user, password);
+    }
+    ifaces_[i]->createLocalUser(sharedSecret, user, password);
+  }
+
+  void dropLocalUser(const std::string& sharedSecret, const std::string& user) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->dropLocalUser(sharedSecret, user);
+    }
+    ifaces_[i]->dropLocalUser(sharedSecret, user);
+  }
+
+  void getUserAuthorizations(std::vector<std::string> & _return, const std::string& sharedSecret, const std::string& user) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->getUserAuthorizations(_return, sharedSecret, user);
+    }
+    ifaces_[i]->getUserAuthorizations(_return, sharedSecret, user);
     return;
   }
 
-  void removeProperty(const std::string& login, const std::string& property) override {
+  void grantSystemPermission(const std::string& sharedSecret, const std::string& user, const SystemPermission::type perm) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->removeProperty(login, property);
+      ifaces_[i]->grantSystemPermission(sharedSecret, user, perm);
     }
-    ifaces_[i]->removeProperty(login, property);
+    ifaces_[i]->grantSystemPermission(sharedSecret, user, perm);
   }
 
-  void setProperty(const std::string& login, const std::string& property, const std::string& value) override {
+  void grantTablePermission(const std::string& sharedSecret, const std::string& user, const std::string& table, const TablePermission::type perm) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->setProperty(login, property, value);
+      ifaces_[i]->grantTablePermission(sharedSecret, user, table, perm);
     }
-    ifaces_[i]->setProperty(login, property, value);
+    ifaces_[i]->grantTablePermission(sharedSecret, user, table, perm);
   }
 
-  bool testClassLoad(const std::string& login, const std::string& className, const std::string& asTypeName) override {
+  bool hasSystemPermission(const std::string& sharedSecret, const std::string& user, const SystemPermission::type perm) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->testClassLoad(login, className, asTypeName);
+      ifaces_[i]->hasSystemPermission(sharedSecret, user, perm);
     }
-    return ifaces_[i]->testClassLoad(login, className, asTypeName);
+    return ifaces_[i]->hasSystemPermission(sharedSecret, user, perm);
   }
 
-  bool authenticateUser(const std::string& login, const std::string& user, const std::map<std::string, std::string> & properties) override {
+  bool hasTablePermission(const std::string& sharedSecret, const std::string& user, const std::string& table, const TablePermission::type perm) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->authenticateUser(login, user, properties);
+      ifaces_[i]->hasTablePermission(sharedSecret, user, table, perm);
     }
-    return ifaces_[i]->authenticateUser(login, user, properties);
+    return ifaces_[i]->hasTablePermission(sharedSecret, user, table, perm);
   }
 
-  void changeUserAuthorizations(const std::string& login, const std::string& user, const std::set<std::string> & authorizations) override {
+  void listLocalUsers(std::set<std::string> & _return, const std::string& sharedSecret) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->changeUserAuthorizations(login, user, authorizations);
+      ifaces_[i]->listLocalUsers(_return, sharedSecret);
     }
-    ifaces_[i]->changeUserAuthorizations(login, user, authorizations);
-  }
-
-  void changeLocalUserPassword(const std::string& login, const std::string& user, const std::string& password) override {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->changeLocalUserPassword(login, user, password);
-    }
-    ifaces_[i]->changeLocalUserPassword(login, user, password);
-  }
-
-  void createLocalUser(const std::string& login, const std::string& user, const std::string& password) override {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->createLocalUser(login, user, password);
-    }
-    ifaces_[i]->createLocalUser(login, user, password);
-  }
-
-  void dropLocalUser(const std::string& login, const std::string& user) override {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->dropLocalUser(login, user);
-    }
-    ifaces_[i]->dropLocalUser(login, user);
-  }
-
-  void getUserAuthorizations(std::vector<std::string> & _return, const std::string& login, const std::string& user) override {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->getUserAuthorizations(_return, login, user);
-    }
-    ifaces_[i]->getUserAuthorizations(_return, login, user);
+    ifaces_[i]->listLocalUsers(_return, sharedSecret);
     return;
   }
 
-  void grantSystemPermission(const std::string& login, const std::string& user, const SystemPermission::type perm) override {
+  void revokeSystemPermission(const std::string& sharedSecret, const std::string& user, const SystemPermission::type perm) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->grantSystemPermission(login, user, perm);
+      ifaces_[i]->revokeSystemPermission(sharedSecret, user, perm);
     }
-    ifaces_[i]->grantSystemPermission(login, user, perm);
+    ifaces_[i]->revokeSystemPermission(sharedSecret, user, perm);
   }
 
-  void grantTablePermission(const std::string& login, const std::string& user, const std::string& table, const TablePermission::type perm) override {
+  void revokeTablePermission(const std::string& sharedSecret, const std::string& user, const std::string& table, const TablePermission::type perm) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->grantTablePermission(login, user, table, perm);
+      ifaces_[i]->revokeTablePermission(sharedSecret, user, table, perm);
     }
-    ifaces_[i]->grantTablePermission(login, user, table, perm);
+    ifaces_[i]->revokeTablePermission(sharedSecret, user, table, perm);
   }
 
-  bool hasSystemPermission(const std::string& login, const std::string& user, const SystemPermission::type perm) override {
+  void grantNamespacePermission(const std::string& sharedSecret, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->hasSystemPermission(login, user, perm);
+      ifaces_[i]->grantNamespacePermission(sharedSecret, user, namespaceName, perm);
     }
-    return ifaces_[i]->hasSystemPermission(login, user, perm);
+    ifaces_[i]->grantNamespacePermission(sharedSecret, user, namespaceName, perm);
   }
 
-  bool hasTablePermission(const std::string& login, const std::string& user, const std::string& table, const TablePermission::type perm) override {
+  bool hasNamespacePermission(const std::string& sharedSecret, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->hasTablePermission(login, user, table, perm);
+      ifaces_[i]->hasNamespacePermission(sharedSecret, user, namespaceName, perm);
     }
-    return ifaces_[i]->hasTablePermission(login, user, table, perm);
+    return ifaces_[i]->hasNamespacePermission(sharedSecret, user, namespaceName, perm);
   }
 
-  void listLocalUsers(std::set<std::string> & _return, const std::string& login) override {
+  void revokeNamespacePermission(const std::string& sharedSecret, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->listLocalUsers(_return, login);
+      ifaces_[i]->revokeNamespacePermission(sharedSecret, user, namespaceName, perm);
     }
-    ifaces_[i]->listLocalUsers(_return, login);
+    ifaces_[i]->revokeNamespacePermission(sharedSecret, user, namespaceName, perm);
+  }
+
+  void createBatchScanner(std::string& _return, const std::string& sharedSecret, const std::string& tableName, const BatchScanOptions& options) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->createBatchScanner(_return, sharedSecret, tableName, options);
+    }
+    ifaces_[i]->createBatchScanner(_return, sharedSecret, tableName, options);
     return;
   }
 
-  void revokeSystemPermission(const std::string& login, const std::string& user, const SystemPermission::type perm) override {
+  void createScanner(std::string& _return, const std::string& sharedSecret, const std::string& tableName, const ScanOptions& options) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->revokeSystemPermission(login, user, perm);
+      ifaces_[i]->createScanner(_return, sharedSecret, tableName, options);
     }
-    ifaces_[i]->revokeSystemPermission(login, user, perm);
-  }
-
-  void revokeTablePermission(const std::string& login, const std::string& user, const std::string& table, const TablePermission::type perm) override {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->revokeTablePermission(login, user, table, perm);
-    }
-    ifaces_[i]->revokeTablePermission(login, user, table, perm);
-  }
-
-  void grantNamespacePermission(const std::string& login, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm) override {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->grantNamespacePermission(login, user, namespaceName, perm);
-    }
-    ifaces_[i]->grantNamespacePermission(login, user, namespaceName, perm);
-  }
-
-  bool hasNamespacePermission(const std::string& login, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm) override {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->hasNamespacePermission(login, user, namespaceName, perm);
-    }
-    return ifaces_[i]->hasNamespacePermission(login, user, namespaceName, perm);
-  }
-
-  void revokeNamespacePermission(const std::string& login, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm) override {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->revokeNamespacePermission(login, user, namespaceName, perm);
-    }
-    ifaces_[i]->revokeNamespacePermission(login, user, namespaceName, perm);
-  }
-
-  void createBatchScanner(std::string& _return, const std::string& login, const std::string& tableName, const BatchScanOptions& options) override {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->createBatchScanner(_return, login, tableName, options);
-    }
-    ifaces_[i]->createBatchScanner(_return, login, tableName, options);
-    return;
-  }
-
-  void createScanner(std::string& _return, const std::string& login, const std::string& tableName, const ScanOptions& options) override {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->createScanner(_return, login, tableName, options);
-    }
-    ifaces_[i]->createScanner(_return, login, tableName, options);
+    ifaces_[i]->createScanner(_return, sharedSecret, tableName, options);
     return;
   }
 
@@ -15184,22 +15044,22 @@ class AccumuloProxyMultiface : virtual public AccumuloProxyIf {
     ifaces_[i]->closeScanner(scanner);
   }
 
-  void updateAndFlush(const std::string& login, const std::string& tableName, const std::map<std::string, std::vector<ColumnUpdate> > & cells) override {
+  void updateAndFlush(const std::string& sharedSecret, const std::string& tableName, const std::map<std::string, std::vector<ColumnUpdate> > & cells) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->updateAndFlush(login, tableName, cells);
+      ifaces_[i]->updateAndFlush(sharedSecret, tableName, cells);
     }
-    ifaces_[i]->updateAndFlush(login, tableName, cells);
+    ifaces_[i]->updateAndFlush(sharedSecret, tableName, cells);
   }
 
-  void createWriter(std::string& _return, const std::string& login, const std::string& tableName, const WriterOptions& opts) override {
+  void createWriter(std::string& _return, const std::string& sharedSecret, const std::string& tableName, const WriterOptions& opts) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->createWriter(_return, login, tableName, opts);
+      ifaces_[i]->createWriter(_return, sharedSecret, tableName, opts);
     }
-    ifaces_[i]->createWriter(_return, login, tableName, opts);
+    ifaces_[i]->createWriter(_return, sharedSecret, tableName, opts);
     return;
   }
 
@@ -15230,22 +15090,22 @@ class AccumuloProxyMultiface : virtual public AccumuloProxyIf {
     ifaces_[i]->closeWriter(writer);
   }
 
-  ConditionalStatus::type updateRowConditionally(const std::string& login, const std::string& tableName, const std::string& row, const ConditionalUpdates& updates) override {
+  ConditionalStatus::type updateRowConditionally(const std::string& sharedSecret, const std::string& tableName, const std::string& row, const ConditionalUpdates& updates) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->updateRowConditionally(login, tableName, row, updates);
+      ifaces_[i]->updateRowConditionally(sharedSecret, tableName, row, updates);
     }
-    return ifaces_[i]->updateRowConditionally(login, tableName, row, updates);
+    return ifaces_[i]->updateRowConditionally(sharedSecret, tableName, row, updates);
   }
 
-  void createConditionalWriter(std::string& _return, const std::string& login, const std::string& tableName, const ConditionalWriterOptions& options) override {
+  void createConditionalWriter(std::string& _return, const std::string& sharedSecret, const std::string& tableName, const ConditionalWriterOptions& options) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->createConditionalWriter(_return, login, tableName, options);
+      ifaces_[i]->createConditionalWriter(_return, sharedSecret, tableName, options);
     }
-    ifaces_[i]->createConditionalWriter(_return, login, tableName, options);
+    ifaces_[i]->createConditionalWriter(_return, sharedSecret, tableName, options);
     return;
   }
 
@@ -15308,172 +15168,172 @@ class AccumuloProxyMultiface : virtual public AccumuloProxyIf {
     return;
   }
 
-  void listNamespaces(std::vector<std::string> & _return, const std::string& login) override {
+  void listNamespaces(std::vector<std::string> & _return, const std::string& sharedSecret) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->listNamespaces(_return, login);
+      ifaces_[i]->listNamespaces(_return, sharedSecret);
     }
-    ifaces_[i]->listNamespaces(_return, login);
+    ifaces_[i]->listNamespaces(_return, sharedSecret);
     return;
   }
 
-  bool namespaceExists(const std::string& login, const std::string& namespaceName) override {
+  bool namespaceExists(const std::string& sharedSecret, const std::string& namespaceName) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->namespaceExists(login, namespaceName);
+      ifaces_[i]->namespaceExists(sharedSecret, namespaceName);
     }
-    return ifaces_[i]->namespaceExists(login, namespaceName);
+    return ifaces_[i]->namespaceExists(sharedSecret, namespaceName);
   }
 
-  void createNamespace(const std::string& login, const std::string& namespaceName) override {
+  void createNamespace(const std::string& sharedSecret, const std::string& namespaceName) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->createNamespace(login, namespaceName);
+      ifaces_[i]->createNamespace(sharedSecret, namespaceName);
     }
-    ifaces_[i]->createNamespace(login, namespaceName);
+    ifaces_[i]->createNamespace(sharedSecret, namespaceName);
   }
 
-  void deleteNamespace(const std::string& login, const std::string& namespaceName) override {
+  void deleteNamespace(const std::string& sharedSecret, const std::string& namespaceName) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->deleteNamespace(login, namespaceName);
+      ifaces_[i]->deleteNamespace(sharedSecret, namespaceName);
     }
-    ifaces_[i]->deleteNamespace(login, namespaceName);
+    ifaces_[i]->deleteNamespace(sharedSecret, namespaceName);
   }
 
-  void renameNamespace(const std::string& login, const std::string& oldNamespaceName, const std::string& newNamespaceName) override {
+  void renameNamespace(const std::string& sharedSecret, const std::string& oldNamespaceName, const std::string& newNamespaceName) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->renameNamespace(login, oldNamespaceName, newNamespaceName);
+      ifaces_[i]->renameNamespace(sharedSecret, oldNamespaceName, newNamespaceName);
     }
-    ifaces_[i]->renameNamespace(login, oldNamespaceName, newNamespaceName);
+    ifaces_[i]->renameNamespace(sharedSecret, oldNamespaceName, newNamespaceName);
   }
 
-  void setNamespaceProperty(const std::string& login, const std::string& namespaceName, const std::string& property, const std::string& value) override {
+  void setNamespaceProperty(const std::string& sharedSecret, const std::string& namespaceName, const std::string& property, const std::string& value) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->setNamespaceProperty(login, namespaceName, property, value);
+      ifaces_[i]->setNamespaceProperty(sharedSecret, namespaceName, property, value);
     }
-    ifaces_[i]->setNamespaceProperty(login, namespaceName, property, value);
+    ifaces_[i]->setNamespaceProperty(sharedSecret, namespaceName, property, value);
   }
 
-  void removeNamespaceProperty(const std::string& login, const std::string& namespaceName, const std::string& property) override {
+  void removeNamespaceProperty(const std::string& sharedSecret, const std::string& namespaceName, const std::string& property) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->removeNamespaceProperty(login, namespaceName, property);
+      ifaces_[i]->removeNamespaceProperty(sharedSecret, namespaceName, property);
     }
-    ifaces_[i]->removeNamespaceProperty(login, namespaceName, property);
+    ifaces_[i]->removeNamespaceProperty(sharedSecret, namespaceName, property);
   }
 
-  void getNamespaceProperties(std::map<std::string, std::string> & _return, const std::string& login, const std::string& namespaceName) override {
+  void getNamespaceProperties(std::map<std::string, std::string> & _return, const std::string& sharedSecret, const std::string& namespaceName) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->getNamespaceProperties(_return, login, namespaceName);
+      ifaces_[i]->getNamespaceProperties(_return, sharedSecret, namespaceName);
     }
-    ifaces_[i]->getNamespaceProperties(_return, login, namespaceName);
+    ifaces_[i]->getNamespaceProperties(_return, sharedSecret, namespaceName);
     return;
   }
 
-  void namespaceIdMap(std::map<std::string, std::string> & _return, const std::string& login) override {
+  void namespaceIdMap(std::map<std::string, std::string> & _return, const std::string& sharedSecret) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->namespaceIdMap(_return, login);
+      ifaces_[i]->namespaceIdMap(_return, sharedSecret);
     }
-    ifaces_[i]->namespaceIdMap(_return, login);
+    ifaces_[i]->namespaceIdMap(_return, sharedSecret);
     return;
   }
 
-  void attachNamespaceIterator(const std::string& login, const std::string& namespaceName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes) override {
+  void attachNamespaceIterator(const std::string& sharedSecret, const std::string& namespaceName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->attachNamespaceIterator(login, namespaceName, setting, scopes);
+      ifaces_[i]->attachNamespaceIterator(sharedSecret, namespaceName, setting, scopes);
     }
-    ifaces_[i]->attachNamespaceIterator(login, namespaceName, setting, scopes);
+    ifaces_[i]->attachNamespaceIterator(sharedSecret, namespaceName, setting, scopes);
   }
 
-  void removeNamespaceIterator(const std::string& login, const std::string& namespaceName, const std::string& name, const std::set<IteratorScope::type> & scopes) override {
+  void removeNamespaceIterator(const std::string& sharedSecret, const std::string& namespaceName, const std::string& name, const std::set<IteratorScope::type> & scopes) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->removeNamespaceIterator(login, namespaceName, name, scopes);
+      ifaces_[i]->removeNamespaceIterator(sharedSecret, namespaceName, name, scopes);
     }
-    ifaces_[i]->removeNamespaceIterator(login, namespaceName, name, scopes);
+    ifaces_[i]->removeNamespaceIterator(sharedSecret, namespaceName, name, scopes);
   }
 
-  void getNamespaceIteratorSetting(IteratorSetting& _return, const std::string& login, const std::string& namespaceName, const std::string& name, const IteratorScope::type scope) override {
+  void getNamespaceIteratorSetting(IteratorSetting& _return, const std::string& sharedSecret, const std::string& namespaceName, const std::string& name, const IteratorScope::type scope) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->getNamespaceIteratorSetting(_return, login, namespaceName, name, scope);
+      ifaces_[i]->getNamespaceIteratorSetting(_return, sharedSecret, namespaceName, name, scope);
     }
-    ifaces_[i]->getNamespaceIteratorSetting(_return, login, namespaceName, name, scope);
+    ifaces_[i]->getNamespaceIteratorSetting(_return, sharedSecret, namespaceName, name, scope);
     return;
   }
 
-  void listNamespaceIterators(std::map<std::string, std::set<IteratorScope::type> > & _return, const std::string& login, const std::string& namespaceName) override {
+  void listNamespaceIterators(std::map<std::string, std::set<IteratorScope::type> > & _return, const std::string& sharedSecret, const std::string& namespaceName) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->listNamespaceIterators(_return, login, namespaceName);
+      ifaces_[i]->listNamespaceIterators(_return, sharedSecret, namespaceName);
     }
-    ifaces_[i]->listNamespaceIterators(_return, login, namespaceName);
+    ifaces_[i]->listNamespaceIterators(_return, sharedSecret, namespaceName);
     return;
   }
 
-  void checkNamespaceIteratorConflicts(const std::string& login, const std::string& namespaceName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes) override {
+  void checkNamespaceIteratorConflicts(const std::string& sharedSecret, const std::string& namespaceName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->checkNamespaceIteratorConflicts(login, namespaceName, setting, scopes);
+      ifaces_[i]->checkNamespaceIteratorConflicts(sharedSecret, namespaceName, setting, scopes);
     }
-    ifaces_[i]->checkNamespaceIteratorConflicts(login, namespaceName, setting, scopes);
+    ifaces_[i]->checkNamespaceIteratorConflicts(sharedSecret, namespaceName, setting, scopes);
   }
 
-  int32_t addNamespaceConstraint(const std::string& login, const std::string& namespaceName, const std::string& constraintClassName) override {
+  int32_t addNamespaceConstraint(const std::string& sharedSecret, const std::string& namespaceName, const std::string& constraintClassName) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->addNamespaceConstraint(login, namespaceName, constraintClassName);
+      ifaces_[i]->addNamespaceConstraint(sharedSecret, namespaceName, constraintClassName);
     }
-    return ifaces_[i]->addNamespaceConstraint(login, namespaceName, constraintClassName);
+    return ifaces_[i]->addNamespaceConstraint(sharedSecret, namespaceName, constraintClassName);
   }
 
-  void removeNamespaceConstraint(const std::string& login, const std::string& namespaceName, const int32_t id) override {
+  void removeNamespaceConstraint(const std::string& sharedSecret, const std::string& namespaceName, const int32_t id) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->removeNamespaceConstraint(login, namespaceName, id);
+      ifaces_[i]->removeNamespaceConstraint(sharedSecret, namespaceName, id);
     }
-    ifaces_[i]->removeNamespaceConstraint(login, namespaceName, id);
+    ifaces_[i]->removeNamespaceConstraint(sharedSecret, namespaceName, id);
   }
 
-  void listNamespaceConstraints(std::map<std::string, int32_t> & _return, const std::string& login, const std::string& namespaceName) override {
+  void listNamespaceConstraints(std::map<std::string, int32_t> & _return, const std::string& sharedSecret, const std::string& namespaceName) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->listNamespaceConstraints(_return, login, namespaceName);
+      ifaces_[i]->listNamespaceConstraints(_return, sharedSecret, namespaceName);
     }
-    ifaces_[i]->listNamespaceConstraints(_return, login, namespaceName);
+    ifaces_[i]->listNamespaceConstraints(_return, sharedSecret, namespaceName);
     return;
   }
 
-  bool testNamespaceClassLoad(const std::string& login, const std::string& namespaceName, const std::string& className, const std::string& asTypeName) override {
+  bool testNamespaceClassLoad(const std::string& sharedSecret, const std::string& namespaceName, const std::string& className, const std::string& asTypeName) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->testNamespaceClassLoad(login, namespaceName, className, asTypeName);
+      ifaces_[i]->testNamespaceClassLoad(sharedSecret, namespaceName, className, asTypeName);
     }
-    return ifaces_[i]->testNamespaceClassLoad(login, namespaceName, className, asTypeName);
+    return ifaces_[i]->testNamespaceClassLoad(sharedSecret, namespaceName, className, asTypeName);
   }
 
 };
@@ -15508,200 +15368,197 @@ class AccumuloProxyConcurrentClient : virtual public AccumuloProxyIf {
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  void login(std::string& _return, const std::string& principal, const std::map<std::string, std::string> & loginProperties) override;
-  int32_t send_login(const std::string& principal, const std::map<std::string, std::string> & loginProperties);
-  void recv_login(std::string& _return, const int32_t seqid);
-  int32_t addConstraint(const std::string& login, const std::string& tableName, const std::string& constraintClassName) override;
-  int32_t send_addConstraint(const std::string& login, const std::string& tableName, const std::string& constraintClassName);
+  int32_t addConstraint(const std::string& sharedSecret, const std::string& tableName, const std::string& constraintClassName) override;
+  int32_t send_addConstraint(const std::string& sharedSecret, const std::string& tableName, const std::string& constraintClassName);
   int32_t recv_addConstraint(const int32_t seqid);
-  void addSplits(const std::string& login, const std::string& tableName, const std::set<std::string> & splits) override;
-  int32_t send_addSplits(const std::string& login, const std::string& tableName, const std::set<std::string> & splits);
+  void addSplits(const std::string& sharedSecret, const std::string& tableName, const std::set<std::string> & splits) override;
+  int32_t send_addSplits(const std::string& sharedSecret, const std::string& tableName, const std::set<std::string> & splits);
   void recv_addSplits(const int32_t seqid);
-  void attachIterator(const std::string& login, const std::string& tableName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes) override;
-  int32_t send_attachIterator(const std::string& login, const std::string& tableName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes);
+  void attachIterator(const std::string& sharedSecret, const std::string& tableName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes) override;
+  int32_t send_attachIterator(const std::string& sharedSecret, const std::string& tableName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes);
   void recv_attachIterator(const int32_t seqid);
-  void checkIteratorConflicts(const std::string& login, const std::string& tableName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes) override;
-  int32_t send_checkIteratorConflicts(const std::string& login, const std::string& tableName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes);
+  void checkIteratorConflicts(const std::string& sharedSecret, const std::string& tableName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes) override;
+  int32_t send_checkIteratorConflicts(const std::string& sharedSecret, const std::string& tableName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes);
   void recv_checkIteratorConflicts(const int32_t seqid);
-  void clearLocatorCache(const std::string& login, const std::string& tableName) override;
-  int32_t send_clearLocatorCache(const std::string& login, const std::string& tableName);
+  void clearLocatorCache(const std::string& sharedSecret, const std::string& tableName) override;
+  int32_t send_clearLocatorCache(const std::string& sharedSecret, const std::string& tableName);
   void recv_clearLocatorCache(const int32_t seqid);
-  void cloneTable(const std::string& login, const std::string& tableName, const std::string& newTableName, const bool flush, const std::map<std::string, std::string> & propertiesToSet, const std::set<std::string> & propertiesToExclude) override;
-  int32_t send_cloneTable(const std::string& login, const std::string& tableName, const std::string& newTableName, const bool flush, const std::map<std::string, std::string> & propertiesToSet, const std::set<std::string> & propertiesToExclude);
+  void cloneTable(const std::string& sharedSecret, const std::string& tableName, const std::string& newTableName, const bool flush, const std::map<std::string, std::string> & propertiesToSet, const std::set<std::string> & propertiesToExclude) override;
+  int32_t send_cloneTable(const std::string& sharedSecret, const std::string& tableName, const std::string& newTableName, const bool flush, const std::map<std::string, std::string> & propertiesToSet, const std::set<std::string> & propertiesToExclude);
   void recv_cloneTable(const int32_t seqid);
-  void compactTable(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow, const std::vector<IteratorSetting> & iterators, const bool flush, const bool wait, const PluginConfig& selectorConfig, const PluginConfig& configurerConfig) override;
-  int32_t send_compactTable(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow, const std::vector<IteratorSetting> & iterators, const bool flush, const bool wait, const PluginConfig& selectorConfig, const PluginConfig& configurerConfig);
+  void compactTable(const std::string& sharedSecret, const std::string& tableName, const std::string& startRow, const std::string& endRow, const std::vector<IteratorSetting> & iterators, const bool flush, const bool wait, const PluginConfig& selectorConfig, const PluginConfig& configurerConfig) override;
+  int32_t send_compactTable(const std::string& sharedSecret, const std::string& tableName, const std::string& startRow, const std::string& endRow, const std::vector<IteratorSetting> & iterators, const bool flush, const bool wait, const PluginConfig& selectorConfig, const PluginConfig& configurerConfig);
   void recv_compactTable(const int32_t seqid);
-  void cancelCompaction(const std::string& login, const std::string& tableName) override;
-  int32_t send_cancelCompaction(const std::string& login, const std::string& tableName);
+  void cancelCompaction(const std::string& sharedSecret, const std::string& tableName) override;
+  int32_t send_cancelCompaction(const std::string& sharedSecret, const std::string& tableName);
   void recv_cancelCompaction(const int32_t seqid);
-  void createTable(const std::string& login, const std::string& tableName, const bool versioningIter, const TimeType::type type) override;
-  int32_t send_createTable(const std::string& login, const std::string& tableName, const bool versioningIter, const TimeType::type type);
+  void createTable(const std::string& sharedSecret, const std::string& tableName, const bool versioningIter, const TimeType::type type) override;
+  int32_t send_createTable(const std::string& sharedSecret, const std::string& tableName, const bool versioningIter, const TimeType::type type);
   void recv_createTable(const int32_t seqid);
-  void deleteTable(const std::string& login, const std::string& tableName) override;
-  int32_t send_deleteTable(const std::string& login, const std::string& tableName);
+  void deleteTable(const std::string& sharedSecret, const std::string& tableName) override;
+  int32_t send_deleteTable(const std::string& sharedSecret, const std::string& tableName);
   void recv_deleteTable(const int32_t seqid);
-  void deleteRows(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow) override;
-  int32_t send_deleteRows(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow);
+  void deleteRows(const std::string& sharedSecret, const std::string& tableName, const std::string& startRow, const std::string& endRow) override;
+  int32_t send_deleteRows(const std::string& sharedSecret, const std::string& tableName, const std::string& startRow, const std::string& endRow);
   void recv_deleteRows(const int32_t seqid);
-  void exportTable(const std::string& login, const std::string& tableName, const std::string& exportDir) override;
-  int32_t send_exportTable(const std::string& login, const std::string& tableName, const std::string& exportDir);
+  void exportTable(const std::string& sharedSecret, const std::string& tableName, const std::string& exportDir) override;
+  int32_t send_exportTable(const std::string& sharedSecret, const std::string& tableName, const std::string& exportDir);
   void recv_exportTable(const int32_t seqid);
-  void flushTable(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow, const bool wait) override;
-  int32_t send_flushTable(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow, const bool wait);
+  void flushTable(const std::string& sharedSecret, const std::string& tableName, const std::string& startRow, const std::string& endRow, const bool wait) override;
+  int32_t send_flushTable(const std::string& sharedSecret, const std::string& tableName, const std::string& startRow, const std::string& endRow, const bool wait);
   void recv_flushTable(const int32_t seqid);
-  void getDiskUsage(std::vector<DiskUsage> & _return, const std::string& login, const std::set<std::string> & tables) override;
-  int32_t send_getDiskUsage(const std::string& login, const std::set<std::string> & tables);
+  void getDiskUsage(std::vector<DiskUsage> & _return, const std::string& sharedSecret, const std::set<std::string> & tables) override;
+  int32_t send_getDiskUsage(const std::string& sharedSecret, const std::set<std::string> & tables);
   void recv_getDiskUsage(std::vector<DiskUsage> & _return, const int32_t seqid);
-  void getLocalityGroups(std::map<std::string, std::set<std::string> > & _return, const std::string& login, const std::string& tableName) override;
-  int32_t send_getLocalityGroups(const std::string& login, const std::string& tableName);
+  void getLocalityGroups(std::map<std::string, std::set<std::string> > & _return, const std::string& sharedSecret, const std::string& tableName) override;
+  int32_t send_getLocalityGroups(const std::string& sharedSecret, const std::string& tableName);
   void recv_getLocalityGroups(std::map<std::string, std::set<std::string> > & _return, const int32_t seqid);
-  void getIteratorSetting(IteratorSetting& _return, const std::string& login, const std::string& tableName, const std::string& iteratorName, const IteratorScope::type scope) override;
-  int32_t send_getIteratorSetting(const std::string& login, const std::string& tableName, const std::string& iteratorName, const IteratorScope::type scope);
+  void getIteratorSetting(IteratorSetting& _return, const std::string& sharedSecret, const std::string& tableName, const std::string& iteratorName, const IteratorScope::type scope) override;
+  int32_t send_getIteratorSetting(const std::string& sharedSecret, const std::string& tableName, const std::string& iteratorName, const IteratorScope::type scope);
   void recv_getIteratorSetting(IteratorSetting& _return, const int32_t seqid);
-  void getMaxRow(std::string& _return, const std::string& login, const std::string& tableName, const std::set<std::string> & auths, const std::string& startRow, const bool startInclusive, const std::string& endRow, const bool endInclusive) override;
-  int32_t send_getMaxRow(const std::string& login, const std::string& tableName, const std::set<std::string> & auths, const std::string& startRow, const bool startInclusive, const std::string& endRow, const bool endInclusive);
+  void getMaxRow(std::string& _return, const std::string& sharedSecret, const std::string& tableName, const std::set<std::string> & auths, const std::string& startRow, const bool startInclusive, const std::string& endRow, const bool endInclusive) override;
+  int32_t send_getMaxRow(const std::string& sharedSecret, const std::string& tableName, const std::set<std::string> & auths, const std::string& startRow, const bool startInclusive, const std::string& endRow, const bool endInclusive);
   void recv_getMaxRow(std::string& _return, const int32_t seqid);
-  void getTableProperties(std::map<std::string, std::string> & _return, const std::string& login, const std::string& tableName) override;
-  int32_t send_getTableProperties(const std::string& login, const std::string& tableName);
+  void getTableProperties(std::map<std::string, std::string> & _return, const std::string& sharedSecret, const std::string& tableName) override;
+  int32_t send_getTableProperties(const std::string& sharedSecret, const std::string& tableName);
   void recv_getTableProperties(std::map<std::string, std::string> & _return, const int32_t seqid);
-  void importDirectory(const std::string& login, const std::string& tableName, const std::string& importDir, const std::string& failureDir, const bool setTime) override;
-  int32_t send_importDirectory(const std::string& login, const std::string& tableName, const std::string& importDir, const std::string& failureDir, const bool setTime);
+  void importDirectory(const std::string& sharedSecret, const std::string& tableName, const std::string& importDir, const std::string& failureDir, const bool setTime) override;
+  int32_t send_importDirectory(const std::string& sharedSecret, const std::string& tableName, const std::string& importDir, const std::string& failureDir, const bool setTime);
   void recv_importDirectory(const int32_t seqid);
-  void importTable(const std::string& login, const std::string& tableName, const std::string& importDir) override;
-  int32_t send_importTable(const std::string& login, const std::string& tableName, const std::string& importDir);
+  void importTable(const std::string& sharedSecret, const std::string& tableName, const std::string& importDir) override;
+  int32_t send_importTable(const std::string& sharedSecret, const std::string& tableName, const std::string& importDir);
   void recv_importTable(const int32_t seqid);
-  void listSplits(std::vector<std::string> & _return, const std::string& login, const std::string& tableName, const int32_t maxSplits) override;
-  int32_t send_listSplits(const std::string& login, const std::string& tableName, const int32_t maxSplits);
+  void listSplits(std::vector<std::string> & _return, const std::string& sharedSecret, const std::string& tableName, const int32_t maxSplits) override;
+  int32_t send_listSplits(const std::string& sharedSecret, const std::string& tableName, const int32_t maxSplits);
   void recv_listSplits(std::vector<std::string> & _return, const int32_t seqid);
-  void listTables(std::set<std::string> & _return, const std::string& login) override;
-  int32_t send_listTables(const std::string& login);
+  void listTables(std::set<std::string> & _return, const std::string& sharedSecret) override;
+  int32_t send_listTables(const std::string& sharedSecret);
   void recv_listTables(std::set<std::string> & _return, const int32_t seqid);
-  void listIterators(std::map<std::string, std::set<IteratorScope::type> > & _return, const std::string& login, const std::string& tableName) override;
-  int32_t send_listIterators(const std::string& login, const std::string& tableName);
+  void listIterators(std::map<std::string, std::set<IteratorScope::type> > & _return, const std::string& sharedSecret, const std::string& tableName) override;
+  int32_t send_listIterators(const std::string& sharedSecret, const std::string& tableName);
   void recv_listIterators(std::map<std::string, std::set<IteratorScope::type> > & _return, const int32_t seqid);
-  void listConstraints(std::map<std::string, int32_t> & _return, const std::string& login, const std::string& tableName) override;
-  int32_t send_listConstraints(const std::string& login, const std::string& tableName);
+  void listConstraints(std::map<std::string, int32_t> & _return, const std::string& sharedSecret, const std::string& tableName) override;
+  int32_t send_listConstraints(const std::string& sharedSecret, const std::string& tableName);
   void recv_listConstraints(std::map<std::string, int32_t> & _return, const int32_t seqid);
-  void mergeTablets(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow) override;
-  int32_t send_mergeTablets(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow);
+  void mergeTablets(const std::string& sharedSecret, const std::string& tableName, const std::string& startRow, const std::string& endRow) override;
+  int32_t send_mergeTablets(const std::string& sharedSecret, const std::string& tableName, const std::string& startRow, const std::string& endRow);
   void recv_mergeTablets(const int32_t seqid);
-  void offlineTable(const std::string& login, const std::string& tableName, const bool wait) override;
-  int32_t send_offlineTable(const std::string& login, const std::string& tableName, const bool wait);
+  void offlineTable(const std::string& sharedSecret, const std::string& tableName, const bool wait) override;
+  int32_t send_offlineTable(const std::string& sharedSecret, const std::string& tableName, const bool wait);
   void recv_offlineTable(const int32_t seqid);
-  void onlineTable(const std::string& login, const std::string& tableName, const bool wait) override;
-  int32_t send_onlineTable(const std::string& login, const std::string& tableName, const bool wait);
+  void onlineTable(const std::string& sharedSecret, const std::string& tableName, const bool wait) override;
+  int32_t send_onlineTable(const std::string& sharedSecret, const std::string& tableName, const bool wait);
   void recv_onlineTable(const int32_t seqid);
-  void removeConstraint(const std::string& login, const std::string& tableName, const int32_t constraint) override;
-  int32_t send_removeConstraint(const std::string& login, const std::string& tableName, const int32_t constraint);
+  void removeConstraint(const std::string& sharedSecret, const std::string& tableName, const int32_t constraint) override;
+  int32_t send_removeConstraint(const std::string& sharedSecret, const std::string& tableName, const int32_t constraint);
   void recv_removeConstraint(const int32_t seqid);
-  void removeIterator(const std::string& login, const std::string& tableName, const std::string& iterName, const std::set<IteratorScope::type> & scopes) override;
-  int32_t send_removeIterator(const std::string& login, const std::string& tableName, const std::string& iterName, const std::set<IteratorScope::type> & scopes);
+  void removeIterator(const std::string& sharedSecret, const std::string& tableName, const std::string& iterName, const std::set<IteratorScope::type> & scopes) override;
+  int32_t send_removeIterator(const std::string& sharedSecret, const std::string& tableName, const std::string& iterName, const std::set<IteratorScope::type> & scopes);
   void recv_removeIterator(const int32_t seqid);
-  void removeTableProperty(const std::string& login, const std::string& tableName, const std::string& property) override;
-  int32_t send_removeTableProperty(const std::string& login, const std::string& tableName, const std::string& property);
+  void removeTableProperty(const std::string& sharedSecret, const std::string& tableName, const std::string& property) override;
+  int32_t send_removeTableProperty(const std::string& sharedSecret, const std::string& tableName, const std::string& property);
   void recv_removeTableProperty(const int32_t seqid);
-  void renameTable(const std::string& login, const std::string& oldTableName, const std::string& newTableName) override;
-  int32_t send_renameTable(const std::string& login, const std::string& oldTableName, const std::string& newTableName);
+  void renameTable(const std::string& sharedSecret, const std::string& oldTableName, const std::string& newTableName) override;
+  int32_t send_renameTable(const std::string& sharedSecret, const std::string& oldTableName, const std::string& newTableName);
   void recv_renameTable(const int32_t seqid);
-  void setLocalityGroups(const std::string& login, const std::string& tableName, const std::map<std::string, std::set<std::string> > & groups) override;
-  int32_t send_setLocalityGroups(const std::string& login, const std::string& tableName, const std::map<std::string, std::set<std::string> > & groups);
+  void setLocalityGroups(const std::string& sharedSecret, const std::string& tableName, const std::map<std::string, std::set<std::string> > & groups) override;
+  int32_t send_setLocalityGroups(const std::string& sharedSecret, const std::string& tableName, const std::map<std::string, std::set<std::string> > & groups);
   void recv_setLocalityGroups(const int32_t seqid);
-  void setTableProperty(const std::string& login, const std::string& tableName, const std::string& property, const std::string& value) override;
-  int32_t send_setTableProperty(const std::string& login, const std::string& tableName, const std::string& property, const std::string& value);
+  void setTableProperty(const std::string& sharedSecret, const std::string& tableName, const std::string& property, const std::string& value) override;
+  int32_t send_setTableProperty(const std::string& sharedSecret, const std::string& tableName, const std::string& property, const std::string& value);
   void recv_setTableProperty(const int32_t seqid);
-  void splitRangeByTablets(std::set<Range> & _return, const std::string& login, const std::string& tableName, const Range& range, const int32_t maxSplits) override;
-  int32_t send_splitRangeByTablets(const std::string& login, const std::string& tableName, const Range& range, const int32_t maxSplits);
+  void splitRangeByTablets(std::set<Range> & _return, const std::string& sharedSecret, const std::string& tableName, const Range& range, const int32_t maxSplits) override;
+  int32_t send_splitRangeByTablets(const std::string& sharedSecret, const std::string& tableName, const Range& range, const int32_t maxSplits);
   void recv_splitRangeByTablets(std::set<Range> & _return, const int32_t seqid);
-  bool tableExists(const std::string& login, const std::string& tableName) override;
-  int32_t send_tableExists(const std::string& login, const std::string& tableName);
+  bool tableExists(const std::string& sharedSecret, const std::string& tableName) override;
+  int32_t send_tableExists(const std::string& sharedSecret, const std::string& tableName);
   bool recv_tableExists(const int32_t seqid);
-  void tableIdMap(std::map<std::string, std::string> & _return, const std::string& login) override;
-  int32_t send_tableIdMap(const std::string& login);
+  void tableIdMap(std::map<std::string, std::string> & _return, const std::string& sharedSecret) override;
+  int32_t send_tableIdMap(const std::string& sharedSecret);
   void recv_tableIdMap(std::map<std::string, std::string> & _return, const int32_t seqid);
-  bool testTableClassLoad(const std::string& login, const std::string& tableName, const std::string& className, const std::string& asTypeName) override;
-  int32_t send_testTableClassLoad(const std::string& login, const std::string& tableName, const std::string& className, const std::string& asTypeName);
+  bool testTableClassLoad(const std::string& sharedSecret, const std::string& tableName, const std::string& className, const std::string& asTypeName) override;
+  int32_t send_testTableClassLoad(const std::string& sharedSecret, const std::string& tableName, const std::string& className, const std::string& asTypeName);
   bool recv_testTableClassLoad(const int32_t seqid);
-  void pingTabletServer(const std::string& login, const std::string& tserver) override;
-  int32_t send_pingTabletServer(const std::string& login, const std::string& tserver);
+  void pingTabletServer(const std::string& sharedSecret, const std::string& tserver) override;
+  int32_t send_pingTabletServer(const std::string& sharedSecret, const std::string& tserver);
   void recv_pingTabletServer(const int32_t seqid);
-  void getActiveScans(std::vector<ActiveScan> & _return, const std::string& login, const std::string& tserver) override;
-  int32_t send_getActiveScans(const std::string& login, const std::string& tserver);
+  void getActiveScans(std::vector<ActiveScan> & _return, const std::string& sharedSecret, const std::string& tserver) override;
+  int32_t send_getActiveScans(const std::string& sharedSecret, const std::string& tserver);
   void recv_getActiveScans(std::vector<ActiveScan> & _return, const int32_t seqid);
-  void getActiveCompactions(std::vector<ActiveCompaction> & _return, const std::string& login, const std::string& tserver) override;
-  int32_t send_getActiveCompactions(const std::string& login, const std::string& tserver);
+  void getActiveCompactions(std::vector<ActiveCompaction> & _return, const std::string& sharedSecret, const std::string& tserver) override;
+  int32_t send_getActiveCompactions(const std::string& sharedSecret, const std::string& tserver);
   void recv_getActiveCompactions(std::vector<ActiveCompaction> & _return, const int32_t seqid);
-  void getSiteConfiguration(std::map<std::string, std::string> & _return, const std::string& login) override;
-  int32_t send_getSiteConfiguration(const std::string& login);
+  void getSiteConfiguration(std::map<std::string, std::string> & _return, const std::string& sharedSecret) override;
+  int32_t send_getSiteConfiguration(const std::string& sharedSecret);
   void recv_getSiteConfiguration(std::map<std::string, std::string> & _return, const int32_t seqid);
-  void getSystemConfiguration(std::map<std::string, std::string> & _return, const std::string& login) override;
-  int32_t send_getSystemConfiguration(const std::string& login);
+  void getSystemConfiguration(std::map<std::string, std::string> & _return, const std::string& sharedSecret) override;
+  int32_t send_getSystemConfiguration(const std::string& sharedSecret);
   void recv_getSystemConfiguration(std::map<std::string, std::string> & _return, const int32_t seqid);
-  void getTabletServers(std::vector<std::string> & _return, const std::string& login) override;
-  int32_t send_getTabletServers(const std::string& login);
+  void getTabletServers(std::vector<std::string> & _return, const std::string& sharedSecret) override;
+  int32_t send_getTabletServers(const std::string& sharedSecret);
   void recv_getTabletServers(std::vector<std::string> & _return, const int32_t seqid);
-  void removeProperty(const std::string& login, const std::string& property) override;
-  int32_t send_removeProperty(const std::string& login, const std::string& property);
+  void removeProperty(const std::string& sharedSecret, const std::string& property) override;
+  int32_t send_removeProperty(const std::string& sharedSecret, const std::string& property);
   void recv_removeProperty(const int32_t seqid);
-  void setProperty(const std::string& login, const std::string& property, const std::string& value) override;
-  int32_t send_setProperty(const std::string& login, const std::string& property, const std::string& value);
+  void setProperty(const std::string& sharedSecret, const std::string& property, const std::string& value) override;
+  int32_t send_setProperty(const std::string& sharedSecret, const std::string& property, const std::string& value);
   void recv_setProperty(const int32_t seqid);
-  bool testClassLoad(const std::string& login, const std::string& className, const std::string& asTypeName) override;
-  int32_t send_testClassLoad(const std::string& login, const std::string& className, const std::string& asTypeName);
+  bool testClassLoad(const std::string& sharedSecret, const std::string& className, const std::string& asTypeName) override;
+  int32_t send_testClassLoad(const std::string& sharedSecret, const std::string& className, const std::string& asTypeName);
   bool recv_testClassLoad(const int32_t seqid);
-  bool authenticateUser(const std::string& login, const std::string& user, const std::map<std::string, std::string> & properties) override;
-  int32_t send_authenticateUser(const std::string& login, const std::string& user, const std::map<std::string, std::string> & properties);
+  bool authenticateUser(const std::string& sharedSecret, const std::string& user, const std::map<std::string, std::string> & properties) override;
+  int32_t send_authenticateUser(const std::string& sharedSecret, const std::string& user, const std::map<std::string, std::string> & properties);
   bool recv_authenticateUser(const int32_t seqid);
-  void changeUserAuthorizations(const std::string& login, const std::string& user, const std::set<std::string> & authorizations) override;
-  int32_t send_changeUserAuthorizations(const std::string& login, const std::string& user, const std::set<std::string> & authorizations);
+  void changeUserAuthorizations(const std::string& sharedSecret, const std::string& user, const std::set<std::string> & authorizations) override;
+  int32_t send_changeUserAuthorizations(const std::string& sharedSecret, const std::string& user, const std::set<std::string> & authorizations);
   void recv_changeUserAuthorizations(const int32_t seqid);
-  void changeLocalUserPassword(const std::string& login, const std::string& user, const std::string& password) override;
-  int32_t send_changeLocalUserPassword(const std::string& login, const std::string& user, const std::string& password);
+  void changeLocalUserPassword(const std::string& sharedSecret, const std::string& user, const std::string& password) override;
+  int32_t send_changeLocalUserPassword(const std::string& sharedSecret, const std::string& user, const std::string& password);
   void recv_changeLocalUserPassword(const int32_t seqid);
-  void createLocalUser(const std::string& login, const std::string& user, const std::string& password) override;
-  int32_t send_createLocalUser(const std::string& login, const std::string& user, const std::string& password);
+  void createLocalUser(const std::string& sharedSecret, const std::string& user, const std::string& password) override;
+  int32_t send_createLocalUser(const std::string& sharedSecret, const std::string& user, const std::string& password);
   void recv_createLocalUser(const int32_t seqid);
-  void dropLocalUser(const std::string& login, const std::string& user) override;
-  int32_t send_dropLocalUser(const std::string& login, const std::string& user);
+  void dropLocalUser(const std::string& sharedSecret, const std::string& user) override;
+  int32_t send_dropLocalUser(const std::string& sharedSecret, const std::string& user);
   void recv_dropLocalUser(const int32_t seqid);
-  void getUserAuthorizations(std::vector<std::string> & _return, const std::string& login, const std::string& user) override;
-  int32_t send_getUserAuthorizations(const std::string& login, const std::string& user);
+  void getUserAuthorizations(std::vector<std::string> & _return, const std::string& sharedSecret, const std::string& user) override;
+  int32_t send_getUserAuthorizations(const std::string& sharedSecret, const std::string& user);
   void recv_getUserAuthorizations(std::vector<std::string> & _return, const int32_t seqid);
-  void grantSystemPermission(const std::string& login, const std::string& user, const SystemPermission::type perm) override;
-  int32_t send_grantSystemPermission(const std::string& login, const std::string& user, const SystemPermission::type perm);
+  void grantSystemPermission(const std::string& sharedSecret, const std::string& user, const SystemPermission::type perm) override;
+  int32_t send_grantSystemPermission(const std::string& sharedSecret, const std::string& user, const SystemPermission::type perm);
   void recv_grantSystemPermission(const int32_t seqid);
-  void grantTablePermission(const std::string& login, const std::string& user, const std::string& table, const TablePermission::type perm) override;
-  int32_t send_grantTablePermission(const std::string& login, const std::string& user, const std::string& table, const TablePermission::type perm);
+  void grantTablePermission(const std::string& sharedSecret, const std::string& user, const std::string& table, const TablePermission::type perm) override;
+  int32_t send_grantTablePermission(const std::string& sharedSecret, const std::string& user, const std::string& table, const TablePermission::type perm);
   void recv_grantTablePermission(const int32_t seqid);
-  bool hasSystemPermission(const std::string& login, const std::string& user, const SystemPermission::type perm) override;
-  int32_t send_hasSystemPermission(const std::string& login, const std::string& user, const SystemPermission::type perm);
+  bool hasSystemPermission(const std::string& sharedSecret, const std::string& user, const SystemPermission::type perm) override;
+  int32_t send_hasSystemPermission(const std::string& sharedSecret, const std::string& user, const SystemPermission::type perm);
   bool recv_hasSystemPermission(const int32_t seqid);
-  bool hasTablePermission(const std::string& login, const std::string& user, const std::string& table, const TablePermission::type perm) override;
-  int32_t send_hasTablePermission(const std::string& login, const std::string& user, const std::string& table, const TablePermission::type perm);
+  bool hasTablePermission(const std::string& sharedSecret, const std::string& user, const std::string& table, const TablePermission::type perm) override;
+  int32_t send_hasTablePermission(const std::string& sharedSecret, const std::string& user, const std::string& table, const TablePermission::type perm);
   bool recv_hasTablePermission(const int32_t seqid);
-  void listLocalUsers(std::set<std::string> & _return, const std::string& login) override;
-  int32_t send_listLocalUsers(const std::string& login);
+  void listLocalUsers(std::set<std::string> & _return, const std::string& sharedSecret) override;
+  int32_t send_listLocalUsers(const std::string& sharedSecret);
   void recv_listLocalUsers(std::set<std::string> & _return, const int32_t seqid);
-  void revokeSystemPermission(const std::string& login, const std::string& user, const SystemPermission::type perm) override;
-  int32_t send_revokeSystemPermission(const std::string& login, const std::string& user, const SystemPermission::type perm);
+  void revokeSystemPermission(const std::string& sharedSecret, const std::string& user, const SystemPermission::type perm) override;
+  int32_t send_revokeSystemPermission(const std::string& sharedSecret, const std::string& user, const SystemPermission::type perm);
   void recv_revokeSystemPermission(const int32_t seqid);
-  void revokeTablePermission(const std::string& login, const std::string& user, const std::string& table, const TablePermission::type perm) override;
-  int32_t send_revokeTablePermission(const std::string& login, const std::string& user, const std::string& table, const TablePermission::type perm);
+  void revokeTablePermission(const std::string& sharedSecret, const std::string& user, const std::string& table, const TablePermission::type perm) override;
+  int32_t send_revokeTablePermission(const std::string& sharedSecret, const std::string& user, const std::string& table, const TablePermission::type perm);
   void recv_revokeTablePermission(const int32_t seqid);
-  void grantNamespacePermission(const std::string& login, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm) override;
-  int32_t send_grantNamespacePermission(const std::string& login, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm);
+  void grantNamespacePermission(const std::string& sharedSecret, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm) override;
+  int32_t send_grantNamespacePermission(const std::string& sharedSecret, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm);
   void recv_grantNamespacePermission(const int32_t seqid);
-  bool hasNamespacePermission(const std::string& login, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm) override;
-  int32_t send_hasNamespacePermission(const std::string& login, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm);
+  bool hasNamespacePermission(const std::string& sharedSecret, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm) override;
+  int32_t send_hasNamespacePermission(const std::string& sharedSecret, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm);
   bool recv_hasNamespacePermission(const int32_t seqid);
-  void revokeNamespacePermission(const std::string& login, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm) override;
-  int32_t send_revokeNamespacePermission(const std::string& login, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm);
+  void revokeNamespacePermission(const std::string& sharedSecret, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm) override;
+  int32_t send_revokeNamespacePermission(const std::string& sharedSecret, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm);
   void recv_revokeNamespacePermission(const int32_t seqid);
-  void createBatchScanner(std::string& _return, const std::string& login, const std::string& tableName, const BatchScanOptions& options) override;
-  int32_t send_createBatchScanner(const std::string& login, const std::string& tableName, const BatchScanOptions& options);
+  void createBatchScanner(std::string& _return, const std::string& sharedSecret, const std::string& tableName, const BatchScanOptions& options) override;
+  int32_t send_createBatchScanner(const std::string& sharedSecret, const std::string& tableName, const BatchScanOptions& options);
   void recv_createBatchScanner(std::string& _return, const int32_t seqid);
-  void createScanner(std::string& _return, const std::string& login, const std::string& tableName, const ScanOptions& options) override;
-  int32_t send_createScanner(const std::string& login, const std::string& tableName, const ScanOptions& options);
+  void createScanner(std::string& _return, const std::string& sharedSecret, const std::string& tableName, const ScanOptions& options) override;
+  int32_t send_createScanner(const std::string& sharedSecret, const std::string& tableName, const ScanOptions& options);
   void recv_createScanner(std::string& _return, const int32_t seqid);
   bool hasNext(const std::string& scanner) override;
   int32_t send_hasNext(const std::string& scanner);
@@ -15715,11 +15572,11 @@ class AccumuloProxyConcurrentClient : virtual public AccumuloProxyIf {
   void closeScanner(const std::string& scanner) override;
   int32_t send_closeScanner(const std::string& scanner);
   void recv_closeScanner(const int32_t seqid);
-  void updateAndFlush(const std::string& login, const std::string& tableName, const std::map<std::string, std::vector<ColumnUpdate> > & cells) override;
-  int32_t send_updateAndFlush(const std::string& login, const std::string& tableName, const std::map<std::string, std::vector<ColumnUpdate> > & cells);
+  void updateAndFlush(const std::string& sharedSecret, const std::string& tableName, const std::map<std::string, std::vector<ColumnUpdate> > & cells) override;
+  int32_t send_updateAndFlush(const std::string& sharedSecret, const std::string& tableName, const std::map<std::string, std::vector<ColumnUpdate> > & cells);
   void recv_updateAndFlush(const int32_t seqid);
-  void createWriter(std::string& _return, const std::string& login, const std::string& tableName, const WriterOptions& opts) override;
-  int32_t send_createWriter(const std::string& login, const std::string& tableName, const WriterOptions& opts);
+  void createWriter(std::string& _return, const std::string& sharedSecret, const std::string& tableName, const WriterOptions& opts) override;
+  int32_t send_createWriter(const std::string& sharedSecret, const std::string& tableName, const WriterOptions& opts);
   void recv_createWriter(std::string& _return, const int32_t seqid);
   void update(const std::string& writer, const std::map<std::string, std::vector<ColumnUpdate> > & cells) override;
   void send_update(const std::string& writer, const std::map<std::string, std::vector<ColumnUpdate> > & cells);
@@ -15729,11 +15586,11 @@ class AccumuloProxyConcurrentClient : virtual public AccumuloProxyIf {
   void closeWriter(const std::string& writer) override;
   int32_t send_closeWriter(const std::string& writer);
   void recv_closeWriter(const int32_t seqid);
-  ConditionalStatus::type updateRowConditionally(const std::string& login, const std::string& tableName, const std::string& row, const ConditionalUpdates& updates) override;
-  int32_t send_updateRowConditionally(const std::string& login, const std::string& tableName, const std::string& row, const ConditionalUpdates& updates);
+  ConditionalStatus::type updateRowConditionally(const std::string& sharedSecret, const std::string& tableName, const std::string& row, const ConditionalUpdates& updates) override;
+  int32_t send_updateRowConditionally(const std::string& sharedSecret, const std::string& tableName, const std::string& row, const ConditionalUpdates& updates);
   ConditionalStatus::type recv_updateRowConditionally(const int32_t seqid);
-  void createConditionalWriter(std::string& _return, const std::string& login, const std::string& tableName, const ConditionalWriterOptions& options) override;
-  int32_t send_createConditionalWriter(const std::string& login, const std::string& tableName, const ConditionalWriterOptions& options);
+  void createConditionalWriter(std::string& _return, const std::string& sharedSecret, const std::string& tableName, const ConditionalWriterOptions& options) override;
+  int32_t send_createConditionalWriter(const std::string& sharedSecret, const std::string& tableName, const ConditionalWriterOptions& options);
   void recv_createConditionalWriter(std::string& _return, const int32_t seqid);
   void updateRowsConditionally(std::map<std::string, ConditionalStatus::type> & _return, const std::string& conditionalWriter, const std::map<std::string, ConditionalUpdates> & updates) override;
   int32_t send_updateRowsConditionally(const std::string& conditionalWriter, const std::map<std::string, ConditionalUpdates> & updates);
@@ -15753,59 +15610,59 @@ class AccumuloProxyConcurrentClient : virtual public AccumuloProxyIf {
   void defaultNamespace(std::string& _return) override;
   int32_t send_defaultNamespace();
   void recv_defaultNamespace(std::string& _return, const int32_t seqid);
-  void listNamespaces(std::vector<std::string> & _return, const std::string& login) override;
-  int32_t send_listNamespaces(const std::string& login);
+  void listNamespaces(std::vector<std::string> & _return, const std::string& sharedSecret) override;
+  int32_t send_listNamespaces(const std::string& sharedSecret);
   void recv_listNamespaces(std::vector<std::string> & _return, const int32_t seqid);
-  bool namespaceExists(const std::string& login, const std::string& namespaceName) override;
-  int32_t send_namespaceExists(const std::string& login, const std::string& namespaceName);
+  bool namespaceExists(const std::string& sharedSecret, const std::string& namespaceName) override;
+  int32_t send_namespaceExists(const std::string& sharedSecret, const std::string& namespaceName);
   bool recv_namespaceExists(const int32_t seqid);
-  void createNamespace(const std::string& login, const std::string& namespaceName) override;
-  int32_t send_createNamespace(const std::string& login, const std::string& namespaceName);
+  void createNamespace(const std::string& sharedSecret, const std::string& namespaceName) override;
+  int32_t send_createNamespace(const std::string& sharedSecret, const std::string& namespaceName);
   void recv_createNamespace(const int32_t seqid);
-  void deleteNamespace(const std::string& login, const std::string& namespaceName) override;
-  int32_t send_deleteNamespace(const std::string& login, const std::string& namespaceName);
+  void deleteNamespace(const std::string& sharedSecret, const std::string& namespaceName) override;
+  int32_t send_deleteNamespace(const std::string& sharedSecret, const std::string& namespaceName);
   void recv_deleteNamespace(const int32_t seqid);
-  void renameNamespace(const std::string& login, const std::string& oldNamespaceName, const std::string& newNamespaceName) override;
-  int32_t send_renameNamespace(const std::string& login, const std::string& oldNamespaceName, const std::string& newNamespaceName);
+  void renameNamespace(const std::string& sharedSecret, const std::string& oldNamespaceName, const std::string& newNamespaceName) override;
+  int32_t send_renameNamespace(const std::string& sharedSecret, const std::string& oldNamespaceName, const std::string& newNamespaceName);
   void recv_renameNamespace(const int32_t seqid);
-  void setNamespaceProperty(const std::string& login, const std::string& namespaceName, const std::string& property, const std::string& value) override;
-  int32_t send_setNamespaceProperty(const std::string& login, const std::string& namespaceName, const std::string& property, const std::string& value);
+  void setNamespaceProperty(const std::string& sharedSecret, const std::string& namespaceName, const std::string& property, const std::string& value) override;
+  int32_t send_setNamespaceProperty(const std::string& sharedSecret, const std::string& namespaceName, const std::string& property, const std::string& value);
   void recv_setNamespaceProperty(const int32_t seqid);
-  void removeNamespaceProperty(const std::string& login, const std::string& namespaceName, const std::string& property) override;
-  int32_t send_removeNamespaceProperty(const std::string& login, const std::string& namespaceName, const std::string& property);
+  void removeNamespaceProperty(const std::string& sharedSecret, const std::string& namespaceName, const std::string& property) override;
+  int32_t send_removeNamespaceProperty(const std::string& sharedSecret, const std::string& namespaceName, const std::string& property);
   void recv_removeNamespaceProperty(const int32_t seqid);
-  void getNamespaceProperties(std::map<std::string, std::string> & _return, const std::string& login, const std::string& namespaceName) override;
-  int32_t send_getNamespaceProperties(const std::string& login, const std::string& namespaceName);
+  void getNamespaceProperties(std::map<std::string, std::string> & _return, const std::string& sharedSecret, const std::string& namespaceName) override;
+  int32_t send_getNamespaceProperties(const std::string& sharedSecret, const std::string& namespaceName);
   void recv_getNamespaceProperties(std::map<std::string, std::string> & _return, const int32_t seqid);
-  void namespaceIdMap(std::map<std::string, std::string> & _return, const std::string& login) override;
-  int32_t send_namespaceIdMap(const std::string& login);
+  void namespaceIdMap(std::map<std::string, std::string> & _return, const std::string& sharedSecret) override;
+  int32_t send_namespaceIdMap(const std::string& sharedSecret);
   void recv_namespaceIdMap(std::map<std::string, std::string> & _return, const int32_t seqid);
-  void attachNamespaceIterator(const std::string& login, const std::string& namespaceName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes) override;
-  int32_t send_attachNamespaceIterator(const std::string& login, const std::string& namespaceName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes);
+  void attachNamespaceIterator(const std::string& sharedSecret, const std::string& namespaceName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes) override;
+  int32_t send_attachNamespaceIterator(const std::string& sharedSecret, const std::string& namespaceName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes);
   void recv_attachNamespaceIterator(const int32_t seqid);
-  void removeNamespaceIterator(const std::string& login, const std::string& namespaceName, const std::string& name, const std::set<IteratorScope::type> & scopes) override;
-  int32_t send_removeNamespaceIterator(const std::string& login, const std::string& namespaceName, const std::string& name, const std::set<IteratorScope::type> & scopes);
+  void removeNamespaceIterator(const std::string& sharedSecret, const std::string& namespaceName, const std::string& name, const std::set<IteratorScope::type> & scopes) override;
+  int32_t send_removeNamespaceIterator(const std::string& sharedSecret, const std::string& namespaceName, const std::string& name, const std::set<IteratorScope::type> & scopes);
   void recv_removeNamespaceIterator(const int32_t seqid);
-  void getNamespaceIteratorSetting(IteratorSetting& _return, const std::string& login, const std::string& namespaceName, const std::string& name, const IteratorScope::type scope) override;
-  int32_t send_getNamespaceIteratorSetting(const std::string& login, const std::string& namespaceName, const std::string& name, const IteratorScope::type scope);
+  void getNamespaceIteratorSetting(IteratorSetting& _return, const std::string& sharedSecret, const std::string& namespaceName, const std::string& name, const IteratorScope::type scope) override;
+  int32_t send_getNamespaceIteratorSetting(const std::string& sharedSecret, const std::string& namespaceName, const std::string& name, const IteratorScope::type scope);
   void recv_getNamespaceIteratorSetting(IteratorSetting& _return, const int32_t seqid);
-  void listNamespaceIterators(std::map<std::string, std::set<IteratorScope::type> > & _return, const std::string& login, const std::string& namespaceName) override;
-  int32_t send_listNamespaceIterators(const std::string& login, const std::string& namespaceName);
+  void listNamespaceIterators(std::map<std::string, std::set<IteratorScope::type> > & _return, const std::string& sharedSecret, const std::string& namespaceName) override;
+  int32_t send_listNamespaceIterators(const std::string& sharedSecret, const std::string& namespaceName);
   void recv_listNamespaceIterators(std::map<std::string, std::set<IteratorScope::type> > & _return, const int32_t seqid);
-  void checkNamespaceIteratorConflicts(const std::string& login, const std::string& namespaceName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes) override;
-  int32_t send_checkNamespaceIteratorConflicts(const std::string& login, const std::string& namespaceName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes);
+  void checkNamespaceIteratorConflicts(const std::string& sharedSecret, const std::string& namespaceName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes) override;
+  int32_t send_checkNamespaceIteratorConflicts(const std::string& sharedSecret, const std::string& namespaceName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes);
   void recv_checkNamespaceIteratorConflicts(const int32_t seqid);
-  int32_t addNamespaceConstraint(const std::string& login, const std::string& namespaceName, const std::string& constraintClassName) override;
-  int32_t send_addNamespaceConstraint(const std::string& login, const std::string& namespaceName, const std::string& constraintClassName);
+  int32_t addNamespaceConstraint(const std::string& sharedSecret, const std::string& namespaceName, const std::string& constraintClassName) override;
+  int32_t send_addNamespaceConstraint(const std::string& sharedSecret, const std::string& namespaceName, const std::string& constraintClassName);
   int32_t recv_addNamespaceConstraint(const int32_t seqid);
-  void removeNamespaceConstraint(const std::string& login, const std::string& namespaceName, const int32_t id) override;
-  int32_t send_removeNamespaceConstraint(const std::string& login, const std::string& namespaceName, const int32_t id);
+  void removeNamespaceConstraint(const std::string& sharedSecret, const std::string& namespaceName, const int32_t id) override;
+  int32_t send_removeNamespaceConstraint(const std::string& sharedSecret, const std::string& namespaceName, const int32_t id);
   void recv_removeNamespaceConstraint(const int32_t seqid);
-  void listNamespaceConstraints(std::map<std::string, int32_t> & _return, const std::string& login, const std::string& namespaceName) override;
-  int32_t send_listNamespaceConstraints(const std::string& login, const std::string& namespaceName);
+  void listNamespaceConstraints(std::map<std::string, int32_t> & _return, const std::string& sharedSecret, const std::string& namespaceName) override;
+  int32_t send_listNamespaceConstraints(const std::string& sharedSecret, const std::string& namespaceName);
   void recv_listNamespaceConstraints(std::map<std::string, int32_t> & _return, const int32_t seqid);
-  bool testNamespaceClassLoad(const std::string& login, const std::string& namespaceName, const std::string& className, const std::string& asTypeName) override;
-  int32_t send_testNamespaceClassLoad(const std::string& login, const std::string& namespaceName, const std::string& className, const std::string& asTypeName);
+  bool testNamespaceClassLoad(const std::string& sharedSecret, const std::string& namespaceName, const std::string& className, const std::string& asTypeName) override;
+  int32_t send_testNamespaceClassLoad(const std::string& sharedSecret, const std::string& namespaceName, const std::string& className, const std::string& asTypeName);
   bool recv_testNamespaceClassLoad(const int32_t seqid);
  protected:
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;

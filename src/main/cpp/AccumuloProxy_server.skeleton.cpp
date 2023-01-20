@@ -38,327 +38,322 @@ class AccumuloProxyHandler : virtual public AccumuloProxyIf {
     // Your initialization goes here
   }
 
-  void login(std::string& _return, const std::string& principal, const std::map<std::string, std::string> & loginProperties) {
-    // Your implementation goes here
-    printf("login\n");
-  }
-
-  int32_t addConstraint(const std::string& login, const std::string& tableName, const std::string& constraintClassName) {
+  int32_t addConstraint(const std::string& sharedSecret, const std::string& tableName, const std::string& constraintClassName) {
     // Your implementation goes here
     printf("addConstraint\n");
   }
 
-  void addSplits(const std::string& login, const std::string& tableName, const std::set<std::string> & splits) {
+  void addSplits(const std::string& sharedSecret, const std::string& tableName, const std::set<std::string> & splits) {
     // Your implementation goes here
     printf("addSplits\n");
   }
 
-  void attachIterator(const std::string& login, const std::string& tableName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes) {
+  void attachIterator(const std::string& sharedSecret, const std::string& tableName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes) {
     // Your implementation goes here
     printf("attachIterator\n");
   }
 
-  void checkIteratorConflicts(const std::string& login, const std::string& tableName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes) {
+  void checkIteratorConflicts(const std::string& sharedSecret, const std::string& tableName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes) {
     // Your implementation goes here
     printf("checkIteratorConflicts\n");
   }
 
-  void clearLocatorCache(const std::string& login, const std::string& tableName) {
+  void clearLocatorCache(const std::string& sharedSecret, const std::string& tableName) {
     // Your implementation goes here
     printf("clearLocatorCache\n");
   }
 
-  void cloneTable(const std::string& login, const std::string& tableName, const std::string& newTableName, const bool flush, const std::map<std::string, std::string> & propertiesToSet, const std::set<std::string> & propertiesToExclude) {
+  void cloneTable(const std::string& sharedSecret, const std::string& tableName, const std::string& newTableName, const bool flush, const std::map<std::string, std::string> & propertiesToSet, const std::set<std::string> & propertiesToExclude) {
     // Your implementation goes here
     printf("cloneTable\n");
   }
 
-  void compactTable(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow, const std::vector<IteratorSetting> & iterators, const bool flush, const bool wait, const PluginConfig& selectorConfig, const PluginConfig& configurerConfig) {
+  void compactTable(const std::string& sharedSecret, const std::string& tableName, const std::string& startRow, const std::string& endRow, const std::vector<IteratorSetting> & iterators, const bool flush, const bool wait, const PluginConfig& selectorConfig, const PluginConfig& configurerConfig) {
     // Your implementation goes here
     printf("compactTable\n");
   }
 
-  void cancelCompaction(const std::string& login, const std::string& tableName) {
+  void cancelCompaction(const std::string& sharedSecret, const std::string& tableName) {
     // Your implementation goes here
     printf("cancelCompaction\n");
   }
 
-  void createTable(const std::string& login, const std::string& tableName, const bool versioningIter, const TimeType::type type) {
+  void createTable(const std::string& sharedSecret, const std::string& tableName, const bool versioningIter, const TimeType::type type) {
     // Your implementation goes here
     printf("createTable\n");
   }
 
-  void deleteTable(const std::string& login, const std::string& tableName) {
+  void deleteTable(const std::string& sharedSecret, const std::string& tableName) {
     // Your implementation goes here
     printf("deleteTable\n");
   }
 
-  void deleteRows(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow) {
+  void deleteRows(const std::string& sharedSecret, const std::string& tableName, const std::string& startRow, const std::string& endRow) {
     // Your implementation goes here
     printf("deleteRows\n");
   }
 
-  void exportTable(const std::string& login, const std::string& tableName, const std::string& exportDir) {
+  void exportTable(const std::string& sharedSecret, const std::string& tableName, const std::string& exportDir) {
     // Your implementation goes here
     printf("exportTable\n");
   }
 
-  void flushTable(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow, const bool wait) {
+  void flushTable(const std::string& sharedSecret, const std::string& tableName, const std::string& startRow, const std::string& endRow, const bool wait) {
     // Your implementation goes here
     printf("flushTable\n");
   }
 
-  void getDiskUsage(std::vector<DiskUsage> & _return, const std::string& login, const std::set<std::string> & tables) {
+  void getDiskUsage(std::vector<DiskUsage> & _return, const std::string& sharedSecret, const std::set<std::string> & tables) {
     // Your implementation goes here
     printf("getDiskUsage\n");
   }
 
-  void getLocalityGroups(std::map<std::string, std::set<std::string> > & _return, const std::string& login, const std::string& tableName) {
+  void getLocalityGroups(std::map<std::string, std::set<std::string> > & _return, const std::string& sharedSecret, const std::string& tableName) {
     // Your implementation goes here
     printf("getLocalityGroups\n");
   }
 
-  void getIteratorSetting(IteratorSetting& _return, const std::string& login, const std::string& tableName, const std::string& iteratorName, const IteratorScope::type scope) {
+  void getIteratorSetting(IteratorSetting& _return, const std::string& sharedSecret, const std::string& tableName, const std::string& iteratorName, const IteratorScope::type scope) {
     // Your implementation goes here
     printf("getIteratorSetting\n");
   }
 
-  void getMaxRow(std::string& _return, const std::string& login, const std::string& tableName, const std::set<std::string> & auths, const std::string& startRow, const bool startInclusive, const std::string& endRow, const bool endInclusive) {
+  void getMaxRow(std::string& _return, const std::string& sharedSecret, const std::string& tableName, const std::set<std::string> & auths, const std::string& startRow, const bool startInclusive, const std::string& endRow, const bool endInclusive) {
     // Your implementation goes here
     printf("getMaxRow\n");
   }
 
-  void getTableProperties(std::map<std::string, std::string> & _return, const std::string& login, const std::string& tableName) {
+  void getTableProperties(std::map<std::string, std::string> & _return, const std::string& sharedSecret, const std::string& tableName) {
     // Your implementation goes here
     printf("getTableProperties\n");
   }
 
-  void importDirectory(const std::string& login, const std::string& tableName, const std::string& importDir, const std::string& failureDir, const bool setTime) {
+  void importDirectory(const std::string& sharedSecret, const std::string& tableName, const std::string& importDir, const std::string& failureDir, const bool setTime) {
     // Your implementation goes here
     printf("importDirectory\n");
   }
 
-  void importTable(const std::string& login, const std::string& tableName, const std::string& importDir) {
+  void importTable(const std::string& sharedSecret, const std::string& tableName, const std::string& importDir) {
     // Your implementation goes here
     printf("importTable\n");
   }
 
-  void listSplits(std::vector<std::string> & _return, const std::string& login, const std::string& tableName, const int32_t maxSplits) {
+  void listSplits(std::vector<std::string> & _return, const std::string& sharedSecret, const std::string& tableName, const int32_t maxSplits) {
     // Your implementation goes here
     printf("listSplits\n");
   }
 
-  void listTables(std::set<std::string> & _return, const std::string& login) {
+  void listTables(std::set<std::string> & _return, const std::string& sharedSecret) {
     // Your implementation goes here
     printf("listTables\n");
   }
 
-  void listIterators(std::map<std::string, std::set<IteratorScope::type> > & _return, const std::string& login, const std::string& tableName) {
+  void listIterators(std::map<std::string, std::set<IteratorScope::type> > & _return, const std::string& sharedSecret, const std::string& tableName) {
     // Your implementation goes here
     printf("listIterators\n");
   }
 
-  void listConstraints(std::map<std::string, int32_t> & _return, const std::string& login, const std::string& tableName) {
+  void listConstraints(std::map<std::string, int32_t> & _return, const std::string& sharedSecret, const std::string& tableName) {
     // Your implementation goes here
     printf("listConstraints\n");
   }
 
-  void mergeTablets(const std::string& login, const std::string& tableName, const std::string& startRow, const std::string& endRow) {
+  void mergeTablets(const std::string& sharedSecret, const std::string& tableName, const std::string& startRow, const std::string& endRow) {
     // Your implementation goes here
     printf("mergeTablets\n");
   }
 
-  void offlineTable(const std::string& login, const std::string& tableName, const bool wait) {
+  void offlineTable(const std::string& sharedSecret, const std::string& tableName, const bool wait) {
     // Your implementation goes here
     printf("offlineTable\n");
   }
 
-  void onlineTable(const std::string& login, const std::string& tableName, const bool wait) {
+  void onlineTable(const std::string& sharedSecret, const std::string& tableName, const bool wait) {
     // Your implementation goes here
     printf("onlineTable\n");
   }
 
-  void removeConstraint(const std::string& login, const std::string& tableName, const int32_t constraint) {
+  void removeConstraint(const std::string& sharedSecret, const std::string& tableName, const int32_t constraint) {
     // Your implementation goes here
     printf("removeConstraint\n");
   }
 
-  void removeIterator(const std::string& login, const std::string& tableName, const std::string& iterName, const std::set<IteratorScope::type> & scopes) {
+  void removeIterator(const std::string& sharedSecret, const std::string& tableName, const std::string& iterName, const std::set<IteratorScope::type> & scopes) {
     // Your implementation goes here
     printf("removeIterator\n");
   }
 
-  void removeTableProperty(const std::string& login, const std::string& tableName, const std::string& property) {
+  void removeTableProperty(const std::string& sharedSecret, const std::string& tableName, const std::string& property) {
     // Your implementation goes here
     printf("removeTableProperty\n");
   }
 
-  void renameTable(const std::string& login, const std::string& oldTableName, const std::string& newTableName) {
+  void renameTable(const std::string& sharedSecret, const std::string& oldTableName, const std::string& newTableName) {
     // Your implementation goes here
     printf("renameTable\n");
   }
 
-  void setLocalityGroups(const std::string& login, const std::string& tableName, const std::map<std::string, std::set<std::string> > & groups) {
+  void setLocalityGroups(const std::string& sharedSecret, const std::string& tableName, const std::map<std::string, std::set<std::string> > & groups) {
     // Your implementation goes here
     printf("setLocalityGroups\n");
   }
 
-  void setTableProperty(const std::string& login, const std::string& tableName, const std::string& property, const std::string& value) {
+  void setTableProperty(const std::string& sharedSecret, const std::string& tableName, const std::string& property, const std::string& value) {
     // Your implementation goes here
     printf("setTableProperty\n");
   }
 
-  void splitRangeByTablets(std::set<Range> & _return, const std::string& login, const std::string& tableName, const Range& range, const int32_t maxSplits) {
+  void splitRangeByTablets(std::set<Range> & _return, const std::string& sharedSecret, const std::string& tableName, const Range& range, const int32_t maxSplits) {
     // Your implementation goes here
     printf("splitRangeByTablets\n");
   }
 
-  bool tableExists(const std::string& login, const std::string& tableName) {
+  bool tableExists(const std::string& sharedSecret, const std::string& tableName) {
     // Your implementation goes here
     printf("tableExists\n");
   }
 
-  void tableIdMap(std::map<std::string, std::string> & _return, const std::string& login) {
+  void tableIdMap(std::map<std::string, std::string> & _return, const std::string& sharedSecret) {
     // Your implementation goes here
     printf("tableIdMap\n");
   }
 
-  bool testTableClassLoad(const std::string& login, const std::string& tableName, const std::string& className, const std::string& asTypeName) {
+  bool testTableClassLoad(const std::string& sharedSecret, const std::string& tableName, const std::string& className, const std::string& asTypeName) {
     // Your implementation goes here
     printf("testTableClassLoad\n");
   }
 
-  void pingTabletServer(const std::string& login, const std::string& tserver) {
+  void pingTabletServer(const std::string& sharedSecret, const std::string& tserver) {
     // Your implementation goes here
     printf("pingTabletServer\n");
   }
 
-  void getActiveScans(std::vector<ActiveScan> & _return, const std::string& login, const std::string& tserver) {
+  void getActiveScans(std::vector<ActiveScan> & _return, const std::string& sharedSecret, const std::string& tserver) {
     // Your implementation goes here
     printf("getActiveScans\n");
   }
 
-  void getActiveCompactions(std::vector<ActiveCompaction> & _return, const std::string& login, const std::string& tserver) {
+  void getActiveCompactions(std::vector<ActiveCompaction> & _return, const std::string& sharedSecret, const std::string& tserver) {
     // Your implementation goes here
     printf("getActiveCompactions\n");
   }
 
-  void getSiteConfiguration(std::map<std::string, std::string> & _return, const std::string& login) {
+  void getSiteConfiguration(std::map<std::string, std::string> & _return, const std::string& sharedSecret) {
     // Your implementation goes here
     printf("getSiteConfiguration\n");
   }
 
-  void getSystemConfiguration(std::map<std::string, std::string> & _return, const std::string& login) {
+  void getSystemConfiguration(std::map<std::string, std::string> & _return, const std::string& sharedSecret) {
     // Your implementation goes here
     printf("getSystemConfiguration\n");
   }
 
-  void getTabletServers(std::vector<std::string> & _return, const std::string& login) {
+  void getTabletServers(std::vector<std::string> & _return, const std::string& sharedSecret) {
     // Your implementation goes here
     printf("getTabletServers\n");
   }
 
-  void removeProperty(const std::string& login, const std::string& property) {
+  void removeProperty(const std::string& sharedSecret, const std::string& property) {
     // Your implementation goes here
     printf("removeProperty\n");
   }
 
-  void setProperty(const std::string& login, const std::string& property, const std::string& value) {
+  void setProperty(const std::string& sharedSecret, const std::string& property, const std::string& value) {
     // Your implementation goes here
     printf("setProperty\n");
   }
 
-  bool testClassLoad(const std::string& login, const std::string& className, const std::string& asTypeName) {
+  bool testClassLoad(const std::string& sharedSecret, const std::string& className, const std::string& asTypeName) {
     // Your implementation goes here
     printf("testClassLoad\n");
   }
 
-  bool authenticateUser(const std::string& login, const std::string& user, const std::map<std::string, std::string> & properties) {
+  bool authenticateUser(const std::string& sharedSecret, const std::string& user, const std::map<std::string, std::string> & properties) {
     // Your implementation goes here
     printf("authenticateUser\n");
   }
 
-  void changeUserAuthorizations(const std::string& login, const std::string& user, const std::set<std::string> & authorizations) {
+  void changeUserAuthorizations(const std::string& sharedSecret, const std::string& user, const std::set<std::string> & authorizations) {
     // Your implementation goes here
     printf("changeUserAuthorizations\n");
   }
 
-  void changeLocalUserPassword(const std::string& login, const std::string& user, const std::string& password) {
+  void changeLocalUserPassword(const std::string& sharedSecret, const std::string& user, const std::string& password) {
     // Your implementation goes here
     printf("changeLocalUserPassword\n");
   }
 
-  void createLocalUser(const std::string& login, const std::string& user, const std::string& password) {
+  void createLocalUser(const std::string& sharedSecret, const std::string& user, const std::string& password) {
     // Your implementation goes here
     printf("createLocalUser\n");
   }
 
-  void dropLocalUser(const std::string& login, const std::string& user) {
+  void dropLocalUser(const std::string& sharedSecret, const std::string& user) {
     // Your implementation goes here
     printf("dropLocalUser\n");
   }
 
-  void getUserAuthorizations(std::vector<std::string> & _return, const std::string& login, const std::string& user) {
+  void getUserAuthorizations(std::vector<std::string> & _return, const std::string& sharedSecret, const std::string& user) {
     // Your implementation goes here
     printf("getUserAuthorizations\n");
   }
 
-  void grantSystemPermission(const std::string& login, const std::string& user, const SystemPermission::type perm) {
+  void grantSystemPermission(const std::string& sharedSecret, const std::string& user, const SystemPermission::type perm) {
     // Your implementation goes here
     printf("grantSystemPermission\n");
   }
 
-  void grantTablePermission(const std::string& login, const std::string& user, const std::string& table, const TablePermission::type perm) {
+  void grantTablePermission(const std::string& sharedSecret, const std::string& user, const std::string& table, const TablePermission::type perm) {
     // Your implementation goes here
     printf("grantTablePermission\n");
   }
 
-  bool hasSystemPermission(const std::string& login, const std::string& user, const SystemPermission::type perm) {
+  bool hasSystemPermission(const std::string& sharedSecret, const std::string& user, const SystemPermission::type perm) {
     // Your implementation goes here
     printf("hasSystemPermission\n");
   }
 
-  bool hasTablePermission(const std::string& login, const std::string& user, const std::string& table, const TablePermission::type perm) {
+  bool hasTablePermission(const std::string& sharedSecret, const std::string& user, const std::string& table, const TablePermission::type perm) {
     // Your implementation goes here
     printf("hasTablePermission\n");
   }
 
-  void listLocalUsers(std::set<std::string> & _return, const std::string& login) {
+  void listLocalUsers(std::set<std::string> & _return, const std::string& sharedSecret) {
     // Your implementation goes here
     printf("listLocalUsers\n");
   }
 
-  void revokeSystemPermission(const std::string& login, const std::string& user, const SystemPermission::type perm) {
+  void revokeSystemPermission(const std::string& sharedSecret, const std::string& user, const SystemPermission::type perm) {
     // Your implementation goes here
     printf("revokeSystemPermission\n");
   }
 
-  void revokeTablePermission(const std::string& login, const std::string& user, const std::string& table, const TablePermission::type perm) {
+  void revokeTablePermission(const std::string& sharedSecret, const std::string& user, const std::string& table, const TablePermission::type perm) {
     // Your implementation goes here
     printf("revokeTablePermission\n");
   }
 
-  void grantNamespacePermission(const std::string& login, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm) {
+  void grantNamespacePermission(const std::string& sharedSecret, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm) {
     // Your implementation goes here
     printf("grantNamespacePermission\n");
   }
 
-  bool hasNamespacePermission(const std::string& login, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm) {
+  bool hasNamespacePermission(const std::string& sharedSecret, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm) {
     // Your implementation goes here
     printf("hasNamespacePermission\n");
   }
 
-  void revokeNamespacePermission(const std::string& login, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm) {
+  void revokeNamespacePermission(const std::string& sharedSecret, const std::string& user, const std::string& namespaceName, const NamespacePermission::type perm) {
     // Your implementation goes here
     printf("revokeNamespacePermission\n");
   }
 
-  void createBatchScanner(std::string& _return, const std::string& login, const std::string& tableName, const BatchScanOptions& options) {
+  void createBatchScanner(std::string& _return, const std::string& sharedSecret, const std::string& tableName, const BatchScanOptions& options) {
     // Your implementation goes here
     printf("createBatchScanner\n");
   }
 
-  void createScanner(std::string& _return, const std::string& login, const std::string& tableName, const ScanOptions& options) {
+  void createScanner(std::string& _return, const std::string& sharedSecret, const std::string& tableName, const ScanOptions& options) {
     // Your implementation goes here
     printf("createScanner\n");
   }
@@ -383,12 +378,12 @@ class AccumuloProxyHandler : virtual public AccumuloProxyIf {
     printf("closeScanner\n");
   }
 
-  void updateAndFlush(const std::string& login, const std::string& tableName, const std::map<std::string, std::vector<ColumnUpdate> > & cells) {
+  void updateAndFlush(const std::string& sharedSecret, const std::string& tableName, const std::map<std::string, std::vector<ColumnUpdate> > & cells) {
     // Your implementation goes here
     printf("updateAndFlush\n");
   }
 
-  void createWriter(std::string& _return, const std::string& login, const std::string& tableName, const WriterOptions& opts) {
+  void createWriter(std::string& _return, const std::string& sharedSecret, const std::string& tableName, const WriterOptions& opts) {
     // Your implementation goes here
     printf("createWriter\n");
   }
@@ -408,12 +403,12 @@ class AccumuloProxyHandler : virtual public AccumuloProxyIf {
     printf("closeWriter\n");
   }
 
-  ConditionalStatus::type updateRowConditionally(const std::string& login, const std::string& tableName, const std::string& row, const ConditionalUpdates& updates) {
+  ConditionalStatus::type updateRowConditionally(const std::string& sharedSecret, const std::string& tableName, const std::string& row, const ConditionalUpdates& updates) {
     // Your implementation goes here
     printf("updateRowConditionally\n");
   }
 
-  void createConditionalWriter(std::string& _return, const std::string& login, const std::string& tableName, const ConditionalWriterOptions& options) {
+  void createConditionalWriter(std::string& _return, const std::string& sharedSecret, const std::string& tableName, const ConditionalWriterOptions& options) {
     // Your implementation goes here
     printf("createConditionalWriter\n");
   }
@@ -448,92 +443,92 @@ class AccumuloProxyHandler : virtual public AccumuloProxyIf {
     printf("defaultNamespace\n");
   }
 
-  void listNamespaces(std::vector<std::string> & _return, const std::string& login) {
+  void listNamespaces(std::vector<std::string> & _return, const std::string& sharedSecret) {
     // Your implementation goes here
     printf("listNamespaces\n");
   }
 
-  bool namespaceExists(const std::string& login, const std::string& namespaceName) {
+  bool namespaceExists(const std::string& sharedSecret, const std::string& namespaceName) {
     // Your implementation goes here
     printf("namespaceExists\n");
   }
 
-  void createNamespace(const std::string& login, const std::string& namespaceName) {
+  void createNamespace(const std::string& sharedSecret, const std::string& namespaceName) {
     // Your implementation goes here
     printf("createNamespace\n");
   }
 
-  void deleteNamespace(const std::string& login, const std::string& namespaceName) {
+  void deleteNamespace(const std::string& sharedSecret, const std::string& namespaceName) {
     // Your implementation goes here
     printf("deleteNamespace\n");
   }
 
-  void renameNamespace(const std::string& login, const std::string& oldNamespaceName, const std::string& newNamespaceName) {
+  void renameNamespace(const std::string& sharedSecret, const std::string& oldNamespaceName, const std::string& newNamespaceName) {
     // Your implementation goes here
     printf("renameNamespace\n");
   }
 
-  void setNamespaceProperty(const std::string& login, const std::string& namespaceName, const std::string& property, const std::string& value) {
+  void setNamespaceProperty(const std::string& sharedSecret, const std::string& namespaceName, const std::string& property, const std::string& value) {
     // Your implementation goes here
     printf("setNamespaceProperty\n");
   }
 
-  void removeNamespaceProperty(const std::string& login, const std::string& namespaceName, const std::string& property) {
+  void removeNamespaceProperty(const std::string& sharedSecret, const std::string& namespaceName, const std::string& property) {
     // Your implementation goes here
     printf("removeNamespaceProperty\n");
   }
 
-  void getNamespaceProperties(std::map<std::string, std::string> & _return, const std::string& login, const std::string& namespaceName) {
+  void getNamespaceProperties(std::map<std::string, std::string> & _return, const std::string& sharedSecret, const std::string& namespaceName) {
     // Your implementation goes here
     printf("getNamespaceProperties\n");
   }
 
-  void namespaceIdMap(std::map<std::string, std::string> & _return, const std::string& login) {
+  void namespaceIdMap(std::map<std::string, std::string> & _return, const std::string& sharedSecret) {
     // Your implementation goes here
     printf("namespaceIdMap\n");
   }
 
-  void attachNamespaceIterator(const std::string& login, const std::string& namespaceName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes) {
+  void attachNamespaceIterator(const std::string& sharedSecret, const std::string& namespaceName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes) {
     // Your implementation goes here
     printf("attachNamespaceIterator\n");
   }
 
-  void removeNamespaceIterator(const std::string& login, const std::string& namespaceName, const std::string& name, const std::set<IteratorScope::type> & scopes) {
+  void removeNamespaceIterator(const std::string& sharedSecret, const std::string& namespaceName, const std::string& name, const std::set<IteratorScope::type> & scopes) {
     // Your implementation goes here
     printf("removeNamespaceIterator\n");
   }
 
-  void getNamespaceIteratorSetting(IteratorSetting& _return, const std::string& login, const std::string& namespaceName, const std::string& name, const IteratorScope::type scope) {
+  void getNamespaceIteratorSetting(IteratorSetting& _return, const std::string& sharedSecret, const std::string& namespaceName, const std::string& name, const IteratorScope::type scope) {
     // Your implementation goes here
     printf("getNamespaceIteratorSetting\n");
   }
 
-  void listNamespaceIterators(std::map<std::string, std::set<IteratorScope::type> > & _return, const std::string& login, const std::string& namespaceName) {
+  void listNamespaceIterators(std::map<std::string, std::set<IteratorScope::type> > & _return, const std::string& sharedSecret, const std::string& namespaceName) {
     // Your implementation goes here
     printf("listNamespaceIterators\n");
   }
 
-  void checkNamespaceIteratorConflicts(const std::string& login, const std::string& namespaceName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes) {
+  void checkNamespaceIteratorConflicts(const std::string& sharedSecret, const std::string& namespaceName, const IteratorSetting& setting, const std::set<IteratorScope::type> & scopes) {
     // Your implementation goes here
     printf("checkNamespaceIteratorConflicts\n");
   }
 
-  int32_t addNamespaceConstraint(const std::string& login, const std::string& namespaceName, const std::string& constraintClassName) {
+  int32_t addNamespaceConstraint(const std::string& sharedSecret, const std::string& namespaceName, const std::string& constraintClassName) {
     // Your implementation goes here
     printf("addNamespaceConstraint\n");
   }
 
-  void removeNamespaceConstraint(const std::string& login, const std::string& namespaceName, const int32_t id) {
+  void removeNamespaceConstraint(const std::string& sharedSecret, const std::string& namespaceName, const int32_t id) {
     // Your implementation goes here
     printf("removeNamespaceConstraint\n");
   }
 
-  void listNamespaceConstraints(std::map<std::string, int32_t> & _return, const std::string& login, const std::string& namespaceName) {
+  void listNamespaceConstraints(std::map<std::string, int32_t> & _return, const std::string& sharedSecret, const std::string& namespaceName) {
     // Your implementation goes here
     printf("listNamespaceConstraints\n");
   }
 
-  bool testNamespaceClassLoad(const std::string& login, const std::string& namespaceName, const std::string& className, const std::string& asTypeName) {
+  bool testNamespaceClassLoad(const std::string& sharedSecret, const std::string& namespaceName, const std::string& className, const std::string& asTypeName) {
     // Your implementation goes here
     printf("testNamespaceClassLoad\n");
   }
