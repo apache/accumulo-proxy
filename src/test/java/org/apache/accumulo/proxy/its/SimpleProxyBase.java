@@ -1098,10 +1098,14 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
   @Test
   public void testNamespaceNotEmpty() throws Exception {
-    client.createTable(sharedSecret, namespaceName + ".abcdefg", true, TimeType.MILLIS);
+    final String tableInNamespace = namespaceName + ".abcdefg";
+    client.createTable(sharedSecret, tableInNamespace, true, TimeType.MILLIS);
 
     assertThrows(NamespaceNotEmptyException.class,
         () -> client.deleteNamespace(sharedSecret, namespaceName));
+
+    // delete table so namespace can also be deleted
+    client.deleteTable(sharedSecret, tableInNamespace);
   }
 
   @Test
