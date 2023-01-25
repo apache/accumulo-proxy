@@ -13,20 +13,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM openjdk:8
+FROM openjdk:11
 
 EXPOSE 42424
 
 WORKDIR /opt/accumulo-proxy
 
-ARG HADOOP_VERSION=3.2.1
-ARG ZOOKEEPER_VERSION=3.5.7
-ARG ACCUMULO_VERSION=2.0.0
+ARG HADOOP_VERSION=3.3.4
+ARG ZOOKEEPER_VERSION=3.8.0
+ARG ACCUMULO_VERSION=2.1.0
 ARG ACCUMULO_PROXY_VERSION=2.0.0-SNAPSHOT
 
-ARG HADOOP_HASH=a57962a24d178193349917730bf95cdc99bde9df
-ARG ZOOKEEPER_HASH=619928c8553b62775119e3d7d143a4714a160365
-ARG ACCUMULO_HASH=b72bf5c3dcaa25387933a032925046234f30e17a
+ARG HADOOP_HASH=ca5e12625679ca95b8fd7bb7babc2a8dcb2605979b901df9ad137178718821097b67555115fafc6dbf6bb32b61864ccb6786dbc555e589694a22bf69147780b4
+ARG ZOOKEEPER_HASH=d66e3a40451f840406901b2cd940992b001f92049a372ae48d8b420891605871cd1ae5f6cceb3b10665491e7abef36a4078dace158bd1e0938fcd3567b5234ca
+ARG ACCUMULO_HASH=9bbc4defc114013f145e9e9fdd08683c842a29faaa01ea6e80555549a6aecef86ee6657cce23183b411a64c31123db682a6944e2825eef83c76fb5a91620235f
 
 # Download from Apache mirrors instead of archive #9
 ENV APACHE_DIST_URLS \
@@ -47,7 +47,7 @@ RUN set -eux; \
       if wget -nv -O "/tmp/${f}" "${distUrl}${distFile}"; then \
         success=1; \
         # Checksum the download
-        echo "${hash}" "/tmp/${f}" | sha1sum -c -; \
+        echo "${hash}" "/tmp/${f}" | sha512sum -c -; \
         break; \
       fi; \
     done; \
