@@ -29,8 +29,7 @@ proxy = Accumulo::AccumuloProxy::Client.new(proto)
 # open up the connect
 transport.open()
 
-# Test if the server is up
-login = proxy.login('root', {'password' => 'secret'})
+login = "sharedSecret"
 
 # print out a table list
 puts "List of tables: #{proxy.listTables(login).inspect}"
