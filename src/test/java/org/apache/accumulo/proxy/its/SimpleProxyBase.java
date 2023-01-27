@@ -1878,14 +1878,14 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
     // Write an RFile
     String filename = dir + "/bulk/import/rfile.rf";
-    FileSKVWriter writer = FileOperations.getInstance().newWriterBuilder()
+    try (FileSKVWriter writer = FileOperations.getInstance().newWriterBuilder()
         .forFile(filename, fs, fs.getConf(), NoCryptoServiceFactory.NONE)
-        .withTableConfiguration(DefaultConfiguration.getInstance()).build();
-    writer.startDefaultLocalityGroup();
-    writer.append(
-        new org.apache.accumulo.core.data.Key(new Text("a"), new Text("b"), new Text("c")),
-        new Value("value".getBytes(UTF_8)));
-    writer.close();
+        .withTableConfiguration(DefaultConfiguration.getInstance()).build()) {
+      writer.startDefaultLocalityGroup();
+      writer.append(
+          new org.apache.accumulo.core.data.Key(new Text("a"), new Text("b"), new Text("c")),
+          new Value("value".getBytes(UTF_8)));
+    }
 
     // Create failures directory
     fs.mkdirs(new Path(dir + "/bulk/fail"));
