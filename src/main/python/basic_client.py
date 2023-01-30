@@ -31,7 +31,7 @@ protocol = TCompactProtocol.TCompactProtocol(transport)
 client = AccumuloProxy.Client(protocol)
 transport.open()
 
-login = client.login('root', {'password':'secret'})
+login = "sharedSecret"
 
 print client.listTables(login)
 
