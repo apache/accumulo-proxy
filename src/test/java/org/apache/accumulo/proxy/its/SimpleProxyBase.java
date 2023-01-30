@@ -137,13 +137,14 @@ import org.apache.thrift.server.TServer;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.function.Executable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.Sets;
 
 /**
  * Call every method on the proxy and try to verify that it works.
@@ -673,7 +674,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
   @Test
   @Timeout(5)
-  public void hasTablePermission() {
+  public void hasTablePermissionBadSharedSecret() {
     assertThrows(AccumuloSecurityException.class,
         () -> client.hasTablePermission(badSecret, "root", tableName, TablePermission.WRITE));
   }
@@ -1465,268 +1466,6 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     }
   }
 
-  @Disabled("This test needs to be reworked, because it tries to switch users")
-  @Test
-  public void userPermissions() throws Exception {
-    String userName = getUniqueNameArray(1)[0];
-    ClusterUser otherClient = null;
-    ByteBuffer password = s2bb("password");
-    String user = "secret";
-
-    TestProxyClient origProxyClient = null;
-    Client origClient = null;
-    TestProxyClient userProxyClient = null;
-    Client userClient = null;
-
-    if (isKerberosEnabled()) {
-      otherClient = getKdc().getClientPrincipal(1);
-      userName = otherClient.getPrincipal();
-
-      UserGroupInformation.loginUserFromKeytab(otherClient.getPrincipal(),
-          otherClient.getKeytab().getAbsolutePath());
-      final UserGroupInformation ugi = UserGroupInformation.getCurrentUser();
-      // Re-login in and make a new connection. Can't use the previous one
-
-      userProxyClient = new TestProxyClient(hostname, proxyPort, factory, proxyPrimary, ugi);
-
-      origProxyClient = proxyClient;
-      origClient = client;
-      userClient = client = userProxyClient.proxy();
-
-    } else {
-      userName = getUniqueNameArray(1)[0];
-      // create a user
-      client.createLocalUser(sharedSecret, userName, password);
-    }
-
-    // check permission failure
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.createTable(user, "fail", true, TimeType.MILLIS),
-        "should not be able to create the table");
-    if (isKerberosEnabled()) {
-      // Switch back to original client
-      UserGroupInformation.loginUserFromKeytab(clientPrincipal, clientKeytab.getAbsolutePath());
-      client = origClient;
-    }
-    assertFalse(client.listTables(sharedSecret).contains("fail"));
-
-    // grant permissions and test
-    assertFalse(client.hasSystemPermission(sharedSecret, userName, SystemPermission.CREATE_TABLE));
-    client.grantSystemPermission(sharedSecret, userName, SystemPermission.CREATE_TABLE);
-    assertTrue(client.hasSystemPermission(sharedSecret, userName, SystemPermission.CREATE_TABLE));
-    if (isKerberosEnabled()) {
-      // Switch back to the extra user
-      UserGroupInformation.loginUserFromKeytab(otherClient.getPrincipal(),
-          otherClient.getKeytab().getAbsolutePath());
-      client = userClient;
-    }
-    client.createTable(user, "success", true, TimeType.MILLIS);
-    if (isKerberosEnabled()) {
-      // Switch back to original client
-      UserGroupInformation.loginUserFromKeytab(clientPrincipal, clientKeytab.getAbsolutePath());
-      client = origClient;
-    }
-    assertTrue(client.listTables(sharedSecret).contains("success"));
-
-    // revoke permissions
-    client.revokeSystemPermission(sharedSecret, userName, SystemPermission.CREATE_TABLE);
-    assertFalse(client.hasSystemPermission(sharedSecret, userName, SystemPermission.CREATE_TABLE));
-    if (isKerberosEnabled()) {
-      // Switch back to the extra user
-      UserGroupInformation.loginUserFromKeytab(otherClient.getPrincipal(),
-          otherClient.getKeytab().getAbsolutePath());
-      client = userClient;
-    }
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.createTable(user, "fail", true, TimeType.MILLIS),
-        "should not be able to create the table");
-    if (isKerberosEnabled()) {
-      // Switch back to original client
-      UserGroupInformation.loginUserFromKeytab(clientPrincipal, clientKeytab.getAbsolutePath());
-      client = origClient;
-    }
-    assertFalse(client.listTables(sharedSecret).contains("fail"));
-
-    // denied!
-    if (isKerberosEnabled()) {
-      // Switch back to the extra user
-      UserGroupInformation.loginUserFromKeytab(otherClient.getPrincipal(),
-          otherClient.getKeytab().getAbsolutePath());
-      client = userClient;
-    }
-
-    {
-      final String scanner = client.createScanner(user, tableName, null);
-      assertThrows(AccumuloSecurityException.class, () -> client.nextK(scanner, 100),
-          "stooge should not read table test");
-    }
-
-    if (isKerberosEnabled()) {
-      // Switch back to original client
-      UserGroupInformation.loginUserFromKeytab(clientPrincipal, clientKeytab.getAbsolutePath());
-      client = origClient;
-    }
-
-    // grant
-    assertFalse(client.hasTablePermission(sharedSecret, userName, tableName, TablePermission.READ));
-    client.grantTablePermission(sharedSecret, userName, tableName, TablePermission.READ);
-    assertTrue(client.hasTablePermission(sharedSecret, userName, tableName, TablePermission.READ));
-
-    if (isKerberosEnabled()) {
-      // Switch back to the extra user
-      UserGroupInformation.loginUserFromKeytab(otherClient.getPrincipal(),
-          otherClient.getKeytab().getAbsolutePath());
-      client = userClient;
-    }
-
-    {
-      final String scanner = client.createScanner(user, tableName, null);
-      client.nextK(scanner, 10);
-      client.closeScanner(scanner);
-    }
-
-    if (isKerberosEnabled()) {
-      // Switch back to original client
-      UserGroupInformation.loginUserFromKeytab(clientPrincipal, clientKeytab.getAbsolutePath());
-      client = origClient;
-    }
-
-    // revoke
-    client.revokeTablePermission(sharedSecret, userName, tableName, TablePermission.READ);
-    assertFalse(client.hasTablePermission(sharedSecret, userName, tableName, TablePermission.READ));
-    if (isKerberosEnabled()) {
-      // Switch back to the extra user
-      UserGroupInformation.loginUserFromKeytab(otherClient.getPrincipal(),
-          otherClient.getKeytab().getAbsolutePath());
-      client = userClient;
-    }
-
-    {
-      final String scanner = client.createScanner(user, tableName, null);
-      assertThrows(AccumuloSecurityException.class, () -> client.nextK(scanner, 100),
-          "stooge should not read table test");
-    }
-
-    if (isKerberosEnabled()) {
-      // Switch back to original client
-      UserGroupInformation.loginUserFromKeytab(clientPrincipal, clientKeytab.getAbsolutePath());
-      client = origClient;
-    }
-
-    // delete user
-    client.dropLocalUser(sharedSecret, userName);
-    Set<String> users = client.listLocalUsers(sharedSecret);
-    assertFalse(users.contains(userName), "Should not see user after they are deleted");
-
-    if (isKerberosEnabled()) {
-      userProxyClient.close();
-      proxyClient = origProxyClient;
-      client = origClient;
-    }
-  }
-
-  @Disabled("This test needs to be reworked, because it tries to switch users")
-  @Test
-  public void namespacePermissions() throws Exception {
-    String userName;
-    ClusterUser otherClient = null;
-    ByteBuffer password = s2bb("password");
-    String user = "secret";
-
-    TestProxyClient origProxyClient = null;
-    Client origClient = null;
-    TestProxyClient userProxyClient = null;
-    Client userClient = null;
-
-    if (isKerberosEnabled()) {
-      otherClient = getKdc().getClientPrincipal(1);
-      userName = otherClient.getPrincipal();
-
-      UserGroupInformation.loginUserFromKeytab(otherClient.getPrincipal(),
-          otherClient.getKeytab().getAbsolutePath());
-      final UserGroupInformation ugi = UserGroupInformation.getCurrentUser();
-      // Re-login in and make a new connection. Can't use the previous one
-
-      userProxyClient = new TestProxyClient(hostname, proxyPort, factory, proxyPrimary, ugi);
-
-      origProxyClient = proxyClient;
-      origClient = client;
-      userClient = client = userProxyClient.proxy();
-
-    } else {
-      userName = getUniqueNameArray(1)[0];
-      // create a user
-      client.createLocalUser(sharedSecret, userName, password);
-    }
-
-    // check permission failure
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.createTable(user, namespaceName + ".fail", true, TimeType.MILLIS),
-        "should not be able to create the table");
-    if (isKerberosEnabled()) {
-      // Switch back to original client
-      UserGroupInformation.loginUserFromKeytab(clientPrincipal, clientKeytab.getAbsolutePath());
-      client = origClient;
-    }
-    assertFalse(client.listTables(sharedSecret).contains(namespaceName + ".fail"));
-
-    // grant permissions and test
-    assertFalse(client.hasNamespacePermission(sharedSecret, userName, namespaceName,
-        NamespacePermission.CREATE_TABLE));
-    client.grantNamespacePermission(sharedSecret, userName, namespaceName,
-        NamespacePermission.CREATE_TABLE);
-    assertTrue(client.hasNamespacePermission(sharedSecret, userName, namespaceName,
-        NamespacePermission.CREATE_TABLE));
-    if (isKerberosEnabled()) {
-      // Switch back to the extra user
-      UserGroupInformation.loginUserFromKeytab(otherClient.getPrincipal(),
-          otherClient.getKeytab().getAbsolutePath());
-      client = userClient;
-    }
-    client.createTable(user, namespaceName + ".success", true, TimeType.MILLIS);
-    if (isKerberosEnabled()) {
-      // Switch back to original client
-      UserGroupInformation.loginUserFromKeytab(clientPrincipal, clientKeytab.getAbsolutePath());
-      client = origClient;
-    }
-    assertTrue(client.listTables(sharedSecret).contains(namespaceName + ".success"));
-
-    // revoke permissions
-    client.revokeNamespacePermission(sharedSecret, userName, namespaceName,
-        NamespacePermission.CREATE_TABLE);
-    assertFalse(client.hasNamespacePermission(sharedSecret, userName, namespaceName,
-        NamespacePermission.CREATE_TABLE));
-    if (isKerberosEnabled()) {
-      // Switch back to the extra user
-      UserGroupInformation.loginUserFromKeytab(otherClient.getPrincipal(),
-          otherClient.getKeytab().getAbsolutePath());
-      client = userClient;
-    }
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.createTable(user, namespaceName + ".fail", true, TimeType.MILLIS),
-        "should not be able to create the table");
-    if (isKerberosEnabled()) {
-      // Switch back to original client
-      UserGroupInformation.loginUserFromKeytab(clientPrincipal, clientKeytab.getAbsolutePath());
-      client = origClient;
-    }
-    assertFalse(client.listTables(sharedSecret).contains(namespaceName + ".fail"));
-
-    // delete user
-    client.dropLocalUser(sharedSecret, userName);
-    Set<String> users = client.listLocalUsers(sharedSecret);
-    assertFalse(users.contains(userName), "Should not see user after they are deleted");
-
-    if (isKerberosEnabled()) {
-      userProxyClient.close();
-      proxyClient = origProxyClient;
-      client = origClient;
-    }
-
-    // delete table from namespace otherwise we can't delete namespace during teardown
-    client.deleteTable(sharedSecret, namespaceName + ".success");
-  }
-
   @Test
   public void testBatchWriter() throws Exception {
     client.addConstraint(sharedSecret, tableName, NumericValueConstraint.class.getName());
@@ -2099,20 +1838,34 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
     client.removeTableProperty(sharedSecret, tableName, "table.split.threshold");
     update = client.getTableProperties(sharedSecret, tableName);
-    assertEquals(orig, update);
+
+    var difference = Sets.symmetricDifference(orig.entrySet(), update.entrySet());
+
+    assertTrue(difference.isEmpty(),
+        "Properties should have been the same. Found difference: " + difference);
   }
 
   @Test
   public void tableRenames() throws Exception {
-    // rename table
-    Map<String,String> tables = client.tableIdMap(sharedSecret);
-    client.renameTable(sharedSecret, tableName, "bar");
-    Map<String,String> tables2 = client.tableIdMap(sharedSecret);
-    assertEquals(tables.get(tableName), tables2.get("bar"));
-    // table exists
-    assertTrue(client.tableExists(sharedSecret, "bar"));
-    assertFalse(client.tableExists(sharedSecret, tableName));
-    client.renameTable(sharedSecret, "bar", tableName);
+    final String newTableName = "bar";
+
+    Map<String,String> tableIds = client.tableIdMap(sharedSecret);
+    final String originalTableID = tableIds.get(tableName);
+
+    client.renameTable(sharedSecret, tableName, newTableName);
+
+    tableIds = client.tableIdMap(sharedSecret);
+    final String newTableID = tableIds.get(newTableName);
+
+    assertEquals(originalTableID, newTableID,
+        "Table ID should be the same before and after the table has been renamed");
+
+    assertTrue(client.tableExists(sharedSecret, newTableName),
+        "Expected to find table with new name");
+    assertFalse(client.tableExists(sharedSecret, tableName),
+        "Did not expect to find table with original name");
+
+    client.deleteTable(sharedSecret, newTableName);
   }
 
   @Test
@@ -2125,14 +1878,14 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
     // Write an RFile
     String filename = dir + "/bulk/import/rfile.rf";
-    FileSKVWriter writer = FileOperations.getInstance().newWriterBuilder()
+    try (FileSKVWriter writer = FileOperations.getInstance().newWriterBuilder()
         .forFile(filename, fs, fs.getConf(), NoCryptoServiceFactory.NONE)
-        .withTableConfiguration(DefaultConfiguration.getInstance()).build();
-    writer.startDefaultLocalityGroup();
-    writer.append(
-        new org.apache.accumulo.core.data.Key(new Text("a"), new Text("b"), new Text("c")),
-        new Value("value".getBytes(UTF_8)));
-    writer.close();
+        .withTableConfiguration(DefaultConfiguration.getInstance()).build()) {
+      writer.startDefaultLocalityGroup();
+      writer.append(
+          new org.apache.accumulo.core.data.Key(new Text("a"), new Text("b"), new Text("c")),
+          new Value("value".getBytes(UTF_8)));
+    }
 
     // Create failures directory
     fs.mkdirs(new Path(dir + "/bulk/fail"));
@@ -2192,7 +1945,6 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     client.closeScanner(scid);
   }
 
-  @Disabled("This test needs to be reworked, because it tries to switch users")
   @Test
   public void testConditionalWriter() throws Exception {
     log.debug("Adding constraint {} to {}", tableName, NumericValueConstraint.class.getName());
@@ -2424,157 +2176,6 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     client.closeConditionalWriter(cwid);
     assertThrows(UnknownWriter.class, () -> client.updateRowsConditionally(cwid, updates),
         "conditional writer not closed");
-
-    String principal;
-    ClusterUser cwuser = null;
-    if (isKerberosEnabled()) {
-      cwuser = getKdc().getClientPrincipal(1);
-      principal = cwuser.getPrincipal();
-      client.createLocalUser(sharedSecret, principal, s2bb("unused"));
-
-    } else {
-      principal = "cwuser";
-      // run test with colvis
-      client.createLocalUser(sharedSecret, principal, s2bb("bestpasswordever"));
-    }
-
-    client.changeUserAuthorizations(sharedSecret, principal, Collections.singleton(s2bb("A")));
-    client.grantTablePermission(sharedSecret, principal, tableName, TablePermission.WRITE);
-    client.grantTablePermission(sharedSecret, principal, tableName, TablePermission.READ);
-
-    TestProxyClient cwuserProxyClient = null;
-    Client origClient = null;
-    Map<String,String> cwProperties;
-    if (isKerberosEnabled()) {
-      UserGroupInformation.loginUserFromKeytab(cwuser.getPrincipal(),
-          cwuser.getKeytab().getAbsolutePath());
-      final UserGroupInformation cwuserUgi = UserGroupInformation.getCurrentUser();
-      // Re-login in and make a new connection. Can't use the previous one
-      cwuserProxyClient =
-          new TestProxyClient(hostname, proxyPort, factory, proxyPrimary, cwuserUgi);
-      origClient = client;
-      client = cwuserProxyClient.proxy();
-      cwProperties = Collections.emptyMap();
-    } else {
-      cwProperties = Collections.singletonMap("password", "bestpasswordever");
-    }
-
-    try {
-      String cwCreds = cwProperties.get("secret");
-
-      final String cwid2 = client.createConditionalWriter(cwCreds, tableName,
-          new ConditionalWriterOptions().setAuthorizations(Collections.singleton(s2bb("A"))));
-
-      updates.clear();
-      updates.put(s2bb("00348"),
-          new ConditionalUpdates(
-              List.of(new Condition(new Column(s2bb("data"), s2bb("c"), s2bb("A")))),
-              List.of(newColUpdate("data", "seq", "1"),
-                  newColUpdate("data", "c", "1").setColVisibility(s2bb("A")))));
-      updates.put(s2bb("00349"),
-          new ConditionalUpdates(
-              List.of(new Condition(new Column(s2bb("data"), s2bb("c"), s2bb("B")))),
-              List.of(newColUpdate("data", "seq", "1"))));
-
-      results = client.updateRowsConditionally(cwid2, updates);
-
-      assertEquals(2, results.size());
-      assertEquals(ConditionalStatus.ACCEPTED, results.get(s2bb("00348")));
-      assertEquals(ConditionalStatus.INVISIBLE_VISIBILITY, results.get(s2bb("00349")));
-
-      if (isKerberosEnabled()) {
-        UserGroupInformation.loginUserFromKeytab(clientPrincipal, clientKeytab.getAbsolutePath());
-        client = origClient;
-      }
-      // Verify that the original user can't see the updates with visibilities set
-      assertScan(
-          new String[][] {{"00345", "data", "img", "1234567890"}, {"00345", "meta", "seq", "3"},
-              {"00346", "meta", "seq", "1"}, {"00347", "data", "count", "3"},
-              {"00347", "data", "img", "0987654321"}, {"00348", "data", "seq", "1"}},
-          tableName);
-
-      if (isKerberosEnabled()) {
-        UserGroupInformation.loginUserFromKeytab(cwuser.getPrincipal(),
-            cwuser.getKeytab().getAbsolutePath());
-        client = cwuserProxyClient.proxy();
-      }
-
-      updates.clear();
-
-      updates.put(s2bb("00348"), new ConditionalUpdates(
-          List.of(
-              new Condition(new Column(s2bb("data"), s2bb("c"), s2bb("A"))).setValue(s2bb("0"))),
-          List.of(newColUpdate("data", "seq", "2"),
-              newColUpdate("data", "c", "2").setColVisibility(s2bb("A")))));
-
-      results = client.updateRowsConditionally(cwid2, updates);
-
-      assertEquals(1, results.size());
-      assertEquals(ConditionalStatus.REJECTED, results.get(s2bb("00348")));
-
-      if (isKerberosEnabled()) {
-        UserGroupInformation.loginUserFromKeytab(clientPrincipal, clientKeytab.getAbsolutePath());
-        client = origClient;
-      }
-
-      // Same results as the original user
-      assertScan(
-          new String[][] {{"00345", "data", "img", "1234567890"}, {"00345", "meta", "seq", "3"},
-              {"00346", "meta", "seq", "1"}, {"00347", "data", "count", "3"},
-              {"00347", "data", "img", "0987654321"}, {"00348", "data", "seq", "1"}},
-          tableName);
-
-      if (isKerberosEnabled()) {
-        UserGroupInformation.loginUserFromKeytab(cwuser.getPrincipal(),
-            cwuser.getKeytab().getAbsolutePath());
-        client = cwuserProxyClient.proxy();
-      }
-
-      updates.clear();
-      updates.put(s2bb("00348"), new ConditionalUpdates(
-          List.of(
-              new Condition(new Column(s2bb("data"), s2bb("c"), s2bb("A"))).setValue(s2bb("1"))),
-          List.of(newColUpdate("data", "seq", "2"),
-              newColUpdate("data", "c", "2").setColVisibility(s2bb("A")))));
-
-      results = client.updateRowsConditionally(cwid2, updates);
-
-      assertEquals(1, results.size());
-      assertEquals(ConditionalStatus.ACCEPTED, results.get(s2bb("00348")));
-
-      if (isKerberosEnabled()) {
-        UserGroupInformation.loginUserFromKeytab(clientPrincipal, clientKeytab.getAbsolutePath());
-        client = origClient;
-      }
-
-      assertScan(
-          new String[][] {{"00345", "data", "img", "1234567890"}, {"00345", "meta", "seq", "3"},
-              {"00346", "meta", "seq", "1"}, {"00347", "data", "count", "3"},
-              {"00347", "data", "img", "0987654321"}, {"00348", "data", "seq", "2"}},
-          tableName);
-
-      if (isKerberosEnabled()) {
-        UserGroupInformation.loginUserFromKeytab(cwuser.getPrincipal(),
-            cwuser.getKeytab().getAbsolutePath());
-        client = cwuserProxyClient.proxy();
-      }
-
-      client.closeConditionalWriter(cwid2);
-      assertThrows(UnknownWriter.class, () -> client.updateRowsConditionally(cwid2, updates),
-          "conditional writer not closed");
-    } finally {
-      if (isKerberosEnabled()) {
-        // Close the other client
-        if (cwuserProxyClient != null) {
-          cwuserProxyClient.close();
-        }
-
-        UserGroupInformation.loginUserFromKeytab(clientPrincipal, clientKeytab.getAbsolutePath());
-        // Re-login and restore the original client
-        client = origClient;
-      }
-      client.dropLocalUser(sharedSecret, principal);
-    }
   }
 
   private void checkKey(String row, String cf, String cq, String val, KeyValue keyValue) {

@@ -85,14 +85,8 @@ public class Proxy implements KeywordExecutable {
     @Override
     public Properties convert(String fileName) {
       Properties prop = new Properties();
-      InputStream is;
-      try {
-        is = new FileInputStream(fileName);
-        try {
-          prop.load(is);
-        } finally {
-          is.close();
-        }
+      try (InputStream is = new FileInputStream(fileName)) {
+        prop.load(is);
       } catch (IOException e) {
         throw new RuntimeException(e);
       }
