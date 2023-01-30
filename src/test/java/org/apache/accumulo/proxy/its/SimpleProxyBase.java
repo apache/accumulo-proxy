@@ -1861,9 +1861,9 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
         "Table ID should be the same before and after the table has been renamed");
 
     assertTrue(client.tableExists(sharedSecret, newTableName),
-        "Expect to find table with new name");
+        "Expected to find table with new name");
     assertFalse(client.tableExists(sharedSecret, tableName),
-        "Do not expect to find table with original name");
+        "Did not expect to find table with original name");
 
     client.deleteTable(sharedSecret, newTableName);
   }
