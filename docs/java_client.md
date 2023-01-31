@@ -18,46 +18,42 @@ limitations under the License.
 # Java client
 
 After initiating a connection to the Proxy (see Apache Thrift's documentation for examples
-of connecting to a Thrift service), the methods on the proxy client will be available. The
-first thing to do is log in:
+of connecting to a Thrift service), the methods on the proxy client will be available. A shared
+secret will be used to authenticate to the proxy server:
 
 ```java
-Map password = new HashMap<String,String>();
-password.put("password", "secret");
-ByteBuffer token = client.login("root", password);
+String sharedSecret = "sharedSecret";
 ```
 
-Once logged in, the token returned will be used for most subsequent calls to the client.
+The shared secret will be used for most subsequent calls to the client.
 Let's create a table, add some data, scan the table, and delete it.
 
 First, create a table.
 
 ```java
-client.createTable(token, "myTable", true, TimeType.MILLIS);
+client.createTable(sharedSecret, "myTable", true, TimeType.MILLIS);
 ```
 
 Next, add some data:
 
 ```java
 // first, create a writer on the server
-String writer = client.createWriter(token, "myTable", new WriterOptions());
+String writer = client.createWriter(sharedSecret, "myTable", new WriterOptions());
 
-//rowid
+// rowid
 ByteBuffer rowid = ByteBuffer.wrap("UUID".getBytes());
 
-//mutation like class
+// mutation-like class
 ColumnUpdate cu = new ColumnUpdate();
 cu.setColFamily("MyFamily".getBytes());
 cu.setColQualifier("MyQualifier".getBytes());
 cu.setColVisibility("VisLabel".getBytes());
 cu.setValue("Some Value.".getBytes());
 
-List<ColumnUpdate> updates = new ArrayList<ColumnUpdate>();
-updates.add(cu);
+List<ColumnUpdate> updates = List.of(cu);
 
 // build column updates
-Map<ByteBuffer, List<ColumnUpdate>> cellsToUpdate = new HashMap<ByteBuffer, List<ColumnUpdate>>();
-cellsToUpdate.put(rowid, updates);
+Map<ByteBuffer, List<ColumnUpdate>> cellsToUpdate = Map.of(rowid, updates);
 
 // send updates to the server
 client.updateAndFlush(writer, "myTable", cellsToUpdate);
@@ -68,7 +64,7 @@ client.closeWriter(writer);
 Scan for the data and batch the return of the results on the server:
 
 ```java
-String scanner = client.createScanner(token, "myTable", new ScanOptions());
+String scanner = client.createScanner(sharedSecret, "myTable", new ScanOptions());
 ScanResult results = client.nextK(scanner, 100);
 
 for(KeyValue keyValue : results.getResultsIterator()) {
