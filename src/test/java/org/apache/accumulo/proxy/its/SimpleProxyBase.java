@@ -47,6 +47,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import org.apache.accumulo.cluster.ClusterUser;
@@ -2216,6 +2217,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
         break;
       }
     }
+    client.closeScanner(scanner);
     return result;
   }
 
@@ -2277,7 +2279,20 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     client.compactTable(sharedSecret, tableName, null, null, null, true, true, selector, null);
 
     // SelectHalfSelector should lead to half the files being compacted
-    Wait.waitFor(() -> countFiles(tableName) == (expectedFileCount / 2));
+    final int halfOfOriginalFileCount = expectedFileCount / 2;
+
+    // a supplier is needed for the message so the file count will be computed lazily
+    Supplier<String> message = () -> {
+      int fileCount;
+      try {
+        fileCount = countFiles(tableName);
+      } catch (Exception e) {
+        throw new RuntimeException(e);
+      }
+      return "Expected to find " + halfOfOriginalFileCount + " files but found " + fileCount;
+    };
+
+    assertTrue(Wait.waitFor(() -> countFiles(tableName) == halfOfOriginalFileCount), message);
   }
 
   @Test
