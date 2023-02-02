@@ -1482,8 +1482,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     writerOptions.setThreads(1);
     writerOptions.setTimeoutMs(100000);
 
-    Wait.waitFor(() -> client.listConstraints(sharedSecret, tableName)
-        .containsKey(NumericValueConstraint.class.getName()), 30_000L, 2_000L);
+    assertNumericValueConstraintIsPresent();
 
     boolean success = false;
     for (int i = 0; i < 15; i++) {
@@ -1516,8 +1515,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     client.offlineTable(sharedSecret, tableName, true);
     client.onlineTable(sharedSecret, tableName, true);
 
-    Wait.waitFor(() -> !client.listConstraints(sharedSecret, tableName)
-        .containsKey(NumericValueConstraint.class.getName()), 30_000L, 2_000L);
+    assertNumericValueConstraintIsAbsent();
 
     assertScan(new String[][] {}, tableName);
 
@@ -1570,8 +1568,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
     log.debug("Attempting to verify client-side that constraints are observed");
 
-    Wait.waitFor(() -> client.listConstraints(sharedSecret, tableName)
-        .containsKey(NumericValueConstraint.class.getName()), 30_000L, 2_000L);
+    assertNumericValueConstraintIsPresent();
 
     assertEquals(2, client.listConstraints(sharedSecret, tableName).size());
     log.debug("Verified client-side that constraints exist");
@@ -1604,8 +1601,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     client.offlineTable(sharedSecret, tableName, true);
     client.onlineTable(sharedSecret, tableName, true);
 
-    Wait.waitFor(() -> !client.listConstraints(sharedSecret, tableName)
-        .containsKey(NumericValueConstraint.class.getName()), 30_000L, 2_000L);
+    assertNumericValueConstraintIsAbsent();
 
     assertEquals(1, client.listConstraints(sharedSecret, tableName).size());
     log.debug("Verified client-side that the constraint was removed");
@@ -1955,8 +1951,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     client.offlineTable(sharedSecret, tableName, true);
     client.onlineTable(sharedSecret, tableName, true);
 
-    Wait.waitFor(() -> client.listConstraints(sharedSecret, tableName)
-        .containsKey(NumericValueConstraint.class.getName()), 30_000L, 1_000L);
+    assertNumericValueConstraintIsPresent();
 
     String cwid =
         client.createConditionalWriter(sharedSecret, tableName, new ConditionalWriterOptions());
@@ -2176,6 +2171,20 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     client.closeConditionalWriter(cwid);
     assertThrows(UnknownWriter.class, () -> client.updateRowsConditionally(cwid, updates),
         "conditional writer not closed");
+  }
+
+  private void assertNumericValueConstraintIsPresent() throws Exception {
+    assertTrue(
+        Wait.waitFor(() -> client.listConstraints(sharedSecret, tableName)
+            .containsKey(NumericValueConstraint.class.getName()), 30_000L, 2_000L),
+        "Expected to find NumericValueConstraint in constraints.");
+  }
+
+  private void assertNumericValueConstraintIsAbsent() throws Exception {
+    assertTrue(
+        Wait.waitFor(() -> !client.listConstraints(sharedSecret, tableName)
+            .containsKey(NumericValueConstraint.class.getName()), 30_000L, 2_000L),
+        "Found NumericValueConstraint in constraints, expected it to be absent.");
   }
 
   private void checkKey(String row, String cf, String cq, String val, KeyValue keyValue) {
