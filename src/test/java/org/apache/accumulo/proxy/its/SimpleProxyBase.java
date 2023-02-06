@@ -47,14 +47,15 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import org.apache.accumulo.cluster.ClusterUser;
 import org.apache.accumulo.core.client.Accumulo;
 import org.apache.accumulo.core.client.AccumuloClient;
+import org.apache.accumulo.core.client.admin.compaction.TooManyDeletesSelector;
 import org.apache.accumulo.core.client.security.tokens.KerberosToken;
 import org.apache.accumulo.core.client.security.tokens.PasswordToken;
+import org.apache.accumulo.core.client.summary.summarizers.DeletesSummarizer;
 import org.apache.accumulo.core.clientImpl.ClientInfo;
 import org.apache.accumulo.core.clientImpl.Namespace;
 import org.apache.accumulo.core.conf.DefaultConfiguration;
@@ -2262,37 +2263,46 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
   @Test
   public void testCompactionSelector() throws Exception {
 
-    String[] data = "A B C D E F G H I J K L M N O P Q R S T U V W X Y Z".split(" ");
-    final int expectedFileCount = data.length;
+    client.setTableProperty(sharedSecret, tableName, Property.TABLE_SUMMARIZER_PREFIX + "s1",
+        DeletesSummarizer.class.getName());
 
-    for (String datum : data) {
-      client.addSplits(sharedSecret, tableName, Set.of(s2bb(datum)));
-      client.updateAndFlush(sharedSecret, tableName, mutation(datum, "cf", "cq", datum));
-      client.flushTable(sharedSecret, tableName, null, null, true);
+    Map<ByteBuffer,List<ColumnUpdate>> mutation = new HashMap<>();
+
+    for (int i = 1; i < 2000; i++) {
+      String row = String.format("%09d", i);
+      ColumnUpdate columnUpdate = newColUpdate("cf", "cq", "v" + i);
+      mutation.put(s2bb(row), List.of(columnUpdate));
     }
 
-    assertEquals(expectedFileCount, countFiles(tableName), "Unexpected file count");
+    client.updateAndFlush(sharedSecret, tableName, mutation);
+    client.flushTable(sharedSecret, tableName, null, null, true);
 
-    String selectorClassname = SelectHalfSelector.class.getName();
-    PluginConfig selector = new PluginConfig(selectorClassname, Map.of());
+    mutation.clear();
+
+    for (int i = 1; i < 1000; i++) {
+      String row = String.format("%09d", i);
+      ColumnUpdate columnUpdate = newColUpdate("cf", "cq", "v" + i);
+      columnUpdate.setDeleteCell(true);
+      mutation.put(s2bb(row), List.of(columnUpdate));
+    }
+
+    client.updateAndFlush(sharedSecret, tableName, mutation);
+    client.flushTable(sharedSecret, tableName, null, null, true);
+
+    assertEquals(2, countFiles(tableName));
+
+    String selectorClassname = TooManyDeletesSelector.class.getName();
+    PluginConfig selector = new PluginConfig(selectorClassname, Map.of("threshold", ".99"));
 
     client.compactTable(sharedSecret, tableName, null, null, null, true, true, selector, null);
 
-    // SelectHalfSelector should lead to half the files being compacted
-    final int halfOfOriginalFileCount = expectedFileCount / 2;
+    assertEquals(2, countFiles(tableName));
 
-    // a supplier is needed for the message so the file count will be computed lazily
-    Supplier<String> message = () -> {
-      int fileCount;
-      try {
-        fileCount = countFiles(tableName);
-      } catch (Exception e) {
-        throw new RuntimeException(e);
-      }
-      return "Expected to find " + halfOfOriginalFileCount + " files but found " + fileCount;
-    };
+    selector = new PluginConfig(selectorClassname, Map.of("threshold", ".40"));
 
-    assertTrue(Wait.waitFor(() -> countFiles(tableName) == halfOfOriginalFileCount), message);
+    client.compactTable(sharedSecret, tableName, null, null, null, true, true, selector, null);
+
+    assertEquals(1, countFiles(tableName));
   }
 
   @Test
