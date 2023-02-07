@@ -2260,49 +2260,83 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     assertEquals(range.stop.timestamp, range.stop.timestamp);
   }
 
+  private void addFile(String tableName, int startRow, int endRow, boolean delete)
+      throws TException {
+    Map<ByteBuffer,List<ColumnUpdate>> mutation = new HashMap<>();
+
+    for (int i = startRow; i < endRow; i++) {
+      String row = String.format("%09d", i);
+      ColumnUpdate columnUpdate = newColUpdate("cf", "cq", "v" + i);
+      columnUpdate.setDeleteCell(delete);
+      mutation.put(s2bb(row), List.of(columnUpdate));
+    }
+
+    client.updateAndFlush(sharedSecret, tableName, mutation);
+    client.flushTable(sharedSecret, tableName, null, null, true);
+  }
+
   @Test
   public void testCompactionSelector() throws Exception {
 
-    client.setTableProperty(sharedSecret, tableName, Property.TABLE_SUMMARIZER_PREFIX + "s1",
-        DeletesSummarizer.class.getName());
+    // delete table so new tables won't have the same name
+    client.deleteTable(sharedSecret, tableName);
 
-    Map<ByteBuffer,List<ColumnUpdate>> mutation = new HashMap<>();
+    final String[] tableNames = getUniqueNameArray(3);
 
-    for (int i = 1; i < 2000; i++) {
-      String row = String.format("%09d", i);
-      ColumnUpdate columnUpdate = newColUpdate("cf", "cq", "v" + i);
-      mutation.put(s2bb(row), List.of(columnUpdate));
+    // for each table, set the summarizer property needed for TooManyDeletesSelector
+    final String summarizerKey = Property.TABLE_SUMMARIZER_PREFIX + "s1";
+    final String summarizerClassName = DeletesSummarizer.class.getName();
+
+    for (String tableName : tableNames) {
+      client.createTable(sharedSecret, tableName, true, TimeType.MILLIS);
+      client.setTableProperty(sharedSecret, tableName, summarizerKey, summarizerClassName);
     }
 
-    client.updateAndFlush(sharedSecret, tableName, mutation);
-    client.flushTable(sharedSecret, tableName, null, null, true);
+    // add files to each table
 
-    mutation.clear();
+    addFile(tableNames[0], 1, 1000, false);
+    addFile(tableNames[0], 1, 1000, true);
 
-    for (int i = 1; i < 1000; i++) {
-      String row = String.format("%09d", i);
-      ColumnUpdate columnUpdate = newColUpdate("cf", "cq", "v" + i);
-      columnUpdate.setDeleteCell(true);
-      mutation.put(s2bb(row), List.of(columnUpdate));
+    addFile(tableNames[1], 1, 1000, false);
+    addFile(tableNames[1], 1000, 2000, false);
+
+    addFile(tableNames[2], 1, 2000, false);
+    addFile(tableNames[2], 1, 1000, true);
+
+    final String messagePrefix = "Unexpected file count on table ";
+
+    for (String tableName : tableNames) {
+      assertEquals(2, countFiles(tableName), messagePrefix + tableName);
     }
 
-    client.updateAndFlush(sharedSecret, tableName, mutation);
-    client.flushTable(sharedSecret, tableName, null, null, true);
+    // compact the tables and check for expected file counts
 
-    assertEquals(2, countFiles(tableName));
-
-    String selectorClassname = TooManyDeletesSelector.class.getName();
+    final String selectorClassname = TooManyDeletesSelector.class.getName();
     PluginConfig selector = new PluginConfig(selectorClassname, Map.of("threshold", ".99"));
 
-    client.compactTable(sharedSecret, tableName, null, null, null, true, true, selector, null);
+    for (String tableName : tableNames) {
+      client.compactTable(sharedSecret, tableName, null, null, null, true, true, selector, null);
+    }
 
-    assertEquals(2, countFiles(tableName));
+    assertEquals(0, countFiles(tableNames[0]), messagePrefix + tableNames[0]);
+    assertEquals(2, countFiles(tableNames[1]), messagePrefix + tableNames[1]);
+    assertEquals(2, countFiles(tableNames[2]), messagePrefix + tableNames[2]);
+
+    // create a selector with different properties then compact and check file counts
 
     selector = new PluginConfig(selectorClassname, Map.of("threshold", ".40"));
 
-    client.compactTable(sharedSecret, tableName, null, null, null, true, true, selector, null);
+    for (String tableName : tableNames) {
+      client.compactTable(sharedSecret, tableName, null, null, null, true, true, selector, null);
+    }
 
-    assertEquals(1, countFiles(tableName));
+    assertEquals(0, countFiles(tableNames[0]), messagePrefix + tableNames[0]);
+    assertEquals(2, countFiles(tableNames[1]), messagePrefix + tableNames[1]);
+    assertEquals(1, countFiles(tableNames[2]), messagePrefix + tableNames[2]);
+
+    client.compactTable(sharedSecret, tableNames[1], null, null, null, true, true, null, null);
+
+    assertEquals(1, countFiles(tableNames[1]), messagePrefix + tableNames[2]);
   }
 
   @Test
