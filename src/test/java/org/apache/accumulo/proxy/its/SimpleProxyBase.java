@@ -2275,6 +2275,10 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     client.flushTable(sharedSecret, tableName, null, null, true);
   }
 
+  /**
+   * Test to make sure we can specify a Selector from the proxy client, and it will take effect when
+   * compactions occur
+   */
   @Test
   public void testCompactionSelector() throws Exception {
 
