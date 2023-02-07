@@ -52,8 +52,10 @@ import java.util.stream.Stream;
 import org.apache.accumulo.cluster.ClusterUser;
 import org.apache.accumulo.core.client.Accumulo;
 import org.apache.accumulo.core.client.AccumuloClient;
+import org.apache.accumulo.core.client.admin.compaction.TooManyDeletesSelector;
 import org.apache.accumulo.core.client.security.tokens.KerberosToken;
 import org.apache.accumulo.core.client.security.tokens.PasswordToken;
+import org.apache.accumulo.core.client.summary.summarizers.DeletesSummarizer;
 import org.apache.accumulo.core.clientImpl.ClientInfo;
 import org.apache.accumulo.core.clientImpl.Namespace;
 import org.apache.accumulo.core.conf.DefaultConfiguration;
@@ -2216,6 +2218,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
         break;
       }
     }
+    client.closeScanner(scanner);
     return result;
   }
 
@@ -2257,27 +2260,87 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     assertEquals(range.stop.timestamp, range.stop.timestamp);
   }
 
+  private void addFile(String tableName, int startRow, int endRow, boolean delete)
+      throws TException {
+    Map<ByteBuffer,List<ColumnUpdate>> mutation = new HashMap<>();
+
+    for (int i = startRow; i < endRow; i++) {
+      String row = String.format("%09d", i);
+      ColumnUpdate columnUpdate = newColUpdate("cf", "cq", "v" + i);
+      columnUpdate.setDeleteCell(delete);
+      mutation.put(s2bb(row), List.of(columnUpdate));
+    }
+
+    client.updateAndFlush(sharedSecret, tableName, mutation);
+    client.flushTable(sharedSecret, tableName, null, null, true);
+  }
+
+  /**
+   * Test to make sure we can specify a Selector from the proxy client, and it will take effect when
+   * compactions occur
+   */
   @Test
   public void testCompactionSelector() throws Exception {
 
-    String[] data = "A B C D E F G H I J K L M N O P Q R S T U V W X Y Z".split(" ");
-    final int expectedFileCount = data.length;
+    // delete table so new tables won't have the same name
+    client.deleteTable(sharedSecret, tableName);
 
-    for (String datum : data) {
-      client.addSplits(sharedSecret, tableName, Set.of(s2bb(datum)));
-      client.updateAndFlush(sharedSecret, tableName, mutation(datum, "cf", "cq", datum));
-      client.flushTable(sharedSecret, tableName, null, null, true);
+    final String[] tableNames = getUniqueNameArray(3);
+
+    // for each table, set the summarizer property needed for TooManyDeletesSelector
+    final String summarizerKey = Property.TABLE_SUMMARIZER_PREFIX + "s1";
+    final String summarizerClassName = DeletesSummarizer.class.getName();
+
+    for (String tableName : tableNames) {
+      client.createTable(sharedSecret, tableName, true, TimeType.MILLIS);
+      client.setTableProperty(sharedSecret, tableName, summarizerKey, summarizerClassName);
     }
 
-    assertEquals(expectedFileCount, countFiles(tableName), "Unexpected file count");
+    // add files to each table
 
-    String selectorClassname = SelectHalfSelector.class.getName();
-    PluginConfig selector = new PluginConfig(selectorClassname, Map.of());
+    addFile(tableNames[0], 1, 1000, false);
+    addFile(tableNames[0], 1, 1000, true);
 
-    client.compactTable(sharedSecret, tableName, null, null, null, true, true, selector, null);
+    addFile(tableNames[1], 1, 1000, false);
+    addFile(tableNames[1], 1000, 2000, false);
 
-    // SelectHalfSelector should lead to half the files being compacted
-    Wait.waitFor(() -> countFiles(tableName) == (expectedFileCount / 2));
+    addFile(tableNames[2], 1, 2000, false);
+    addFile(tableNames[2], 1, 1000, true);
+
+    final String messagePrefix = "Unexpected file count on table ";
+
+    for (String tableName : tableNames) {
+      assertEquals(2, countFiles(tableName), messagePrefix + tableName);
+    }
+
+    // compact the tables and check for expected file counts
+
+    final String selectorClassname = TooManyDeletesSelector.class.getName();
+    PluginConfig selector = new PluginConfig(selectorClassname, Map.of("threshold", ".99"));
+
+    for (String tableName : tableNames) {
+      client.compactTable(sharedSecret, tableName, null, null, null, true, true, selector, null);
+    }
+
+    assertEquals(0, countFiles(tableNames[0]), messagePrefix + tableNames[0]);
+    assertEquals(2, countFiles(tableNames[1]), messagePrefix + tableNames[1]);
+    assertEquals(2, countFiles(tableNames[2]), messagePrefix + tableNames[2]);
+
+    // create a selector with different properties then compact and check file counts
+
+    selector = new PluginConfig(selectorClassname, Map.of("threshold", ".40"));
+
+    for (String tableName : tableNames) {
+      client.compactTable(sharedSecret, tableName, null, null, null, true, true, selector, null);
+    }
+
+    assertEquals(0, countFiles(tableNames[0]), messagePrefix + tableNames[0]);
+    assertEquals(2, countFiles(tableNames[1]), messagePrefix + tableNames[1]);
+    assertEquals(1, countFiles(tableNames[2]), messagePrefix + tableNames[2]);
+
+    client.compactTable(sharedSecret, tableNames[1], null, null, null, true, true, null, null);
+
+    assertEquals(1, countFiles(tableNames[1]), messagePrefix + tableNames[2]);
   }
 
   @Test
