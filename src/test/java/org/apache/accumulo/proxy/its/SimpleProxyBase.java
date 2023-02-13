@@ -249,7 +249,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
       } else {
         clientPrincipal = "root";
         tokenClass = PasswordToken.class.getName();
-        sharedSecret = "sharedSecret";
+        sharedSecret = "superSecret";
 
         props.put("sharedSecret", sharedSecret);
         hostname = "localhost";
