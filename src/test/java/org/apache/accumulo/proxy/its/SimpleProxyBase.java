@@ -49,14 +49,10 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
-import org.apache.accumulo.cluster.ClusterUser;
 import org.apache.accumulo.core.client.Accumulo;
 import org.apache.accumulo.core.client.AccumuloClient;
 import org.apache.accumulo.core.client.admin.compaction.TooManyDeletesSelector;
-import org.apache.accumulo.core.client.security.tokens.KerberosToken;
-import org.apache.accumulo.core.client.security.tokens.PasswordToken;
 import org.apache.accumulo.core.client.summary.summarizers.DeletesSummarizer;
-import org.apache.accumulo.core.clientImpl.ClientInfo;
 import org.apache.accumulo.core.clientImpl.Namespace;
 import org.apache.accumulo.core.conf.DefaultConfiguration;
 import org.apache.accumulo.core.conf.Property;
@@ -74,9 +70,7 @@ import org.apache.accumulo.core.spi.crypto.NoCryptoServiceFactory;
 import org.apache.accumulo.core.util.ByteBufferUtil;
 import org.apache.accumulo.core.util.HostAndPort;
 import org.apache.accumulo.harness.MiniClusterConfigurationCallback;
-import org.apache.accumulo.harness.MiniClusterHarness;
 import org.apache.accumulo.harness.SharedMiniClusterBase;
-import org.apache.accumulo.harness.TestingKdc;
 import org.apache.accumulo.miniclusterImpl.MiniAccumuloClusterImpl;
 import org.apache.accumulo.miniclusterImpl.MiniAccumuloConfigImpl;
 import org.apache.accumulo.proxy.Proxy;
@@ -125,13 +119,11 @@ import org.apache.accumulo.test.constraints.NumericValueConstraint;
 import org.apache.accumulo.test.functional.SlowIterator;
 import org.apache.accumulo.test.util.Wait;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.CommonConfigurationKeysPublic;
 import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.FileUtil;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.Text;
-import org.apache.hadoop.security.UserGroupInformation;
 import org.apache.thrift.TApplicationException;
 import org.apache.thrift.TException;
 import org.apache.thrift.protocol.TProtocolFactory;
@@ -167,22 +159,16 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
   private org.apache.accumulo.proxy.thrift.AccumuloProxy.Client client;
 
   private static String hostname;
-  private static String proxyPrimary;
   private static String clientPrincipal;
-  private static File clientKeytab;
 
-  private static String sharedSecret;
+  private static final String sharedSecret = "superSecret";
 
   // Implementations can set this
   static TProtocolFactory factory = null;
 
   private static void waitForAccumulo(AccumuloClient c) throws Exception {
-    assertNotEquals(0, c.createScanner(MetadataTable.NAME, Authorizations.EMPTY).stream().count());
-  }
-
-  private static boolean isKerberosEnabled() {
-    return SharedMiniClusterBase.TRUE
-        .equals(System.getProperty(MiniClusterHarness.USE_KERBEROS_FOR_IT_OPTION));
+    assertTrue(
+        c.createScanner(MetadataTable.NAME, Authorizations.EMPTY).stream().findAny().isPresent());
   }
 
   /**
@@ -210,53 +196,9 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
       hostname = InetAddress.getLocalHost().getCanonicalHostName();
 
       Properties props = new Properties();
-      ClientInfo info = ClientInfo.from(c.properties());
-      props.put("instance", info.getInstanceName());
-      props.put("zookeepers", info.getZooKeepers());
-
-      final String tokenClass;
-      if (isKerberosEnabled()) {
-        tokenClass = KerberosToken.class.getName();
-        TestingKdc kdc = getKdc();
-
-        // Create a principal+keytab for the proxy
-        File proxyKeytab = new File(kdc.getKeytabDir(), "proxy.keytab");
-        hostname = InetAddress.getLocalHost().getCanonicalHostName();
-        // Set the primary because the client needs to know it
-        proxyPrimary = "proxy";
-        // Qualify with an instance
-        String proxyPrincipal = proxyPrimary + "/" + hostname;
-        kdc.createPrincipal(proxyKeytab, proxyPrincipal);
-        // Tack on the realm too
-        proxyPrincipal = kdc.qualifyUser(proxyPrincipal);
-
-        props.setProperty("kerberosPrincipal", proxyPrincipal);
-        props.setProperty("kerberosKeytab", proxyKeytab.getCanonicalPath());
-        props.setProperty("thriftServerType", "sasl");
-
-        // Enabled kerberos auth
-        Configuration conf = new Configuration(false);
-        conf.set(CommonConfigurationKeysPublic.HADOOP_SECURITY_AUTHENTICATION, "kerberos");
-        UserGroupInformation.setConfiguration(conf);
-
-        // Login for the Proxy itself
-        UserGroupInformation.loginUserFromKeytab(proxyPrincipal, proxyKeytab.getAbsolutePath());
-
-        // User for tests
-        ClusterUser user = kdc.getRootUser();
-        clientPrincipal = user.getPrincipal();
-        clientKeytab = user.getKeytab();
-      } else {
-        clientPrincipal = "root";
-        tokenClass = PasswordToken.class.getName();
-        sharedSecret = "superSecret";
-
-        props.put("sharedSecret", sharedSecret);
-        hostname = "localhost";
-      }
-
-      props.put("tokenClass", tokenClass);
+      props.put("sharedSecret", sharedSecret);
       props.putAll(SharedMiniClusterBase.getCluster().getClientProperties());
+      clientPrincipal = props.getProperty("auth.principal");
       proxyPort = PortUtils.getRandomFreePort();
       proxyServer = Proxy.createProxyServer(HostAndPort.fromParts(hostname, proxyPort), factory,
           props).server;
@@ -294,45 +236,16 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
   @BeforeEach
   public void setup(TestInfo info) throws Exception {
     // Create a new client for each test
-    if (isKerberosEnabled()) {
-      UserGroupInformation.loginUserFromKeytab(clientPrincipal, clientKeytab.getAbsolutePath());
-      proxyClient = new TestProxyClient(hostname, proxyPort, factory, proxyPrimary,
-          UserGroupInformation.getCurrentUser());
-      client = proxyClient.proxy();
 
-      TestingKdc kdc = getKdc();
-      final ClusterUser user = kdc.getClientPrincipal(0);
-      // Create another user
-      client.createLocalUser(sharedSecret, user.getPrincipal(), s2bb("unused"));
-      // Login in as that user we just created
-      UserGroupInformation.loginUserFromKeytab(user.getPrincipal(),
-          user.getKeytab().getAbsolutePath());
-      final UserGroupInformation badUgi = UserGroupInformation.getCurrentUser();
-      // Get a "Credentials" object for the proxy
-      TestProxyClient badClient =
-          new TestProxyClient(hostname, proxyPort, factory, proxyPrimary, badUgi);
-      try {
-        badSecret = "badSecret";
-      } finally {
-        badClient.close();
-      }
+    proxyClient = new TestProxyClient(hostname, proxyPort, factory);
+    client = proxyClient.proxy();
 
-      // Log back in as the test user
-      UserGroupInformation.loginUserFromKeytab(clientPrincipal, clientKeytab.getAbsolutePath());
-      // Drop test user, invalidating the credentials (not to mention not having the krb credentials
-      // anymore)
-      client.dropLocalUser(sharedSecret, user.getPrincipal());
-    } else {
-      proxyClient = new TestProxyClient(hostname, proxyPort, factory);
-      client = proxyClient.proxy();
-
-      // Create 'user'
-      client.createLocalUser(sharedSecret, "user", s2bb(SharedMiniClusterBase.getRootPassword()));
-      // Log in as 'user'
-      badSecret = "badSecret";
-      // Drop 'user', invalidating the credentials
-      client.dropLocalUser(sharedSecret, "user");
-    }
+    // Create 'user'
+    client.createLocalUser(sharedSecret, "user", s2bb(SharedMiniClusterBase.getRootPassword()));
+    // Log in as 'user'
+    badSecret = "badSecret";
+    // Drop 'user', invalidating the credentials
+    client.dropLocalUser(sharedSecret, "user");
 
     testName = info.getTestMethod().get().getName();
 
@@ -351,9 +264,6 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
   @AfterEach
   public void teardown() throws Exception {
     if (tableName != null) {
-      if (isKerberosEnabled()) {
-        UserGroupInformation.loginUserFromKeytab(clientPrincipal, clientKeytab.getAbsolutePath());
-      }
       try {
         if (client.tableExists(sharedSecret, tableName)) {
           client.deleteTable(sharedSecret, tableName);
@@ -611,12 +521,10 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
   @Test
   @Timeout(5)
   public void authenticateUserBadSharedSecret() {
-    if (!isKerberosEnabled()) {
-      // Not really a relevant test for kerberos
-      Map<String,String> pw = s2pp(SharedMiniClusterBase.getRootPassword());
-      assertThrows(AccumuloSecurityException.class,
-          () -> client.authenticateUser(badSecret, "root", pw));
-    }
+    // Not really a relevant test for kerberos
+    Map<String,String> pw = s2pp(SharedMiniClusterBase.getRootPassword());
+    assertThrows(AccumuloSecurityException.class,
+        () -> client.authenticateUser(badSecret, "root", pw));
   }
 
   @Test
@@ -1268,13 +1176,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
       String scanner;
       TestProxyClient proxyClient2 = null;
       try {
-        if (isKerberosEnabled()) {
-          UserGroupInformation.loginUserFromKeytab(clientPrincipal, clientKeytab.getAbsolutePath());
-          proxyClient2 = new TestProxyClient(hostname, proxyPort, factory, proxyPrimary,
-              UserGroupInformation.getCurrentUser());
-        } else {
-          proxyClient2 = new TestProxyClient(hostname, proxyPort, factory);
-        }
+        proxyClient2 = new TestProxyClient(hostname, proxyPort, factory);
 
         Client client2 = proxyClient2.proxy();
         scanner = client2.createScanner(sharedSecret, "slow", null);
@@ -1354,13 +1256,8 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     Thread t = new Thread(() -> {
       TestProxyClient proxyClient2 = null;
       try {
-        if (isKerberosEnabled()) {
-          UserGroupInformation.loginUserFromKeytab(clientPrincipal, clientKeytab.getAbsolutePath());
-          proxyClient2 = new TestProxyClient(hostname, proxyPort, factory, proxyPrimary,
-              UserGroupInformation.getCurrentUser());
-        } else {
-          proxyClient2 = new TestProxyClient(hostname, proxyPort, factory);
-        }
+        proxyClient2 = new TestProxyClient(hostname, proxyPort, factory);
+
         Client client2 = proxyClient2.proxy();
         client2.compactTable(sharedSecret, "slow", null, null, null, true, true, null, null);
       } catch (Exception e) {
@@ -1422,51 +1319,29 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
   @Test
   public void userAuthentication() throws Exception {
-    if (isKerberosEnabled()) {
-      assertTrue(client.authenticateUser(sharedSecret, clientPrincipal, Collections.emptyMap()));
-      // Can't really authenticate "badly" at the application level w/ kerberos. It's going to fail
-      // to even set up
-      // an RPC
-    } else {
-      // check password
-      assertTrue(client.authenticateUser(sharedSecret, "root",
-          s2pp(SharedMiniClusterBase.getRootPassword())));
-      assertFalse(client.authenticateUser(sharedSecret, "otheruser", s2pp("")));
-    }
+    // check password
+    assertTrue(client.authenticateUser(sharedSecret, "root",
+        s2pp(SharedMiniClusterBase.getRootPassword())));
+    assertFalse(client.authenticateUser(sharedSecret, "otheruser", s2pp("")));
   }
 
   @Test
   public void userManagement() throws Exception {
 
-    String user;
-    ClusterUser otherClient = null;
+    String user = getUniqueNameArray(1)[0];
     ByteBuffer password = s2bb("password");
-    if (isKerberosEnabled()) {
-      otherClient = getKdc().getClientPrincipal(1);
-      user = otherClient.getPrincipal();
-    } else {
-      user = getUniqueNameArray(1)[0];
-    }
 
     // create a user
     client.createLocalUser(sharedSecret, user, password);
     // change auths
     Set<String> users = client.listLocalUsers(sharedSecret);
-    Set<String> expectedUsers = new HashSet<>(List.of(clientPrincipal, user));
+    Set<String> expectedUsers = Set.of(clientPrincipal, user);
     assertTrue(users.containsAll(expectedUsers),
         "Did not find all expected users: " + expectedUsers);
-    HashSet<ByteBuffer> auths = new HashSet<>(List.of(s2bb("A"), s2bb("B")));
+    Set<ByteBuffer> auths = Set.of(s2bb("A"), s2bb("B"));
     client.changeUserAuthorizations(sharedSecret, user, auths);
     List<ByteBuffer> update = client.getUserAuthorizations(sharedSecret, user);
     assertEquals(auths, new HashSet<>(update));
-
-    // change password
-    if (!isKerberosEnabled()) {
-      password = s2bb("");
-      client.changeLocalUserPassword(sharedSecret, user, password);
-      assertTrue(
-          client.authenticateUser(sharedSecret, user, s2pp(ByteBufferUtil.toString(password))));
-    }
 
     client.dropLocalUser(sharedSecret, user);
   }
