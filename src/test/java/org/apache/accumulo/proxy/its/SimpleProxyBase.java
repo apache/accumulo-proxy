@@ -249,7 +249,8 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
       } else {
         clientPrincipal = "root";
         tokenClass = PasswordToken.class.getName();
-        sharedSecret = SharedMiniClusterBase.getRootPassword();
+        sharedSecret = "superSecret";
+
         props.put("sharedSecret", sharedSecret);
         hostname = "localhost";
       }
@@ -1466,6 +1467,132 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
       assertTrue(
           client.authenticateUser(sharedSecret, user, s2pp(ByteBufferUtil.toString(password))));
     }
+
+    client.dropLocalUser(sharedSecret, user);
+  }
+
+  @Test
+  public void createAndDropUser() throws Exception {
+
+    Set<String> expectedUsers = new HashSet<>();
+
+    expectedUsers.add(clientPrincipal);
+
+    assertEquals(expectedUsers, client.listLocalUsers(sharedSecret));
+
+    final String newUser = "user" + getUniqueNameArray(1)[0];
+
+    expectedUsers.add(newUser);
+    client.createLocalUser(sharedSecret, newUser, s2bb("password"));
+
+    assertEquals(expectedUsers, client.listLocalUsers(sharedSecret));
+
+    expectedUsers.remove(newUser);
+    client.dropLocalUser(sharedSecret, newUser);
+
+    assertEquals(expectedUsers, client.listLocalUsers(sharedSecret));
+  }
+
+  @Test
+  public void tablePermissions() throws Exception {
+
+    final String newUser = "user" + getUniqueNameArray(1)[0];
+    client.createLocalUser(sharedSecret, newUser, s2bb("password"));
+
+    final TablePermission[] tablePermissions = TablePermission.values();
+
+    for (TablePermission tablePermission : tablePermissions) {
+
+      // make sure user doesn't have table permission
+      assertFalse(client.hasTablePermission(sharedSecret, newUser, tableName, tablePermission),
+          "A newly created user should not have any permissions, but has " + tablePermission);
+
+      // grant table permission
+      client.grantTablePermission(sharedSecret, newUser, tableName, tablePermission);
+
+      // assert user has table permission
+      assertTrue(client.hasTablePermission(sharedSecret, newUser, tableName, tablePermission),
+          "The user was granted, and should have " + tablePermission);
+
+      // revoke table permission
+      client.revokeTablePermission(sharedSecret, newUser, tableName, tablePermission);
+
+      // assert table permission has been revoked
+      assertFalse(client.hasTablePermission(sharedSecret, newUser, tableName, tablePermission),
+          "The users permissions have been revoked. Should NOT have " + tablePermission);
+    }
+
+    client.dropLocalUser(sharedSecret, newUser);
+
+  }
+
+  @Test
+  public void namespacePermissions() throws Exception {
+
+    final String newUser = "user" + getUniqueNameArray(1)[0];
+    client.createLocalUser(sharedSecret, newUser, s2bb("password"));
+
+    final NamespacePermission[] namespacePermissions = NamespacePermission.values();
+
+    for (NamespacePermission namespacePermission : namespacePermissions) {
+
+      // make sure user doesn't have namespace permission
+      assertFalse(
+          client.hasNamespacePermission(sharedSecret, newUser, namespaceName, namespacePermission),
+          "A newly created user should not have any permissions, but has " + namespacePermission);
+
+      // grant namespace permission
+      client.grantNamespacePermission(sharedSecret, newUser, namespaceName, namespacePermission);
+
+      // assert user has namespace permission
+      assertTrue(
+          client.hasNamespacePermission(sharedSecret, newUser, namespaceName, namespacePermission),
+          "The user was granted, and should have " + namespacePermission);
+
+      // revoke namespace permission
+      client.revokeNamespacePermission(sharedSecret, newUser, namespaceName, namespacePermission);
+
+      // assert namespace permission has been revoked
+      assertFalse(
+          client.hasNamespacePermission(sharedSecret, newUser, namespaceName, namespacePermission),
+          "The users permissions have been revoked. Should NOT have " + namespacePermission);
+    }
+
+    client.dropLocalUser(sharedSecret, newUser);
+
+  }
+
+  @Test
+  public void systemPermissions() throws Exception {
+
+    final String newUser = "user" + getUniqueNameArray(1)[0];
+    client.createLocalUser(sharedSecret, newUser, s2bb("password"));
+
+    final SystemPermission[] systemPermissions = SystemPermission.values();
+
+    for (SystemPermission systemPermission : systemPermissions) {
+
+      // make sure user doesn't have system permission
+      assertFalse(client.hasSystemPermission(sharedSecret, newUser, systemPermission),
+          "A newly created user should not have any permissions, but has " + systemPermission);
+
+      // grant system permission
+      client.grantSystemPermission(sharedSecret, newUser, systemPermission);
+
+      // assert user has system permission
+      assertTrue(client.hasSystemPermission(sharedSecret, newUser, systemPermission),
+          "The user was granted, and should have " + systemPermission);
+
+      // revoke system permission
+      client.revokeSystemPermission(sharedSecret, newUser, systemPermission);
+
+      // assert system permission has been revoked
+      assertFalse(client.hasSystemPermission(sharedSecret, newUser, systemPermission),
+          "The users permissions have been revoked. Should NOT have " + systemPermission);
+    }
+
+    client.dropLocalUser(sharedSecret, newUser);
+
   }
 
   @Test
