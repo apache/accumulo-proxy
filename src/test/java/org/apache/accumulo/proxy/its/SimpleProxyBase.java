@@ -1165,21 +1165,13 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
     // scan
     Thread t = new Thread(() -> {
-      String scanner;
-      TestProxyClient proxyClient2 = null;
-      try {
-        proxyClient2 = new TestProxyClient(hostname, proxyPort, factory);
-
+      try (TestProxyClient proxyClient2 = new TestProxyClient(hostname, proxyPort, factory)) {
         Client client2 = proxyClient2.proxy();
-        scanner = client2.createScanner(sharedSecret, "slow", null);
+        String scanner = client2.createScanner(sharedSecret, "slow", null);
         client2.nextK(scanner, 10);
         client2.closeScanner(scanner);
       } catch (Exception e) {
         throw new RuntimeException(e);
-      } finally {
-        if (proxyClient2 != null) {
-          proxyClient2.close();
-        }
       }
     });
     t.start();
@@ -1246,18 +1238,11 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
     // start a compaction
     Thread t = new Thread(() -> {
-      TestProxyClient proxyClient2 = null;
-      try {
-        proxyClient2 = new TestProxyClient(hostname, proxyPort, factory);
-
+      try (TestProxyClient proxyClient2 = new TestProxyClient(hostname, proxyPort, factory)) {
         Client client2 = proxyClient2.proxy();
         client2.compactTable(sharedSecret, "slow", null, null, null, true, true, null, null);
       } catch (Exception e) {
         throw new RuntimeException(e);
-      } finally {
-        if (proxyClient2 != null) {
-          proxyClient2.close();
-        }
       }
     });
     t.start();
