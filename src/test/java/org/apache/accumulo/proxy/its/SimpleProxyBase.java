@@ -221,7 +221,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
       Collections.singletonMap("sleepTime", "200"));
   String tableName;
   String namespaceName;
-  String badSecret;
+  String badSecret = "badSecret";
 
   private String testName;
 
@@ -240,13 +240,6 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     proxyClient = new TestProxyClient(hostname, proxyPort, factory);
     client = proxyClient.proxy();
 
-    // Create 'user'
-    client.createLocalUser(sharedSecret, "user", s2bb(SharedMiniClusterBase.getRootPassword()));
-    // Log in as 'user'
-    badSecret = "badSecret";
-    // Drop 'user', invalidating the credentials
-    client.dropLocalUser(sharedSecret, "user");
-
     testName = info.getTestMethod().get().getName();
 
     // Create some unique names for tables, namespaces, etc.
@@ -262,7 +255,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
   }
 
   @AfterEach
-  public void teardown() throws Exception {
+  public void teardown() {
     if (tableName != null) {
       try {
         if (client.tableExists(sharedSecret, tableName)) {
@@ -521,7 +514,6 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
   @Test
   @Timeout(5)
   public void authenticateUserBadSharedSecret() {
-    // Not really a relevant test for kerberos
     Map<String,String> pw = s2pp(SharedMiniClusterBase.getRootPassword());
     assertThrows(AccumuloSecurityException.class,
         () -> client.authenticateUser(badSecret, "root", pw));
