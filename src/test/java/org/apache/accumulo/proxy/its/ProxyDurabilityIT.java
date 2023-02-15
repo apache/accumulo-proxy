@@ -143,6 +143,7 @@ public class ProxyDurabilityIT extends ConfigurableMacBase {
         restartTServer();
         assertEquals(1, count(c, tableName));
 
+      } finally {
         proxyServer.stop();
       }
     }
