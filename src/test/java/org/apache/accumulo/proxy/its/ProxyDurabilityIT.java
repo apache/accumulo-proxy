@@ -98,7 +98,7 @@ public class ProxyDurabilityIT extends ConfigurableMacBase {
       proxyProps.put("tokenClass", PasswordToken.class.getName());
       proxyProps.putAll(getClientProperties());
 
-      String sharedSecret = "sharedSecret";
+      String sharedSecret = "superSecret";
 
       proxyProps.put("sharedSecret", sharedSecret);
 
@@ -111,39 +111,41 @@ public class ProxyDurabilityIT extends ConfigurableMacBase {
       while (!proxyServer.isServing()) {
         sleepUninterruptibly(100, TimeUnit.MILLISECONDS);
       }
-      Client client = new TestProxyClient("localhost", proxyPort, protocol).proxy();
+      try (var proxyClient = new TestProxyClient("localhost", proxyPort, protocol)) {
+        Client client = proxyClient.proxy();
+        String tableName = getUniqueNames(1)[0];
+        client.createTable(sharedSecret, tableName, true, TimeType.MILLIS);
+        assertTrue(c.tableOperations().exists(tableName));
 
-      String tableName = getUniqueNames(1)[0];
-      client.createTable(sharedSecret, tableName, true, TimeType.MILLIS);
-      assertTrue(c.tableOperations().exists(tableName));
+        WriterOptions options = new WriterOptions();
+        options.setDurability(Durability.NONE);
+        String writer = client.createWriter(sharedSecret, tableName, options);
+        Map<ByteBuffer,List<ColumnUpdate>> cells = new TreeMap<>();
+        ColumnUpdate column = new ColumnUpdate(bytes("cf"), bytes("cq"));
+        column.setValue("value".getBytes());
+        cells.put(bytes("row"), Collections.singletonList(column));
+        client.update(writer, cells);
+        client.closeWriter(writer);
+        assertEquals(1, count(c, tableName));
+        restartTServer();
+        assertEquals(0, count(c, tableName));
 
-      WriterOptions options = new WriterOptions();
-      options.setDurability(Durability.NONE);
-      String writer = client.createWriter(sharedSecret, tableName, options);
-      Map<ByteBuffer,List<ColumnUpdate>> cells = new TreeMap<>();
-      ColumnUpdate column = new ColumnUpdate(bytes("cf"), bytes("cq"));
-      column.setValue("value".getBytes());
-      cells.put(bytes("row"), Collections.singletonList(column));
-      client.update(writer, cells);
-      client.closeWriter(writer);
-      assertEquals(1, count(c, tableName));
-      restartTServer();
-      assertEquals(0, count(c, tableName));
+        ConditionalWriterOptions cfg = new ConditionalWriterOptions();
+        cfg.setDurability(Durability.SYNC);
+        String cwriter = client.createConditionalWriter(sharedSecret, tableName, cfg);
+        ConditionalUpdates updates = new ConditionalUpdates();
+        updates.addToConditions(new Condition(new Column(bytes("cf"), bytes("cq"), bytes(""))));
+        updates.addToUpdates(column);
+        Map<ByteBuffer,ConditionalStatus> status = client.updateRowsConditionally(cwriter,
+            Collections.singletonMap(bytes("row"), updates));
+        assertEquals(ConditionalStatus.ACCEPTED, status.get(bytes("row")));
+        assertEquals(1, count(c, tableName));
+        restartTServer();
+        assertEquals(1, count(c, tableName));
 
-      ConditionalWriterOptions cfg = new ConditionalWriterOptions();
-      cfg.setDurability(Durability.SYNC);
-      String cwriter = client.createConditionalWriter(sharedSecret, tableName, cfg);
-      ConditionalUpdates updates = new ConditionalUpdates();
-      updates.addToConditions(new Condition(new Column(bytes("cf"), bytes("cq"), bytes(""))));
-      updates.addToUpdates(column);
-      Map<ByteBuffer,ConditionalStatus> status =
-          client.updateRowsConditionally(cwriter, Collections.singletonMap(bytes("row"), updates));
-      assertEquals(ConditionalStatus.ACCEPTED, status.get(bytes("row")));
-      assertEquals(1, count(c, tableName));
-      restartTServer();
-      assertEquals(1, count(c, tableName));
-
-      proxyServer.stop();
+      } finally {
+        proxyServer.stop();
+      }
     }
   }
 

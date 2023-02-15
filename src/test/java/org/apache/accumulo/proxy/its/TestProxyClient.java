@@ -48,9 +48,9 @@ import org.apache.thrift.transport.layered.TFramedTransport;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-public class TestProxyClient {
+public class TestProxyClient implements AutoCloseable {
 
-  protected TProtocolFactory factory;
+  protected TProtocolFactory tProtocolFactory;
   protected TTransport transport;
 
   public TestProxyClient(String host, int port) throws TTransportException {
@@ -62,7 +62,7 @@ public class TestProxyClient {
     final TSocket socket = new TSocket(host, port);
     socket.setTimeout(600000);
     transport = new TFramedTransport(socket);
-    factory = protoFactory;
+    tProtocolFactory = protoFactory;
     transport.open();
   }
 
@@ -77,7 +77,7 @@ public class TestProxyClient {
     // UGI transport will perform the doAs for us
     transport.open();
 
-    factory = protoFactory;
+    tProtocolFactory = protoFactory;
   }
 
   public synchronized void close() {
@@ -88,9 +88,9 @@ public class TestProxyClient {
   }
 
   public AccumuloProxy.Client proxy() {
-    AccumuloProxy.Client.Factory factory1 = new AccumuloProxy.Client.Factory();
-    final TProtocol protocol = factory.getProtocol(transport);
-    return factory1.getClient(protocol);
+    AccumuloProxy.Client.Factory proxyClientFactory = new AccumuloProxy.Client.Factory();
+    final TProtocol protocol = tProtocolFactory.getProtocol(transport);
+    return proxyClientFactory.getClient(protocol);
   }
 
   @SuppressFBWarnings(value = "HARD_CODE_PASSWORD", justification = "test password is okay")
