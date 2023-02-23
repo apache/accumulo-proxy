@@ -205,6 +205,9 @@ public class ProxyServer implements AccumuloProxy.Iface {
     }
 
     sharedSecret = props.getProperty("sharedSecret");
+    if (sharedSecret == null) {
+      throw new RuntimeException("The properties do not contain sharedSecret");
+    }
 
     serverType = tempServerType;
 
