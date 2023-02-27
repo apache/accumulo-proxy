@@ -43,6 +43,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
 import java.util.UUID;
@@ -1177,44 +1178,32 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     t.start();
 
     // look for the scan many times
-    List<ActiveScan> scans = new ArrayList<>();
-    for (int i = 0; i < 100 && scans.isEmpty(); i++) {
+    Optional<ActiveScan> scanFromClient = Optional.empty();
+    for (int i = 0; i < 100 && scanFromClient.isEmpty(); i++) {
       for (String tserver : client.getTabletServers(sharedSecret)) {
-        List<ActiveScan> scansForServer = client.getActiveScans(sharedSecret, tserver);
-        for (ActiveScan scan : scansForServer) {
-          if (clientPrincipal.equals(scan.getUser())) {
-            scans.add(scan);
-          }
-        }
+        scanFromClient = client.getActiveScans(sharedSecret, tserver).stream()
+            .filter(scan -> clientPrincipal.equals(scan.getUser())).findAny();
 
-        if (!scans.isEmpty()) {
+        if (scanFromClient.isPresent()) {
           break;
         }
-        sleepUninterruptibly(100, TimeUnit.MILLISECONDS);
       }
+      sleepUninterruptibly(100, TimeUnit.MILLISECONDS);
     }
     t.join();
 
-    assertFalse(scans.isEmpty(), "Expected to find scans, but found none");
-    boolean found = false;
-    Map<String,String> map;
-    for (int i = 0; i < scans.size() && !found; i++) {
-      ActiveScan scan = scans.get(i);
-      if (clientPrincipal.equals(scan.getUser())) {
-        assertTrue(
-            ScanState.RUNNING.equals(scan.getState()) || ScanState.QUEUED.equals(scan.getState()));
-        assertEquals(ScanType.SINGLE, scan.getType());
-        assertEquals("slow", scan.getTable());
+    assertTrue(scanFromClient.isPresent(), "Could not find any scan matching the client principal");
 
-        map = client.tableIdMap(sharedSecret);
-        assertEquals(map.get("slow"), scan.getExtent().tableId);
-        assertNull(scan.getExtent().endRow);
-        assertNull(scan.getExtent().prevEndRow);
-        found = true;
-      }
-    }
+    ActiveScan scan = scanFromClient.get();
 
-    assertTrue(found, "Could not find a scan against the 'slow' table");
+    assertTrue(
+        ScanState.RUNNING.equals(scan.getState()) || ScanState.QUEUED.equals(scan.getState()));
+    assertEquals(ScanType.SINGLE, scan.getType());
+    assertEquals("slow", scan.getTable());
+
+    assertEquals(client.tableIdMap(sharedSecret).get("slow"), scan.getExtent().tableId);
+    assertNull(scan.getExtent().endRow);
+    assertNull(scan.getExtent().prevEndRow);
   }
 
   @Test
@@ -1766,8 +1755,10 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     client.offlineTable(sharedSecret, tableName, false);
     client.exportTable(sharedSecret, tableName, dir.toString());
     // copy files to a new location
-    FSDataInputStream is = fs.open(new Path(dir, "distcp.txt"));
-    try (BufferedReader r = new BufferedReader(new InputStreamReader(is, UTF_8))) {
+    Path f = new Path(dir, "distcp.txt");
+    try (FSDataInputStream is = fs.open(f);
+        InputStreamReader isr = new InputStreamReader(is, UTF_8);
+        BufferedReader r = new BufferedReader(isr)) {
       while (true) {
         String line = r.readLine();
         if (line == null) {
