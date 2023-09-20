@@ -85,7 +85,7 @@
     <url>https://github.com/apache/accumulo-proxy/actions</url>
   </ciManagement>
   <properties>
-    <accumulo.version>2.1.0</accumulo.version>
+    <accumulo.version>2.1.1</accumulo.version>
     <eclipseFormatterStyle>contrib/Eclipse-Accumulo-Codestyle.xml</eclipseFormatterStyle>
     <!-- extra release args for testing -->
     <extraReleaseArguments />
