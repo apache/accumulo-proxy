@@ -38,7 +38,6 @@ import org.apache.accumulo.minicluster.MiniAccumuloCluster;
 import org.apache.accumulo.proxy.thrift.AccumuloProxy;
 import org.apache.accumulo.server.rpc.SaslServerConnectionParams;
 import org.apache.accumulo.server.rpc.ServerAddress;
-import org.apache.accumulo.server.rpc.TServerUtils;
 import org.apache.accumulo.server.rpc.ThriftServerType;
 import org.apache.accumulo.server.rpc.TimedProcessor;
 import org.apache.accumulo.server.rpc.UGIAssumingProcessor;
@@ -254,9 +253,9 @@ public class Proxy implements KeywordExecutable {
     TimedProcessor timedProcessor = new TimedProcessor(processor);
 
     // Create the thrift server with our processor and properties
-
-    return TServerUtils.startTServer(ClientConfConverter.toAccumuloConf(props), serverType,
-        timedProcessor, serverName, threadName, numThreads, ThreadPools.DEFAULT_TIMEOUT_MILLISECS,
-        1000L, maxFrameSize, sslParams, saslParams, serverSocketTimeout, address);
+    return TServerUtils.startTServer(serverType, timedProcessor, protocolFactory, serverName,
+        threadName, numThreads, ThreadPools.DEFAULT_TIMEOUT_MILLISECS,
+        ClientConfConverter.toAccumuloConf(props), 1000L, maxFrameSize, sslParams, saslParams,
+        serverSocketTimeout, address);
   }
 }
