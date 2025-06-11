@@ -274,25 +274,21 @@ public class Proxy implements KeywordExecutable {
 
     @Override
     public void addServiceTags(String applicationName, HostAndPort hostAndPort) {
-      // TODO Auto-generated method stub
       throw new UnsupportedOperationException("Unimplemented method 'addServiceTags'");
     }
 
     @Override
     public void addCommonTags(List<Tag> updates) {
-      // TODO Auto-generated method stub
       throw new UnsupportedOperationException("Unimplemented method 'addCommonTags'");
     }
 
     @Override
     public Collection<Tag> getCommonTags() {
-      // TODO Auto-generated method stub
       throw new UnsupportedOperationException("Unimplemented method 'getCommonTags'");
     }
 
     @Override
     public void addRegistry(MeterRegistry registry) {
-      // TODO Auto-generated method stub
       throw new UnsupportedOperationException("Unimplemented method 'addRegistry'");
     }
 

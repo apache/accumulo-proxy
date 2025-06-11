@@ -222,8 +222,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   protected AccumuloClient getClient(String sharedSecret) throws Exception {
-    // TODO: Get rid of this before committing!
-    logger.info("Shared secret should be " + this.sharedSecret);
+
     if (sharedSecret.equals(this.sharedSecret)) {
       return client;
     } else {
@@ -948,8 +947,6 @@ public class ProxyServer implements AccumuloProxy.Iface {
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
     try {
-      // TODO: Get rid of this
-      logger.info("Authenticated User: |" + sharedSecret + "|" + user + "|" + properties);
       return getClient(sharedSecret).securityOperations().authenticateUser(user,
           getToken(user, properties));
     } catch (Exception e) {
