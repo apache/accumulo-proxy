@@ -31,6 +31,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -47,6 +48,7 @@ import org.apache.accumulo.core.util.Halt;
 import org.apache.accumulo.core.util.HostAndPort;
 import org.apache.accumulo.core.util.Pair;
 import org.apache.accumulo.core.util.threads.ThreadPools;
+import org.apache.accumulo.core.util.threads.ThreadPools.ThreadPoolExecutorBuilder;
 import org.apache.accumulo.core.util.threads.Threads;
 import org.apache.accumulo.server.rpc.ClientInfoProcessorFactory;
 import org.apache.accumulo.server.rpc.CustomNonBlockingServer;
@@ -187,8 +189,15 @@ public class TServerUtils {
   private static ThreadPoolExecutor createSelfResizingThreadPool(final String serverName,
       final int executorThreads, long threadTimeOut, final AccumuloConfiguration conf,
       long timeBetweenThreadChecks) {
-    final ThreadPoolExecutor pool = ThreadPools.getServerThreadPools().createFixedThreadPool(
-        executorThreads, threadTimeOut, TimeUnit.MILLISECONDS, serverName + "-ClientPool", true);
+    // Creating a ThreadPoolExecutor builder, giving it all the information, then building.
+    // Split giving information to the builder into two lines for readability
+    // TODO: Find out what number the priority should be
+    final ThreadPoolExecutorBuilder builder =
+        ThreadPools.getServerThreadPools().getPoolBuilder(serverName + "-ClientPool");
+    builder.numCoreThreads(executorThreads).numMaxThreads(executorThreads)
+        .withTimeOut(threadTimeOut, TimeUnit.MILLISECONDS);
+    builder.enableThreadPoolMetrics(true).withQueue(new LinkedBlockingQueue<>());
+    final ThreadPoolExecutor pool = builder.build();
     // periodically adjust the number of threads we need by checking how busy our threads are
     ThreadPools.watchCriticalFixedDelay(conf, timeBetweenThreadChecks, () -> {
       // there is a minor race condition between sampling the current state of the thread pool
@@ -276,7 +285,7 @@ public class TServerUtils {
           TSSLTransportFactory.getServerSocket(port, timeout, params.isClientAuth(), address);
     } else {
       tServerSock = TSSLTransportFactory.getServerSocket(port, timeout, address,
-          params.getTTransportParams());
+          params.getTSSLTransportParameters());
     }
 
     final ServerSocket serverSock = tServerSock.getServerSocket();

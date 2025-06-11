@@ -2146,17 +2146,17 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
   }
 
   private void assertNumericValueConstraintIsPresent() throws Exception {
-    assertTrue(
-        Wait.waitFor(() -> client.listConstraints(sharedSecret, tableName)
-            .containsKey(NumericValueConstraint.class.getName()), 30_000L, 2_000L),
-        "Expected to find NumericValueConstraint in constraints.");
+    Wait.waitFor(
+        () -> client.listConstraints(sharedSecret, tableName)
+            .containsKey(NumericValueConstraint.class.getName()),
+        30_000L, 2_000L, "Expected to find NumericValueConstraint in constraints.");
   }
 
   private void assertNumericValueConstraintIsAbsent() throws Exception {
-    assertTrue(
-        Wait.waitFor(() -> !client.listConstraints(sharedSecret, tableName)
-            .containsKey(NumericValueConstraint.class.getName()), 30_000L, 2_000L),
-        "Found NumericValueConstraint in constraints, expected it to be absent.");
+    Wait.waitFor(
+        () -> !client.listConstraints(sharedSecret, tableName)
+            .containsKey(NumericValueConstraint.class.getName()),
+        30_000L, 2_000L, "Found NumericValueConstraint in constraints, expected it to be absent.");
   }
 
   private void checkKey(String row, String cf, String cq, String val, KeyValue keyValue) {
