@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
+import java.util.Collection;
+import java.util.List;
 import java.util.Properties;
 
 import org.apache.accumulo.core.cli.Help;
@@ -30,6 +32,8 @@ import org.apache.accumulo.core.client.security.tokens.KerberosToken;
 import org.apache.accumulo.core.clientImpl.ClientConfConverter;
 import org.apache.accumulo.core.conf.ClientProperty;
 import org.apache.accumulo.core.conf.ConfigurationTypeHelper;
+import org.apache.accumulo.core.metrics.MetricsInfo;
+import org.apache.accumulo.core.metrics.MetricsProducer;
 import org.apache.accumulo.core.rpc.SslConnectionParams;
 import org.apache.accumulo.core.trace.TraceUtil;
 import org.apache.accumulo.core.util.HostAndPort;
@@ -55,6 +59,8 @@ import com.beust.jcommander.Parameter;
 import com.google.auto.service.AutoService;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Tag;
 
 @AutoService(KeywordExecutable.class)
 public class Proxy implements KeywordExecutable {
@@ -250,12 +256,68 @@ public class Proxy implements KeywordExecutable {
         break;
     }
 
-    TimedProcessor timedProcessor = new TimedProcessor(processor);
+    TimedProcessor timedProcessor = new TimedProcessor(processor, new ProxyMetricsInfo());
 
     // Create the thrift server with our processor and properties
     return TServerUtils.startTServer(serverType, timedProcessor, protocolFactory, serverName,
         threadName, numThreads, ThreadPools.DEFAULT_TIMEOUT_MILLISECS,
         ClientConfConverter.toAccumuloConf(props), 1000L, maxFrameSize, sslParams, saslParams,
         serverSocketTimeout, address);
+  }
+
+  static private class ProxyMetricsInfo implements MetricsInfo {
+
+    @Override
+    public boolean isMetricsEnabled() {
+      return false;
+    }
+
+    @Override
+    public void addServiceTags(String applicationName, HostAndPort hostAndPort) {
+      // TODO Auto-generated method stub
+      throw new UnsupportedOperationException("Unimplemented method 'addServiceTags'");
+    }
+
+    @Override
+    public void addCommonTags(List<Tag> updates) {
+      // TODO Auto-generated method stub
+      throw new UnsupportedOperationException("Unimplemented method 'addCommonTags'");
+    }
+
+    @Override
+    public Collection<Tag> getCommonTags() {
+      // TODO Auto-generated method stub
+      throw new UnsupportedOperationException("Unimplemented method 'getCommonTags'");
+    }
+
+    @Override
+    public void addRegistry(MeterRegistry registry) {
+      // TODO Auto-generated method stub
+      throw new UnsupportedOperationException("Unimplemented method 'addRegistry'");
+    }
+
+    @Override
+    public void addMetricsProducers(MetricsProducer... producer) {
+      return;
+    }
+
+    @Override
+    public void init() {
+      // TODO Auto-generated method stub
+      throw new UnsupportedOperationException("Unimplemented method 'init'");
+    }
+
+    @Override
+    public MeterRegistry getRegistry() {
+      // TODO Auto-generated method stub
+      throw new UnsupportedOperationException("Unimplemented method 'getRegistry'");
+    }
+
+    @Override
+    public void close() {
+      // TODO Auto-generated method stub
+      throw new UnsupportedOperationException("Unimplemented method 'close'");
+    }
+
   }
 }
