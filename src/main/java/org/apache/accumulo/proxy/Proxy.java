@@ -265,55 +265,35 @@ public class Proxy implements KeywordExecutable {
         serverSocketTimeout, address);
   }
 
+  // TODO: This MetricsInfo is a stub Metrics Info to allow the timed processor to build. If Metrics are wanted or needed in a later version of the proxy, this can be updated.
   static private class ProxyMetricsInfo implements MetricsInfo {
 
     @Override
-    public boolean isMetricsEnabled() {
-      return false;
-    }
+    public boolean isMetricsEnabled() {return false;}
 
     @Override
-    public void addServiceTags(String applicationName, HostAndPort hostAndPort) {
-      throw new UnsupportedOperationException("Unimplemented method 'addServiceTags'");
-    }
+    public void addServiceTags(String applicationName, HostAndPort hostAndPort) {throw new UnsupportedOperationException("Unimplemented method 'addServiceTags'");}
 
     @Override
-    public void addCommonTags(List<Tag> updates) {
-      throw new UnsupportedOperationException("Unimplemented method 'addCommonTags'");
-    }
+    public void addCommonTags(List<Tag> updates) {throw new UnsupportedOperationException("Unimplemented method 'addCommonTags'");}
 
     @Override
-    public Collection<Tag> getCommonTags() {
-      throw new UnsupportedOperationException("Unimplemented method 'getCommonTags'");
-    }
+    public Collection<Tag> getCommonTags() {throw new UnsupportedOperationException("Unimplemented method 'getCommonTags'");}
 
     @Override
-    public void addRegistry(MeterRegistry registry) {
-      throw new UnsupportedOperationException("Unimplemented method 'addRegistry'");
-    }
+    public void addRegistry(MeterRegistry registry) {throw new UnsupportedOperationException("Unimplemented method 'addRegistry'");}
 
     @Override
-    public void addMetricsProducers(MetricsProducer... producer) {
-      return;
-    }
+    public void addMetricsProducers(MetricsProducer... producer) {return;}
 
     @Override
-    public void init() {
-      // TODO Auto-generated method stub
-      throw new UnsupportedOperationException("Unimplemented method 'init'");
-    }
+    public void init() {throw new UnsupportedOperationException("Unimplemented method 'init'");}
 
     @Override
-    public MeterRegistry getRegistry() {
-      // TODO Auto-generated method stub
-      throw new UnsupportedOperationException("Unimplemented method 'getRegistry'");
-    }
+    public MeterRegistry getRegistry() {throw new UnsupportedOperationException("Unimplemented method 'getRegistry'");}
 
     @Override
-    public void close() {
-      // TODO Auto-generated method stub
-      throw new UnsupportedOperationException("Unimplemented method 'close'");
-    }
+    public void close() {throw new UnsupportedOperationException("Unimplemented method 'close'");}
 
   }
 }
