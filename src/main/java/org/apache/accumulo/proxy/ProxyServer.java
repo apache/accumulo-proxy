@@ -2119,7 +2119,9 @@ public class ProxyServer implements AccumuloProxy.Iface {
     try {
       ConditionalWriterConfig cwc = new ConditionalWriterConfig();
       if (options.getMaxMemory() != 0) {
-        // TODO
+        // TODO - This was left blank, I'm not sure why it's here. For now, it will log the max
+        // memory
+        logger.info("Max memory: " + options.getMaxMemory());
       }
       if (options.isSetThreads() && options.getThreads() != 0) {
         cwc.setMaxWriteThreads(options.getThreads());
