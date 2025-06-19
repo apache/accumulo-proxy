@@ -222,8 +222,7 @@ public class ProxyServer implements AccumuloProxy.Iface {
   }
 
   protected AccumuloClient getClient(String sharedSecret) throws Exception {
-    // TODO: Get rid of this before committing!
-    logger.info("Shared secret should be " + this.sharedSecret);
+
     if (sharedSecret.equals(this.sharedSecret)) {
       return client;
     } else {
@@ -948,8 +947,6 @@ public class ProxyServer implements AccumuloProxy.Iface {
       throws org.apache.accumulo.proxy.thrift.AccumuloException,
       org.apache.accumulo.proxy.thrift.AccumuloSecurityException, TException {
     try {
-      // TODO: Get rid of this
-      logger.info("Authenticated User: |" + sharedSecret + "|" + user + "|" + properties);
       return getClient(sharedSecret).securityOperations().authenticateUser(user,
           getToken(user, properties));
     } catch (Exception e) {
@@ -2122,7 +2119,9 @@ public class ProxyServer implements AccumuloProxy.Iface {
     try {
       ConditionalWriterConfig cwc = new ConditionalWriterConfig();
       if (options.getMaxMemory() != 0) {
-        // TODO
+        // TODO - This was left blank, I'm not sure why it's here. For now, it will log the max
+        // memory
+        logger.info("Max memory: " + options.getMaxMemory());
       }
       if (options.isSetThreads() && options.getThreads() != 0) {
         cwc.setMaxWriteThreads(options.getThreads());

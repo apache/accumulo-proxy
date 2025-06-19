@@ -241,7 +241,8 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     proxyClient = new TestProxyClient(hostname, proxyPort, factory);
     client = proxyClient.proxy();
 
-    testName = info.getTestMethod().get().getName();
+    testName = info.getTestMethod()
+        .orElseThrow(() -> new IllegalArgumentException("Test method is missing")).getName();
 
     // Create some unique names for tables, namespaces, etc.
     String[] uniqueNames = getUniqueNameArray(2);
@@ -1194,7 +1195,8 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
 
     assertTrue(scanFromClient.isPresent(), "Could not find any scan matching the client principal");
 
-    ActiveScan scan = scanFromClient.get();
+    ActiveScan scan =
+        scanFromClient.orElseThrow(() -> new IllegalArgumentException("ActiveScan is missing"));
 
     assertTrue(
         ScanState.RUNNING.equals(scan.getState()) || ScanState.QUEUED.equals(scan.getState()));

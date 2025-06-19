@@ -265,6 +265,8 @@ public class Proxy implements KeywordExecutable {
         serverSocketTimeout, address);
   }
 
+  // TODO: This MetricsInfo is a stub Metrics Info to allow the timed processor to build. If Metrics
+  // are wanted or needed in a later version of the proxy, this can be updated.
   static private class ProxyMetricsInfo implements MetricsInfo {
 
     @Override
@@ -274,25 +276,21 @@ public class Proxy implements KeywordExecutable {
 
     @Override
     public void addServiceTags(String applicationName, HostAndPort hostAndPort) {
-      // TODO Auto-generated method stub
       throw new UnsupportedOperationException("Unimplemented method 'addServiceTags'");
     }
 
     @Override
     public void addCommonTags(List<Tag> updates) {
-      // TODO Auto-generated method stub
       throw new UnsupportedOperationException("Unimplemented method 'addCommonTags'");
     }
 
     @Override
     public Collection<Tag> getCommonTags() {
-      // TODO Auto-generated method stub
       throw new UnsupportedOperationException("Unimplemented method 'getCommonTags'");
     }
 
     @Override
     public void addRegistry(MeterRegistry registry) {
-      // TODO Auto-generated method stub
       throw new UnsupportedOperationException("Unimplemented method 'addRegistry'");
     }
 
@@ -303,19 +301,16 @@ public class Proxy implements KeywordExecutable {
 
     @Override
     public void init() {
-      // TODO Auto-generated method stub
       throw new UnsupportedOperationException("Unimplemented method 'init'");
     }
 
     @Override
     public MeterRegistry getRegistry() {
-      // TODO Auto-generated method stub
       throw new UnsupportedOperationException("Unimplemented method 'getRegistry'");
     }
 
     @Override
     public void close() {
-      // TODO Auto-generated method stub
       throw new UnsupportedOperationException("Unimplemented method 'close'");
     }
 
