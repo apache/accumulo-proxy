@@ -263,8 +263,8 @@ public class Proxy implements KeywordExecutable {
         serverSocketTimeout, address);
   }
 
-  // TODO: This MetricsInfo is a stub Metrics Info to allow the timed processor to build. If Metrics
-  // are wanted or needed in a later version of the proxy, this can be updated.
+  // This MetricsInfo is a stub MetricsInfo to allow the timed processor to build.
+  // Issue #85 in the GitHub regards updating this with a proper implementation.
   static private class ProxyMetricsInfo implements MetricsInfo {
 
     @Override
