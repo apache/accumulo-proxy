@@ -19,22 +19,22 @@ EXPOSE 42424
 
 WORKDIR /opt/accumulo-proxy
 
-ARG HADOOP_VERSION=3.3.4
-ARG ZOOKEEPER_VERSION=3.8.0
-ARG ACCUMULO_VERSION=2.1.1
+ARG HADOOP_VERSION=3.3.6
+ARG ZOOKEEPER_VERSION=3.9.2
+ARG ACCUMULO_VERSION=2.1.3
 ARG ACCUMULO_PROXY_VERSION=2.0.0-SNAPSHOT
 
-ARG HADOOP_HASH=ca5e12625679ca95b8fd7bb7babc2a8dcb2605979b901df9ad137178718821097b67555115fafc6dbf6bb32b61864ccb6786dbc555e589694a22bf69147780b4
-ARG ZOOKEEPER_HASH=d66e3a40451f840406901b2cd940992b001f92049a372ae48d8b420891605871cd1ae5f6cceb3b10665491e7abef36a4078dace158bd1e0938fcd3567b5234ca
-ARG ACCUMULO_HASH=adb23e56362c2e3e813d07791389b8ca2d5976df8b00a29b607e6ae05ea465eff80ada6d1ec9a9c596df8b4066c51078cd5a4006dc78568ac38f638a1d3895be
+ARG HADOOP_HASH=de3eaca2e0517e4b569a88b63c89fae19cb8ac6c01ff990f1ff8f0cc0f3128c8e8a23db01577ca562a0e0bb1b4a3889f8c74384e609cd55e537aada3dcaa9f8a
+ARG ZOOKEEPER_HASH=2b5ae02d618a27ca8cd54924855d5344263b7d9dee760181f9d66bafa9230324d2ad31786895f0654c969dc38d4a3d0077f74cc376b58b5fa2fb94beb1ab445f
+ARG ACCUMULO_HASH=1a27a144dc31f55ccc8e081b6c1bc6cc0362a8391838c53c166cb45291ff8f35867fd8e4729aa7b2c540f8b721f8c6953281bf589fc7fe320e4dc4d20b87abc4
 
 # Download from Apache mirrors instead of archive #9
-ENV APACHE_DIST_URLS \
+ENV APACHE_DIST_URLS="\
   https://www.apache.org/dyn/closer.cgi?action=download&filename= \
 # if the version is outdated (or we're grabbing the .asc file), we might have to pull from the dist/archive :/
   https://www-us.apache.org/dist/ \
   https://www.apache.org/dist/ \
-  https://archive.apache.org/dist/
+  https://archive.apache.org/dist/"
 
 RUN set -eux; \
   download_bin() { \
@@ -42,7 +42,7 @@ RUN set -eux; \
     local hash="$1"; shift; \
     local distFile="$1"; shift; \
     local success=; \
-    local distUrl=; \
+    local distUrl=; \ 
     for distUrl in ${APACHE_DIST_URLS}; do \
       if wget -nv -O "/tmp/${f}" "${distUrl}${distFile}"; then \
         success=1; \
@@ -63,16 +63,16 @@ RUN tar xzf /tmp/hadoop.tar.gz -C /opt/ && ln -s /opt/hadoop-${HADOOP_VERSION} /
 RUN tar xzf /tmp/apache-zookeeper.tar.gz -C /opt/ && ln -s /opt/apache-zookeeper-${ZOOKEEPER_VERSION}-bin /opt/apache-zookeeper
 RUN tar xzf /tmp/accumulo.tar.gz -C /opt/ && ln -s /opt/accumulo-${ACCUMULO_VERSION} /opt/accumulo && sed -i 's/\${ZOOKEEPER_HOME}\/\*/\${ZOOKEEPER_HOME}\/\*\:\${ZOOKEEPER_HOME}\/lib\/\*/g' /opt/accumulo/conf/accumulo-env.sh
 
-ENV HADOOP_HOME /opt/hadoop
-ENV ZOOKEEPER_HOME /opt/apache-zookeeper
-ENV ACCUMULO_HOME /opt/accumulo
+ENV HADOOP_HOME=/opt/hadoop
+ENV ZOOKEEPER_HOME=/opt/apache-zookeeper
+ENV ACCUMULO_HOME=/opt/accumulo
 
 # Add the proxy binary
 COPY target/accumulo-proxy-${ACCUMULO_PROXY_VERSION}-bin.tar.gz /tmp/
 RUN tar xzf /tmp/accumulo-proxy-${ACCUMULO_PROXY_VERSION}-bin.tar.gz -C /opt/accumulo-proxy --strip 1
-ENV ACCUMULO_PROXY_HOME /opt/accumulo-proxy
+ENV ACCUMULO_PROXY_HOME=/opt/accumulo-proxy
 
 # Ensure Accumulo is on the path.
-ENV PATH "${PATH}:${ACCUMULO_HOME}/bin"
+ENV PATH="${PATH}:${ACCUMULO_HOME}/bin"
 
 CMD ["/opt/accumulo-proxy/bin/accumulo-proxy", "-p", "/opt/accumulo-proxy/conf/proxy.properties"]

@@ -188,8 +188,6 @@ public class TServerUtils {
   private static ThreadPoolExecutor createSelfResizingThreadPool(final String serverName,
       final int executorThreads, long threadTimeOut, final AccumuloConfiguration conf,
       long timeBetweenThreadChecks) {
-    // Using a ThreadPoolExecutorBuilder to create the ThreadPool Executor needed for this method
-    // TODO: Find out what number should go into the priority parameter.
     final ThreadPoolExecutor pool = ThreadPools.getServerThreadPools()
         .getPoolBuilder(serverName + "-ClientPool").numCoreThreads(executorThreads)
         .numMaxThreads(executorThreads).withTimeOut(threadTimeOut, TimeUnit.MILLISECONDS)
