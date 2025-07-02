@@ -505,11 +505,11 @@ public class TServerUtils {
 
     final TServer finalServer = serverAddress.server;
 
-    Threads.createThread(threadName, () -> {
+    Threads.createNonCriticalThread(threadName, () -> {
       try {
         finalServer.serve();
       } catch (Error e) {
-        Halt.halt("Unexpected error in TThreadPoolServer " + e + ", halting.", 1);
+        Halt.halt(1, "Unexpected error in TThreadPoolServer " + e + ", halting.");
       }
     }).start();
 
