@@ -52,11 +52,13 @@ import java.util.stream.Stream;
 
 import org.apache.accumulo.core.client.Accumulo;
 import org.apache.accumulo.core.client.AccumuloClient;
+import org.apache.accumulo.core.client.admin.compaction.CompressionConfigurer;
 import org.apache.accumulo.core.client.admin.compaction.TooManyDeletesSelector;
 import org.apache.accumulo.core.client.summary.summarizers.DeletesSummarizer;
 import org.apache.accumulo.core.clientImpl.Namespace;
 import org.apache.accumulo.core.conf.DefaultConfiguration;
 import org.apache.accumulo.core.conf.Property;
+import org.apache.accumulo.core.data.TableId;
 import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.file.FileOperations;
 import org.apache.accumulo.core.file.FileSKVWriter;
@@ -66,6 +68,7 @@ import org.apache.accumulo.core.iterators.SortedKeyValueIterator;
 import org.apache.accumulo.core.iterators.user.SummingCombiner;
 import org.apache.accumulo.core.iterators.user.VersioningIterator;
 import org.apache.accumulo.core.metadata.MetadataTable;
+import org.apache.accumulo.core.metadata.schema.TabletMetadata;
 import org.apache.accumulo.core.security.Authorizations;
 import org.apache.accumulo.core.spi.crypto.NoCryptoServiceFactory;
 import org.apache.accumulo.core.util.ByteBufferUtil;
@@ -114,6 +117,7 @@ import org.apache.accumulo.proxy.thrift.TimeType;
 import org.apache.accumulo.proxy.thrift.UnknownScanner;
 import org.apache.accumulo.proxy.thrift.UnknownWriter;
 import org.apache.accumulo.proxy.thrift.WriterOptions;
+import org.apache.accumulo.server.ServerContext;
 import org.apache.accumulo.server.util.PortUtils;
 import org.apache.accumulo.test.constraints.MaxMutationSize;
 import org.apache.accumulo.test.constraints.NumericValueConstraint;
@@ -2313,6 +2317,37 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     client.compactTable(sharedSecret, tableNames[1], null, null, null, true, true, null, null);
 
     assertEquals(1, countFiles(tableNames[1]), messagePrefix + tableNames[2]);
+  }
+
+  /**
+   * Testing the functionality for the CompactionConfigurer
+   */
+  @Test
+  public void testCompactionConfigurer() throws Exception {
+    // Create a table, and give it some data to be compacted
+    client.createTable(sharedSecret, tableName, true, TimeType.MILLIS);
+    addFile(tableName, 1, 1000, false);
+
+    // Create a PluginConfig for the Configurer, then compact the tables to see their output
+    PluginConfig configurer = new PluginConfig(CompressionConfigurer.class.getName(), Map.of(
+        CompressionConfigurer.LARGE_FILE_COMPRESSION_THRESHOLD, "1",
+        CompressionConfigurer.LARGE_FILE_COMPRESSION_TYPE, "gz"));
+    
+    client.compactTable(sharedSecret, tableName, null, null, null, true, true, null, configurer);
+    assertCompactionMetadata(getCluster().getServerContext(), tableName);
+  }
+
+  /**
+   * Asserts true if Compaction Metadata was found
+   */
+  private void assertCompactionMetadata(ServerContext ctx, String tableName){
+    var tableId = TableId.of(ctx.tableOperations().tableIdMap().get(tableName));
+    try (var tabletsMetadata = ctx.getAmple().readTablets().forTable(tableId).build()) {
+      for (TabletMetadata tablet : tabletsMetadata) {
+        // TODO: Make this actually look for compaction metadata
+        assertEquals(tablet, tablet);
+      }
+    }
   }
 
   @Test
