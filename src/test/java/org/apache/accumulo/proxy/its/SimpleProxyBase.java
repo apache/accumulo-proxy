@@ -2324,15 +2324,17 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
    */
   @Test
   public void testCompactionConfigurer() throws Exception {
+    // Delete the table to start fresh
+    client.deleteTable(sharedSecret, tableName);
     // Create a table, and give it some data to be compacted
     client.createTable(sharedSecret, tableName, true, TimeType.MILLIS);
     addFile(tableName, 1, 1000, false);
 
     // Create a PluginConfig for the Configurer, then compact the tables to see their output
-    PluginConfig configurer = new PluginConfig(CompressionConfigurer.class.getName(), Map.of(
-        CompressionConfigurer.LARGE_FILE_COMPRESSION_THRESHOLD, "1",
-        CompressionConfigurer.LARGE_FILE_COMPRESSION_TYPE, "gz"));
-    
+    PluginConfig configurer = new PluginConfig(CompressionConfigurer.class.getName(),
+        Map.of(CompressionConfigurer.LARGE_FILE_COMPRESSION_THRESHOLD, "1",
+            CompressionConfigurer.LARGE_FILE_COMPRESSION_TYPE, "gz"));
+
     client.compactTable(sharedSecret, tableName, null, null, null, true, true, null, configurer);
     assertCompactionMetadata(getCluster().getServerContext(), tableName);
   }
@@ -2340,7 +2342,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
   /**
    * Asserts true if Compaction Metadata was found
    */
-  private void assertCompactionMetadata(ServerContext ctx, String tableName){
+  private void assertCompactionMetadata(ServerContext ctx, String tableName) {
     var tableId = TableId.of(ctx.tableOperations().tableIdMap().get(tableName));
     try (var tabletsMetadata = ctx.getAmple().readTablets().forTable(tableId).build()) {
       for (TabletMetadata tablet : tabletsMetadata) {
