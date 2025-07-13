@@ -2368,29 +2368,25 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     // Checking the sizes of the files before compaction
     for (String tableName : tableNames) {
       long sizes = getFileSizes(getCluster().getServerContext(), tableName);
-      assertTrue(sizes > data.length * 10 && sizes < data.length * 11);
+      assertTrue(sizes > data.length * 10.0 && sizes < data.length * 11.0);
     }
 
-    // Create two PluginConfigs for the CompressionConfigurer
+    // Create a PluginConfig for the CompressionConfigurer
     PluginConfig configurerCompact = new PluginConfig(CompressionConfigurer.class.getName(),
         Map.of(CompressionConfigurer.LARGE_FILE_COMPRESSION_THRESHOLD, data.length + "",
             CompressionConfigurer.LARGE_FILE_COMPRESSION_TYPE, "gz"));
-    PluginConfig configurerNoCompact = new PluginConfig(CompressionConfigurer.class.getName(),
-        Map.of(CompressionConfigurer.LARGE_FILE_COMPRESSION_THRESHOLD, data.length + 9999 + "",
-            CompressionConfigurer.LARGE_FILE_COMPRESSION_TYPE, "gz"));
 
-    // Compacting the table
+    // Compacting the tables one with the Configurer, one without
     client.compactTable(sharedSecret, tableNames[0], null, null, null, true, true, null,
         configurerCompact);
-    client.compactTable(sharedSecret, tableNames[1], null, null, null, true, true, null,
-        configurerNoCompact);
+    client.compactTable(sharedSecret, tableNames[1], null, null, null, true, true, null, null);
 
-    // Checking to see that the data sizes are the appropriate size
+    // Checking to see that the data sizes are the appropriate size. Based on the data, it will be
+    // significantly smaller with compression
     long sizes1 = getFileSizes(getCluster().getServerContext(), tableNames[0]);
     long sizes2 = getFileSizes(getCluster().getServerContext(), tableNames[1]);
     assertTrue(sizes1 < data.length);
-    assertTrue(sizes1 < sizes2,
-        "Configurer meant to do no compactions is smaller than Configurer that did compactions.");
+    assertTrue(sizes1 < sizes2, "Size1 is " + sizes1 + ", size2 is " + sizes2);
   }
 
   @Test
