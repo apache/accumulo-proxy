@@ -31,6 +31,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UncheckedIOException;
 import java.net.InetAddress;
 import java.net.URI;
 import java.nio.ByteBuffer;
@@ -68,7 +69,6 @@ import org.apache.accumulo.core.iterators.SortedKeyValueIterator;
 import org.apache.accumulo.core.iterators.user.SummingCombiner;
 import org.apache.accumulo.core.iterators.user.VersioningIterator;
 import org.apache.accumulo.core.metadata.MetadataTable;
-import org.apache.accumulo.core.metadata.schema.TabletMetadata;
 import org.apache.accumulo.core.security.Authorizations;
 import org.apache.accumulo.core.spi.crypto.NoCryptoServiceFactory;
 import org.apache.accumulo.core.util.ByteBufferUtil;
@@ -2320,36 +2320,77 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
   }
 
   /**
-   * Testing the functionality for the CompactionConfigurer
+   * Retrieves the collective size of all the files in a table.
+   */
+  private long getFileSizes(ServerContext ctx, String tableName) {
+    TableId tableId = TableId.of(ctx.tableOperations().tableIdMap().get(tableName));
+    var tabletsMetadata = ctx.getAmple().readTablets().forTable(tableId).build();
+    return tabletsMetadata.stream().flatMap(tm -> tm.getFiles().stream()).mapToLong(stf -> {
+      try {
+        return FileSystem.getLocal(new Configuration()).getFileStatus(stf.getPath()).getLen();
+      } catch (IOException e) {
+        throw new UncheckedIOException(e);
+      }
+    }).sum();
+  }
+
+  /**
+   * Testing the functionality for the CompactionConfigurer by testing an implementation of it. The
+   * implementation being tested is the CompressionConfigurer.
    */
   @Test
   public void testCompactionConfigurer() throws Exception {
     // Delete the table to start fresh
     client.deleteTable(sharedSecret, tableName);
-    // Create a table, and give it some data to be compacted
-    client.createTable(sharedSecret, tableName, true, TimeType.MILLIS);
-    addFile(tableName, 1, 1000, false);
+    // Create two tables
+    final String[] tableNames = getUniqueNameArray(2);
+    for (String tableName : tableNames) {
+      client.createTable(sharedSecret, tableName, true, TimeType.MILLIS);
+      client.setTableProperty(sharedSecret, tableName, "table.file.compress.type", "none");
+    }
 
-    // Create a PluginConfig for the Configurer, then compact the tables to see their output
-    PluginConfig configurer = new PluginConfig(CompressionConfigurer.class.getName(),
-        Map.of(CompressionConfigurer.LARGE_FILE_COMPRESSION_THRESHOLD, "1",
+    // Create data to add to the tables
+    Map<ByteBuffer,List<ColumnUpdate>> mutation = new HashMap<>();
+    byte[] data = new byte[100000];
+    Arrays.fill(data, (byte) 65);
+    for (int i = 0; i < 10; i++) {
+      String row = String.format("%09d", i);
+      ColumnUpdate columnUpdate = new ColumnUpdate(s2bb("big"), s2bb("files"));
+      columnUpdate.setDeleteCell(false);
+      columnUpdate.setValue(data);
+      mutation.put(s2bb(row), List.of(columnUpdate));
+    }
+    for (String tableName : tableNames) {
+      client.updateAndFlush(sharedSecret, tableName, mutation);
+      client.flushTable(sharedSecret, tableName, null, null, true);
+    }
+
+    // Checking the sizes of the files before compaction
+    for (String tableName : tableNames) {
+      long sizes = getFileSizes(getCluster().getServerContext(), tableName);
+      assertTrue(sizes > data.length * 10 && sizes < data.length * 11);
+    }
+
+    // Create two PluginConfigs for the CompressionConfigurer
+    PluginConfig configurerCompact = new PluginConfig(CompressionConfigurer.class.getName(),
+        Map.of(CompressionConfigurer.LARGE_FILE_COMPRESSION_THRESHOLD, data.length + "",
+            CompressionConfigurer.LARGE_FILE_COMPRESSION_TYPE, "gz"));
+    PluginConfig configurerNoCompact = new PluginConfig(CompressionConfigurer.class.getName(),
+        Map.of(CompressionConfigurer.LARGE_FILE_COMPRESSION_THRESHOLD, data.length + 9999 + "",
             CompressionConfigurer.LARGE_FILE_COMPRESSION_TYPE, "gz"));
 
-    client.compactTable(sharedSecret, tableName, null, null, null, true, true, null, configurer);
-    assertCompactionMetadata(getCluster().getServerContext(), tableName);
-  }
+    // Compacting the table
+    client.compactTable(sharedSecret, tableNames[0], null, null, null, true, true, null,
+        configurerCompact);
+    client.compactTable(sharedSecret, tableNames[1], null, null, null, true, true, null,
+        configurerNoCompact);
 
-  /**
-   * Asserts true if Compaction Metadata was found
-   */
-  private void assertCompactionMetadata(ServerContext ctx, String tableName) {
-    var tableId = TableId.of(ctx.tableOperations().tableIdMap().get(tableName));
-    try (var tabletsMetadata = ctx.getAmple().readTablets().forTable(tableId).build()) {
-      for (TabletMetadata tablet : tabletsMetadata) {
-        // TODO: Make this actually look for compaction metadata
-        assertEquals(tablet, tablet);
-      }
-    }
+    // Checking to see that the data sizes are the appropriate size
+    long sizes1 = getFileSizes(getCluster().getServerContext(), tableNames[0]);
+    long sizes2 = getFileSizes(getCluster().getServerContext(), tableNames[1]);
+    assertTrue(sizes1 < data.length);
+    assertTrue(sizes1 < sizes2,
+        "Configurer meant to do no compactions is smaller than Configurer that did compactions.");
   }
 
   @Test
