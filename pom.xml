@@ -244,21 +244,31 @@
         <plugin>
           <groupId>com.mycila</groupId>
           <artifactId>license-maven-plugin</artifactId>
-          <version>4.3</version>
+          <version>5.0.0</version>
           <configuration>
-            <header>${session.executionRootDirectory}/contrib/license-header.txt</header>
-            <excludes combine.children="append">
-              <exclude>**/DEPENDENCIES</exclude>
-              <exclude>**/LICENSE</exclude>
-              <exclude>**/NOTICE</exclude>
-              <exclude>**/target/**</exclude>
-              <exclude>contrib/javadoc11.patch</exclude>
-            </excludes>
+            <licenseSets>
+              <licenseSet>
+                <header>${session.executionRootDirectory}/contrib/license-header.txt</header>
+                <excludes combine.children="append">
+                  <exclude>**/DEPENDENCIES</exclude>
+                  <exclude>**/LICENSE</exclude>
+                  <exclude>**/NOTICE</exclude>
+                  <exclude>**/target/**</exclude>
+                  <exclude>contrib/javadoc11.patch</exclude>
+                </excludes>
+              </licenseSet>
+            </licenseSets>
             <mapping combine.children="append">
               <!-- general mappings; module-specific mappings appear in their respective pom -->
               <Makefile>SCRIPT_STYLE</Makefile>
+              <Dockerfile>SCRIPT_STYLE</Dockerfile>
+              <Gemfile>SCRIPT_STYLE</Gemfile>
+              <gemspec>SCRIPT_STYLE</gemspec>
+              <AccumuloProxy-remote>SCRIPT_STYLE</AccumuloProxy-remote>
+              <accumulo-proxy>SCRIPT_STYLE</accumulo-proxy>
               <c>SLASHSTAR_STYLE</c>
               <cc>SLASHSTAR_STYLE</cc>
+              <cpp>SLASHSTAR_STYLE</cpp>
               <css>SLASHSTAR_STYLE</css>
               <h>SLASHSTAR_STYLE</h>
               <java>SLASHSTAR_STYLE</java>
@@ -488,7 +498,7 @@
             <goals>
               <goal>format</goal>
             </goals>
-            <phase>validate</phase>
+            <phase>process-sources</phase>
           </execution>
         </executions>
       </plugin>
@@ -728,6 +738,7 @@
             <goals>
               <goal>check</goal>
             </goals>
+            <phase>process-resources</phase>
           </execution>
         </executions>
       </plugin>
