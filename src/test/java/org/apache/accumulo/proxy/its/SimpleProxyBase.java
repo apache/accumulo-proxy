@@ -289,417 +289,112 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
   /*
    * Set a lower timeout for tests that should fail fast
    */
-
   @Test
-  @Timeout(5)
-  public void addConstraintBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.addConstraint(badSecret, tableName, NumericValueConstraint.class.getName()));
-  }
+  @Timeout(10)
+  public void badSecretTests() throws Exception {
 
-  @Test
-  @Timeout(5)
-  public void addSplitsBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.addSplits(badSecret, tableName, Collections.singleton(s2bb("1"))));
-  }
-
-  @Test
-  @Timeout(5)
-  public void clearLocatorCacheBadSharedSecret() {
-    assertThrows(TApplicationException.class, () -> client.clearLocatorCache(badSecret, tableName));
-  }
-
-  @Test
-  @Timeout(5)
-  public void compactTableBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.compactTable(badSecret, tableName, null, null, null, true, false, null, null));
-  }
-
-  @Test
-  @Timeout(5)
-  public void cancelCompactionBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.cancelCompaction(badSecret, tableName));
-  }
-
-  @Test
-  @Timeout(5)
-  public void createTableBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.createTable(badSecret, tableName, false, TimeType.MILLIS));
-  }
-
-  @Test
-  @Timeout(5)
-  public void deleteTableBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class, () -> client.deleteTable(badSecret, tableName));
-  }
-
-  @Test
-  @Timeout(5)
-  public void deleteRowsBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.deleteRows(badSecret, tableName, null, null));
-  }
-
-  @Test
-  @Timeout(5)
-  public void tableExistsBadSharedSecret() {
-    assertThrows(TApplicationException.class, () -> client.tableExists(badSecret, tableName));
-  }
-
-  @Test
-  @Timeout(5)
-  public void flushTableBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.flushTable(badSecret, tableName, null, null, false));
-  }
-
-  @Test
-  @Timeout(5)
-  public void getLocalityGroupsBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.getLocalityGroups(badSecret, tableName));
-  }
-
-  @Test
-  @Timeout(5)
-  public void getMaxRowBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class, () -> client.getMaxRow(badSecret, tableName,
-        Collections.emptySet(), null, false, null, false));
-  }
-
-  @Test
-  @Timeout(5)
-  public void getTablePropertiesBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.getTableProperties(badSecret, tableName));
-  }
-
-  @Test
-  @Timeout(5)
-  public void listSplitsBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.listSplits(badSecret, tableName, 10000));
-  }
-
-  @Test
-  @Timeout(5)
-  public void listTablesBadSharedSecret() {
-    assertThrows(TApplicationException.class, () -> client.listTables(badSecret));
-  }
-
-  @Test
-  @Timeout(5)
-  public void listConstraintsBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.listConstraints(badSecret, tableName));
-  }
-
-  @Test
-  @Timeout(5)
-  public void mergeTabletsBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.mergeTablets(badSecret, tableName, null, null));
-  }
-
-  @Test
-  @Timeout(5)
-  public void offlineTableBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.offlineTable(badSecret, tableName, false));
-  }
-
-  @Test
-  @Timeout(5)
-  public void onlineTableBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.onlineTable(badSecret, tableName, false));
-  }
-
-  @Test
-  @Timeout(5)
-  public void removeConstraintBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.removeConstraint(badSecret, tableName, 0));
-  }
-
-  @Test
-  @Timeout(5)
-  public void removeTablePropertyBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.removeTableProperty(badSecret, tableName, Property.TABLE_FILE_MAX.getKey()));
-  }
-
-  @Test
-  @Timeout(5)
-  public void renameTableBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.renameTable(badSecret, tableName, "someTableName"));
-  }
-
-  @Test
-  @Timeout(5)
-  public void setLocalityGroupsBadSharedSecret() {
     Map<String,Set<String>> groups = new HashMap<>();
     groups.put("group1", Collections.singleton("cf1"));
     groups.put("group2", Collections.singleton("cf2"));
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.setLocalityGroups(badSecret, tableName, groups));
-  }
 
-  @Test
-  @Timeout(5)
-  public void setTablePropertyBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.setTableProperty(badSecret, tableName, Property.TABLE_FILE_MAX.getKey(), "0"));
-  }
-
-  @Test
-  @Timeout(5)
-  public void tableIdMapBadSharedSecret() {
-    assertThrows(TException.class, () -> client.tableIdMap(badSecret));
-  }
-
-  @Test
-  @Timeout(5)
-  public void getSiteConfigurationBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class, () -> client.getSiteConfiguration(badSecret));
-  }
-
-  @Test
-  @Timeout(5)
-  public void getSystemConfigurationBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class, () -> client.getSystemConfiguration(badSecret));
-  }
-
-  @Test
-  @Timeout(5)
-  public void getTabletServersBadSharedSecret() {
-    assertThrows(TException.class, () -> client.getTabletServers(badSecret));
-  }
-
-  @Test
-  @Timeout(5)
-  public void getActiveScansBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class, () -> client.getActiveScans(badSecret, "fake"));
-  }
-
-  @Test
-  @Timeout(5)
-  public void getActiveCompactionsBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.getActiveCompactions(badSecret, "fake"));
-  }
-
-  @Test
-  @Timeout(5)
-  public void removePropertyBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.removeProperty(badSecret, "table.split.threshold"));
-  }
-
-  @Test
-  @Timeout(5)
-  public void setPropertyBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.setProperty(badSecret, "table.split.threshold", "500M"));
-  }
-
-  @Test
-  @Timeout(5)
-  public void testClassLoadBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class, () -> client.testClassLoad(badSecret,
-        DevNull.class.getName(), SortedKeyValueIterator.class.getName()));
-  }
-
-  @Test
-  @Timeout(5)
-  public void authenticateUserBadSharedSecret() {
     Map<String,String> pw = s2pp(SharedMiniClusterBase.getRootPassword());
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.authenticateUser(badSecret, "root", pw));
-  }
-
-  @Test
-  @Timeout(5)
-  public void changeUserAuthorizationsBadSharedSecret() {
     HashSet<ByteBuffer> auths = new HashSet<>(List.of(s2bb("A"), s2bb("B")));
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.changeUserAuthorizations(badSecret, "stooge", auths));
-  }
 
-  @Test
-  @Timeout(5)
-  public void changePasswordBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.changeLocalUserPassword(badSecret, "stooge", s2bb("")));
-  }
+    IteratorSetting setting = new IteratorSetting(100, "DebugTheThings",
+        DebugIterator.class.getName(), Collections.emptyMap());
 
-  @Test
-  @Timeout(5)
-  public void createUserBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.createLocalUser(badSecret, "stooge", s2bb("password")));
-  }
+  // @formatter:off
+  Stream<Executable> securityExceptionCases = Stream.of(
+          () -> client.addConstraint(badSecret, tableName, NumericValueConstraint.class.getName()),
+          () -> client.addSplits(badSecret, tableName, Collections.singleton(s2bb("1"))),
+          () -> client.compactTable(badSecret, tableName, null, null, null, true, false, null, null),
+          () -> client.cancelCompaction(badSecret, tableName),
+          () -> client.createTable(badSecret, tableName, false, TimeType.MILLIS),
+          () -> client.deleteTable(badSecret, tableName),
+          () -> client.deleteRows(badSecret, tableName, null, null),
+          () -> client.flushTable(badSecret, tableName, null, null, false),
+          () -> client.getLocalityGroups(badSecret, tableName),
+          () -> client.getMaxRow(badSecret, tableName, Collections.emptySet(), null, false, null, false),
+          () -> client.getTableProperties(badSecret, tableName),
+          () -> client.listSplits(badSecret, tableName, 10000),
+          () -> client.listConstraints(badSecret, tableName),
+          () -> client.mergeTablets(badSecret, tableName, null, null),
+          () -> client.offlineTable(badSecret, tableName, false),
+          () -> client.onlineTable(badSecret, tableName, false),
+          () -> client.removeConstraint(badSecret, tableName, 0),
+          () -> client.removeTableProperty(badSecret, tableName, Property.TABLE_FILE_MAX.getKey()),
+          () -> client.renameTable(badSecret, tableName, "someTableName"),
+          () -> client.setLocalityGroups(badSecret, tableName, groups),
+          () -> client.setTableProperty(badSecret, tableName, Property.TABLE_FILE_MAX.getKey(), "0"),
+          () -> client.getSiteConfiguration(badSecret),
+          () -> client.getSystemConfiguration(badSecret),
+          () -> client.getActiveScans(badSecret, "fake"),
+          () -> client.getActiveCompactions(badSecret, "fake"),
+          () -> client.removeProperty(badSecret, "table.split.threshold"),
+          () -> client.setProperty(badSecret, "table.split.threshold", "500M"),
+          () -> client.testClassLoad(badSecret, DevNull.class.getName(), SortedKeyValueIterator.class.getName()),
+          () -> client.authenticateUser(badSecret, "root", pw),
+          () -> client.changeUserAuthorizations(badSecret, "stooge", auths),
+          () -> client.changeLocalUserPassword(badSecret, "stooge", s2bb("")),
+          () -> client.createLocalUser(badSecret, "stooge", s2bb("password")),
+          () -> client.dropLocalUser(badSecret, "stooge"),
+          () -> client.getUserAuthorizations(badSecret, "stooge"),
+          () -> client.grantSystemPermission(badSecret, "stooge", SystemPermission.CREATE_TABLE),
+          () -> client.grantTablePermission(badSecret, "root", tableName, TablePermission.WRITE),
+          () -> client.hasSystemPermission(badSecret, "stooge", SystemPermission.CREATE_TABLE),
+          () -> client.hasTablePermission(badSecret, "root", tableName, TablePermission.WRITE),
+          () -> client.listLocalUsers(badSecret),
+          () -> client.revokeSystemPermission(badSecret, "stooge", SystemPermission.CREATE_TABLE),
+          () -> client.revokeTablePermission(badSecret, "root", tableName, TablePermission.ALTER_TABLE),
+          () -> client.createScanner(badSecret, tableName, new ScanOptions()),
+          () -> client.createBatchScanner(badSecret, tableName, new BatchScanOptions()),
+          () -> client.updateAndFlush(badSecret, tableName, new HashMap<>()),
+          () -> client.createWriter(badSecret, tableName, new WriterOptions()),
+          () -> client.attachIterator(badSecret, "slow", setting, EnumSet.allOf(IteratorScope.class)),
+          () -> client.checkIteratorConflicts(badSecret, tableName, setting, EnumSet.allOf(IteratorScope.class)),
+          () -> client.cloneTable(badSecret, tableName, tableName + "_clone", false, null, null),
+          () -> client.exportTable(badSecret, tableName, "/tmp"),
+          () -> client.importTable(badSecret, "testify", "/tmp"),
+          () -> client.getIteratorSetting(badSecret, tableName, "foo", IteratorScope.SCAN),
+          () -> client.listIterators(badSecret, tableName),
+          () -> client.removeIterator(badSecret, tableName, "name", EnumSet.allOf(IteratorScope.class)),
+          () -> client.pingTabletServer(badSecret, "fake"),
+          () -> client.testTableClassLoad(badSecret, tableName, VersioningIterator.class.getName(), SortedKeyValueIterator.class.getName()),
+          () -> client.createConditionalWriter(badSecret, tableName, new ConditionalWriterOptions()),
+          () -> client.grantNamespacePermission(badSecret, "stooge", namespaceName, NamespacePermission.ALTER_NAMESPACE),
+          () -> client.hasNamespacePermission(badSecret, "stooge", namespaceName, NamespacePermission.ALTER_NAMESPACE),
+          () -> client.revokeNamespacePermission(badSecret, "stooge", namespaceName, NamespacePermission.ALTER_NAMESPACE),
+          () -> client.listNamespaces(badSecret),
+          () -> client.namespaceExists(badSecret, namespaceName),
+          () -> client.createNamespace(badSecret, "abcdef"),
+          () -> client.deleteNamespace(badSecret, namespaceName),
+          () -> client.renameNamespace(badSecret, namespaceName, "abcdef"),
+          () -> client.setNamespaceProperty(badSecret, namespaceName, "table.compaction.major.ratio", "4"),
+          () -> client.removeNamespaceProperty(badSecret, namespaceName, "table.compaction.major.ratio"),
+          () -> client.getNamespaceProperties(badSecret, namespaceName),
+          () -> client.namespaceIdMap(badSecret),
+          () -> client.attachNamespaceIterator(badSecret, namespaceName, setting, EnumSet.allOf(IteratorScope.class)),
+          () -> client.removeNamespaceIterator(badSecret, namespaceName, "DebugTheThings", EnumSet.allOf(IteratorScope.class)),
+          () -> client.getNamespaceIteratorSetting(badSecret, namespaceName, "DebugTheThings", IteratorScope.SCAN),
+          () -> client.listNamespaceIterators(badSecret, namespaceName),
+          () -> client.checkNamespaceIteratorConflicts(badSecret, namespaceName, setting, EnumSet.allOf(IteratorScope.class)),
+          () -> client.addNamespaceConstraint(badSecret, namespaceName, MaxMutationSize.class.getName()),
+          () -> client.removeNamespaceConstraint(badSecret, namespaceName, 1),
+          () -> client.listNamespaceConstraints(badSecret, namespaceName),
+          () -> client.testNamespaceClassLoad(badSecret, namespaceName, DebugIterator.class.getName(), SortedKeyValueIterator.class.getName())
+  );
+  // @formatter:on
 
-  @Test
-  @Timeout(5)
-  public void dropUserBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class, () -> client.dropLocalUser(badSecret, "stooge"));
-  }
+    securityExceptionCases.forEach(e -> assertThrows(AccumuloSecurityException.class, e,
+        "Client action " + e.toString() + " proceeded with invalid Auth"));
 
-  @Test
-  @Timeout(5)
-  public void getUserAuthorizationsBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.getUserAuthorizations(badSecret, "stooge"));
-  }
+    assertThrows(TApplicationException.class, () -> client.clearLocatorCache(badSecret, tableName));
+    assertThrows(TApplicationException.class, () -> client.tableExists(badSecret, tableName));
+    assertThrows(TApplicationException.class, () -> client.listTables(badSecret));
 
-  @Test
-  @Timeout(5)
-  public void grantSystemPermissionBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.grantSystemPermission(badSecret, "stooge", SystemPermission.CREATE_TABLE));
-  }
+    assertThrows(TException.class, () -> client.tableIdMap(badSecret));
+    assertThrows(TException.class, () -> client.getTabletServers(badSecret));
 
-  @Test
-  @Timeout(5)
-  public void grantTablePermissionBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.grantTablePermission(badSecret, "root", tableName, TablePermission.WRITE));
-  }
-
-  @Test
-  @Timeout(5)
-  public void hasSystemPermissionBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.hasSystemPermission(badSecret, "stooge", SystemPermission.CREATE_TABLE));
-  }
-
-  @Test
-  @Timeout(5)
-  public void hasTablePermissionBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.hasTablePermission(badSecret, "root", tableName, TablePermission.WRITE));
-  }
-
-  @Test
-  @Timeout(5)
-  public void listLocalUsersBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class, () -> client.listLocalUsers(badSecret));
-  }
-
-  @Test
-  @Timeout(5)
-  public void revokeSystemPermissionBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.revokeSystemPermission(badSecret, "stooge", SystemPermission.CREATE_TABLE));
-  }
-
-  @Test
-  @Timeout(5)
-  public void revokeTablePermissionBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class, () -> client.revokeTablePermission(badSecret,
-        "root", tableName, TablePermission.ALTER_TABLE));
-  }
-
-  @Test
-  @Timeout(5)
-  public void createScannerBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.createScanner(badSecret, tableName, new ScanOptions()));
-  }
-
-  @Test
-  @Timeout(5)
-  public void createBatchScannerBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.createBatchScanner(badSecret, tableName, new BatchScanOptions()));
-  }
-
-  @Test
-  @Timeout(5)
-  public void updateAndFlushBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.updateAndFlush(badSecret, tableName, new HashMap<>()));
-  }
-
-  @Test
-  @Timeout(5)
-  public void createWriterBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.createWriter(badSecret, tableName, new WriterOptions()));
-  }
-
-  @Test
-  @Timeout(5)
-  public void attachIteratorBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class, () -> client.attachIterator(badSecret, "slow",
-        setting, EnumSet.allOf(IteratorScope.class)));
-  }
-
-  @Test
-  @Timeout(5)
-  public void checkIteratorBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class, () -> client.checkIteratorConflicts(badSecret,
-        tableName, setting, EnumSet.allOf(IteratorScope.class)));
-  }
-
-  @Test
-  @Timeout(5)
-  public void cloneTableBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.cloneTable(badSecret, tableName, tableName + "_clone", false, null, null));
-  }
-
-  @Test
-  @Timeout(5)
-  public void exportTableBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.exportTable(badSecret, tableName, "/tmp"));
-  }
-
-  @Test
-  @Timeout(5)
-  public void importTableBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.importTable(badSecret, "testify", "/tmp"));
-  }
-
-  @Test
-  @Timeout(5)
-  public void getIteratorSettingBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.getIteratorSetting(badSecret, tableName, "foo", IteratorScope.SCAN));
-  }
-
-  @Test
-  @Timeout(5)
-  public void listIteratorsBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class, () -> client.listIterators(badSecret, tableName));
-  }
-
-  @Test
-  @Timeout(5)
-  public void removeIteratorBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class, () -> client.removeIterator(badSecret, tableName,
-        "name", EnumSet.allOf(IteratorScope.class)));
-  }
-
-  @Test
-  @Timeout(5)
-  public void splitRangeByTabletsBadSharedSecret() throws Exception {
-    Range range = client.getRowRange(ByteBuffer.wrap("row".getBytes(UTF_8)));
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.splitRangeByTablets(badSecret, tableName, range, 10));
-  }
-
-  @Test
-  @Timeout(5)
-  public void importDirectoryBadSharedSecret() throws Exception {
     MiniAccumuloClusterImpl cluster = SharedMiniClusterBase.getCluster();
     Path base = cluster.getTemporaryPath();
     Path importDir = new Path(base, "importDir");
@@ -708,177 +403,9 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     assertTrue(cluster.getFileSystem().mkdirs(failuresDir));
     assertThrows(AccumuloSecurityException.class, () -> client.importDirectory(badSecret, tableName,
         importDir.toString(), failuresDir.toString(), true));
-  }
-
-  @Test
-  @Timeout(5)
-  public void pingTabletServerBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class, () -> client.pingTabletServer(badSecret, "fake"));
-  }
-
-  @Test
-  @Timeout(5)
-  public void testTableClassLoadBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class, () -> client.testTableClassLoad(badSecret,
-        tableName, VersioningIterator.class.getName(), SortedKeyValueIterator.class.getName()));
-  }
-
-  @Test
-  @Timeout(5)
-  public void createConditionalWriterBadSharedSecret() {
+    Range range = client.getRowRange(ByteBuffer.wrap("row".getBytes(UTF_8)));
     assertThrows(AccumuloSecurityException.class,
-        () -> client.createConditionalWriter(badSecret, tableName, new ConditionalWriterOptions()));
-  }
-
-  @Test
-  @Timeout(5)
-  public void grantNamespacePermissionBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class, () -> client.grantNamespacePermission(badSecret,
-        "stooge", namespaceName, NamespacePermission.ALTER_NAMESPACE));
-  }
-
-  @Test
-  @Timeout(5)
-  public void hasNamespacePermissionBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class, () -> client.hasNamespacePermission(badSecret,
-        "stooge", namespaceName, NamespacePermission.ALTER_NAMESPACE));
-  }
-
-  @Test
-  @Timeout(5)
-  public void revokeNamespacePermissionBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class, () -> client.revokeNamespacePermission(badSecret,
-        "stooge", namespaceName, NamespacePermission.ALTER_NAMESPACE));
-  }
-
-  @Test
-  @Timeout(5)
-  public void listNamespacesBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class, () -> client.listNamespaces(badSecret));
-  }
-
-  @Test
-  @Timeout(5)
-  public void namespaceExistsBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.namespaceExists(badSecret, namespaceName));
-  }
-
-  @Test
-  @Timeout(5)
-  public void createNamespaceBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.createNamespace(badSecret, "abcdef"));
-  }
-
-  @Test
-  @Timeout(5)
-  public void deleteNamespaceBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.deleteNamespace(badSecret, namespaceName));
-  }
-
-  @Test
-  @Timeout(5)
-  public void renameNamespaceBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.renameNamespace(badSecret, namespaceName, "abcdef"));
-  }
-
-  @Test
-  @Timeout(5)
-  public void setNamespacePropertyBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class, () -> client.setNamespaceProperty(badSecret,
-        namespaceName, "table.compaction.major.ratio", "4"));
-  }
-
-  @Test
-  @Timeout(5)
-  public void removeNamespacePropertyBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class, () -> client.removeNamespaceProperty(badSecret,
-        namespaceName, "table.compaction.major.ratio"));
-  }
-
-  @Test
-  @Timeout(5)
-  public void getNamespacePropertiesBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.getNamespaceProperties(badSecret, namespaceName));
-  }
-
-  @Test
-  @Timeout(5)
-  public void namespaceIdMapBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class, () -> client.namespaceIdMap(badSecret));
-  }
-
-  @Test
-  @Timeout(5)
-  public void attachNamespaceIteratorBadSharedSecret() {
-    IteratorSetting setting = new IteratorSetting(100, "DebugTheThings",
-        DebugIterator.class.getName(), Collections.emptyMap());
-    assertThrows(AccumuloSecurityException.class, () -> client.attachNamespaceIterator(badSecret,
-        namespaceName, setting, EnumSet.allOf(IteratorScope.class)));
-  }
-
-  @Test
-  @Timeout(5)
-  public void removeNamespaceIteratorBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class, () -> client.removeNamespaceIterator(badSecret,
-        namespaceName, "DebugTheThings", EnumSet.allOf(IteratorScope.class)));
-  }
-
-  @Test
-  @Timeout(5)
-  public void getNamespaceIteratorSettingBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.getNamespaceIteratorSetting(badSecret, namespaceName, "DebugTheThings",
-            IteratorScope.SCAN));
-  }
-
-  @Test
-  @Timeout(5)
-  public void listNamespaceIteratorsBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.listNamespaceIterators(badSecret, namespaceName));
-  }
-
-  @Test
-  @Timeout(5)
-  public void checkNamespaceIteratorConflictsBadSharedSecret() {
-    IteratorSetting setting = new IteratorSetting(100, "DebugTheThings",
-        DebugIterator.class.getName(), Collections.emptyMap());
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.checkNamespaceIteratorConflicts(badSecret, namespaceName, setting,
-            EnumSet.allOf(IteratorScope.class)));
-  }
-
-  @Test
-  @Timeout(5)
-  public void addNamespaceConstraintBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class, () -> client.addNamespaceConstraint(badSecret,
-        namespaceName, MaxMutationSize.class.getName()));
-  }
-
-  @Test
-  @Timeout(5)
-  public void removeNamespaceConstraintBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.removeNamespaceConstraint(badSecret, namespaceName, 1));
-  }
-
-  @Test
-  @Timeout(5)
-  public void listNamespaceConstraintsBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class,
-        () -> client.listNamespaceConstraints(badSecret, namespaceName));
-  }
-
-  @Test
-  @Timeout(5)
-  public void testNamespaceClassLoadBadSharedSecret() {
-    assertThrows(AccumuloSecurityException.class, () -> client.testNamespaceClassLoad(badSecret,
-        namespaceName, DebugIterator.class.getName(), SortedKeyValueIterator.class.getName()));
+        () -> client.splitRangeByTablets(badSecret, tableName, range, 10));
   }
 
   @Test
@@ -979,39 +506,25 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     client.createTable(sharedSecret, table1, false, TimeType.MILLIS);
     client.createTable(sharedSecret, table2, false, TimeType.MILLIS);
 
-    // @formatter:off
-    Stream<Executable> cases = Stream.of(
-        () -> client.createTable(sharedSecret, table1, false, TimeType.MILLIS),
-        () -> client.renameTable(sharedSecret, table1, table2),
-        () -> client.cloneTable(sharedSecret, table1, table2, false, new HashMap<>(), new HashSet<>())
-    );
-    // @formatter:on
+    assertThrows(TableExistsException.class,
+        () -> client.createTable(sharedSecret, table1, false, TimeType.MILLIS));
+    assertThrows(TableExistsException.class,
+        () -> client.renameTable(sharedSecret, table1, table2));
+    assertThrows(TableExistsException.class, () -> client.cloneTable(sharedSecret, table1, table2,
+        false, new HashMap<>(), new HashSet<>()));
 
-    cases.forEach(executable -> assertThrows(TableExistsException.class, executable));
-  }
-
-  @Test
-  public void testNamespaceExists() throws TException {
     client.createNamespace(sharedSecret, "foobar");
 
-    // @formatter:off
-    Stream<Executable> cases = Stream.of(
-        () -> client.createNamespace(sharedSecret, namespaceName),
-        () -> client.renameNamespace(sharedSecret, "foobar", namespaceName)
-    );
-    // @formatter:on
+    assertThrows(NamespaceExistsException.class,
+        () -> client.createNamespace(sharedSecret, namespaceName));
+    assertThrows(NamespaceExistsException.class,
+        () -> client.renameNamespace(sharedSecret, "foobar", namespaceName));
 
-    cases.forEach(executable -> assertThrows(NamespaceExistsException.class, executable));
-  }
-
-  @Test
-  public void testNamespaceNotEmpty() throws Exception {
     final String tableInNamespace = namespaceName + ".abcdefg";
     client.createTable(sharedSecret, tableInNamespace, true, TimeType.MILLIS);
 
     assertThrows(NamespaceNotEmptyException.class,
         () -> client.deleteNamespace(sharedSecret, namespaceName));
-
     // delete table so namespace can also be deleted
     client.deleteTable(sharedSecret, tableInNamespace);
   }
