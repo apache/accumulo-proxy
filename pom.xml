@@ -93,11 +93,12 @@
     <eclipseFormatterStyle>contrib/Eclipse-Accumulo-Codestyle.xml</eclipseFormatterStyle>
     <!-- extra release args for testing -->
     <extraReleaseArguments />
+    <failsafe.failIfNoSpecifiedTests>false</failsafe.failIfNoSpecifiedTests>
     <hadoop.version>3.3.6</hadoop.version>
-    <it.failIfNoSpecifiedTests>false</it.failIfNoSpecifiedTests>
     <maven.compiler.release>11</maven.compiler.release>
     <maven.compiler.source>11</maven.compiler.source>
     <maven.compiler.target>11</maven.compiler.target>
+    <maven.test.redirectTestOutputToFile>true</maven.test.redirectTestOutputToFile>
     <slf4j.version>2.0.12</slf4j.version>
     <sourceReleaseAssemblyDescriptor>source-release-tar</sourceReleaseAssemblyDescriptor>
     <spotbugs.excludeFilterFile>src/main/spotbugs/exclude-filter.xml</spotbugs.excludeFilterFile>
