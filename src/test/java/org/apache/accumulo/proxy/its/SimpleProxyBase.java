@@ -2387,6 +2387,7 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
     long sizes2 = getFileSizes(getCluster().getServerContext(), tableNames[1]);
     assertTrue(sizes1 < data.length);
     assertTrue(sizes1 < sizes2, "Size1 is " + sizes1 + ", size2 is " + sizes2);
+    assertTrue(sizes2 > data.length * 10.0 && sizes2 < data.length * 11.0);
   }
 
   @Test
