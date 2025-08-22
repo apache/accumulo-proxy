@@ -93,7 +93,6 @@
     <eclipseFormatterStyle>contrib/Eclipse-Accumulo-Codestyle.xml</eclipseFormatterStyle>
     <!-- extra release args for testing -->
     <extraReleaseArguments />
-    <failsafe.failIfNoSpecifiedTests>false</failsafe.failIfNoSpecifiedTests>
     <hadoop.version>3.3.6</hadoop.version>
     <maven.compiler.release>11</maven.compiler.release>
     <maven.compiler.source>11</maven.compiler.source>
