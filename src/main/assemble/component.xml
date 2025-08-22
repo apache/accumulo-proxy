@@ -34,7 +34,6 @@
         version listing for packaged artifacts -->
         <include>${groupId}:${artifactId}</include>
         <include>com.google.guava:guava</include>
-        <include>commons-lang:commons-lang</include>
         <include>org.apache.thrift:libthrift</include>
         <include>org.slf4j:slf4j-api</include>
       </includes>

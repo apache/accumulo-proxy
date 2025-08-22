@@ -48,7 +48,6 @@ import org.apache.accumulo.server.rpc.ThriftServerType;
 import org.apache.accumulo.server.rpc.TimedProcessor;
 import org.apache.accumulo.server.rpc.UGIAssumingProcessor;
 import org.apache.accumulo.start.spi.KeywordExecutable;
-import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.security.UserGroupInformation;
 import org.apache.thrift.TProcessor;
 import org.apache.thrift.protocol.TCompactProtocol;
@@ -233,7 +232,8 @@ public class Proxy implements KeywordExecutable {
         }
         final KerberosToken kerberosToken = (KerberosToken) authToken;
         final String kerberosKeytab = kerberosToken.getKeytab().getAbsolutePath();
-        if (StringUtils.isBlank(kerberosPrincipal) || StringUtils.isBlank(kerberosKeytab)) {
+
+        if (kerberosPrincipal.isBlank() || kerberosKeytab.isBlank()) {
           throw new IllegalStateException(
               String.format("Kerberos principal '%s' and keytab '%s' must be provided",
                   kerberosPrincipal, kerberosKeytab));
