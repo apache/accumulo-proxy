@@ -81,66 +81,6 @@ done
 find $BUILD_DIR/gen-java -name '*.java' -exec grep -Zl '^public class ' {} + | xargs -0 sed -i -e 's/^[}]$/  private static void unusedMethod() {}\
 }/'
 
-for lang in "${LANGUAGES_TO_GENERATE[@]}"; do
-  case $lang in
-    cpp)
-      PREFIX="/*
-"
-      LINE_NOTATION=" *"
-      SUFFIX="
- */"
-      FILE_SUFFIX=(.h .cpp)
-      ;;
-    java)
-      PREFIX="/*
-"
-      LINE_NOTATION=" *"
-      SUFFIX="
- */"
-      FILE_SUFFIX=(.java)
-      ;;
-    rb)
-      PREFIX=""
-      LINE_NOTATION="#"
-      SUFFIX=""
-      FILE_SUFFIX=(.rb)
-      ;;
-    py)
-      PREFIX=""
-      LINE_NOTATION="#"
-      SUFFIX=""
-      FILE_SUFFIX=(.py -remote)
-      ;;
-    *)
-      continue
-      ;;
-  esac
-
-  for file in "${FILE_SUFFIX[@]}"; do
-    mapfile -t ALL_FILES_TO_LICENSE < <(find "$BUILD_DIR/gen-$lang" -name "*$file")
-    for f in "${ALL_FILES_TO_LICENSE[@]}"; do
-      cat - "$f" >"${f}-with-license" <<EOF
-${PREFIX}${LINE_NOTATION} Licensed to the Apache Software Foundation (ASF) under one
-${LINE_NOTATION} or more contributor license agreements.  See the NOTICE file
-${LINE_NOTATION} distributed with this work for additional information
-${LINE_NOTATION} regarding copyright ownership.  The ASF licenses this file
-${LINE_NOTATION} to you under the Apache License, Version 2.0 (the
-${LINE_NOTATION} "License"); you may not use this file except in compliance
-${LINE_NOTATION} with the License.  You may obtain a copy of the License at
-${LINE_NOTATION}
-${LINE_NOTATION}   https://www.apache.org/licenses/LICENSE-2.0
-${LINE_NOTATION}
-${LINE_NOTATION} Unless required by applicable law or agreed to in writing,
-${LINE_NOTATION} software distributed under the License is distributed on an
-${LINE_NOTATION} "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-${LINE_NOTATION} KIND, either express or implied.  See the License for the
-${LINE_NOTATION} specific language governing permissions and limitations
-${LINE_NOTATION} under the License.${SUFFIX}
-EOF
-    done
-  done
-done
-
 # For every generated java file, compare it with the version-controlled one, and copy the ones that have changed into place
 for d in "${PACKAGES_TO_GENERATE[@]}"; do
   for lang in "${LANGUAGES_TO_GENERATE[@]}"; do
@@ -173,18 +113,18 @@ for d in "${PACKAGES_TO_GENERATE[@]}"; do
     for file in "${FILE_SUFFIX[@]}"; do
       mapfile -t ALL_EXISTING_FILES < <(find "$DDIR" -name "*$file")
       for f in "${ALL_EXISTING_FILES[@]}"; do
-        if [[ ! -f "$SDIR/$(basename "$f")-with-license" ]]; then
+        if [[ ! -f "$SDIR/$(basename "$f")" ]]; then
           set -x
           rm -f "$f"
           { set +x; } 2>/dev/null
         fi
       done
-      mapfile -t ALL_LICENSE_FILES_TO_COPY < <(find "$SDIR" -name "*$file")
-      for f in "${ALL_LICENSE_FILES_TO_COPY[@]}"; do
+      mapfile -t ALL_FILES_TO_COPY < <(find "$SDIR" -name "*$file")
+      for f in "${ALL_FILES_TO_COPY[@]}"; do
         DEST="$DDIR/$(basename "$f")"
-        if ! cmp -s "${f}-with-license" "${DEST}"; then
+        if ! cmp -s "${f}" "${DEST}"; then
           set -x
-          cp -f "${f}-with-license" "${DEST}" || fail unable to copy files to java workspace
+          cp -f "${f}" "${DEST}" || fail unable to copy files to java workspace
           { set +x; } 2>/dev/null
         fi
       done
