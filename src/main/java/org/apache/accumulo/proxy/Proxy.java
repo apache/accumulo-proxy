@@ -25,7 +25,6 @@ import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.util.Collection;
-import java.util.List;
 import java.util.Properties;
 
 import org.apache.accumulo.core.cli.Help;
@@ -60,7 +59,6 @@ import com.beust.jcommander.Parameter;
 import com.google.auto.service.AutoService;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Tag;
 
 @AutoService(KeywordExecutable.class)
@@ -267,8 +265,8 @@ public class Proxy implements KeywordExecutable {
         serverSocketTimeout, address);
   }
 
-  // TODO: This MetricsInfo is a stub Metrics Info to allow the timed processor to build. If Metrics
-  // are wanted or needed in a later version of the proxy, this can be updated.
+  // This MetricsInfo is a stub MetricsInfo to allow the timed processor to build.
+  // Issue #85 in the GitHub regards updating this with a proper implementation.
   static private class ProxyMetricsInfo implements MetricsInfo {
 
     @Override
@@ -277,43 +275,18 @@ public class Proxy implements KeywordExecutable {
     }
 
     @Override
-    public void addServiceTags(String applicationName, HostAndPort hostAndPort) {
-      throw new UnsupportedOperationException("Unimplemented method 'addServiceTags'");
-    }
-
-    @Override
-    public void addCommonTags(List<Tag> updates) {
-      throw new UnsupportedOperationException("Unimplemented method 'addCommonTags'");
-    }
-
-    @Override
-    public Collection<Tag> getCommonTags() {
-      throw new UnsupportedOperationException("Unimplemented method 'getCommonTags'");
-    }
-
-    @Override
-    public void addRegistry(MeterRegistry registry) {
-      throw new UnsupportedOperationException("Unimplemented method 'addRegistry'");
-    }
-
-    @Override
     public void addMetricsProducers(MetricsProducer... producer) {
       return;
     }
 
     @Override
-    public void init() {
-      throw new UnsupportedOperationException("Unimplemented method 'init'");
-    }
-
-    @Override
-    public MeterRegistry getRegistry() {
-      throw new UnsupportedOperationException("Unimplemented method 'getRegistry'");
-    }
-
-    @Override
     public void close() {
       throw new UnsupportedOperationException("Unimplemented method 'close'");
+    }
+
+    @Override
+    public void init(Collection<Tag> commonTags) {
+      throw new UnsupportedOperationException("Unimplemented method 'init'");
     }
 
   }
