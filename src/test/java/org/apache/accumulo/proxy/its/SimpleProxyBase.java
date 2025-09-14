@@ -2324,14 +2324,15 @@ public abstract class SimpleProxyBase extends SharedMiniClusterBase {
    */
   private long getFileSizes(ServerContext ctx, String tableName) {
     TableId tableId = TableId.of(ctx.tableOperations().tableIdMap().get(tableName));
-    var tabletsMetadata = ctx.getAmple().readTablets().forTable(tableId).build();
-    return tabletsMetadata.stream().flatMap(tm -> tm.getFiles().stream()).mapToLong(stf -> {
-      try {
-        return FileSystem.getLocal(new Configuration()).getFileStatus(stf.getPath()).getLen();
-      } catch (IOException e) {
-        throw new UncheckedIOException(e);
-      }
-    }).sum();
+    try (var tabletsMetadata = ctx.getAmple().readTablets().forTable(tableId).build();) {
+      return tabletsMetadata.stream().flatMap(tm -> tm.getFiles().stream()).mapToLong(stf -> {
+        try {
+          return FileSystem.getLocal(new Configuration()).getFileStatus(stf.getPath()).getLen();
+        } catch (IOException e) {
+          throw new UncheckedIOException(e);
+        }
+      }).sum();
+    }
   }
 
   /**
